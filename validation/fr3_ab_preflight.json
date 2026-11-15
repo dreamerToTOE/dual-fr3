@@ -1,0 +1,69 @@
+{
+  "scene_id": "dual_fr3_four_wall_100mm_5goal",
+  "scope": "single_cube_A_B1_B2",
+  "status": "PASS_GEOMETRY_BLOCKED_RUNTIME",
+  "geometry_status": "PASS",
+  "runtime_contract_status": "BLOCKED",
+  "phase_checks": {
+    "A_landing": {
+      "center_m": [
+        0.0,
+        0.736,
+        0.762
+      ],
+      "boundary_gaps_m": {
+        "left_m": 0.20500000000000002,
+        "right_m": 0.20500000000000002,
+        "front_m": 0.4079999999999999,
+        "back_m": 0.3399999999999999,
+        "floor_m": 0.0
+      },
+      "inside": true
+    },
+    "B1_back_wall": {
+      "center_m": [
+        0.0,
+        1.076,
+        0.762
+      ],
+      "boundary_gaps_m": {
+        "left_m": 0.20500000000000002,
+        "right_m": 0.20500000000000002,
+        "front_m": 0.748,
+        "back_m": -1.8041124150158794e-16,
+        "floor_m": 0.0
+      },
+      "inside": true
+    },
+    "B2_left_wall": {
+      "center_m": [
+        -0.205,
+        1.076,
+        0.762
+      ],
+      "boundary_gaps_m": {
+        "left_m": 0.0,
+        "right_m": 0.41,
+        "front_m": 0.748,
+        "back_m": -1.8041124150158794e-16,
+        "floor_m": 0.0
+      },
+      "inside": true
+    }
+  },
+  "runtime_contract": {
+    "physics_scene": false,
+    "dynamic_cube": false,
+    "tool_collision": false,
+    "ab_state_machine": false,
+    "joint_trajectory": false,
+    "suction_attach_release": false
+  },
+  "ab_status": "BLOCKED",
+  "blockers": [
+    "preview USD is geometry-only; no dynamic Cube rigid body or PhysicsScene",
+    "no FR3 joint trajectory/IK runner is present",
+    "no physical suction attach/release or B1/B2 state machine is present"
+  ],
+  "claim": "This report does not claim A/B dynamics passed."
+}

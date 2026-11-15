@@ -1,0 +1,45 @@
+{
+  "scene_id": "dual_fr3_four_wall_100mm_5goal",
+  "scope": "dynamic_scene_load_and_settle_only",
+  "ab_status": "BLOCKED",
+  "ab_blocker": "joint trajectory, suction attach/release, and B1/B2 controller are not implemented",
+  "status": "PASS",
+  "physics_scene": "/physicsScene",
+  "dynamic_cube": "/World/Cube",
+  "required_prim_presence": {
+    "/physicsScene": true,
+    "/World/Cube": true,
+    "/World/Environment/wall_front": true,
+    "/World/Environment/wall_back": true,
+    "/World/Environment/wall_left": true,
+    "/World/Environment/wall_right": true,
+    "/World/left_fr3/fr3_link8/ABSideTool": true,
+    "/World/right_fr3/fr3_link8/ABSideTool": true
+  },
+  "articulations": {
+    "left": {
+      "num_dof": 9
+    },
+    "right": {
+      "num_dof": 9
+    }
+  },
+  "cube_position_m": [
+    -1.1998628224318963e-06,
+    -0.3000013828277588,
+    0.7619999647140503
+  ],
+  "cube_orientation_wxyz": [
+    0.9999999403953552,
+    6.4069690779433586e-06,
+    -4.176846687187208e-06,
+    6.222142445722056e-08
+  ],
+  "cube_linear_velocity_m_s": [
+    0.00010680675768526271,
+    -6.172829307615757e-05,
+    -0.00021217860921751708
+  ],
+  "cube_speed_m_s": 0.00024543395825112356,
+  "cube_position_error_m": 1.831154963789248e-06
+}

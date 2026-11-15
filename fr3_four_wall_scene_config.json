@@ -46,6 +46,38 @@
     "beam_local_center_m": [0.0, 0.425, 0.0],
     "carriage_size_m": [0.17, 0.16, 0.02]
   },
-  "scope": "static_geometry_preview_only",
-  "dynamic_validation": false
+  "task": {
+    "scope": "single_cube_A_B1_B2",
+    "phase_A": {
+      "goal": "双臂从供料位中心吸附，抬高越过前墙，放到前墙内 landing 位",
+      "landing_center_m": [0.0, 0.736, 0.762],
+      "lift_center_m": [0.0, -0.3, 0.882],
+      "over_front_center_m": [0.0, 0.34, 0.882]
+    },
+    "phase_B1": {
+      "goal": "左臂从 cube 前侧面中心沿 +Y 推到后墙",
+      "target_center_m": [0.0, 1.076, 0.762],
+      "direction_world": [0.0, 1.0, 0.0],
+      "active_arm": "left"
+    },
+    "phase_B2": {
+      "goal": "右臂从 cube 右侧面中心沿 -X 推到左墙",
+      "target_center_m": [-0.205, 1.076, 0.762],
+      "direction_world": [-1.0, 0.0, 0.0],
+      "active_arm": "right",
+      "back_wall_contact_required": true
+    },
+    "phase_B_exit": {
+      "goal": "确认释放且 cube 静止后再回撤双臂"
+    }
+  },
+  "physics": {
+    "cube_mass_kg": 0.37037037037037046,
+    "gravity_m_s2": [0.0, 0.0, -9.81],
+    "settle_speed_threshold_m_s": 0.01,
+    "settle_hold_s": 0.25
+  },
+  "scope": "four_wall_100mm_A_B_geometry_and_dynamic_smoke",
+  "dynamic_validation": false,
+  "ab_runtime": "not_implemented"
 }
