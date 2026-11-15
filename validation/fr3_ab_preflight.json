@@ -55,6 +55,7 @@
     "physics_scene": false,
     "dynamic_cube": false,
     "tool_collision": false,
+    "ik_waypoint_preflight": true,
     "ab_state_machine": false,
     "joint_trajectory": false,
     "suction_attach_release": false
@@ -62,8 +63,8 @@
   "ab_status": "BLOCKED",
   "blockers": [
     "preview USD is geometry-only; no dynamic Cube rigid body or PhysicsScene",
-    "no FR3 joint trajectory/IK runner is present",
-    "no physical suction attach/release or B1/B2 state machine is present"
+    "no FR3 joint trajectory controller is present",
+    "no physical suction attach/release or B1/B2 contact state machine is present"
   ],
   "claim": "This report does not claim A/B dynamics passed."
 }

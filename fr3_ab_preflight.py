@@ -56,6 +56,7 @@ def main() -> int:
         "physics_scene": "/physicsScene" in preview,
         "dynamic_cube": "RigidBodyAPI" in preview and "/World/Cube" in preview,
         "tool_collision": tool_collision,
+        "ik_waypoint_preflight": (ROOT / "fr3_ab_ik_preflight.py").exists(),
         "ab_state_machine": False,
         "joint_trajectory": False,
         "suction_attach_release": False,
@@ -73,8 +74,8 @@ def main() -> int:
         "ab_status": "BLOCKED",
         "blockers": [
             "preview USD is geometry-only; no dynamic Cube rigid body or PhysicsScene",
-            "no FR3 joint trajectory/IK runner is present",
-            "no physical suction attach/release or B1/B2 state machine is present",
+            "no FR3 joint trajectory controller is present",
+            "no physical suction attach/release or B1/B2 contact state machine is present",
         ],
         "claim": "This report does not claim A/B dynamics passed.",
     }

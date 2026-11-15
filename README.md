@@ -48,7 +48,20 @@ Run the Isaac Sim headless dynamic loading smoke test with:
 ```
 
 The smoke test creates a real `PhysicsScene`, dynamic `/World/Cube`, collision
-walls/tools, and both FR3 articulations, then checks that the supply cube settles
-under gravity. Its report is written to `validation/`; `ab_status` remains
-`BLOCKED` until a dedicated FR3 IK/trajectory and suction/contact controller is
-implemented.
+walls/tools/cups, and both FR3 articulations, then checks that the supply cube
+settles under gravity. Its report is written to `validation/`; `ab_status`
+remains `BLOCKED` until a dedicated FR3 trajectory and suction/contact
+controller is implemented.
+
+Run the Lula waypoint reachability gate with:
+
+```bash
+/home/ubuntu2004/isaacsim-4.5.0/python.sh fr3_ab_ik_preflight.py --no-window
+```
+
+The current local result is `PASS_KINEMATIC_RAIL_PLAN`: A and B1 waypoints
+pass, while fixed-base B2 is unreachable. A rail-assisted B2 plan becomes
+kinematically reachable by moving the right carriage to `base_y=0.38 m` and
+using the configured R270 TCP orientation over 42 samples. This is still an
+IK-only result; continuous execution, collision evidence, suction attach/
+release, and contact dynamics remain unverified.

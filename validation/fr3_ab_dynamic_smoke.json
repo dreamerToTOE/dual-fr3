@@ -14,7 +14,9 @@
     "/World/Environment/wall_left": true,
     "/World/Environment/wall_right": true,
     "/World/left_fr3/fr3_link8/ABSideTool": true,
-    "/World/right_fr3/fr3_link8/ABSideTool": true
+    "/World/right_fr3/fr3_link8/ABSideTool": true,
+    "/World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": true,
+    "/World/right_fr3/fr3_link8/ABSideTool/cup_r2_c2": true
   },
   "articulations": {
     "left": {
@@ -25,21 +27,21 @@
     }
   },
   "cube_position_m": [
-    -1.1998628224318963e-06,
-    -0.3000013828277588,
+    -1.1954018646065379e-06,
+    -0.3000014126300812,
     0.7619999647140503
   ],
   "cube_orientation_wxyz": [
-    0.9999999403953552,
-    6.4069690779433586e-06,
-    -4.176846687187208e-06,
-    6.222142445722056e-08
+    1.0,
+    6.084472715883749e-06,
+    -4.217935838823905e-06,
+    7.444038629955685e-08
   ],
   "cube_linear_velocity_m_s": [
-    0.00010680675768526271,
-    -6.172829307615757e-05,
-    -0.00021217860921751708
+    0.00010638211824698374,
+    -6.286598363658413e-05,
+    -0.00021230545826256275
   ],
-  "cube_speed_m_s": 0.00024543395825112356,
-  "cube_position_error_m": 1.831154963789248e-06
+  "cube_speed_m_s": 0.00024564790776513296,
+  "cube_position_error_m": 1.850879375439979e-06
 }

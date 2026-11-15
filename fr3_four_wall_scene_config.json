@@ -65,7 +65,12 @@
       "target_center_m": [-0.205, 1.076, 0.762],
       "direction_world": [-1.0, 0.0, 0.0],
       "active_arm": "right",
-      "back_wall_contact_required": true
+      "back_wall_contact_required": true,
+      "rail_assist": {
+        "base_y_m": 0.38,
+        "tcp_orientation_wxyz": [0.5, -0.5, 0.5, 0.5],
+        "path_samples": 42
+      }
     },
     "phase_B_exit": {
       "goal": "确认释放且 cube 静止后再回撤双臂"

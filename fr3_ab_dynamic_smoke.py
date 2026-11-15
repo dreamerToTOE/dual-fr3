@@ -50,7 +50,7 @@ def _set_start_targets(stage, root_path):
 
 
 def _add_robot(stage, side, asset_url):
-    from pxr import Gf, UsdGeom
+    from pxr import Gf, UsdGeom, UsdPhysics
 
     base = CONFIG["fr3"]["bases"][side]
     root = f"/World/{side}_fr3"
@@ -67,6 +67,17 @@ def _add_robot(stage, side, asset_url):
     sign = -1.0 if side == "left" else 1.0
     _box(stage, f"{tool}/lateral", (0.0, sign * 0.065, 0.08), (0.018, 0.13, 0.018), collision=True)
     _box(stage, f"{tool}/manifold", (0.0, sign * 0.138, 0.08), (0.07, 0.014, 0.07), collision=True)
+    # The TCP is at local y=+/-0.155; keep the cup collision surface there.
+    for row, z_offset in enumerate((-0.024, 0.024), start=1):
+        for column, x_offset in enumerate((-0.024, 0.024), start=1):
+            cup = UsdGeom.Cylinder.Define(stage, f"{tool}/cup_r{row}_c{column}")
+            cup.CreateAxisAttr(UsdGeom.Tokens.y)
+            cup.CreateRadiusAttr(0.01)
+            cup.CreateHeightAttr(0.01)
+            UsdGeom.Xformable(cup.GetPrim()).AddTranslateOp().Set(
+                Gf.Vec3d(x_offset, sign * 0.15, 0.08 + z_offset)
+            )
+            UsdPhysics.CollisionAPI.Apply(cup.GetPrim())
 
 
 def main():
@@ -154,6 +165,8 @@ def main():
         "/World/Environment/wall_right",
         "/World/left_fr3/fr3_link8/ABSideTool",
         "/World/right_fr3/fr3_link8/ABSideTool",
+        "/World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1",
+        "/World/right_fr3/fr3_link8/ABSideTool/cup_r2_c2",
     ]
 
     cube = SingleRigidPrim("/World/Cube", name="ab_smoke_cube")
