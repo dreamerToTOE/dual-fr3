@@ -65,3 +65,16 @@ kinematically reachable by moving the right carriage to `base_y=0.38 m` and
 using the configured R270 TCP orientation over 42 samples. This is still an
 IK-only result; continuous execution, collision evidence, suction attach/
 release, and contact dynamics remain unverified.
+
+Start the visible automatic task demo with:
+
+```bash
+/home/ubuntu2004/isaacsim-4.5.0/python.sh fr3_ab_visual_runner.py
+```
+
+This opens Isaac Sim, automatically drives the two FR3 arms through the A
+approach and lift using joint actions, and uses an explicitly labelled temporary
+PhysX fixed-joint proxy for the attachment. It stops and keeps the window open
+when the current trajectory safety gate fails; it does not claim Surface
+Gripper or full B1/B2 dynamics validation. The report is written to
+`validation/fr3_ab_visual_runner.json`.

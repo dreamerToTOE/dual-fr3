@@ -1,0 +1,133 @@
+{
+  "scene_id": "dual_fr3_four_wall_100mm_5goal",
+  "status": "STOPPED",
+  "ab_status": "BLOCKED",
+  "scope": "automatic_articulation_visual_demo",
+  "attachment_model": "temporary_PhysX_fixed_joints",
+  "surface_gripper_validated": false,
+  "collision_safety_validated": false,
+  "phases": [
+    {
+      "phase": "A_approach",
+      "status": "RUNNING",
+      "sim_time_s": 1.0,
+      "cube_position_m": [
+        -4.6247657792264363e-07,
+        -0.30000045895576477,
+        0.7619999647140503
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        1.7231687934327056e-06,
+        -1.7338226143692737e-06,
+        -3.794406566726138e-09
+      ]
+    },
+    {
+      "phase": "A_attach",
+      "status": "FIXED_JOINT_PROXY",
+      "sim_time_s": 12.558333333333334,
+      "cube_position_m": [
+        1.0245874193515192e-07,
+        -0.29999998211860657,
+        0.7619999051094055
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -2.057786900877545e-07,
+        2.6653640361473663e-07,
+        4.1761469282697306e-10
+      ]
+    },
+    {
+      "phase": "A_lift",
+      "status": "RUNNING",
+      "sim_time_s": 12.558333333333334,
+      "cube_position_m": [
+        1.0245874193515192e-07,
+        -0.29999998211860657,
+        0.7619999051094055
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -2.057786900877545e-07,
+        2.6653640361473663e-07,
+        4.1761469282697306e-10
+      ]
+    },
+    {
+      "phase": "A_lift",
+      "status": "REACHED_WITH_ATTACHMENT_PROXY",
+      "sim_time_s": 15.358333333333333,
+      "cube_position_m": [
+        5.922676791669801e-05,
+        -0.3000814616680145,
+        0.8808963894844055
+      ],
+      "cube_orientation_wxyz": [
+        0.9999998807907104,
+        3.8851525459904224e-05,
+        -0.0004684605519287288,
+        -0.0002834373153746128
+      ]
+    },
+    {
+      "phase": "A_over_front",
+      "status": "RUNNING",
+      "sim_time_s": 15.358333333333333,
+      "cube_position_m": [
+        5.922676791669801e-05,
+        -0.3000814616680145,
+        0.8808963894844055
+      ],
+      "cube_orientation_wxyz": [
+        0.9999998807907104,
+        3.8851525459904224e-05,
+        -0.0004684605519287288,
+        -0.0002834373153746128
+      ]
+    }
+  ],
+  "active_phase": "A_over_front",
+  "local_ik_recoveries": 15,
+  "blocked_motion": {
+    "arm": "right",
+    "cube_target_m": [
+      0.0,
+      -0.02571428571428569,
+      0.882
+    ],
+    "joint_start_rad": [
+      1.5087615251541138,
+      -0.2831825613975525,
+      -0.7292308211326599,
+      -3.020232677459717,
+      -0.5208457708358765,
+      2.7589492797851562,
+      -0.2812075614929199
+    ],
+    "joint_target_rad": [
+      0.047456823702193535,
+      -0.4790040543923902,
+      1.1651500169917626,
+      -3.0112923415141095,
+      0.9609649911707098,
+      2.598725123513496,
+      -1.2904469043655349
+    ],
+    "max_joint_step_rad": 1.8943808381244225
+  },
+  "error": "right IK branch jumps 1.894 rad on a 15 mm path segment; refused execution",
+  "stopped_cube_position_m": [
+    -0.00010145940177608281,
+    -0.04210725426673889,
+    0.8820916414260864
+  ],
+  "stopped_cube_orientation_wxyz": [
+    1.0,
+    -0.0003871252411045134,
+    0.00020675627456512302,
+    -9.913341637002304e-05
+  ],
+  "traceback": "Traceback (most recent call last):\n  File \"/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3/fr3_ab_visual_runner.py\", line 298, in main\n    dual_path(previous, center)\n  File \"/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3/fr3_ab_visual_runner.py\", line 252, in dual_path\n    raise RuntimeError(f\"{side} IK branch jumps {change:.3f} rad on a 15 mm path segment; refused execution\")\nRuntimeError: right IK branch jumps 1.894 rad on a 15 mm path segment; refused execution\n"
+}
