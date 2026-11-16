@@ -6,6 +6,7 @@ This demo never claims Surface Gripper or collision-safety validation.
 from __future__ import annotations
 
 import argparse
+import asyncio
 import json
 import math
 from pathlib import Path
@@ -61,6 +62,7 @@ def _add_aruco_marker(stage, cube_size, marker_size):
     quiet = marker_size * 0.12
     backing_size = marker_size + 2 * quiet
     backing = UsdGeom.Cube.Define(stage, "/World/Cube/ArUcoMarker/white_backing")
+    backing.CreateSizeAttr(1.0)
     backing_xf = UsdGeom.Xformable(backing.GetPrim())
     backing_xf.AddTranslateOp().Set(Gf.Vec3d(0, 0, 0.5 + 0.0004 / local_scale))
     backing_xf.AddScaleOp().Set(Gf.Vec3f(
@@ -72,11 +74,12 @@ def _add_aruco_marker(stage, cube_size, marker_size):
             cell = UsdGeom.Cube.Define(
                 stage, f"/World/Cube/ArUcoMarker/cell_{row}_{column}"
             )
+            cell.CreateSizeAttr(1.0)
             cell_xf = UsdGeom.Xformable(cell.GetPrim())
             cell_xf.AddTranslateOp().Set(Gf.Vec3d(
                 (column - 2.5) * cell_size,
                 (2.5 - row) * cell_size,
-                0.5 + 0.0011 / local_scale,
+                0.5 + 0.008 / local_scale,
             ))
             cell_xf.AddScaleOp().Set(Gf.Vec3f(cell_size, cell_size, 0.001 / local_scale))
             color = 0.02 if bit else 0.98
@@ -194,6 +197,9 @@ def main():
     status_label = None
     contact_monitor = None
     vision_camera = None
+    vision_viewport = None
+    vision_loop = None
+    vision_task = None
     try:
         import numpy as np
         import omni.client
@@ -247,43 +253,51 @@ def main():
         vision_cfg = CONFIG["vision"]
         d455_url = f"{assets_root.rstrip('/')}/{vision_cfg['camera_asset']}"
         d455_status, _ = omni.client.stat(d455_url)
-        vision_runtime_path = vision_cfg["camera_path"]
         if d455_status == omni.client.Result.OK:
             vision_root = stage.DefinePrim(vision_cfg["camera_root_path"], "Xform")
             vision_root.GetReferences().AddReference(d455_url)
-            UsdGeom.Xformable(vision_root).AddTransformOp().Set(
-                Gf.Matrix4d().SetLookAt(
-                    Gf.Vec3d(*vision_cfg["camera_position_m"]),
-                    Gf.Vec3d(*vision_cfg["camera_look_at_m"]),
-                    Gf.Vec3d(0, 0, 1),
-                ).GetInverse()
+            app.update()
+            rsd_root = stage.GetPrimAtPath(f"{vision_cfg['camera_root_path']}/RSD455")
+            rsd_xf = UsdGeom.Xformable(rsd_root)
+            rsd_xf.ClearXformOpOrder()
+            rsd_xf.AddTransformOp().Set(Gf.Matrix4d(1.0))
+            vision_runtime_path = "/World/D455/CalibratedColorCamera"
+            report["vision"]["camera_mode"] = "d455_calibrated_pinhole_fallback"
+            report["vision"]["d455_color_prim"] = vision_cfg["camera_path"]
+            report["vision"]["d455_color_prim_renderable"] = False
+            report["vision"]["fallback_reason"] = (
+                "Isaac Sim 4.5 D455 USD color prim carries unsupported cameraProjectionType metadata; "
+                "capture uses a pinhole camera with the D455 color intrinsics"
             )
-            report["vision"]["camera_mode"] = "d455_asset"
         else:
             vision_runtime_path = "/World/VisionCameraFallback"
-            vision_camera_prim = UsdGeom.Camera.Define(stage, vision_runtime_path)
-            vision_camera_prim.AddTransformOp().Set(
-                Gf.Matrix4d().SetLookAt(
-                    Gf.Vec3d(*vision_cfg["camera_position_m"]),
-                    Gf.Vec3d(*vision_cfg["camera_look_at_m"]),
-                    Gf.Vec3d(0, 0, 1),
-                ).GetInverse()
-            )
-            vision_camera_prim.CreateClippingRangeAttr(Gf.Vec2f(0.01, 100.0))
-            vision_camera_prim.CreateFocalLengthAttr(24.0)
             report["vision"]["camera_mode"] = "generic_fallback"
+        vision_camera_prim = UsdGeom.Camera.Define(stage, vision_runtime_path)
+        vision_camera_prim.AddTransformOp().Set(
+            Gf.Matrix4d().SetLookAt(
+                Gf.Vec3d(*vision_cfg["camera_position_m"]),
+                Gf.Vec3d(*vision_cfg["camera_look_at_m"]),
+                Gf.Vec3d(0, 0, 1),
+            ).GetInverse()
+        )
+        vision_camera_prim.CreateClippingRangeAttr(Gf.Vec2f(0.01, 100.0))
+        vision_camera_prim.CreateFocalLengthAttr(1.93 if d455_status == omni.client.Result.OK else 24.0)
+        vision_camera_prim.CreateHorizontalApertureAttr(3.896 if d455_status == omni.client.Result.OK else 36.0)
+        vision_camera_prim.CreateVerticalApertureAttr(2.453 if d455_status == omni.client.Result.OK else 20.25)
         report["vision"]["camera_path"] = vision_runtime_path
         from isaacsim.sensors.camera import Camera as IsaacCamera
+        if not args.headless:
+            from omni.kit.viewport.utility import get_active_viewport
+            vision_viewport = get_active_viewport()
         vision_camera = world.scene.add(IsaacCamera(
             prim_path=vision_runtime_path,
             name="vision_camera",
             frequency=vision_cfg["frequency_hz"],
             resolution=tuple(vision_cfg["resolution"]),
+            render_product_path=(None if vision_viewport is None else vision_viewport.get_render_product_path()),
         ))
         vision_camera.set_projection_type("pinhole")
         if not args.headless:
-            from omni.kit.viewport.utility import get_active_viewport
-            get_active_viewport().set_active_camera("/World/Camera")
             import omni.ui as ui
             status_window = ui.Window("FR3 automatic task", width=420, height=110)
             with status_window.frame:
@@ -311,6 +325,8 @@ def main():
         world.reset()
         if vision_camera is not None:
             vision_camera.resume()
+        if vision_viewport is not None:
+            vision_viewport.set_active_camera(vision_runtime_path)
         for side, robot in robots.items():
             joints[side] = np.array([robot.get_dof_index(f"fr3_joint{i}") for i in range(1, 8)])
             robot.set_joint_positions(np.array(CONFIG["fr3"]["official_start_q_rad"]), joint_indices=joints[side])
@@ -333,6 +349,9 @@ def main():
         last_render_wall = last_control_wall
         report["simulation_clock"] = {"control_hz": 120, "render_hz": 60,
                                       "render_count": 0, "uncommanded_physics_steps": 0}
+        report["vision"]["sampling_mode"] = "async_viewport" if vision_viewport is not None else "sync_sensor"
+        if vision_viewport is not None:
+            vision_loop = asyncio.get_event_loop()
 
         def render_only():
             nonlocal last_render_wall
@@ -373,10 +392,11 @@ def main():
         except (AttributeError, ImportError) as exc:
             report["vision"]["detector_error"] = str(exc)
 
-        def sample_vision():
+        def sample_vision(render=True):
             if vision_camera is None or vision_dictionary is None:
                 return
-            render_only()
+            if render:
+                render_only()
             try:
                 rgba = np.asarray(vision_camera.get_rgba())
                 if rgba.ndim != 3 or rgba.shape[2] < 3 or rgba.shape[0] == 0:
@@ -402,16 +422,30 @@ def main():
                 pixel_center = np.mean(np.asarray(corners[match])[0], axis=0)
                 camera_matrix = vision_camera.get_intrinsics_matrix()
                 distortion = np.zeros((5, 1), dtype=float)
-                _, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(
-                    corners, vision_cfg["aruco_marker_size_m"], camera_matrix, distortion)
-                camera_position, camera_orientation = vision_camera.get_world_pose()
-                rotation = quat_to_rot_matrix(np.asarray(camera_orientation, dtype=float))
-                right = rotation[:, 0]
-                up = rotation[:, 1]
-                forward = -rotation[:, 2]
+                if hasattr(cv2.aruco, "estimatePoseSingleMarkers"):
+                    _, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(
+                        corners, vision_cfg["aruco_marker_size_m"], camera_matrix, distortion)
+                else:
+                    marker_half = vision_cfg["aruco_marker_size_m"] / 2.0
+                    object_points = np.array([
+                        [-marker_half, marker_half, 0.0],
+                        [marker_half, marker_half, 0.0],
+                        [marker_half, -marker_half, 0.0],
+                        [-marker_half, -marker_half, 0.0],
+                    ], dtype=np.float32)
+                    tvecs = []
+                    for marker_corners in corners:
+                        solved, _, tvec = cv2.solvePnP(
+                            object_points, np.asarray(marker_corners).reshape(4, 2),
+                            camera_matrix, distortion, flags=cv2.SOLVEPNP_IPPE_SQUARE)
+                        if not solved:
+                            raise RuntimeError("solvePnP failed for the ArUco marker")
+                        tvecs.append(tvec.reshape(3))
+                    tvecs = np.asarray(tvecs, dtype=float).reshape(-1, 1, 3)
                 tvec = np.asarray(tvecs[match][0], dtype=float)
-                marker_center = np.asarray(camera_position, dtype=float) + right * tvec[0] - up * tvec[1] + forward * tvec[2]
-                cube_estimate = marker_center - np.array([0, 0, CONFIG["cube_size_m"] / 2 + 0.0011])
+                marker_center = np.asarray(vision_camera.get_world_points_from_image_coords(
+                    np.asarray([pixel_center]), np.asarray([tvec[2]]))[0], dtype=float)
+                cube_estimate = marker_center - np.array([0, 0, CONFIG["cube_size_m"] / 2 + 0.008])
                 actual_center, _ = cube.get_world_pose()
                 error = float(np.linalg.norm(cube_estimate - np.asarray(actual_center, dtype=float)))
                 detection = {
@@ -428,8 +462,12 @@ def main():
             except (AttributeError, IndexError, TypeError, ValueError, RuntimeError) as exc:
                 report["vision"]["detector_error"] = str(exc)
 
+        async def sample_vision_async():
+            await asyncio.sleep(0)
+            sample_vision(render=False)
+
         def step(count=1):
-            nonlocal tick, last_control_wall
+            nonlocal tick, last_control_wall, vision_task
             for _ in range(count):
                 if not app.is_running():
                     raise RuntimeError("Viewer was closed before the task finished")
@@ -452,7 +490,11 @@ def main():
                 report["simulation_clock"]["control_steps"] = tick
                 report["simulation_clock"]["physics_steps"] = world.current_time_step_index - initial_physics_step
                 if tick % vision_period == 0:
-                    sample_vision()
+                    if vision_loop is None:
+                        sample_vision()
+                    elif vision_task is None or vision_task.done():
+                        render_only()
+                        vision_task = asyncio.ensure_future(sample_vision_async())
                 if not args.headless and tick % 2 == 0:
                     render_only()
 

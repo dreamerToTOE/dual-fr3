@@ -286,16 +286,16 @@
     "camera_model": "Intel RealSense D455",
     "camera_asset": "Isaac/Sensors/Intel/RealSense/rsd455.usd",
     "depth_camera_path": "/World/D455/RSD455/Camera_Pseudo_Depth",
-    "camera_path": "/World/D455/RSD455/Camera_OmniVision_OV9782_Color",
+    "camera_path": "/World/D455/CalibratedColorCamera",
     "camera_position_m": [
       0.0,
-      1.55,
-      1.45
+      1.35,
+      1.8
     ],
     "camera_look_at_m": [
       0.0,
-      0.78,
-      0.8
+      1.0,
+      0.82
     ],
     "resolution": [
       640,
@@ -305,11 +305,393 @@
     "aruco_marker_id": 23,
     "aruco_marker_face": "top",
     "samples": 1301,
-    "detections": 0,
-    "misses": 1303,
-    "last_detection": null,
-    "detection_log": [],
-    "camera_mode": "d455_asset"
+    "detections": 905,
+    "misses": 398,
+    "last_detection": {
+      "physics_step": 10424,
+      "pixel_center": [
+        400.0,
+        258.0
+      ],
+      "cube_position_estimate_m": [
+        -0.25277309393028546,
+        1.0666357675480969,
+        0.7544816017802588
+      ],
+      "cube_position_actual_m": [
+        -0.24488462507724762,
+        1.0759828090667725,
+        0.7870000004768372
+      ],
+      "position_error_m": 0.03474250105831218
+    },
+    "detection_log": [
+      {
+        "physics_step": 10272,
+        "pixel_center": [
+          400.0,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03474250105831218
+      },
+      {
+        "physics_step": 10280,
+        "pixel_center": [
+          400.0,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03474250105831218
+      },
+      {
+        "physics_step": 10288,
+        "pixel_center": [
+          400.0,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03474250105831218
+      },
+      {
+        "physics_step": 10296,
+        "pixel_center": [
+          400.0,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03474250105831218
+      },
+      {
+        "physics_step": 10304,
+        "pixel_center": [
+          400.0,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03474250105831218
+      },
+      {
+        "physics_step": 10312,
+        "pixel_center": [
+          400.0,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03474250105831218
+      },
+      {
+        "physics_step": 10320,
+        "pixel_center": [
+          400.0,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03474250105831218
+      },
+      {
+        "physics_step": 10328,
+        "pixel_center": [
+          400.0,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03474250105831218
+      },
+      {
+        "physics_step": 10336,
+        "pixel_center": [
+          400.0,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03474250105831218
+      },
+      {
+        "physics_step": 10344,
+        "pixel_center": [
+          400.0,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03474250105831218
+      },
+      {
+        "physics_step": 10352,
+        "pixel_center": [
+          400.0,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03474250105831218
+      },
+      {
+        "physics_step": 10360,
+        "pixel_center": [
+          400.0,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03474250105831218
+      },
+      {
+        "physics_step": 10368,
+        "pixel_center": [
+          399.75,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.251795414891504,
+          1.0668469139957084,
+          0.7551988138690631
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.033801465415996275
+      },
+      {
+        "physics_step": 10376,
+        "pixel_center": [
+          399.75,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.251795414891504,
+          1.0668469139957084,
+          0.7551988138690631
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.033801465415996275
+      },
+      {
+        "physics_step": 10384,
+        "pixel_center": [
+          399.75,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.2517871038084361,
+          1.0668562601150915,
+          0.7552305603174677
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.033767372365075946
+      },
+      {
+        "physics_step": 10392,
+        "pixel_center": [
+          400.0,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03474250105831218
+      },
+      {
+        "physics_step": 10400,
+        "pixel_center": [
+          400.0,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03474250105831218
+      },
+      {
+        "physics_step": 10408,
+        "pixel_center": [
+          399.75,
+          257.75
+        ],
+        "cube_position_estimate_m": [
+          -0.25135609806855674,
+          1.0665988962158877,
+          0.7571419206614085
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03196001741762279
+      },
+      {
+        "physics_step": 10416,
+        "pixel_center": [
+          399.75,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.251795414891504,
+          1.0668469139957084,
+          0.7551988138690631
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.033801465415996275
+      },
+      {
+        "physics_step": 10424,
+        "pixel_center": [
+          400.0,
+          258.0
+        ],
+        "cube_position_estimate_m": [
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
+        ],
+        "cube_position_actual_m": [
+          -0.24488462507724762,
+          1.0759828090667725,
+          0.7870000004768372
+        ],
+        "position_error_m": 0.03474250105831218
+      }
+    ],
+    "camera_mode": "d455_calibrated_pinhole_fallback",
+    "d455_color_prim": "/World/D455/RSD455/Camera_OmniVision_OV9782_Color",
+    "d455_color_prim_renderable": false,
+    "fallback_reason": "Isaac Sim 4.5 D455 USD color prim carries unsupported cameraProjectionType metadata; capture uses a pinhole camera with the D455 color intrinsics",
+    "sampling_mode": "sync_sensor"
   },
   "trajectory_cache": {
     "loaded": true,

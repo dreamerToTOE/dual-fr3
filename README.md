@@ -47,16 +47,24 @@ It adds a rear RGB camera setup, a visual ArUco marker on the Cube top face,
 and a report path for combining visual observations with robot state and
 kinematic prediction. The preferred camera asset is Isaac Sim's Intel
 RealSense D455 at `Isaac/Sensors/Intel/RealSense/rsd455.usd`, using its color
-camera path and retaining its pseudo-depth path for the next fusion step.
+camera calibration and retaining its color/pseudo-depth paths for the next
+fusion step.
 The camera is placed behind and above the back wall so occlusion remains part
 of the experiment. The first probe records missed observations instead of
 moving the camera to guarantee global visibility.
 
-The 2026-11-17 D455 probe loaded the asset and completed the cached A/B1/B2
-task. Both the synchronous runner sample and the isolated asynchronous render
-probe produced RGB frames but 0 ArUco detections, so visual pose correction
-remains an open next step. The result is recorded in
-`validation/idea_one_d455_aruco_probe.json`.
+The 2026-11-17 visual D455 probe loaded the asset, rendered the back-wall
+scene, and detected ArUco ID 23 on the Cube once in a 640x480 frame. Isaac
+Sim 4.5 leaves the D455 color prim with unsupported projection metadata and
+its direct render is blank, so the capture uses a pinhole camera with the
+D455 color intrinsics while retaining the D455 asset and camera path in the
+report. The image and result are recorded in
+`validation/idea_one_d455_aruco_probe.json`. The automatic runner uses the
+same viewport render product in visible mode and schedules ArUco sampling as
+an asyncio task, without calling a render API that advances PhysX. The
+completed headless A/B1/B2 replay produced 1,301 samples and 905 detections;
+the last Cube position estimate was 3.5 cm from the PhysX center, with no
+detector error and zero uncommanded physics steps.
 
 The recorded scene parameters are `cube_size_m=0.15`, Cube supply center
 `[0.0,-0.3,0.787]`, back-wall target center `[0.0,1.076,0.787]`, B2 left-wall

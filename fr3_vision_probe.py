@@ -1,4 +1,4 @@
-"""Probe D455 RGB rendering and ArUco Cube localization independently."""
+"""Validate D455 ArUco visibility through the Isaac Sim viewport render product."""
 from __future__ import annotations
 
 import argparse
@@ -23,14 +23,16 @@ def main():
     try:
         import cv2
         import omni.client
-        import omni.syntheticdata
         import omni.usd
         from isaacsim.core.api import World
-        from isaacsim.core.utils.rotations import euler_angles_to_quat
         from isaacsim.sensors.camera import Camera
         from isaacsim.storage.native import get_assets_root_path
         from pxr import Gf, UsdGeom, UsdLux
-        from fr3_ab_visual_runner import _add_aruco_marker
+        from fr3_ab_visual_runner import _add_aruco_marker, _box
+
+        if args.headless:
+            raise RuntimeError("Run the vision probe without --headless so the viewport render product is active")
+        from omni.kit.viewport.utility import get_active_viewport
 
         omni.usd.get_context().new_stage()
         stage = omni.usd.get_context().get_stage()
@@ -38,6 +40,8 @@ def main():
         UsdGeom.SetStageMetersPerUnit(stage, 1.0)
         UsdGeom.Xform.Define(stage, "/World")
 
+        _box(stage, "/World/Floor", (0.0, 0.8, 0.706), (0.9, 1.8, 0.012))
+        _box(stage, "/World/BackWall", (0.0, 1.157, 0.787), (0.64, 0.012, 0.15))
         cube = UsdGeom.Cube.Define(stage, "/World/Cube")
         cube.CreateSizeAttr(1.0)
         cube_xf = UsdGeom.Xformable(cube.GetPrim())
@@ -58,87 +62,125 @@ def main():
             root_xf = UsdGeom.Xformable(root)
             root_xf.ClearXformOpOrder()
             root_xf.AddTransformOp().Set(Gf.Matrix4d(1.0))
-            rsd = stage.GetPrimAtPath(f"{CONFIG['vision']['camera_root_path']}/RSD455")
-            if rsd.IsValid():
-                rsd_xf = UsdGeom.Xformable(rsd)
-                rsd_xf.ClearXformOpOrder()
-                rsd_xf.AddTransformOp().Set(Gf.Matrix4d(1.0))
-
-        capture_path = "/World/VisionCaptureCamera"
-        world = World(stage_units_in_meters=1.0, physics_dt=1 / 120, rendering_dt=1 / 60)
-        fallback_camera = world.scene.add(Camera(
-            prim_path=capture_path,
-            name="vision_capture_camera",
-            frequency=CONFIG["vision"]["frequency_hz"],
-            resolution=tuple(CONFIG["vision"]["resolution"]),
-            position=np.asarray(CONFIG["vision"]["camera_position_m"], dtype=float),
-            orientation=euler_angles_to_quat(np.array([-40.0, 0.0, 0.0]), degrees=True),
-        ))
-        d455_camera = None
-        if d455_available:
-            d455_camera = world.scene.add(Camera(
-                prim_path=CONFIG["vision"]["camera_path"],
-                name="d455_color_camera",
-                frequency=CONFIG["vision"]["frequency_hz"],
-                resolution=tuple(CONFIG["vision"]["resolution"]),
-            ))
-            d455_camera.set_projection_type("pinhole")
-        world.reset()
-        omni.timeline.get_timeline_interface().play()
-        fallback_camera.resume()
-        if d455_camera is not None:
-            d455_camera.resume()
-
-        # The probe owns this render-driven simulation, so its extra physics
-        # steps do not interfere with the A/B control clock.
-        loop = asyncio.get_event_loop()
-        for camera in (fallback_camera, d455_camera):
-            if camera is None:
-                continue
-            future = asyncio.ensure_future(
-                omni.syntheticdata.sensors.next_render_simulation_async(
-                    camera.get_render_product_path(), 8
-                )
-            )
-            while not future.done():
+            for _ in range(30):
                 app.update()
-                loop.run_until_complete(asyncio.sleep(0))
-            future.result()
+            rsd_root = stage.GetPrimAtPath(f"{CONFIG['vision']['camera_root_path']}/RSD455")
+            rsd_xf = UsdGeom.Xformable(rsd_root)
+            rsd_xf.ClearXformOpOrder()
+            rsd_xf.AddTransformOp().Set(Gf.Matrix4d(1.0))
 
+        viewport = get_active_viewport()
+        capture_path = "/World/D455/CalibratedColorCamera" if d455_available else "/World/VisionViewportCamera"
+        capture_prim = UsdGeom.Camera.Define(stage, capture_path)
+        capture_prim.AddTransformOp().Set(
+            Gf.Matrix4d().SetLookAt(
+                Gf.Vec3d(*CONFIG["vision"]["camera_position_m"]),
+                Gf.Vec3d(*CONFIG["vision"]["camera_look_at_m"]),
+                Gf.Vec3d(0, 0, 1),
+            ).GetInverse()
+        )
+        capture_prim.CreateClippingRangeAttr(Gf.Vec2f(0.01, 100.0))
+        capture_prim.CreateFocalLengthAttr(1.93 if d455_available else 24.0)
+        capture_prim.CreateHorizontalApertureAttr(3.896 if d455_available else 36.0)
+        capture_prim.CreateVerticalApertureAttr(2.453 if d455_available else 20.25)
+        camera = Camera(
+            prim_path=capture_path,
+            name="vision_viewport_camera",
+            resolution=tuple(CONFIG["vision"]["resolution"]),
+            render_product_path=viewport.get_render_product_path(),
+        )
+        world = World(stage_units_in_meters=1.0, physics_dt=1 / 120, rendering_dt=1 / 60)
+        world.scene.add(camera)
+        camera.set_projection_type("pinhole")
+        world.reset()
+        camera.initialize()
+        viewport.set_active_camera(capture_path)
+        for _ in range(60):
+            app.update()
+            world.step(render=True)
+
+        async def _render_frame():
+            await omni.syntheticdata.sensors.next_render_simulation_async(
+                camera.get_render_product_path(), 2
+            )
+
+        future = asyncio.ensure_future(_render_frame())
+        loop = asyncio.get_event_loop()
+        while not future.done():
+            app.update()
+            loop.run_until_complete(asyncio.sleep(0))
+        future.result()
+
+        rgba = np.asarray(camera.get_rgba())
+        if rgba.ndim != 3 or rgba.shape[2] < 3 or rgba.size == 0:
+            raise RuntimeError(f"Viewport render product returned an empty frame with shape {rgba.shape}")
+        rgb = rgba[..., :3].astype(np.uint8, copy=False)
+        gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
         dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
-        parameters = cv2.aruco.DetectorParameters()
-        detector = cv2.aruco.ArucoDetector(dictionary, parameters)
-        results = {}
-        for name, camera in (("fallback", fallback_camera), ("d455", d455_camera)):
-            if camera is None:
-                continue
-            rgba = np.asarray(camera.get_rgba())
-            if rgba.ndim != 3 or rgba.shape[2] < 3 or rgba.size == 0:
-                results[name] = {"shape": list(rgba.shape), "detections": 0}
-                continue
-            rgb = rgba[..., :3].astype(np.uint8, copy=False)
-            gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
+        if hasattr(cv2.aruco, "ArucoDetector"):
+            detector = cv2.aruco.ArucoDetector(dictionary, cv2.aruco.DetectorParameters())
             corners, ids, _ = detector.detectMarkers(gray)
-            results[name] = {
-                "shape": list(rgba.shape),
-                "detections": 0 if ids is None else int(np.sum(ids.reshape(-1) == CONFIG["vision"]["aruco_marker_id"])),
-            }
-            cv2.imwrite(f"/tmp/idea_one_{name}_d455_probe.png", cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR))
+            if ids is None and hasattr(cv2.aruco, "detectMarkers"):
+                corners, ids, _ = cv2.aruco.detectMarkers(
+                    gray, dictionary, parameters=cv2.aruco.DetectorParameters_create()
+                )
+        else:
+            corners, ids, _ = cv2.aruco.detectMarkers(
+                gray, dictionary, parameters=cv2.aruco.DetectorParameters_create()
+            )
+        detections = 0 if ids is None else int(np.sum(ids.reshape(-1) == CONFIG["vision"]["aruco_marker_id"]))
+        cube_estimate = None
+        position_error = None
+        if detections:
+            match = int(np.flatnonzero(np.asarray(ids).reshape(-1) == CONFIG["vision"]["aruco_marker_id"])[0])
+            marker_half = CONFIG["vision"]["aruco_marker_size_m"] / 2.0
+            object_points = np.array([
+                [-marker_half, marker_half, 0.0], [marker_half, marker_half, 0.0],
+                [marker_half, -marker_half, 0.0], [-marker_half, -marker_half, 0.0],
+            ], dtype=np.float32)
+            solved, _, tvec = cv2.solvePnP(
+                object_points, np.asarray(corners[match]).reshape(4, 2),
+                camera.get_intrinsics_matrix(), np.zeros((5, 1), dtype=float),
+                flags=cv2.SOLVEPNP_IPPE_SQUARE)
+            if solved:
+                tvec = np.asarray(tvec, dtype=float).reshape(3)
+                marker_center = np.asarray(camera.get_world_points_from_image_coords(
+                    np.asarray([np.mean(np.asarray(corners[match])[0], axis=0)]),
+                    np.asarray([tvec[2]]))[0], dtype=float)
+                cube_estimate = marker_center - np.array(
+                    [0.0, 0.0, CONFIG["cube_size_m"] / 2 + 0.008])
+                actual_center = np.asarray(CONFIG["task"]["phase_B1"]["target_center_m"], dtype=float)
+                position_error = float(np.linalg.norm(cube_estimate - actual_center))
+        image_path = "/tmp/idea_one_viewport_d455_probe.png"
+        cv2.imwrite(image_path, cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR))
         result = {
-            "snapshot_id": "idea_one_d455_async_probe_2026-11-17",
+            "snapshot_id": "idea_one_d455_viewport_probe_2026-11-17",
             "scene_id": CONFIG["scene_id"],
             "d455_asset_available": d455_available,
+            "camera_path": capture_path,
+            "capture_mode": "d455_calibrated_pinhole_fallback" if d455_available else "generic_pinhole",
+            "d455_color_prim": CONFIG["vision"]["camera_path"] if d455_available else None,
+            "d455_color_prim_renderable": False if d455_available else None,
+            "fallback_reason": (
+                "Isaac Sim 4.5 D455 USD color prim carries unsupported cameraProjectionType metadata; "
+                "capture uses a pinhole camera with the D455 color intrinsics"
+                if d455_available else None
+            ),
             "camera_position_m": CONFIG["vision"]["camera_position_m"],
             "camera_look_at_m": CONFIG["vision"]["camera_look_at_m"],
             "aruco_dictionary": CONFIG["vision"]["aruco_dictionary"],
             "aruco_marker_id": CONFIG["vision"]["aruco_marker_id"],
-            "results": results,
-            "status": "PASS_ARUCO_DETECTED" if any(item.get("detections", 0) > 0 for item in results.values()) else "NO_ARUCO_DETECTION",
-            "images": {name: f"/tmp/idea_one_{name}_d455_probe.png" for name in results},
+            "frame_shape": list(rgba.shape),
+            "detections": detections,
+            "cube_position_estimate_m": None if cube_estimate is None else cube_estimate.tolist(),
+            "cube_position_actual_m": CONFIG["task"]["phase_B1"]["target_center_m"] if detections else None,
+            "position_error_m": position_error,
+            "status": "PASS_ARUCO_DETECTED" if detections else "NO_ARUCO_DETECTION",
+            "image": image_path,
         }
         REPORT.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n")
         print(json.dumps(result, ensure_ascii=False), flush=True)
-        return 0 if result["status"] == "PASS_ARUCO_DETECTED" else 2
+        return 0 if detections else 2
     finally:
         app.close()
 

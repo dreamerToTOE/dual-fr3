@@ -1,40 +1,41 @@
 {
-  "snapshot_id": "idea_one_d455_async_probe_2026-11-17",
+  "snapshot_id": "idea_one_d455_viewport_probe_2026-11-17",
   "scene_id": "dual_fr3_four_wall_150mm_5goal",
   "d455_asset_available": true,
+  "camera_path": "/World/D455/CalibratedColorCamera",
+  "capture_mode": "d455_calibrated_pinhole_fallback",
+  "d455_color_prim": "/World/D455/RSD455/Camera_OmniVision_OV9782_Color",
+  "d455_color_prim_renderable": false,
+  "fallback_reason": "Isaac Sim 4.5 D455 USD color prim carries unsupported cameraProjectionType metadata; capture uses a pinhole camera with the D455 color intrinsics",
   "camera_position_m": [
     0.0,
-    1.55,
-    1.45
+    1.35,
+    1.8
   ],
   "camera_look_at_m": [
     0.0,
-    0.78,
-    0.8
+    1.0,
+    0.82
   ],
   "aruco_dictionary": "DICT_4X4_50",
   "aruco_marker_id": 23,
-  "results": {
-    "fallback": {
-      "shape": [
-        480,
-        640,
-        4
-      ],
-      "detections": 0
-    },
-    "d455": {
-      "shape": [
-        480,
-        640,
-        4
-      ],
-      "detections": 0
-    }
-  },
-  "status": "NO_ARUCO_DETECTION",
-  "images": {
-    "fallback": "/tmp/idea_one_fallback_d455_probe.png",
-    "d455": "/tmp/idea_one_d455_d455_probe.png"
-  }
+  "frame_shape": [
+    480,
+    640,
+    4
+  ],
+  "detections": 1,
+  "cube_position_estimate_m": [
+    0.0007837136667953839,
+    1.068133314569921,
+    0.7623388772041249
+  ],
+  "cube_position_actual_m": [
+    0.0,
+    1.076,
+    0.787
+  ],
+  "position_error_m": 0.025897295695121808,
+  "status": "PASS_ARUCO_DETECTED",
+  "image": "/tmp/idea_one_viewport_d455_probe.png"
 }
