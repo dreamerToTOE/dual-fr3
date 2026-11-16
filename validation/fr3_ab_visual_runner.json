@@ -282,10 +282,33 @@
       "reason": "Real Surface Gripper remains unvalidated"
     }
   ],
+  "trajectory_cache": {
+    "loaded": true,
+    "path": "validation/fr3_trajectory_cache.json",
+    "used_phases": [
+      "A_approach_transit",
+      "A_approach_transit_transit",
+      "A_transfer",
+      "A_transfer",
+      "A_transfer",
+      "A_landing_transit",
+      "B1_contact_transit",
+      "B1",
+      "B2_lift_from_measured_state",
+      "B2_lift_from_measured_state_transit",
+      "B2_descent",
+      "B2_suction_plane_approach",
+      "B2_push",
+      "B2_push_transit",
+      "B2_push_transit_transit"
+    ],
+    "used_rail_transfers": 1,
+    "fallback_reason": null
+  },
   "simulation_clock": {
     "control_hz": 120,
     "render_hz": 60,
-    "render_count": 5725,
+    "render_count": 5244,
     "uncommanded_physics_steps": 0,
     "control_steps": 10426,
     "physics_steps": 10426
@@ -303,8 +326,10 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 884,
-        "issues": []
-      }
+        "issues": [],
+        "source": "cached_trajectory"
+      },
+      "source": "cached_trajectory"
     },
     {
       "phase": "A_approach_transit_transit",
@@ -317,8 +342,10 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 53,
-        "issues": []
-      }
+        "issues": [],
+        "source": "cached_trajectory"
+      },
+      "source": "cached_trajectory"
     },
     {
       "phase": "A_transfer",
@@ -331,8 +358,10 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 431,
-        "issues": []
-      }
+        "issues": [],
+        "source": "cached_trajectory"
+      },
+      "source": "cached_trajectory"
     },
     {
       "phase": "A_transfer",
@@ -345,8 +374,10 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 993,
-        "issues": []
-      }
+        "issues": [],
+        "source": "cached_trajectory"
+      },
+      "source": "cached_trajectory"
     },
     {
       "phase": "A_transfer",
@@ -359,8 +390,10 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 1062,
-        "issues": []
-      }
+        "issues": [],
+        "source": "cached_trajectory"
+      },
+      "source": "cached_trajectory"
     },
     {
       "phase": "A_landing_transit",
@@ -373,8 +406,10 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 44,
-        "issues": []
-      }
+        "issues": [],
+        "source": "cached_trajectory"
+      },
+      "source": "cached_trajectory"
     },
     {
       "phase": "B1_contact_transit",
@@ -386,8 +421,10 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 1658,
-        "issues": []
-      }
+        "issues": [],
+        "source": "cached_trajectory"
+      },
+      "source": "cached_trajectory"
     },
     {
       "phase": "B1",
@@ -399,8 +436,10 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 583,
-        "issues": []
-      }
+        "issues": [],
+        "source": "cached_trajectory"
+      },
+      "source": "cached_trajectory"
     },
     {
       "phase": "B2_lift_from_measured_state",
@@ -412,8 +451,10 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 568,
-        "issues": []
-      }
+        "issues": [],
+        "source": "cached_trajectory"
+      },
+      "source": "cached_trajectory"
     },
     {
       "phase": "B2_lift_from_measured_state_transit",
@@ -425,8 +466,10 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 621,
-        "issues": []
-      }
+        "issues": [],
+        "source": "cached_trajectory"
+      },
+      "source": "cached_trajectory"
     },
     {
       "phase": "B2_descent",
@@ -438,8 +481,10 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 770,
-        "issues": []
-      }
+        "issues": [],
+        "source": "cached_trajectory"
+      },
+      "source": "cached_trajectory"
     },
     {
       "phase": "B2_suction_plane_approach",
@@ -451,8 +496,10 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 194,
-        "issues": []
-      }
+        "issues": [],
+        "source": "cached_trajectory"
+      },
+      "source": "cached_trajectory"
     },
     {
       "phase": "B2_push",
@@ -465,8 +512,10 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 675,
-        "issues": []
-      }
+        "issues": [],
+        "source": "cached_trajectory"
+      },
+      "source": "cached_trajectory"
     },
     {
       "phase": "B2_push_transit",
@@ -478,8 +527,10 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 59,
-        "issues": []
-      }
+        "issues": [],
+        "source": "cached_trajectory"
+      },
+      "source": "cached_trajectory"
     },
     {
       "phase": "B2_push_transit_transit",
@@ -491,8 +542,10 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 79,
-        "issues": []
-      }
+        "issues": [],
+        "source": "cached_trajectory"
+      },
+      "source": "cached_trajectory"
     }
   ],
   "A_attachment_tcp_error_m": {
@@ -500,8 +553,8 @@
     "right": 5.7757896508985615e-05
   },
   "A_attachment_flange_gap_m": 0.4600028395652771,
-  "local_ik_recoveries": 137,
   "rail_collision_checked_samples": 900,
+  "local_ik_recoveries": 1,
   "blocker": "Real Surface Gripper remains unvalidated",
   "physx_contacts": {
     "reporter_count": 26,

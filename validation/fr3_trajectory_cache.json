@@ -16862,7 +16862,8 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 884,
-        "issues": []
+        "issues": [],
+        "source": "cached_trajectory"
       }
     },
     {
@@ -17933,7 +17934,8 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 53,
-        "issues": []
+        "issues": [],
+        "source": "cached_trajectory"
       }
     },
     {
@@ -28684,7 +28686,8 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 431,
-        "issues": []
+        "issues": [],
+        "source": "cached_trajectory"
       }
     },
     {
@@ -53373,7 +53376,8 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 993,
-        "issues": []
+        "issues": [],
+        "source": "cached_trajectory"
       }
     },
     {
@@ -79430,7 +79434,8 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 1062,
-        "issues": []
+        "issues": [],
+        "source": "cached_trajectory"
       }
     },
     {
@@ -80330,7 +80335,8 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 44,
-        "issues": []
+        "issues": [],
+        "source": "cached_trajectory"
       }
     },
     {
@@ -111902,7 +111908,8 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 1658,
-        "issues": []
+        "issues": [],
+        "source": "cached_trajectory"
       }
     },
     {
@@ -126118,7 +126125,8 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 583,
-        "issues": []
+        "issues": [],
+        "source": "cached_trajectory"
       }
     },
     {
@@ -137466,7 +137474,8 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 568,
-        "issues": []
+        "issues": [],
+        "source": "cached_trajectory"
       }
     },
     {
@@ -149308,7 +149317,8 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 621,
-        "issues": []
+        "issues": [],
+        "source": "cached_trajectory"
       }
     },
     {
@@ -164683,7 +164693,8 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 770,
-        "issues": []
+        "issues": [],
+        "source": "cached_trajectory"
       }
     },
     {
@@ -168574,7 +168585,8 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 194,
-        "issues": []
+        "issues": [],
+        "source": "cached_trajectory"
       }
     },
     {
@@ -185577,7 +185589,8 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 675,
-        "issues": []
+        "issues": [],
+        "source": "cached_trajectory"
       }
     },
     {
@@ -186741,7 +186754,8 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 59,
-        "issues": []
+        "issues": [],
+        "source": "cached_trajectory"
       }
     },
     {
@@ -188285,7 +188299,8 @@
       "collision_check": {
         "status": "CLEAR",
         "samples_checked": 79,
-        "issues": []
+        "issues": [],
+        "source": "cached_trajectory"
       }
     }
   ],

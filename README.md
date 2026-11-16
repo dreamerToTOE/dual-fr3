@@ -43,6 +43,14 @@ waypoints, time-sampled joint commands, expected Cube centers, collision-check
 reports, and rail base samples. Regenerate it with the automatic runner after
 changing the scene configuration.
 
+The runner loads a `COMPLETE` cache for the matching scene before each A/B1/B2
+phase. It checks the measured joint start, TCP/Cube pose, and rail endpoints
+before replay. A mismatch disables replay for the remaining phases and uses
+the existing online RRT/IK planner. PhysX contacts, joint limits, Cube
+deviation, and B2 dual-contact checks remain active during replay. A measured
+collision or mid-phase deviation stops the run for inspection rather than
+silently continuing.
+
 This is a geometry preview only. It does not claim PhysX contact, suction,
 ROS, IK, trajectory, or full B2 validation.
 

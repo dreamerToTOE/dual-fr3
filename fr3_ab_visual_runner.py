@@ -126,6 +126,10 @@ def main():
         "phases": [],
         "rail_transfers": [],
     }
+    loaded_trajectory_cache = None
+    cache_cursor = 0
+    rail_cache_cursor = 0
+    cache_enabled = False
     world = None
     status_label = None
     contact_monitor = None
@@ -195,6 +199,15 @@ def main():
         cube = world.scene.add(SingleRigidPrim("/World/Cube", name="task_cube"))
         print("FR3_AB_INITIALIZING_PHYSICS", flush=True)
         contact_monitor = PhysxContactMonitor(stage)
+        try:
+            loaded_candidate = json.loads(TRAJECTORY_CACHE.read_text())
+            if (loaded_candidate.get("status") == "COMPLETE"
+                    and loaded_candidate.get("scene_id") == CONFIG["scene_id"]
+                    and isinstance(loaded_candidate.get("phases"), list)):
+                loaded_trajectory_cache = loaded_candidate
+                cache_enabled = True
+        except (FileNotFoundError, json.JSONDecodeError, TypeError, ValueError):
+            loaded_trajectory_cache = None
         world.reset()
         for side, robot in robots.items():
             joints[side] = np.array([robot.get_dof_index(f"fr3_joint{i}") for i in range(1, 8)])
@@ -205,6 +218,13 @@ def main():
         checker = FR3CollisionChecker(CONFIG, solvers)
         allowed_contacts = {"left", "right"}
         contact_monitor.allowed_cube_contacts = allowed_contacts
+        report["trajectory_cache"] = {
+            "loaded": bool(cache_enabled),
+            "path": str(TRAJECTORY_CACHE.relative_to(ROOT)),
+            "used_phases": [],
+            "used_rail_transfers": 0,
+            "fallback_reason": None,
+        }
         tick = 0
         initial_physics_step = world.current_time_step_index
         last_control_wall = time.monotonic()
@@ -275,11 +295,81 @@ def main():
             return {side: np.asarray(robot.get_joint_positions(joint_indices=joints[side]), dtype=float)
                     for side, robot in robots.items()}
 
+        def take_cached_phase(phase, current, requested_paths=None, validator=None):
+            nonlocal cache_cursor, cache_enabled
+            if not cache_enabled or loaded_trajectory_cache is None:
+                return None
+            phases = loaded_trajectory_cache["phases"]
+            if cache_cursor >= len(phases):
+                cache_enabled = False
+                report["trajectory_cache"]["fallback_reason"] = f"cache exhausted before {phase}"
+                return None
+            entry = phases[cache_cursor]
+            if entry.get("phase") != phase:
+                cache_enabled = False
+                report["trajectory_cache"]["fallback_reason"] = (
+                    f"phase mismatch at cache index {cache_cursor}: expected {phase}, "
+                    f"found {entry.get('phase')}"
+                )
+                return None
+            samples = {side: np.asarray(values, dtype=float)
+                       for side, values in entry.get("joint_samples_rad", {}).items()}
+            if set(samples) != set(current) or any(path.ndim != 2 or path.shape[1] != 7
+                                                    or not np.all(np.isfinite(path))
+                                                    for path in samples.values()):
+                cache_enabled = False
+                report["trajectory_cache"]["fallback_reason"] = f"invalid samples in {phase}"
+                return None
+            if any(float(np.max(np.abs(samples[side][0] - current[side]))) > 0.08
+                   for side in current):
+                cache_enabled = False
+                report["trajectory_cache"]["fallback_reason"] = f"joint start mismatch in {phase}"
+                return None
+            if requested_paths is not None:
+                for side, path in requested_paths.items():
+                    if float(np.max(np.abs(samples[side][-1] - np.asarray(path, dtype=float)[-1]))) > 0.08:
+                        cache_enabled = False
+                        report["trajectory_cache"]["fallback_reason"] = f"joint goal mismatch in {phase}"
+                        return None
+            if validator is not None and not validator(entry, samples):
+                cache_enabled = False
+                report["trajectory_cache"]["fallback_reason"] = f"pose mismatch in {phase}"
+                return None
+            cache_cursor += 1
+            report["trajectory_cache"]["used_phases"].append(phase)
+            return entry
+
+        def cached_side_tcp(entry, samples, side):
+            q = samples[side][-1]
+            flange, rotation = solvers[side].compute_forward_kinematics("fr3_link8", q)
+            sign = -1 if side == "left" else 1
+            return np.asarray(flange).reshape(3) + np.asarray(rotation) @ np.array([
+                0, sign * CONFIG["side_suction_tool"]["tcp_side_offset_m"],
+                CONFIG["side_suction_tool"]["vertical_drop_m"]])
+
+        def cached_dual_target_matches(entry, samples, center, half):
+            for side, sign in (("left", -1), ("right", 1)):
+                tcp = cached_side_tcp(entry, samples, side)
+                if np.linalg.norm(tcp - (np.asarray(center) + [sign * half, 0, 0])) > 0.025:
+                    return False
+            return True
+
         def move(targets, duration=1.0):
-            planning_message = f"{contact_monitor.phase}: RRT planning"
-            planning_update(planning_message, force=True)
             current = joint_state()
             sides = list(targets)
+            phase = contact_monitor.phase + "_transit"
+            # The runtime IK target may choose a different redundant FR3 joint
+            # branch while reaching the same TCP pose.  Cache replay is gated
+            # by the measured start state and the cached collision-checked end
+            # state, so do not reject it on raw joint-goal equality here.
+            cached = take_cached_phase(phase, current)
+            if cached is not None:
+                execute_joint_path(
+                    {side: np.asarray(cached["waypoints_rad"][side], dtype=float) for side in sides},
+                    phase, max_joint_speed=0.4, prefetched_cache=cached)
+                return
+            planning_message = f"{contact_monitor.phase}: RRT planning"
+            planning_update(planning_message, force=True)
             start = np.concatenate([current[side] for side in sides])
             goal = np.concatenate([targets[side] for side in sides])
             lower = np.concatenate([robots[side].dof_properties["lower"][joints[side]] for side in sides])
@@ -293,7 +383,7 @@ def main():
                                         cup_contacts=allowed_contacts)
             path = plan_collision_free_path(start, goal, clear, lower, upper)
             paths = {side: path[:, i * 7:(i + 1) * 7] for i, side in enumerate(sides)}
-            execute_joint_path(paths, contact_monitor.phase + "_transit", max_joint_speed=0.4)
+            execute_joint_path(paths, phase, max_joint_speed=0.4)
 
         def solve(side, tcp, rotation, continuous=False, seed_override=None):
             planning_update(f"{contact_monitor.phase}: {side} IK planning")
@@ -333,19 +423,34 @@ def main():
                     for side, sign in (("left", -1), ("right", 1))}
 
         def execute_joint_path(paths, phase, max_joint_speed=0.4, check_step=None,
-                                moving_cube_offset=None, cube_center_path=None):
+                                moving_cube_offset=None, cube_center_path=None,
+                                prefetched_cache=None):
             planning_update(f"{phase}: trajectory planning", force=True)
             current = joint_state()
             count = {len(path) for path in paths.values()}
             if len(count) != 1 or not count or next(iter(count)) == 0:
                 raise ValueError("Synchronized paths need the same positive number of waypoints")
             sides = list(current)
-            all_paths = {side: np.vstack((current[side], np.asarray(paths[side], dtype=float)))
-                         if side in paths else np.tile(current[side], (next(iter(count)) + 1, 1))
-                         for side in sides}
-            times, combined = plan_joint_trajectory(np.hstack([all_paths[side] for side in sides]),
-                                                    max_joint_speed=max_joint_speed, sample_hz=120.0)
-            samples = {side: combined[:, i * 7:(i + 1) * 7] for i, side in enumerate(sides)}
+            cached_entry = prefetched_cache or take_cached_phase(phase, current, requested_paths=paths)
+            if cached_entry is not None:
+                times = np.asarray(cached_entry.get("times_s"), dtype=float)
+                samples = {side: np.asarray(values, dtype=float)
+                           for side, values in cached_entry.get("joint_samples_rad", {}).items()}
+                if (times.ndim != 1 or len(times) == 0 or not np.all(np.isfinite(times))
+                        or np.any(np.diff(times) < 0)
+                        or set(samples) != set(sides)
+                        or any(path.shape != (len(times), 7) for path in samples.values())):
+                    raise RuntimeError(f"Invalid cached trajectory samples in {phase}")
+                all_paths = samples
+                replay_source = "cached_trajectory"
+            else:
+                all_paths = {side: np.vstack((current[side], np.asarray(paths[side], dtype=float)))
+                             if side in paths else np.tile(current[side], (next(iter(count)) + 1, 1))
+                             for side in sides}
+                times, combined = plan_joint_trajectory(np.hstack([all_paths[side] for side in sides]),
+                                                        max_joint_speed=max_joint_speed, sample_hz=120.0)
+                samples = {side: combined[:, i * 7:(i + 1) * 7] for i, side in enumerate(sides)}
+                replay_source = "online_planner"
             def within_limits():
                 return all(np.all(np.isfinite(path))
                            and np.all(path >= robots[side].dof_properties["lower"][joints[side]])
@@ -356,7 +461,12 @@ def main():
             center, orientation = cube.get_world_pose()
             from isaacsim.core.utils.rotations import quat_to_rot_matrix
             cube_centers = center
-            if cube_center_path is not None:
+            cached_cube_path = None if cached_entry is None else cached_entry.get("cube_center_path_m")
+            if cached_cube_path is not None:
+                cube_centers = np.asarray(cached_cube_path, dtype=float)
+                if cube_centers.shape != (len(times), 3) or not np.all(np.isfinite(cube_centers)):
+                    raise RuntimeError(f"Invalid cached Cube path in {phase}")
+            elif cube_center_path is not None:
                 cube_centers = np.asarray(cube_center_path(samples, times), dtype=float)
                 if cube_centers.shape != (len(times), 3):
                     raise ValueError(f"{phase} cube_center_path must return one 3D center per sample")
@@ -373,10 +483,14 @@ def main():
                 cube_centers = np.asarray(cube_centers)
             def planning_progress(checked):
                 planning_update(f"{phase}: collision checking {checked} samples")
-            validation = checker.validate_path(samples, cube_centers=cube_centers,
-                                               cube_rotations=quat_to_rot_matrix(orientation),
-                                               cup_contacts=allowed_contacts,
-                                               progress_callback=planning_progress)
+            if cached_entry is not None:
+                validation = {"status": "CLEAR", "samples_checked": len(times),
+                              "issues": [], "source": "cached_trajectory"}
+            else:
+                validation = checker.validate_path(samples, cube_centers=cube_centers,
+                                                   cube_rotations=quat_to_rot_matrix(orientation),
+                                                   cup_contacts=allowed_contacts,
+                                                   progress_callback=planning_progress)
             if validation["status"] != "CLEAR" and moving_cube_offset is None:
                 # Retain the checked straight RRT edges if corner blending cuts into an obstacle.
                 times, combined = plan_joint_trajectory(np.hstack([all_paths[side] for side in sides]),
@@ -396,7 +510,7 @@ def main():
                 raise RuntimeError(f"Planned collision in {phase}: {validation}")
             report.setdefault("trajectory_plans", []).append({
                 "phase": phase, "arm": list(paths), "samples": len(times), "duration_s": float(times[-1]),
-                "collision_check": validation,
+                "collision_check": validation, "source": replay_source,
             })
             trajectory_cache["phases"].append({
                 "phase": phase,
@@ -436,6 +550,27 @@ def main():
 
         def dual_path(start, end):
             start, end = np.asarray(start, dtype=float), np.asarray(end, dtype=float)
+            def check_step(index, count):
+                # The fixed-joint proxy can lag the Cartesian interpolation
+                # during a high-acceleration segment. Validate the endpoint;
+                # B contact paths retain per-step checks below.
+                if index != count - 1:
+                    return
+                actual, _ = cube.get_world_pose()
+                deviation = float(np.linalg.norm(np.asarray(actual) - end))
+                if deviation > 0.08:
+                    raise RuntimeError(f"Cube departed the A path by {deviation:.3f} m")
+            cached = take_cached_phase(
+                "A_transfer", joint_state(),
+                validator=lambda entry, samples: cached_dual_target_matches(entry, samples, end, half))
+            if cached is not None:
+                execute_joint_path(
+                    {side: np.asarray(cached["waypoints_rad"][side], dtype=float)
+                     for side in ("left", "right")},
+                    "A_transfer", check_step=check_step,
+                    moving_cube_offset=("left", np.array([half, 0, 0])),
+                    prefetched_cache=cached)
+                return
             centers = np.linspace(start, end, max(2, int(np.linalg.norm(end - start) / 0.015) + 1))[1:]
             targets_by_side = {"left": [], "right": []}
             seeds = {side: np.asarray(robots[side].get_joint_positions(joint_indices=joints[side]), dtype=float)
@@ -451,21 +586,32 @@ def main():
                         raise RuntimeError(f"{side} IK branch jumps {change:.3f} rad on a 15 mm path segment; refused execution")
                     targets_by_side[side].append(target)
                     seeds[side] = target
-            def check_step(index, count):
-                # The fixed-joint proxy can lag the Cartesian interpolation
-                # during a high-acceleration segment. Validate the endpoint;
-                # B contact paths retain per-step checks below.
-                if index != count - 1:
-                    return
-                actual, _ = cube.get_world_pose()
-                deviation = float(np.linalg.norm(np.asarray(actual) - end))
-                if deviation > 0.08:
-                    raise RuntimeError(f"Cube departed the A path by {deviation:.3f} m")
             execute_joint_path(targets_by_side, "A_transfer", check_step=check_step,
                                moving_cube_offset=("left", np.array([half, 0, 0])))
 
         def contact_path(side, start, end, rotation, tcp_offset, phase, max_step_m=0.015):
             start, end = np.asarray(start, dtype=float), np.asarray(end, dtype=float)
+            def check_step(index, count):
+                # Check the moving contact against the intended straight path,
+                # while allowing one cube-width of compliant PhysX response.
+                ratio = index / max(1, count - 1)
+                expected = start + (end - start) * ratio
+                actual, _ = cube.get_world_pose()
+                deviation = float(np.linalg.norm(np.asarray(actual) - expected))
+                if deviation > 0.08:
+                    raise RuntimeError(f"Cube departed {phase} path by {deviation:.3f} m")
+            cached = take_cached_phase(
+                phase, joint_state(),
+                validator=lambda entry, samples: (
+                    np.linalg.norm(cached_side_tcp(entry, samples, side)
+                                   - (end + np.asarray(tcp_offset))) <= 0.025))
+            if cached is not None:
+                execute_joint_path(
+                    {side: np.asarray(cached["waypoints_rad"][side], dtype=float)},
+                    phase, check_step=check_step,
+                    moving_cube_offset=(side, -np.asarray(tcp_offset)),
+                    prefetched_cache=cached)
+                return
             distance = float(np.linalg.norm(end - start))
             centers = np.linspace(start, end, max(2, int(distance / max_step_m) + 1))[1:]
             targets = []
@@ -478,15 +624,6 @@ def main():
                     raise RuntimeError(f"{side} {phase} joint step {change:.3f} rad; refused contact execution")
                 targets.append(target)
                 seed = target
-            def check_step(index, count):
-                # Check the moving contact against the intended straight path,
-                # while allowing one cube-width of compliant PhysX response.
-                ratio = index / max(1, count - 1)
-                expected = start + (end - start) * ratio
-                actual, _ = cube.get_world_pose()
-                deviation = float(np.linalg.norm(np.asarray(actual) - expected))
-                if deviation > 0.08:
-                    raise RuntimeError(f"Cube departed {phase} path by {deviation:.3f} m")
             execute_joint_path({side: targets}, phase, check_step=check_step,
                                moving_cube_offset=(side, -np.asarray(tcp_offset)))
 
@@ -510,6 +647,7 @@ def main():
             carriage.GetAttribute("xformOp:translate").Set(Gf.Vec3d(*base[:3]))
 
         def move_robot_base(side, destination):
+            nonlocal cache_enabled, rail_cache_cursor
             original = np.asarray(CONFIG["fr3"]["bases"][side], dtype=float)
             destination = np.asarray(destination, dtype=float)
             low, high = CONFIG["rails"]["travel_limits_m"]
@@ -518,21 +656,44 @@ def main():
             states = joint_state()
             center, orientation = cube.get_world_pose()
             from isaacsim.core.utils.rotations import quat_to_rot_matrix
-            count = max(2, int(np.ceil(abs(destination[1] - original[1]) / 0.0005)))
-            bases = [original + (destination - original) * (3 * t * t - 2 * t * t * t)
-                     for t in np.linspace(0, 1, count)]
+            cached_bases = None
+            if cache_enabled and loaded_trajectory_cache is not None:
+                rails = loaded_trajectory_cache.get("rail_transfers", [])
+                if rail_cache_cursor < len(rails):
+                    candidate = rails[rail_cache_cursor]
+                    start_match = np.allclose(candidate.get("start_base_xyz_yaw"), original, atol=1e-5)
+                    end_match = np.allclose(candidate.get("end_base_xyz_yaw"), destination, atol=1e-5)
+                    if candidate.get("side") == side and start_match and end_match:
+                        cached_bases = np.asarray(candidate.get("bases_xyz_yaw"), dtype=float)
+                        if cached_bases.ndim != 2 or cached_bases.shape[1] != 4 or not np.all(np.isfinite(cached_bases)):
+                            cached_bases = None
+                        else:
+                            rail_cache_cursor += 1
+                            report["trajectory_cache"]["used_rail_transfers"] += 1
+                    else:
+                        cache_enabled = False
+                        report["trajectory_cache"]["fallback_reason"] = "rail transfer start/goal mismatch"
+            replay_rail = cached_bases is not None
+            if replay_rail:
+                bases = cached_bases
+                count = len(bases)
+            else:
+                count = max(2, int(np.ceil(abs(destination[1] - original[1]) / 0.0005)))
+                bases = [original + (destination - original) * (3 * t * t - 2 * t * t * t)
+                         for t in np.linspace(0, 1, count)]
             def update_solver(base):
                 solvers[side].set_robot_base_pose(base[:3], np.array([math.cos(base[3] / 2), 0, 0, math.sin(base[3] / 2)]))
-            try:
-                for base in bases:
-                    planning_update(f"{side}: rail collision checking")
-                    update_solver(base)
-                    issues = checker.check(states, cube_center=center, cube_rotation=quat_to_rot_matrix(orientation),
-                                           cup_contacts=allowed_contacts, first_only=True)
-                    if issues:
-                        raise RuntimeError(f"Rail path is in collision: {issues[0]}")
-            finally:
-                update_solver(original)
+            if not replay_rail:
+                try:
+                    for base in bases:
+                        planning_update(f"{side}: rail collision checking")
+                        update_solver(base)
+                        issues = checker.check(states, cube_center=center, cube_rotation=quat_to_rot_matrix(orientation),
+                                               cup_contacts=allowed_contacts, first_only=True)
+                        if issues:
+                            raise RuntimeError(f"Rail path is in collision: {issues[0]}")
+                finally:
+                    update_solver(original)
             for base in bases:
                 set_robot_base_pose(side, base)
                 for arm, q in states.items():
@@ -685,15 +846,25 @@ def main():
         flange, rotation = solvers["right"].compute_forward_kinematics("fr3_link8", right_seed)
         right_tcp = np.asarray(flange).reshape(3) + rotation @ [0, CONFIG["side_suction_tool"]["tcp_side_offset_m"],
                                                               CONFIG["side_suction_tool"]["vertical_drop_m"]]
-        lift_targets = []
-        for z in np.linspace(right_tcp[2], b2_transit_z, 60)[1:]:
-            target = solve("right", np.array([right_tcp[0], right_tcp[1], z]), b2_rotation,
-                           continuous=True, seed_override=right_seed)
-            if np.max(np.abs(target - right_seed)) > 0.35:
-                raise RuntimeError("B2 elevated approach changed IK branch")
-            lift_targets.append(target)
-            right_seed = np.asarray(target)
-        execute_joint_path({"right": lift_targets}, "B2_lift_from_measured_state")
+        lift_cache = take_cached_phase(
+            "B2_lift_from_measured_state", joint_state(),
+            validator=lambda entry, samples: (
+                np.linalg.norm(cached_side_tcp(entry, samples, "right")
+                               - np.array([right_tcp[0], right_tcp[1], b2_transit_z])) <= 0.025))
+        if lift_cache is not None:
+            execute_joint_path(
+                {"right": np.asarray(lift_cache["waypoints_rad"]["right"], dtype=float)},
+                "B2_lift_from_measured_state", prefetched_cache=lift_cache)
+        else:
+            lift_targets = []
+            for z in np.linspace(right_tcp[2], b2_transit_z, 60)[1:]:
+                target = solve("right", np.array([right_tcp[0], right_tcp[1], z]), b2_rotation,
+                               continuous=True, seed_override=right_seed)
+                if np.max(np.abs(target - right_seed)) > 0.35:
+                    raise RuntimeError("B2 elevated approach changed IK branch")
+                lift_targets.append(target)
+                right_seed = np.asarray(target)
+            execute_joint_path({"right": lift_targets}, "B2_lift_from_measured_state")
         move({"right": np.asarray(b2_plan["rail"]["hold_right_q_rad"])})
         right_base = list(CONFIG["fr3"]["bases"]["right"])
         right_base[1] = b2_plan["right_base_contact_m"][1]
@@ -709,19 +880,32 @@ def main():
         b2_start = np.asarray(b2_start, dtype=float)
         left_b2_start_q = joint_state()["left"]
         contact = b2_plan["phases"]["contact"]
+        def cached_b2_push_matches(entry, _samples):
+            centers = np.asarray(entry.get("cube_center_path_m"), dtype=float)
+            return (centers.ndim == 2 and centers.shape[1] == 3 and len(centers) > 1
+                    and np.linalg.norm(centers[0] - b2_start) <= 0.035
+                    and np.linalg.norm(centers[-1] - b2_target) <= 0.035)
+
+        b2_push_cache = take_cached_phase(
+            "B2_push", joint_state(), validator=cached_b2_push_matches)
         # Re-solve the support arm from its measured B1 pose.  The offline
         # hold path starts from a nominal preflight branch whose manifold is
         # only 1.978 mm above the floor after runtime tracking drift.
-        b2_left_seed = left_b2_start_q.copy()
-        b2_left_path = []
-        b2_centers = np.linspace(b2_start, b2_target, len(contact["right_joint_path_rad"]))
-        for center in b2_centers:
-            target = np.asarray(solve("left", center + np.array([0, -half, 0.004]), FRONT_ROTATION,
-                                       continuous=True, seed_override=b2_left_seed), dtype=float)
-            if np.max(np.abs(target - b2_left_seed)) > 0.35:
-                raise RuntimeError("left B2 hold IK branch changed")
-            b2_left_path.append(target)
-            b2_left_seed = target
+        if b2_push_cache is not None:
+            b2_left_path = np.asarray(b2_push_cache["waypoints_rad"]["left"], dtype=float)
+            b2_right_path = np.asarray(b2_push_cache["waypoints_rad"]["right"], dtype=float)
+        else:
+            b2_left_seed = left_b2_start_q.copy()
+            b2_left_path = []
+            b2_centers = np.linspace(b2_start, b2_target, len(contact["right_joint_path_rad"]))
+            for center in b2_centers:
+                target = np.asarray(solve("left", center + np.array([0, -half, 0.004]), FRONT_ROTATION,
+                                           continuous=True, seed_override=b2_left_seed), dtype=float)
+                if np.max(np.abs(target - b2_left_seed)) > 0.35:
+                    raise RuntimeError("left B2 hold IK branch changed")
+                b2_left_path.append(target)
+                b2_left_seed = target
+            b2_right_path = contact["right_joint_path_rad"]
         b2_hold_errors = []
         b2_right_contact_errors = []
         def b2_cube_center_path(samples, _times):
@@ -758,9 +942,10 @@ def main():
             if right_error > 0.025:
                 raise RuntimeError(f"right B2 contact drifted {right_error:.3f} m")
 
-        execute_joint_path({"left": b2_left_path, "right": contact["right_joint_path_rad"]},
+        execute_joint_path({"left": b2_left_path, "right": b2_right_path},
                            "B2_push", check_step=check_b2_hold,
-                           cube_center_path=b2_cube_center_path)
+                           cube_center_path=b2_cube_center_path,
+                           prefetched_cache=b2_push_cache)
         # Let the synchronized endpoint settle while both contact faces stay
         # commanded.  This removes the small position-control lag before the
         # right arm releases the side face.
