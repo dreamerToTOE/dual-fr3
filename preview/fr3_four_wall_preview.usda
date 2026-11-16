@@ -112,7 +112,7 @@ def Xform "World"
         {
             rel material:binding = </World/Looks/Table>
             double size = 1
-            float3 xformOp:scale = (1, 2.4, 0.05)
+            float3 xformOp:scale = (1.2, 2.4, 0.05)
             double3 xformOp:translate = (0, 0.6, 0.675)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
@@ -123,8 +123,8 @@ def Xform "World"
         {
             rel material:binding = </World/Looks/Floor>
             double size = 1
-            float3 xformOp:scale = (0.534, 0.872, 0.012)
-            double3 xformOp:translate = (0, 0.702, 0.706)
+            float3 xformOp:scale = (0.664, 0.921, 0.012)
+            double3 xformOp:translate = (0, 0.7145, 0.706)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
 
@@ -134,8 +134,8 @@ def Xform "World"
         {
             rel material:binding = </World/Looks/Wall>
             double size = 1
-            float3 xformOp:scale = (0.534, 0.012, 0.1)
-            double3 xformOp:translate = (0, 0.272, 0.762)
+            float3 xformOp:scale = (0.64, 0.012, 0.15)
+            double3 xformOp:translate = (0, 0.272, 0.787)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
 
@@ -145,8 +145,8 @@ def Xform "World"
         {
             rel material:binding = </World/Looks/Wall>
             double size = 1
-            float3 xformOp:scale = (0.534, 0.012, 0.1)
-            double3 xformOp:translate = (0, 1.132, 0.762)
+            float3 xformOp:scale = (0.64, 0.012, 0.15)
+            double3 xformOp:translate = (0, 1.157, 0.787)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
 
@@ -156,8 +156,8 @@ def Xform "World"
         {
             rel material:binding = </World/Looks/Wall>
             double size = 1
-            float3 xformOp:scale = (0.012, 0.848, 0.1)
-            double3 xformOp:translate = (-0.261, 0.702, 0.762)
+            float3 xformOp:scale = (0.012, 0.897, 0.15)
+            double3 xformOp:translate = (-0.326, 0.7145, 0.787)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
 
@@ -167,8 +167,8 @@ def Xform "World"
         {
             rel material:binding = </World/Looks/Wall>
             double size = 1
-            float3 xformOp:scale = (0.012, 0.848, 0.1)
-            double3 xformOp:translate = (0.261, 0.702, 0.762)
+            float3 xformOp:scale = (0.012, 0.897, 0.15)
+            double3 xformOp:translate = (0.326, 0.7145, 0.787)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
     }
@@ -179,8 +179,8 @@ def Xform "World"
     {
         rel material:binding = </World/Looks/Cube>
         double size = 1
-        float3 xformOp:scale = (0.1, 0.1, 0.1)
-        double3 xformOp:translate = (0, -0.3, 0.762)
+        float3 xformOp:scale = (0.15, 0.15, 0.15)
+        double3 xformOp:translate = (0, -0.3, 0.787)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
     }
 
@@ -192,8 +192,8 @@ def Xform "World"
         {
             rel material:binding = </World/Looks/Goal>
             double size = 1
-            float3 xformOp:scale = (0.112, 0.112, 0.002)
-            double3 xformOp:translate = (-0.205, 1.076, 0.713)
+            float3 xformOp:scale = (0.162, 0.162, 0.002)
+            double3 xformOp:translate = (-0.245, 1.076, 0.713)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
 
@@ -203,8 +203,8 @@ def Xform "World"
         {
             rel material:binding = </World/Looks/Goal>
             double size = 1
-            float3 xformOp:scale = (0.112, 0.112, 0.002)
-            double3 xformOp:translate = (0.205, 1.076, 0.713)
+            float3 xformOp:scale = (0.162, 0.162, 0.002)
+            double3 xformOp:translate = (0.245, 1.076, 0.713)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
 
@@ -214,8 +214,8 @@ def Xform "World"
         {
             rel material:binding = </World/Looks/Goal>
             double size = 1
-            float3 xformOp:scale = (0.112, 0.112, 0.002)
-            double3 xformOp:translate = (-0.105, 1.076, 0.713)
+            float3 xformOp:scale = (0.162, 0.162, 0.002)
+            double3 xformOp:translate = (-0.125, 1.076, 0.713)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
 
@@ -225,8 +225,8 @@ def Xform "World"
         {
             rel material:binding = </World/Looks/Goal>
             double size = 1
-            float3 xformOp:scale = (0.112, 0.112, 0.002)
-            double3 xformOp:translate = (0.105, 1.076, 0.713)
+            float3 xformOp:scale = (0.162, 0.162, 0.002)
+            double3 xformOp:translate = (0.125, 1.076, 0.713)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
 
@@ -236,7 +236,7 @@ def Xform "World"
         {
             rel material:binding = </World/Looks/Goal>
             double size = 1
-            float3 xformOp:scale = (0.112, 0.112, 0.002)
+            float3 xformOp:scale = (0.162, 0.162, 0.002)
             double3 xformOp:translate = (0, 1.076, 0.713)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
@@ -247,7 +247,7 @@ def Xform "World"
     )
     {
         float xformOp:rotateZ:preview_yaw = 0
-        double3 xformOp:translate:preview_base = (-0.38, 0.2, 0.745)
+        double3 xformOp:translate:preview_base = (-0.44, 0.2, 0.745)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:translate:preview_base", "xformOp:rotateZ:preview_yaw"]
 
         over "fr3_link0"
@@ -304,6 +304,26 @@ def Xform "World"
             {
                 float drive:angular:physics:targetPosition = 45
             }
+        }
+
+        over "fr3_hand"
+        {
+            token visibility = "invisible"
+        }
+
+        over "fr3_leftfinger"
+        {
+            token visibility = "invisible"
+        }
+
+        over "fr3_rightfinger"
+        {
+            token visibility = "invisible"
+        }
+
+        over "fr3_hand_tcp"
+        {
+            token visibility = "invisible"
         }
 
         over "fr3_link8"
@@ -395,7 +415,7 @@ def Xform "World"
             rel material:binding = </World/Looks/Rail>
             double size = 1
             float3 xformOp:scale = (0.15, 2.35, 0.025)
-            double3 xformOp:translate = (-0.38, 0.625, 0.745)
+            double3 xformOp:translate = (-0.44, 0.625, 0.745)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
 
@@ -405,8 +425,8 @@ def Xform "World"
         {
             rel material:binding = </World/Looks/Rail>
             double size = 1
-            float3 xformOp:scale = (0.17, 0.16, 0.02)
-            double3 xformOp:translate = (-0.38, 0.2, 0.735)
+            float3 xformOp:scale = (0.2, 0.18, 0.02)
+            double3 xformOp:translate = (-0.44, 0.2, 0.735)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
     }
@@ -416,7 +436,7 @@ def Xform "World"
     )
     {
         float xformOp:rotateZ:preview_yaw = 180
-        double3 xformOp:translate:preview_base = (0.38, 0.2, 0.745)
+        double3 xformOp:translate:preview_base = (0.44, 0.2, 0.745)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale", "xformOp:translate:preview_base", "xformOp:rotateZ:preview_yaw"]
 
         over "fr3_link0"
@@ -473,6 +493,26 @@ def Xform "World"
             {
                 float drive:angular:physics:targetPosition = 45
             }
+        }
+
+        over "fr3_hand"
+        {
+            token visibility = "invisible"
+        }
+
+        over "fr3_leftfinger"
+        {
+            token visibility = "invisible"
+        }
+
+        over "fr3_rightfinger"
+        {
+            token visibility = "invisible"
+        }
+
+        over "fr3_hand_tcp"
+        {
+            token visibility = "invisible"
         }
 
         over "fr3_link8"
@@ -564,7 +604,7 @@ def Xform "World"
             rel material:binding = </World/Looks/Rail>
             double size = 1
             float3 xformOp:scale = (0.15, 2.35, 0.025)
-            double3 xformOp:translate = (0.38, 0.625, 0.745)
+            double3 xformOp:translate = (0.44, 0.625, 0.745)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
 
@@ -574,8 +614,8 @@ def Xform "World"
         {
             rel material:binding = </World/Looks/Rail>
             double size = 1
-            float3 xformOp:scale = (0.17, 0.16, 0.02)
-            double3 xformOp:translate = (0.38, 0.2, 0.735)
+            float3 xformOp:scale = (0.2, 0.18, 0.02)
+            double3 xformOp:translate = (0.44, 0.2, 0.735)
             uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:scale"]
         }
     }
@@ -603,7 +643,7 @@ def Xform "World"
         {
             float2 clippingRange = (0.01, 20)
             float focalLength = 25
-            matrix4d xformOp:transform = ( (0.8024623409461334, 0.5967027663445608, -2.775557561562892e-17, 0), (-0.18448390481214363, 0.24809904440253802, 0.9510060741298194, -0), (0.5674679552437436, -0.763146560500207, 0.3091721963052121, 0), (1.4499999999999997, -1.2500000000000002, 1.5500000000000003, 1) )
+            matrix4d xformOp:transform = ( (0.5345844217796828, 0, -0.8451150785487632, 0), (0.6203667669787447, 0.6790825797146948, 0.3924180479493454, -0), (0.5739029276966812, -0.7340618842631969, 0.36302696821743546, 0), (2.1500000000000004, -2.05, 2.15, 1.0000000000000002) )
             uniform token[] xformOpOrder = ["xformOp:transform"]
         }
 
@@ -611,7 +651,7 @@ def Xform "World"
         {
             float2 clippingRange = (0.01, 20)
             float focalLength = 25
-            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, -0, 1, 0), (0, 0.7, 3.2, 1) )
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, -0, 1, 0), (0, 0.7, 4, 1) )
             uniform token[] xformOpOrder = ["xformOp:transform"]
         }
     }

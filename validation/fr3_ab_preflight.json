@@ -1,5 +1,5 @@
 {
-  "scene_id": "dual_fr3_four_wall_100mm_5goal",
+  "scene_id": "dual_fr3_four_wall_150mm_5goal",
   "scope": "single_cube_A_B1_B2",
   "status": "PASS_GEOMETRY_BLOCKED_RUNTIME",
   "geometry_status": "PASS",
@@ -9,14 +9,14 @@
       "center_m": [
         0.0,
         0.736,
-        0.762
+        0.787
       ],
       "boundary_gaps_m": {
-        "left_m": 0.20500000000000002,
-        "right_m": 0.20500000000000002,
-        "front_m": 0.4079999999999999,
-        "back_m": 0.3399999999999999,
-        "floor_m": 0.0
+        "left_m": 0.245,
+        "right_m": 0.245,
+        "front_m": 0.383,
+        "back_m": 0.34,
+        "floor_m": 1.1102230246251565e-16
       },
       "inside": true
     },
@@ -24,29 +24,29 @@
       "center_m": [
         0.0,
         1.076,
-        0.762
+        0.787
       ],
       "boundary_gaps_m": {
-        "left_m": 0.20500000000000002,
-        "right_m": 0.20500000000000002,
-        "front_m": 0.748,
-        "back_m": -1.8041124150158794e-16,
-        "floor_m": 0.0
+        "left_m": 0.245,
+        "right_m": 0.245,
+        "front_m": 0.7230000000000001,
+        "back_m": -4.163336342344337e-17,
+        "floor_m": 1.1102230246251565e-16
       },
       "inside": true
     },
     "B2_left_wall": {
       "center_m": [
-        -0.205,
+        -0.245,
         1.076,
-        0.762
+        0.787
       ],
       "boundary_gaps_m": {
         "left_m": 0.0,
-        "right_m": 0.41,
-        "front_m": 0.748,
-        "back_m": -1.8041124150158794e-16,
-        "floor_m": 0.0
+        "right_m": 0.48999999999999994,
+        "front_m": 0.7230000000000001,
+        "back_m": -4.163336342344337e-17,
+        "floor_m": 1.1102230246251565e-16
       },
       "inside": true
     }

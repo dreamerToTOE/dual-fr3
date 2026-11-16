@@ -1,0 +1,42 @@
+{
+  "snapshot_id": "dual_fr3_four_wall_150mm_5goal_base_no_trajectory_cache",
+  "scene_id": "dual_fr3_four_wall_150mm_5goal",
+  "snapshot_stage": "base_environment_before_runtime_trajectory_cache",
+  "trajectory_cache": {
+    "status": "NOT_STORED",
+    "complete_runtime_a_b1_b2_joint_paths_present": false,
+    "files": [],
+    "note": "The B2 collision-constrained preflight plan is retained for execution validation. It is not the complete runtime A/B1/B2 trajectory cache."
+  },
+  "scene_parameters": {
+    "meters_per_unit": 1.0,
+    "cube_size_m": 0.15,
+    "floor_top_m": 0.712,
+    "supply_cube_center_m": [0.0, -0.3, 0.787],
+    "phase_A_landing_center_m": [0.0, 0.736, 0.787],
+    "phase_B1_target_center_m": [0.0, 1.076, 0.787],
+    "phase_B2_target_center_m": [-0.245, 1.076, 0.787],
+    "wall_inner_x_bounds_m": [-0.320, 0.320],
+    "wall_front_inner_y_m": 0.278,
+    "wall_back_inner_y_m": 1.151,
+    "fr3_bases_xyz_yaw": {
+      "left": [-0.44, 0.2, 0.745, 0.0],
+      "right": [0.44, 0.2, 0.745, 3.141592653589793]
+    },
+    "rail_axis": "Y",
+    "rail_travel_limits_m": [-0.22, 1.5],
+    "b2_right_rail_contact_y_m": 0.65,
+    "physics": {
+      "cube_mass_kg": 1.25,
+      "gravity_m_s2": [0.0, 0.0, -9.81],
+      "physics_dt_s": 0.008333333333333333
+    }
+  },
+  "validation_artifacts": [
+    "validation/fr3_ab_preflight.json",
+    "validation/fr3_ab_ik_preflight.json",
+    "validation/fr3_b2_collision_plan.json",
+    "validation/fr3_ab_visual_runner.json"
+  ],
+  "github_note": "Base environment snapshot only. Runtime trajectory storage is a later stage."
+}

@@ -1,30 +1,30 @@
 {
-  "scene_id": "dual_fr3_four_wall_100mm_5goal",
+  "scene_id": "dual_fr3_four_wall_150mm_5goal",
   "meters_per_unit": 1.0,
-  "cube_size_m": 0.1,
+  "cube_size_m": 0.15,
   "floor_top_m": 0.712,
-  "supply_cube_center_m": [0.0, -0.3, 0.762],
+  "supply_cube_center_m": [0.0, -0.3, 0.787],
   "goal_cube_centers_m": [
-    [-0.205, 1.076, 0.762],
-    [0.205, 1.076, 0.762],
-    [-0.105, 1.076, 0.762],
-    [0.105, 1.076, 0.762],
-    [0.0, 1.076, 0.762]
+    [-0.245, 1.076, 0.787],
+    [0.245, 1.076, 0.787],
+    [-0.125, 1.076, 0.787],
+    [0.125, 1.076, 0.787],
+    [0.0, 1.076, 0.787]
   ],
   "static_boxes": [
-    ["table", [0.0, 0.6, 0.675], [1.0, 2.4, 0.05]],
-    ["floor", [0.0, 0.702, 0.706], [0.534, 0.872, 0.012]],
-    ["wall_front", [0.0, 0.272, 0.762], [0.534, 0.012, 0.1]],
-    ["wall_back", [0.0, 1.132, 0.762], [0.534, 0.012, 0.1]],
-    ["wall_left", [-0.261, 0.702, 0.762], [0.012, 0.848, 0.1]],
-    ["wall_right", [0.261, 0.702, 0.762], [0.012, 0.848, 0.1]],
-    ["supply", [0.0, -0.31, 0.706], [0.16, 0.14, 0.012]]
+    ["table", [0.0, 0.6, 0.675], [1.2, 2.4, 0.05]],
+    ["floor", [0.0, 0.7145, 0.706], [0.664, 0.921, 0.012]],
+    ["wall_front", [0.0, 0.272, 0.787], [0.64, 0.012, 0.15]],
+    ["wall_back", [0.0, 1.157, 0.787], [0.64, 0.012, 0.15]],
+    ["wall_left", [-0.326, 0.7145, 0.787], [0.012, 0.897, 0.15]],
+    ["wall_right", [0.326, 0.7145, 0.787], [0.012, 0.897, 0.15]],
+    ["supply", [0.0, -0.31, 0.706], [0.21, 0.19, 0.012]]
   ],
   "fr3": {
     "asset": "Robots/Franka/FR3/fr3.usd",
     "bases": {
-      "left": [-0.38, 0.2, 0.745, 0.0],
-      "right": [0.38, 0.2, 0.745, 3.141592653589793]
+      "left": [-0.44, 0.2, 0.745, 0.0],
+      "right": [0.44, 0.2, 0.745, 3.141592653589793]
     },
     "official_start_q_rad": [
       0.0, -0.7853981633974483, 0.0, -2.356194490192345,
@@ -44,31 +44,32 @@
     "travel_limits_m": [-0.22, 1.5],
     "beam_size_m": [0.15, 2.35, 0.025],
     "beam_local_center_m": [0.0, 0.425, 0.0],
-    "carriage_size_m": [0.17, 0.16, 0.02]
+    "carriage_size_m": [0.20, 0.18, 0.02]
   },
   "task": {
     "scope": "single_cube_A_B1_B2",
     "phase_A": {
       "goal": "双臂从供料位中心吸附，抬高越过前墙，放到前墙内 landing 位",
-      "landing_center_m": [0.0, 0.736, 0.762],
-      "lift_center_m": [0.0, -0.3, 0.882],
-      "over_front_center_m": [0.0, 0.34, 0.882]
+      "landing_center_m": [0.0, 0.736, 0.787],
+      "lift_center_m": [0.0, -0.3, 1.107],
+      "over_front_center_m": [0.0, 0.40, 1.107]
     },
     "phase_B1": {
       "goal": "左臂从 cube 前侧面中心沿 +Y 推到后墙",
-      "target_center_m": [0.0, 1.076, 0.762],
+      "target_center_m": [0.0, 1.076, 0.787],
       "direction_world": [0.0, 1.0, 0.0],
       "active_arm": "left"
     },
     "phase_B2": {
-      "goal": "右臂从 cube 右侧面中心沿 -X 推到左墙",
-      "target_center_m": [-0.205, 1.076, 0.762],
+      "goal": "左臂持续沿 +Y 压向后墙，右臂沿 -X 推到左墙",
+      "target_center_m": [-0.245, 1.076, 0.787],
       "direction_world": [-1.0, 0.0, 0.0],
       "active_arm": "right",
+      "support_arm": "left",
       "back_wall_contact_required": true,
       "rail_assist": {
-        "base_y_m": 0.38,
-        "tcp_orientation_wxyz": [0.5, -0.5, 0.5, 0.5],
+        "base_y_m": 0.65,
+        "tcp_orientation_wxyz": [0.0, 0.7071067811865476, -0.7071067811865476, 0.0],
         "path_samples": 42
       }
     },
@@ -77,12 +78,12 @@
     }
   },
   "physics": {
-    "cube_mass_kg": 0.37037037037037046,
+    "cube_mass_kg": 1.25,
     "gravity_m_s2": [0.0, 0.0, -9.81],
     "settle_speed_threshold_m_s": 0.01,
     "settle_hold_s": 0.25
   },
-  "scope": "four_wall_100mm_A_B_geometry_and_dynamic_smoke",
+  "scope": "four_wall_150mm_A_B_geometry_and_dynamic_smoke",
   "dynamic_validation": false,
   "ab_runtime": "not_implemented"
 }

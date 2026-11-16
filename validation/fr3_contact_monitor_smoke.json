@@ -1,0 +1,81 @@
+[
+  {
+    "reporter_count": 1,
+    "contact_count": 5,
+    "unexpected_contact_count": 2,
+    "minimum_separation_m": -0.020000003278255463,
+    "first_collision": {
+      "phase": "link_wall",
+      "collider0": "/World/left_fr3/fr3_link3/collider",
+      "collider1": "/World/Environment/wall_back",
+      "separation_m": -0.020000003278255463
+    },
+    "case": "link_wall",
+    "passed": true
+  },
+  {
+    "reporter_count": 1,
+    "contact_count": 5,
+    "unexpected_contact_count": 0,
+    "minimum_separation_m": -0.0020000040531158447,
+    "first_collision": null,
+    "case": "cup_cube",
+    "passed": true
+  },
+  {
+    "reporter_count": 1,
+    "contact_count": 5,
+    "unexpected_contact_count": 1,
+    "minimum_separation_m": -0.020000003278255463,
+    "first_collision": {
+      "phase": "cup_cube_deep",
+      "collider0": "/World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1",
+      "collider1": "/World/Cube",
+      "separation_m": -0.020000003278255463
+    },
+    "case": "cup_cube_deep",
+    "passed": true
+  },
+  {
+    "reporter_count": 1,
+    "contact_count": 5,
+    "unexpected_contact_count": 2,
+    "minimum_separation_m": -0.020000003278255463,
+    "first_collision": {
+      "phase": "manifold_cube",
+      "collider0": "/World/left_fr3/fr3_link8/ABSideTool/manifold",
+      "collider1": "/World/Cube",
+      "separation_m": -0.020000003278255463
+    },
+    "case": "manifold_cube",
+    "passed": true
+  },
+  {
+    "reporter_count": 1,
+    "contact_count": 5,
+    "unexpected_contact_count": 2,
+    "minimum_separation_m": -0.020000003278255463,
+    "first_collision": {
+      "phase": "cup_wall",
+      "collider0": "/World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1",
+      "collider1": "/World/Environment/wall_back",
+      "separation_m": -0.020000003278255463
+    },
+    "case": "cup_wall",
+    "passed": true
+  },
+  {
+    "reporter_count": 2,
+    "contact_count": 5,
+    "unexpected_contact_count": 2,
+    "minimum_separation_m": -0.020000003278255463,
+    "first_collision": {
+      "phase": "interarm",
+      "collider0": "/World/right_fr3/fr3_link3/collider",
+      "collider1": "/World/left_fr3/fr3_link3/collider",
+      "separation_m": -0.020000003278255463
+    },
+    "case": "interarm",
+    "passed": true
+  }
+]

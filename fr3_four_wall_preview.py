@@ -1,4 +1,4 @@
-"""Static FR3 preview for the current 100 mm, four-wall scene.
+"""Static FR3 preview for the current 150 mm, four-wall scene.
 
 This is deliberately geometry-only: it keeps the current scene dimensions and
 only swaps the robot/tool visual model to FR3 for layout review.
@@ -16,7 +16,7 @@ from isaacsim import SimulationApp
 
 
 ROOT = Path(__file__).resolve().parent
-# The FR3-only scene config defines the 100 mm / five-goal, four-wall geometry.
+# The FR3-only scene config defines the 150 mm / five-goal, four-wall geometry.
 CONFIG = json.loads((ROOT / "fr3_four_wall_scene_config.json").read_text())
 OUT = ROOT / "preview"
 OUT.mkdir(parents=True, exist_ok=True)
@@ -146,6 +146,11 @@ try:
         xf.AddTranslateOp(opSuffix="preview_base").Set(Gf.Vec3d(base[0], base[1], base[2]))
         xf.AddRotateZOp(opSuffix="preview_yaw").Set(math.degrees(base[3]))
         _set_start_targets(root)
+        # Replace the stock FR3 hand/fingers with the scene's side suction tool.
+        for name in ("fr3_hand", "fr3_leftfinger", "fr3_rightfinger", "fr3_hand_tcp"):
+            prim = stage.GetPrimAtPath(f"{root}/{name}")
+            if prim.IsValid():
+                UsdGeom.Imageable(prim).CreateVisibilityAttr().Set(UsdGeom.Tokens.invisible)
         _add_tool(root, -1.0 if side == "left" else 1.0)
 
         rail = f"/World/{side}_rail"
@@ -175,9 +180,9 @@ try:
         else:
             cam.CreateFocalLengthAttr().Set(25.0)
 
-    _camera("/World/Cameras/Perspective", (1.45, -1.25, 1.55), (0.0, 0.70, 0.76))
+    _camera("/World/Cameras/Perspective", (2.15, -2.05, 2.15), (0.0, 0.70, 0.79))
     # Perspective top view is more reliable than orthographic capture in Isaac Sim 4.5.
-    _camera("/World/Cameras/Top", (0.0, 0.70, 3.2), (0.0, 0.70, 0.72), False)
+    _camera("/World/Cameras/Top", (0.0, 0.70, 4.0), (0.0, 0.70, 0.72), False)
 
     # Let referenced FR3 meshes and materials resolve before capture.
     for _ in range(900):

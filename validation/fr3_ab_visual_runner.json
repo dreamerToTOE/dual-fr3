@@ -1,133 +1,889 @@
 {
-  "scene_id": "dual_fr3_four_wall_100mm_5goal",
-  "status": "STOPPED",
-  "ab_status": "BLOCKED",
+  "scene_id": "dual_fr3_four_wall_150mm_5goal",
+  "status": "PASS_B1_B2_PROXY_CONTACT",
+  "ab_status": "PASS_PHYSX_CONTACT_PROXY",
   "scope": "automatic_articulation_visual_demo",
   "attachment_model": "temporary_PhysX_fixed_joints",
   "surface_gripper_validated": false,
   "collision_safety_validated": false,
+  "proxy_robot_collisions_disabled": false,
+  "robot_collisions_enabled": true,
+  "full_arm_planning_check": "official_Lula_spheres_and_full_tool_OBBs",
+  "unintended_physx_contact_guard": true,
+  "gravity_compensation": true,
+  "b2_right_body_collision_disabled_for_contact": false,
   "phases": [
     {
       "phase": "A_approach",
       "status": "RUNNING",
       "sim_time_s": 1.0,
       "cube_position_m": [
-        -4.6247657792264363e-07,
-        -0.30000045895576477,
-        0.7619999647140503
+        4.334994940791148e-08,
+        -0.3000001311302185,
+        0.7870000004768372
       ],
       "cube_orientation_wxyz": [
         1.0,
-        1.7231687934327056e-06,
-        -1.7338226143692737e-06,
-        -3.794406566726138e-09
+        1.1168935998284724e-08,
+        4.093769234714273e-08,
+        1.7065863999743414e-10
       ]
     },
     {
       "phase": "A_attach",
       "status": "FIXED_JOINT_PROXY",
-      "sim_time_s": 12.558333333333334,
+      "sim_time_s": 10.808333333333334,
       "cube_position_m": [
-        1.0245874193515192e-07,
-        -0.29999998211860657,
-        0.7619999051094055
+        1.8900292886314674e-08,
+        -0.30000007152557373,
+        0.7869998812675476
       ],
       "cube_orientation_wxyz": [
         1.0,
-        -2.057786900877545e-07,
-        2.6653640361473663e-07,
-        4.1761469282697306e-10
+        -2.00649274972875e-10,
+        -1.0726296295615612e-08,
+        -4.977813716777746e-09
       ]
     },
     {
       "phase": "A_lift",
       "status": "RUNNING",
-      "sim_time_s": 12.558333333333334,
+      "sim_time_s": 10.808333333333334,
       "cube_position_m": [
-        1.0245874193515192e-07,
-        -0.29999998211860657,
-        0.7619999051094055
+        1.8900292886314674e-08,
+        -0.30000007152557373,
+        0.7869998812675476
       ],
       "cube_orientation_wxyz": [
         1.0,
-        -2.057786900877545e-07,
-        2.6653640361473663e-07,
-        4.1761469282697306e-10
+        -2.00649274972875e-10,
+        -1.0726296295615612e-08,
+        -4.977813716777746e-09
       ]
     },
     {
       "phase": "A_lift",
       "status": "REACHED_WITH_ATTACHMENT_PROXY",
-      "sim_time_s": 15.358333333333333,
+      "sim_time_s": 14.4,
       "cube_position_m": [
-        5.922676791669801e-05,
-        -0.3000814616680145,
-        0.8808963894844055
+        9.471802513871808e-06,
+        -0.3003150522708893,
+        1.09148108959198
       ],
       "cube_orientation_wxyz": [
-        0.9999998807907104,
-        3.8851525459904224e-05,
-        -0.0004684605519287288,
-        -0.0002834373153746128
+        1.0,
+        -0.00014339081826619804,
+        6.352867058012635e-05,
+        -4.6874563849996775e-05
       ]
     },
     {
       "phase": "A_over_front",
       "status": "RUNNING",
-      "sim_time_s": 15.358333333333333,
+      "sim_time_s": 14.4,
       "cube_position_m": [
-        5.922676791669801e-05,
-        -0.3000814616680145,
-        0.8808963894844055
+        9.471802513871808e-06,
+        -0.3003150522708893,
+        1.09148108959198
       ],
       "cube_orientation_wxyz": [
-        0.9999998807907104,
-        3.8851525459904224e-05,
-        -0.0004684605519287288,
-        -0.0002834373153746128
+        1.0,
+        -0.00014339081826619804,
+        6.352867058012635e-05,
+        -4.6874563849996775e-05
       ]
+    },
+    {
+      "phase": "A_over_front",
+      "status": "REACHED_WITH_ATTACHMENT_PROXY",
+      "sim_time_s": 22.675,
+      "cube_position_m": [
+        -1.207690638693748e-05,
+        0.39155322313308716,
+        1.1068272590637207
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -0.00034873568802140653,
+        5.943776704953052e-05,
+        -1.2859784874308389e-05
+      ]
+    },
+    {
+      "phase": "A_landing",
+      "status": "RUNNING",
+      "sim_time_s": 22.675,
+      "cube_position_m": [
+        -1.207690638693748e-05,
+        0.39155322313308716,
+        1.1068272590637207
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -0.00034873568802140653,
+        5.943776704953052e-05,
+        -1.2859784874308389e-05
+      ]
+    },
+    {
+      "phase": "A_landing",
+      "status": "REACHED_WITH_ATTACHMENT_PROXY",
+      "sim_time_s": 31.525,
+      "cube_position_m": [
+        -9.577912351232953e-06,
+        0.7310793995857239,
+        0.7917585372924805
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -0.00028622010722756386,
+        0.0001539645454613492,
+        -8.650790550746024e-05
+      ]
+    },
+    {
+      "phase": "A_release",
+      "status": "REACHED_WITH_ATTACHMENT_PROXY",
+      "sim_time_s": 33.891666666666666,
+      "cube_position_m": [
+        4.898628048977116e-06,
+        0.7315459251403809,
+        0.7869998812675476
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        1.2029821583325884e-08,
+        2.3157038953058873e-08,
+        -5.53898535144981e-05
+      ],
+      "landing_error_m": 0.0044540775549764865
+    },
+    {
+      "phase": "B1_contact",
+      "status": "RUNNING",
+      "sim_time_s": 33.891666666666666,
+      "cube_position_m": [
+        4.898628048977116e-06,
+        0.7315459251403809,
+        0.7869998812675476
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        1.2029821583325884e-08,
+        2.3157038953058873e-08,
+        -5.53898535144981e-05
+      ]
+    },
+    {
+      "phase": "B1_push",
+      "status": "REACHED_WITH_PHYSX_CONTACT",
+      "sim_time_s": 52.666666666666664,
+      "cube_position_m": [
+        -2.3709735614829697e-05,
+        1.0745432376861572,
+        0.7870000004768372
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -8.17926718355011e-07,
+        -1.2184169229101371e-08,
+        7.507610007451149e-06
+      ],
+      "progress_m": 0.34299731254577637,
+      "back_wall_hold_armed": true
+    },
+    {
+      "phase": "B2_high_approach",
+      "status": "RUNNING",
+      "sim_time_s": 52.666666666666664,
+      "cube_position_m": [
+        -2.3709735614829697e-05,
+        1.0745432376861572,
+        0.7870000004768372
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -8.17926718355011e-07,
+        -1.2184169229101371e-08,
+        7.507610007451149e-06
+      ]
+    },
+    {
+      "phase": "B2_rail_transfer",
+      "status": "RUNNING",
+      "sim_time_s": 62.575,
+      "cube_position_m": [
+        -2.3709735614829697e-05,
+        1.0745432376861572,
+        0.7870000004768372
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -8.17926718355011e-07,
+        -1.2184169229101371e-08,
+        7.507610007451149e-06
+      ],
+      "base_y_m": 0.65
+    },
+    {
+      "phase": "B2_rail_transfer",
+      "status": "REACHED",
+      "sim_time_s": 70.075,
+      "cube_position_m": [
+        -2.3709735614829697e-05,
+        1.0745432376861572,
+        0.7870000004768372
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -8.17926718355011e-07,
+        -1.2184169229101371e-08,
+        7.507610007451149e-06
+      ],
+      "base_y_m": 0.65
+    },
+    {
+      "phase": "B2_push_release",
+      "status": "REACHED_WITH_PHYSX_CONTACT",
+      "sim_time_s": 86.88333333333334,
+      "cube_position_m": [
+        -0.24488462507724762,
+        1.0759828090667725,
+        0.7870000004768372
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        6.0779457022874794e-09,
+        -2.0851852866599074e-07,
+        5.053258064435795e-06
+      ],
+      "progress_m": 0.2448609153416328,
+      "max_settle_speed_m_s": 0.0,
+      "back_wall_hold_verified": true,
+      "left_hold_joint_motion_rad": 0.7519935369491577,
+      "left_hold_max_contact_error_m": 0.006070332033882286,
+      "right_contact_max_error_m": 0.001587207406037286
+    },
+    {
+      "phase": "B1_B2",
+      "status": "PASS_PHYSX_CONTACT_PROXY",
+      "sim_time_s": 86.88333333333334,
+      "cube_position_m": [
+        -0.24488462507724762,
+        1.0759828090667725,
+        0.7870000004768372
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        6.0779457022874794e-09,
+        -2.0851852866599074e-07,
+        5.053258064435795e-06
+      ],
+      "reason": "Real Surface Gripper remains unvalidated"
     }
   ],
-  "active_phase": "A_over_front",
-  "local_ik_recoveries": 15,
-  "blocked_motion": {
-    "arm": "right",
-    "cube_target_m": [
-      0.0,
-      -0.02571428571428569,
-      0.882
-    ],
-    "joint_start_rad": [
-      1.5087615251541138,
-      -0.2831825613975525,
-      -0.7292308211326599,
-      -3.020232677459717,
-      -0.5208457708358765,
-      2.7589492797851562,
-      -0.2812075614929199
-    ],
-    "joint_target_rad": [
-      0.047456823702193535,
-      -0.4790040543923902,
-      1.1651500169917626,
-      -3.0112923415141095,
-      0.9609649911707098,
-      2.598725123513496,
-      -1.2904469043655349
-    ],
-    "max_joint_step_rad": 1.8943808381244225
+  "simulation_clock": {
+    "control_hz": 120,
+    "render_hz": 60,
+    "render_count": 5702,
+    "uncommanded_physics_steps": 0,
+    "control_steps": 10426,
+    "physics_steps": 10426
   },
-  "error": "right IK branch jumps 1.894 rad on a 15 mm path segment; refused execution",
-  "stopped_cube_position_m": [
-    -0.00010145940177608281,
-    -0.04210725426673889,
-    0.8820916414260864
+  "active_phase": "B1_B2",
+  "trajectory_plans": [
+    {
+      "phase": "A_approach_transit",
+      "arm": [
+        "left",
+        "right"
+      ],
+      "samples": 884,
+      "duration_s": 7.352612625173516,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 884,
+        "issues": []
+      }
+    },
+    {
+      "phase": "A_approach_transit_transit",
+      "arm": [
+        "left",
+        "right"
+      ],
+      "samples": 53,
+      "duration_s": 0.42854971394118363,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 53,
+        "issues": []
+      }
+    },
+    {
+      "phase": "A_transfer",
+      "arm": [
+        "left",
+        "right"
+      ],
+      "samples": 431,
+      "duration_s": 3.578005232273552,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 431,
+        "issues": []
+      }
+    },
+    {
+      "phase": "A_transfer",
+      "arm": [
+        "left",
+        "right"
+      ],
+      "samples": 993,
+      "duration_s": 8.262252517705319,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 993,
+        "issues": []
+      }
+    },
+    {
+      "phase": "A_transfer",
+      "arm": [
+        "left",
+        "right"
+      ],
+      "samples": 1062,
+      "duration_s": 8.835646282121635,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 1062,
+        "issues": []
+      }
+    },
+    {
+      "phase": "A_landing_transit",
+      "arm": [
+        "left",
+        "right"
+      ],
+      "samples": 44,
+      "duration_s": 0.3559434064629604,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 44,
+        "issues": []
+      }
+    },
+    {
+      "phase": "B1_contact_transit",
+      "arm": [
+        "left"
+      ],
+      "samples": 1658,
+      "duration_s": 13.805025527221295,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 1658,
+        "issues": []
+      }
+    },
+    {
+      "phase": "B1",
+      "arm": [
+        "left"
+      ],
+      "samples": 583,
+      "duration_s": 4.8489948060312225,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 583,
+        "issues": []
+      }
+    },
+    {
+      "phase": "B2_lift_from_measured_state",
+      "arm": [
+        "right"
+      ],
+      "samples": 568,
+      "duration_s": 4.720000000000002,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 568,
+        "issues": []
+      }
+    },
+    {
+      "phase": "B2_lift_from_measured_state_transit",
+      "arm": [
+        "right"
+      ],
+      "samples": 621,
+      "duration_s": 5.161910586622573,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 621,
+        "issues": []
+      }
+    },
+    {
+      "phase": "B2_descent",
+      "arm": [
+        "right"
+      ],
+      "samples": 770,
+      "duration_s": 6.400000000000004,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 770,
+        "issues": []
+      }
+    },
+    {
+      "phase": "B2_suction_plane_approach",
+      "arm": [
+        "right"
+      ],
+      "samples": 194,
+      "duration_s": 1.6000000000000003,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 194,
+        "issues": []
+      }
+    },
+    {
+      "phase": "B2_push",
+      "arm": [
+        "left",
+        "right"
+      ],
+      "samples": 675,
+      "duration_s": 5.6085435520111915,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 675,
+        "issues": []
+      }
+    },
+    {
+      "phase": "B2_push_transit",
+      "arm": [
+        "right"
+      ],
+      "samples": 59,
+      "duration_s": 0.48190770839607067,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 59,
+        "issues": []
+      }
+    },
+    {
+      "phase": "B2_push_transit_transit",
+      "arm": [
+        "left"
+      ],
+      "samples": 79,
+      "duration_s": 0.6420086089278603,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 79,
+        "issues": []
+      }
+    }
   ],
-  "stopped_cube_orientation_wxyz": [
-    1.0,
-    -0.0003871252411045134,
-    0.00020675627456512302,
-    -9.913341637002304e-05
-  ],
-  "traceback": "Traceback (most recent call last):\n  File \"/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3/fr3_ab_visual_runner.py\", line 298, in main\n    dual_path(previous, center)\n  File \"/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3/fr3_ab_visual_runner.py\", line 252, in dual_path\n    raise RuntimeError(f\"{side} IK branch jumps {change:.3f} rad on a 15 mm path segment; refused execution\")\nRuntimeError: right IK branch jumps 1.894 rad on a 15 mm path segment; refused execution\n"
+  "A_attachment_tcp_error_m": {
+    "left": 5.8113922892881465e-05,
+    "right": 5.7757896508985615e-05
+  },
+  "A_attachment_flange_gap_m": 0.4600028395652771,
+  "local_ik_recoveries": 137,
+  "rail_collision_checked_samples": 900,
+  "blocker": "Real Surface Gripper remains unvalidated",
+  "physx_contacts": {
+    "reporter_count": 26,
+    "contact_count": 45260,
+    "unexpected_contact_count": 0,
+    "minimum_separation_m": -0.00018533319234848022,
+    "minimum_separation_by_pair_m": {
+      "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c1": -0.00018533319234848022,
+      "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c2": -0.00018525868654251099,
+      "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c1": -0.00018525868654251099,
+      "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c2": -0.0001849532127380371,
+      "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c1": -0.00018098954751621932,
+      "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c2": -0.00017823763482738286,
+      "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": -0.00018280748918186873,
+      "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c2": -0.00017698205192573369
+    },
+    "minimum_separation_by_phase_pair": {
+      "A_approach_transit_transit": {
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": 2.305954694747925e-06,
+          "physics_step_index": 1298
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": 6.835068688815227e-08,
+          "physics_step_index": 1298
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": 3.207474946975708e-06,
+          "physics_step_index": 1298
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": 1.1958181858062744e-06,
+          "physics_step_index": 1298
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": 3.8370490074157715e-06,
+          "physics_step_index": 1280
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": 1.73225998878479e-06,
+          "physics_step_index": 1280
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": 2.8498470783233643e-06,
+          "physics_step_index": 1280
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": 3.8942880564718507e-07,
+          "physics_step_index": 1251
+        }
+      },
+      "A_transfer": {
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": -3.0096625778242014e-05,
+          "physics_step_index": 2424
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": -4.072488809470087e-05,
+          "physics_step_index": 2311
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": -1.3707629477721639e-05,
+          "physics_step_index": 2461
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": -1.163518572866451e-05,
+          "physics_step_index": 2694
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": -6.019268312229542e-06,
+          "physics_step_index": 2460
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": -4.703445029008435e-06,
+          "physics_step_index": 2999
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": -1.2900685760541819e-05,
+          "physics_step_index": 1423
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": -6.573792234121356e-06,
+          "physics_step_index": 2481
+        }
+      },
+      "A_landing": {
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": -7.323512818402378e-07,
+          "physics_step_index": 3788
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": -5.289911655381729e-07,
+          "physics_step_index": 3786
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": 2.5946648747776635e-05,
+          "physics_step_index": 3858
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": 3.0439350666711107e-05,
+          "physics_step_index": 3786
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": 6.627291440963745e-06,
+          "physics_step_index": 3786
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": 4.250556230545044e-06,
+          "physics_step_index": 3786
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": 2.3916361442388734e-06,
+          "physics_step_index": 3786
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": -1.9134145077259745e-06,
+          "physics_step_index": 3789
+        }
+      },
+      "A_landing_transit": {
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": -1.7427241800760385e-06,
+          "physics_step_index": 3910
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": -5.48293610336259e-06,
+          "physics_step_index": 3913
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": 1.0751188710855786e-05,
+          "physics_step_index": 3910
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": 1.1865049600601196e-05,
+          "physics_step_index": 3912
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": 3.992021083831787e-05,
+          "physics_step_index": 3912
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": 2.3137779862736352e-05,
+          "physics_step_index": 3908
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": 1.0833144187927246e-05,
+          "physics_step_index": 3914
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": -3.0688104288856266e-06,
+          "physics_step_index": 3912
+        }
+      },
+      "B1_contact_transit": {
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": 7.006898522377014e-05,
+          "physics_step_index": 5739
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": 2.477690577507019e-05,
+          "physics_step_index": 5739
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": 2.7846544981002808e-05,
+          "physics_step_index": 5739
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": 6.708502769470215e-05,
+          "physics_step_index": 5739
+        }
+      },
+      "B1": {
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": -0.00018280748918186873,
+          "physics_step_index": 5746
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": -0.00018098954751621932,
+          "physics_step_index": 5746
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": -0.00017698205192573369,
+          "physics_step_index": 6318
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": -0.00017823763482738286,
+          "physics_step_index": 6318
+        }
+      },
+      "B2_lift_from_measured_state": {
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": -1.2416014214977622e-05,
+          "physics_step_index": 6324
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": -1.4288280908658635e-05,
+          "physics_step_index": 6324
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": -1.3228099305706564e-05,
+          "physics_step_index": 6324
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": -1.5100002201506868e-05,
+          "physics_step_index": 6324
+        }
+      },
+      "B2_lift_from_measured_state_transit": {
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": 1.2032687664031982e-06,
+          "physics_step_index": 6891
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": 1.226510875085296e-07,
+          "physics_step_index": 6891
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": 1.0728836059570312e-06,
+          "physics_step_index": 6891
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": 1.8270066348691216e-08,
+          "physics_step_index": 6891
+        }
+      },
+      "B2_rail_transfer": {
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": 1.2032687664031982e-06,
+          "physics_step_index": 7512
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": 1.226510875085296e-07,
+          "physics_step_index": 7512
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": 1.0728836059570312e-06,
+          "physics_step_index": 7512
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": 1.8270066348691216e-08,
+          "physics_step_index": 7512
+        }
+      },
+      "B2_descent": {
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": 1.2032687664031982e-06,
+          "physics_step_index": 8412
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": 1.226510875085296e-07,
+          "physics_step_index": 8412
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": 1.0728836059570312e-06,
+          "physics_step_index": 8412
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": 1.8270066348691216e-08,
+          "physics_step_index": 8412
+        }
+      },
+      "B2_suction_plane_approach": {
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": 1.2032687664031982e-06,
+          "physics_step_index": 9182
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": 1.226510875085296e-07,
+          "physics_step_index": 9182
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": 1.0728836059570312e-06,
+          "physics_step_index": 9182
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": 1.8270066348691216e-08,
+          "physics_step_index": 9182
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": 2.4147331714630127e-05,
+          "physics_step_index": 9435
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": 3.113970160484314e-05,
+          "physics_step_index": 9435
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": 3.4712255001068115e-05,
+          "physics_step_index": 9435
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": 4.170835018157959e-05,
+          "physics_step_index": 9435
+        }
+      },
+      "B2_push": {
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": -8.304579637297138e-07,
+          "physics_step_index": 9706
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": -9.839898211794207e-07,
+          "physics_step_index": 9714
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": -1.0358088502471219e-06,
+          "physics_step_index": 10120
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": -6.837976798124146e-07,
+          "physics_step_index": 9918
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": -0.00018525868654251099,
+          "physics_step_index": 9982
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": -0.0001849532127380371,
+          "physics_step_index": 10159
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": -0.00018533319234848022,
+          "physics_step_index": 10159
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": -0.00018525868654251099,
+          "physics_step_index": 10159
+        }
+      },
+      "B2_push_transit": {
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": 1.8659979104995728e-05,
+          "physics_step_index": 10172
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": 5.142390727996826e-05,
+          "physics_step_index": 10172
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": 8.52346420288086e-06,
+          "physics_step_index": 10172
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": 4.130229353904724e-05,
+          "physics_step_index": 10172
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": -0.00016549602150917053,
+          "physics_step_index": 10179
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": -0.00014909208402968943,
+          "physics_step_index": 10178
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": -0.00016508996486663818,
+          "physics_step_index": 10179
+        },
+        "/World/Cube <-> /World/right_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": -0.0001484507229179144,
+          "physics_step_index": 10178
+        }
+      },
+      "B2_push_transit_transit": {
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1": {
+          "separation_m": -3.190338611602783e-05,
+          "physics_step_index": 10297
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c1": {
+          "separation_m": 1.0680407285690308e-05,
+          "physics_step_index": 10296
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r1_c2": {
+          "separation_m": -4.190579056739807e-05,
+          "physics_step_index": 10298
+        },
+        "/World/Cube <-> /World/left_fr3/fr3_link8/ABSideTool/cup_r2_c2": {
+          "separation_m": 1.0319054126739502e-06,
+          "physics_step_index": 10296
+        }
+      }
+    },
+    "first_collision": null
+  }
 }

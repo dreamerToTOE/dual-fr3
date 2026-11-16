@@ -20,7 +20,7 @@ POSITION_TOLERANCE_M = 0.001
 ORIENTATION_TOLERANCE_RAD = 0.01
 SIDE_ROTATION = [[0.0, -1.0, 0.0], [-1.0, 0.0, 0.0], [0.0, 0.0, -1.0]]
 FRONT_ROTATION = [[1.0, 0.0, 0.0], [0.0, -1.0, 0.0], [0.0, 0.0, -1.0]]
-B2_RAIL_ROTATION = [[0.0, -1.0, 0.0], [0.0, 0.0, 1.0], [-1.0, 0.0, 0.0]]
+B2_RAIL_ROTATION = SIDE_ROTATION
 
 
 def waypoints(cfg):
