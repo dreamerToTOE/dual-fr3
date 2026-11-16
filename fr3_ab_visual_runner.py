@@ -20,6 +20,7 @@ from fr3_contact_monitor import PhysxContactMonitor
 ROOT = Path(__file__).resolve().parent
 CONFIG = json.loads((ROOT / "fr3_four_wall_scene_config.json").read_text())
 REPORT = ROOT / "validation" / "fr3_ab_visual_runner.json"
+TRAJECTORY_CACHE = ROOT / "validation" / "fr3_trajectory_cache.json"
 
 def _box(stage, path, center, size, collision=False, dynamic=False, mass=None):
     from pxr import Gf, PhysxSchema, UsdGeom, UsdPhysics
@@ -115,6 +116,15 @@ def main():
         "full_arm_planning_check": "official_Lula_spheres_and_full_tool_OBBs",
         "unintended_physx_contact_guard": True, "gravity_compensation": True,
         "b2_right_body_collision_disabled_for_contact": False, "phases": [],
+    }
+    trajectory_cache = {
+        "schema_version": 1,
+        "scene_id": CONFIG["scene_id"],
+        "status": "RUNNING",
+        "source": "runtime_120hz_collision_checked_execution",
+        "config_file": "fr3_four_wall_scene_config.json",
+        "phases": [],
+        "rail_transfers": [],
     }
     world = None
     status_label = None
@@ -388,6 +398,17 @@ def main():
                 "phase": phase, "arm": list(paths), "samples": len(times), "duration_s": float(times[-1]),
                 "collision_check": validation,
             })
+            trajectory_cache["phases"].append({
+                "phase": phase,
+                "arms": list(paths),
+                "duration_s": float(times[-1]),
+                "times_s": times.tolist(),
+                "waypoints_rad": {side: np.asarray(path, dtype=float).tolist() for side, path in paths.items()},
+                "joint_samples_rad": {side: np.asarray(path, dtype=float).tolist() for side, path in samples.items()},
+                "cube_center_path_m": (None if np.asarray(cube_centers).ndim == 1
+                                        else np.asarray(cube_centers, dtype=float).tolist()),
+                "collision_check": validation,
+            })
             print(f"FR3_PLANNED {phase}: {len(times)} collision-checked samples", flush=True)
             planning_update(f"{phase}: executing", force=True)
             contact_monitor.phase = phase
@@ -519,6 +540,13 @@ def main():
                         ArticulationAction(joint_positions=q, joint_indices=joints[arm]))
                 step()
             report["rail_collision_checked_samples"] = count
+            trajectory_cache["rail_transfers"].append({
+                "side": side,
+                "start_base_xyz_yaw": original.tolist(),
+                "end_base_xyz_yaw": destination.tolist(),
+                "bases_xyz_yaw": [base.tolist() for base in bases],
+                "samples": count,
+            })
 
         def settle_cube(phase):
             last, max_speed = None, 0.0
@@ -786,6 +814,14 @@ def main():
         if contact_monitor is not None:
             report["physx_contacts"] = contact_monitor.report()
             contact_monitor.close()
+        trajectory_cache["status"] = (
+            "COMPLETE" if report.get("status") == "PASS_B1_B2_PROXY_CONTACT" else "INCOMPLETE"
+        )
+        trajectory_cache["runtime_report"] = str(REPORT.relative_to(ROOT))
+        TRAJECTORY_CACHE.parent.mkdir(parents=True, exist_ok=True)
+        TRAJECTORY_CACHE.write_text(
+            json.dumps(trajectory_cache, indent=2, ensure_ascii=False, allow_nan=False) + "\n"
+        )
         REPORT.parent.mkdir(parents=True, exist_ok=True)
         REPORT.write_text(json.dumps(report, indent=2, ensure_ascii=False, allow_nan=False) + "\n")
         print("FR3_AB_RESULT " + json.dumps(report, ensure_ascii=False), flush=True)

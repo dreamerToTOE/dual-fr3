@@ -37,6 +37,12 @@ target `[-0.245,1.076,0.787]`, wall inner bounds `x=±0.320`, right rail contact
 `base_y=0.65`, FR3 bases `x=±0.44`, and a 1.5 m Y-axis rail. The machine-readable
 snapshot is `validation/fr3_environment_snapshot.json`.
 
+After a complete run, the runner stores the 120 Hz phase trajectories in
+`validation/fr3_trajectory_cache.json`. The cache includes raw joint
+waypoints, time-sampled joint commands, expected Cube centers, collision-check
+reports, and rail base samples. Regenerate it with the automatic runner after
+changing the scene configuration.
+
 This is a geometry preview only. It does not claim PhysX contact, suction,
 ROS, IK, trajectory, or full B2 validation.
 

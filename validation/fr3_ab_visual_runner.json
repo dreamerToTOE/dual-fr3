@@ -285,7 +285,7 @@
   "simulation_clock": {
     "control_hz": 120,
     "render_hz": 60,
-    "render_count": 5702,
+    "render_count": 0,
     "uncommanded_physics_steps": 0,
     "control_steps": 10426,
     "physics_steps": 10426
