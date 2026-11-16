@@ -26,6 +26,7 @@ def main():
         import omni.syntheticdata
         import omni.usd
         from isaacsim.core.api import World
+        from isaacsim.core.utils.rotations import euler_angles_to_quat
         from isaacsim.sensors.camera import Camera
         from isaacsim.storage.native import get_assets_root_path
         from pxr import Gf, UsdGeom, UsdLux
@@ -64,22 +65,14 @@ def main():
                 rsd_xf.AddTransformOp().Set(Gf.Matrix4d(1.0))
 
         capture_path = "/World/VisionCaptureCamera"
-        capture_prim = UsdGeom.Camera.Define(stage, capture_path)
-        capture_prim.AddTransformOp().Set(
-            Gf.Matrix4d().SetLookAt(
-                Gf.Vec3d(*CONFIG["vision"]["camera_position_m"]),
-                Gf.Vec3d(*CONFIG["vision"]["camera_look_at_m"]),
-                Gf.Vec3d(0, 0, 1),
-            ).GetInverse()
-        )
-        capture_prim.CreateFocalLengthAttr().Set(24.0)
-        capture_prim.CreateHorizontalApertureAttr().Set(36.0)
         world = World(stage_units_in_meters=1.0, physics_dt=1 / 120, rendering_dt=1 / 60)
         fallback_camera = world.scene.add(Camera(
             prim_path=capture_path,
             name="vision_capture_camera",
             frequency=CONFIG["vision"]["frequency_hz"],
             resolution=tuple(CONFIG["vision"]["resolution"]),
+            position=np.asarray(CONFIG["vision"]["camera_position_m"], dtype=float),
+            orientation=euler_angles_to_quat(np.array([-40.0, 0.0, 0.0]), degrees=True),
         ))
         d455_camera = None
         if d455_available:
@@ -91,6 +84,7 @@ def main():
             ))
             d455_camera.set_projection_type("pinhole")
         world.reset()
+        omni.timeline.get_timeline_interface().play()
         fallback_camera.resume()
         if d455_camera is not None:
             d455_camera.resume()
