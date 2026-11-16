@@ -53,8 +53,9 @@ of the experiment. The first probe records missed observations instead of
 moving the camera to guarantee global visibility.
 
 The 2026-11-17 D455 probe loaded the asset and completed the cached A/B1/B2
-task. It recorded 1301 camera samples and 0 ArUco detections in headless mode,
-so visual pose correction remains an open next step. The result is recorded in
+task. Both the synchronous runner sample and the isolated asynchronous render
+probe produced RGB frames but 0 ArUco detections, so visual pose correction
+remains an open next step. The result is recorded in
 `validation/idea_one_d455_aruco_probe.json`.
 
 The recorded scene parameters are `cube_size_m=0.15`, Cube supply center

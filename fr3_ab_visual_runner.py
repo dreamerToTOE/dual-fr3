@@ -309,6 +309,8 @@ def main():
         except (FileNotFoundError, json.JSONDecodeError, TypeError, ValueError):
             loaded_trajectory_cache = None
         world.reset()
+        if vision_camera is not None:
+            vision_camera.resume()
         for side, robot in robots.items():
             joints[side] = np.array([robot.get_dof_index(f"fr3_joint{i}") for i in range(1, 8)])
             robot.set_joint_positions(np.array(CONFIG["fr3"]["official_start_q_rad"]), joint_indices=joints[side])
