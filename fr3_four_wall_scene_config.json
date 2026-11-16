@@ -46,6 +46,21 @@
     "beam_local_center_m": [0.0, 0.425, 0.0],
     "carriage_size_m": [0.20, 0.18, 0.02]
   },
+  "vision": {
+    "camera_model": "Intel RealSense D455",
+    "camera_asset": "Isaac/Sensors/Intel/RealSense/rsd455.usd",
+    "camera_root_path": "/World/D455",
+    "camera_path": "/World/D455/RSD455/Camera_OmniVision_OV9782_Color",
+    "depth_camera_path": "/World/D455/RSD455/Camera_Pseudo_Depth",
+    "camera_position_m": [0.0, 1.55, 1.45],
+    "camera_look_at_m": [0.0, 0.78, 0.80],
+    "resolution": [640, 480],
+    "frequency_hz": 15,
+    "aruco_dictionary": "DICT_4X4_50",
+    "aruco_marker_id": 23,
+    "aruco_marker_size_m": 0.09,
+    "aruco_marker_face": "top"
+  },
   "task": {
     "scope": "single_cube_A_B1_B2",
     "phase_A": {

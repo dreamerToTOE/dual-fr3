@@ -282,6 +282,35 @@
       "reason": "Real Surface Gripper remains unvalidated"
     }
   ],
+  "vision": {
+    "camera_model": "Intel RealSense D455",
+    "camera_asset": "Isaac/Sensors/Intel/RealSense/rsd455.usd",
+    "depth_camera_path": "/World/D455/RSD455/Camera_Pseudo_Depth",
+    "camera_path": "/World/D455/RSD455/Camera_OmniVision_OV9782_Color",
+    "camera_position_m": [
+      0.0,
+      1.55,
+      1.45
+    ],
+    "camera_look_at_m": [
+      0.0,
+      0.78,
+      0.8
+    ],
+    "resolution": [
+      640,
+      480
+    ],
+    "aruco_dictionary": "DICT_4X4_50",
+    "aruco_marker_id": 23,
+    "aruco_marker_face": "top",
+    "samples": 1301,
+    "detections": 0,
+    "misses": 1303,
+    "last_detection": null,
+    "detection_log": [],
+    "camera_mode": "d455_asset"
+  },
   "trajectory_cache": {
     "loaded": true,
     "path": "validation/fr3_trajectory_cache.json",
@@ -308,7 +337,7 @@
   "simulation_clock": {
     "control_hz": 120,
     "render_hz": 60,
-    "render_count": 5244,
+    "render_count": 1303,
     "uncommanded_physics_steps": 0,
     "control_steps": 10426,
     "physics_steps": 10426

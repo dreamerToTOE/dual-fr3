@@ -22,6 +22,15 @@ CONFIG = json.loads((ROOT / "fr3_four_wall_scene_config.json").read_text())
 REPORT = ROOT / "validation" / "fr3_ab_visual_runner.json"
 TRAJECTORY_CACHE = ROOT / "validation" / "fr3_trajectory_cache.json"
 
+ARUCO_4X4_23_BITS = (
+    (1, 1, 1, 1, 1, 1),
+    (1, 0, 0, 1, 0, 1),
+    (1, 0, 0, 1, 0, 1),
+    (1, 0, 1, 1, 1, 1),
+    (1, 1, 1, 0, 1, 1),
+    (1, 1, 1, 1, 1, 1),
+)
+
 def _box(stage, path, center, size, collision=False, dynamic=False, mass=None):
     from pxr import Gf, PhysxSchema, UsdGeom, UsdPhysics
 
@@ -38,6 +47,40 @@ def _box(stage, path, center, size, collision=False, dynamic=False, mass=None):
         UsdPhysics.MassAPI.Apply(cube.GetPrim()).CreateMassAttr(float(mass))
         PhysxSchema.PhysxRigidBodyAPI.Apply(cube.GetPrim()).CreateEnableCCDAttr(True)
     return cube.GetPrim()
+
+
+def _add_aruco_marker(stage, cube_size, marker_size):
+    """Add a visual DICT_4X4_50 marker to the Cube's top face."""
+    from pxr import Gf, UsdGeom
+
+    UsdGeom.Xform.Define(stage, "/World/Cube/ArUcoMarker")
+    # Cube is authored as a unit cube with a parent scale of cube_size.
+    # Marker dimensions therefore need to be expressed in the Cube's local
+    # unit-cube coordinates to retain their requested world size.
+    local_scale = float(cube_size)
+    quiet = marker_size * 0.12
+    backing_size = marker_size + 2 * quiet
+    backing = UsdGeom.Cube.Define(stage, "/World/Cube/ArUcoMarker/white_backing")
+    backing_xf = UsdGeom.Xformable(backing.GetPrim())
+    backing_xf.AddTranslateOp().Set(Gf.Vec3d(0, 0, 0.5 + 0.0004 / local_scale))
+    backing_xf.AddScaleOp().Set(Gf.Vec3f(
+        backing_size / local_scale, backing_size / local_scale, 0.001 / local_scale))
+    backing.CreateDisplayColorAttr([Gf.Vec3f(0.98, 0.98, 0.98)])
+    cell_size = marker_size / 6.0 / local_scale
+    for row, bits in enumerate(ARUCO_4X4_23_BITS):
+        for column, bit in enumerate(bits):
+            cell = UsdGeom.Cube.Define(
+                stage, f"/World/Cube/ArUcoMarker/cell_{row}_{column}"
+            )
+            cell_xf = UsdGeom.Xformable(cell.GetPrim())
+            cell_xf.AddTranslateOp().Set(Gf.Vec3d(
+                (column - 2.5) * cell_size,
+                (2.5 - row) * cell_size,
+                0.5 + 0.0011 / local_scale,
+            ))
+            cell_xf.AddScaleOp().Set(Gf.Vec3f(cell_size, cell_size, 0.001 / local_scale))
+            color = 0.02 if bit else 0.98
+            cell.CreateDisplayColorAttr([Gf.Vec3f(color, color, color)])
 
 
 def _set_start_targets(stage, root_path):
@@ -116,6 +159,23 @@ def main():
         "full_arm_planning_check": "official_Lula_spheres_and_full_tool_OBBs",
         "unintended_physx_contact_guard": True, "gravity_compensation": True,
         "b2_right_body_collision_disabled_for_contact": False, "phases": [],
+        "vision": {
+            "camera_model": CONFIG["vision"]["camera_model"],
+            "camera_asset": CONFIG["vision"]["camera_asset"],
+            "depth_camera_path": CONFIG["vision"]["depth_camera_path"],
+            "camera_path": CONFIG["vision"]["camera_path"],
+            "camera_position_m": CONFIG["vision"]["camera_position_m"],
+            "camera_look_at_m": CONFIG["vision"]["camera_look_at_m"],
+            "resolution": CONFIG["vision"]["resolution"],
+            "aruco_dictionary": CONFIG["vision"]["aruco_dictionary"],
+            "aruco_marker_id": CONFIG["vision"]["aruco_marker_id"],
+            "aruco_marker_face": CONFIG["vision"]["aruco_marker_face"],
+            "samples": 0,
+            "detections": 0,
+            "misses": 0,
+            "last_detection": None,
+            "detection_log": [],
+        },
     }
     trajectory_cache = {
         "schema_version": 1,
@@ -133,12 +193,14 @@ def main():
     world = None
     status_label = None
     contact_monitor = None
+    vision_camera = None
     try:
         import numpy as np
         import omni.client
         import omni.usd
         from isaacsim.core.api import World
         from isaacsim.core.prims import SingleArticulation, SingleRigidPrim, SingleXFormPrim
+        from isaacsim.core.utils.rotations import quat_to_rot_matrix
         from isaacsim.core.utils.types import ArticulationAction
         from isaacsim.robot_motion.motion_generation import LulaKinematicsSolver, interface_config_loader
         from isaacsim.storage.native import get_assets_root_path
@@ -158,6 +220,7 @@ def main():
         prim = _box(stage, "/World/Cube", CONFIG["supply_cube_center_m"], [CONFIG["cube_size_m"]] * 3,
                     collision=True, dynamic=True, mass=CONFIG["physics"]["cube_mass_kg"])
         UsdGeom.Gprim(prim).CreateDisplayColorAttr([Gf.Vec3f(0.95, 0.35, 0.05)])
+        _add_aruco_marker(stage, CONFIG["cube_size_m"], CONFIG["vision"]["aruco_marker_size_m"])
         for side, base in CONFIG["fr3"]["bases"].items():
             local = CONFIG["rails"]["beam_local_center_m"]
             _box(stage, f"/World/{side}_rail/beam", np.array(base[:3]) + local, CONFIG["rails"]["beam_size_m"])
@@ -181,6 +244,43 @@ def main():
         camera.AddTransformOp().Set(Gf.Matrix4d().SetLookAt(Gf.Vec3d(1.65, -1.7, 2.05), Gf.Vec3d(0, 0.4, 0.8), Gf.Vec3d(0, 0, 1)).GetInverse())
         camera.CreateClippingRangeAttr(Gf.Vec2f(0.01, 100.0))
         camera.CreateFocalLengthAttr(22.0)
+        vision_cfg = CONFIG["vision"]
+        d455_url = f"{assets_root.rstrip('/')}/{vision_cfg['camera_asset']}"
+        d455_status, _ = omni.client.stat(d455_url)
+        vision_runtime_path = vision_cfg["camera_path"]
+        if d455_status == omni.client.Result.OK:
+            vision_root = stage.DefinePrim(vision_cfg["camera_root_path"], "Xform")
+            vision_root.GetReferences().AddReference(d455_url)
+            UsdGeom.Xformable(vision_root).AddTransformOp().Set(
+                Gf.Matrix4d().SetLookAt(
+                    Gf.Vec3d(*vision_cfg["camera_position_m"]),
+                    Gf.Vec3d(*vision_cfg["camera_look_at_m"]),
+                    Gf.Vec3d(0, 0, 1),
+                ).GetInverse()
+            )
+            report["vision"]["camera_mode"] = "d455_asset"
+        else:
+            vision_runtime_path = "/World/VisionCameraFallback"
+            vision_camera_prim = UsdGeom.Camera.Define(stage, vision_runtime_path)
+            vision_camera_prim.AddTransformOp().Set(
+                Gf.Matrix4d().SetLookAt(
+                    Gf.Vec3d(*vision_cfg["camera_position_m"]),
+                    Gf.Vec3d(*vision_cfg["camera_look_at_m"]),
+                    Gf.Vec3d(0, 0, 1),
+                ).GetInverse()
+            )
+            vision_camera_prim.CreateClippingRangeAttr(Gf.Vec2f(0.01, 100.0))
+            vision_camera_prim.CreateFocalLengthAttr(24.0)
+            report["vision"]["camera_mode"] = "generic_fallback"
+        report["vision"]["camera_path"] = vision_runtime_path
+        from isaacsim.sensors.camera import Camera as IsaacCamera
+        vision_camera = world.scene.add(IsaacCamera(
+            prim_path=vision_runtime_path,
+            name="vision_camera",
+            frequency=vision_cfg["frequency_hz"],
+            resolution=tuple(vision_cfg["resolution"]),
+        ))
+        vision_camera.set_projection_type("pinhole")
         if not args.headless:
             from omni.kit.viewport.utility import get_active_viewport
             get_active_viewport().set_active_camera("/World/Camera")
@@ -252,6 +352,80 @@ def main():
                 status_label.text = message
                 render_only()
 
+        vision_period = max(1, int(round(120 / vision_cfg["frequency_hz"])))
+        vision_detector = None
+        vision_dictionary = None
+        try:
+            import cv2
+            dictionary_type = getattr(cv2.aruco, vision_cfg["aruco_dictionary"])
+            if hasattr(cv2.aruco, "getPredefinedDictionary"):
+                vision_dictionary = cv2.aruco.getPredefinedDictionary(dictionary_type)
+            else:
+                vision_dictionary = cv2.aruco.Dictionary_get(dictionary_type)
+            if hasattr(cv2.aruco, "DetectorParameters"):
+                vision_parameters = cv2.aruco.DetectorParameters()
+            else:
+                vision_parameters = cv2.aruco.DetectorParameters_create()
+            if hasattr(cv2.aruco, "ArucoDetector"):
+                vision_detector = cv2.aruco.ArucoDetector(vision_dictionary, vision_parameters)
+        except (AttributeError, ImportError) as exc:
+            report["vision"]["detector_error"] = str(exc)
+
+        def sample_vision():
+            if vision_camera is None or vision_dictionary is None:
+                return
+            render_only()
+            try:
+                rgba = np.asarray(vision_camera.get_rgba())
+                if rgba.ndim != 3 or rgba.shape[2] < 3 or rgba.shape[0] == 0:
+                    report["vision"]["misses"] += 1
+                    return
+                rgb = rgba[..., :3].astype(np.uint8, copy=False)
+                gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
+                if vision_detector is not None:
+                    corners, ids, _ = vision_detector.detectMarkers(gray)
+                else:
+                    corners, ids, _ = cv2.aruco.detectMarkers(
+                        gray, vision_dictionary, parameters=vision_parameters)
+                report["vision"]["samples"] += 1
+                if ids is None:
+                    report["vision"]["misses"] += 1
+                    return
+                ids = np.asarray(ids).reshape(-1)
+                matches = np.flatnonzero(ids == vision_cfg["aruco_marker_id"])
+                if len(matches) == 0:
+                    report["vision"]["misses"] += 1
+                    return
+                match = int(matches[0])
+                pixel_center = np.mean(np.asarray(corners[match])[0], axis=0)
+                camera_matrix = vision_camera.get_intrinsics_matrix()
+                distortion = np.zeros((5, 1), dtype=float)
+                _, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(
+                    corners, vision_cfg["aruco_marker_size_m"], camera_matrix, distortion)
+                camera_position, camera_orientation = vision_camera.get_world_pose()
+                rotation = quat_to_rot_matrix(np.asarray(camera_orientation, dtype=float))
+                right = rotation[:, 0]
+                up = rotation[:, 1]
+                forward = -rotation[:, 2]
+                tvec = np.asarray(tvecs[match][0], dtype=float)
+                marker_center = np.asarray(camera_position, dtype=float) + right * tvec[0] - up * tvec[1] + forward * tvec[2]
+                cube_estimate = marker_center - np.array([0, 0, CONFIG["cube_size_m"] / 2 + 0.0011])
+                actual_center, _ = cube.get_world_pose()
+                error = float(np.linalg.norm(cube_estimate - np.asarray(actual_center, dtype=float)))
+                detection = {
+                    "physics_step": tick,
+                    "pixel_center": pixel_center.tolist(),
+                    "cube_position_estimate_m": cube_estimate.tolist(),
+                    "cube_position_actual_m": np.asarray(actual_center, dtype=float).tolist(),
+                    "position_error_m": error,
+                }
+                report["vision"]["detections"] += 1
+                report["vision"]["last_detection"] = detection
+                report["vision"]["detection_log"].append(detection)
+                report["vision"]["detection_log"] = report["vision"]["detection_log"][-20:]
+            except (AttributeError, IndexError, TypeError, ValueError, RuntimeError) as exc:
+                report["vision"]["detector_error"] = str(exc)
+
         def step(count=1):
             nonlocal tick, last_control_wall
             for _ in range(count):
@@ -275,6 +449,8 @@ def main():
                     raise RuntimeError("Physics and command step counts diverged")
                 report["simulation_clock"]["control_steps"] = tick
                 report["simulation_clock"]["physics_steps"] = world.current_time_step_index - initial_physics_step
+                if tick % vision_period == 0:
+                    sample_vision()
                 if not args.headless and tick % 2 == 0:
                     render_only()
 

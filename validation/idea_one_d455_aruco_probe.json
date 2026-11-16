@@ -1,0 +1,38 @@
+{
+  "snapshot_id": "idea_one_d455_aruco_probe_2026-11-17",
+  "scene_id": "dual_fr3_four_wall_150mm_5goal",
+  "innovation": "多源信息融合的机器人—箱体连接与连续状态估计",
+  "camera": {
+    "camera_model": "Intel RealSense D455",
+    "camera_asset": "Isaac/Sensors/Intel/RealSense/rsd455.usd",
+    "depth_camera_path": "/World/D455/RSD455/Camera_Pseudo_Depth",
+    "camera_path": "/World/D455/RSD455/Camera_OmniVision_OV9782_Color",
+    "camera_position_m": [
+      0.0,
+      1.55,
+      1.45
+    ],
+    "camera_look_at_m": [
+      0.0,
+      0.78,
+      0.8
+    ],
+    "resolution": [
+      640,
+      480
+    ],
+    "aruco_dictionary": "DICT_4X4_50",
+    "aruco_marker_id": 23,
+    "aruco_marker_face": "top",
+    "samples": 1301,
+    "detections": 0,
+    "misses": 1303,
+    "last_detection": null,
+    "detection_log": [],
+    "camera_mode": "d455_asset"
+  },
+  "task_status": "PASS_B1_B2_PROXY_CONTACT",
+  "aruco_probe_status": "CAMERA_ASSET_LOADED_NO_DETECTION_IN_HEADLESS_RENDER",
+  "interpretation": "D455 asset and color camera prim loaded. The current synchronous headless render path produced no ArUco detections, so visual pose correction is not yet validated. Missed observations remain part of the occlusion experiment.",
+  "runtime_report": "validation/fr3_ab_visual_runner.json"
+}
