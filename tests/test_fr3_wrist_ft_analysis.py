@@ -3,6 +3,7 @@ import gzip
 import json
 
 import numpy as np
+import pytest
 
 from fr3_wrist_ft_analysis import analyze, write_analysis
 
@@ -35,6 +36,97 @@ def _trial():
 
 META = {"task_status": "PASS_B1_B2_PROXY_CONTACT", "calibration_passed": True,
         "cube_mass_kg_reference": 1.25, "gravity_world_m_s2": [0, 0, -9.81]}
+TCP_META = {**META, "schema_version": 2, "tcp_calibration_passed": True,
+            "tcp_offset_sensor_m": {"left": [0, -.155, .08], "right": [0, .155, .08]}}
+
+
+def _tcp_trial():
+    rows = _trial()
+    axis = np.array([1, 2, 3]) / np.sqrt(14)
+    skew = np.array([[0, -axis[2], axis[1]], [axis[2], 0, -axis[0]], [-axis[1], axis[0], 0]])
+    for row in rows:
+        for side, angle in (("left", 0.7), ("right", -0.45)):
+            rotation = np.eye(3) + np.sin(angle) * skew + (1 - np.cos(angle)) * skew @ skew
+            value = row[side]
+            world = np.array(value["gravity_corrected_world"])
+            local = np.r_[rotation.T @ world[:3], rotation.T @ world[3:]]
+            offset = np.array(TCP_META["tcp_offset_sensor_m"][side])
+            value["gravity_corrected_local"] = local.tolist()
+            value["sensor_position_m"] = [.4, -.3, 1.2]
+            value["sensor_orientation_wxyz"] = [np.cos(angle / 2), *(axis * np.sin(angle / 2))]
+            value["tcp_position_m"] = (value["sensor_position_m"] + rotation @ offset).tolist()
+            value["tcp_gravity_corrected_local"] = np.r_[
+                local[:3], local[3:] - np.cross(offset, local[:3])].tolist()
+            value["tcp_gravity_corrected_world"] = np.r_[
+                world[:3], world[3:] - np.cross(rotation @ offset, world[:3])].tolist()
+    return rows
+
+
+def test_tcp_translation_checks_both_mirrored_offsets_in_rotated_frames():
+    rows = _tcp_trial()
+    result = analyze(rows, TCP_META)
+    check = result["tcp_transform_validation"]
+    assert result["status"] == "PASS_FORCE_FEEDBACK"
+    assert result["tcp_physical_calibration_status"] == "PASS"
+    assert check["status"] == "PASS"
+    assert check["valid_side_samples"] == {"left": len(rows), "right": len(rows)}
+    assert check["by_phase"]["B2_push"]["left"]["samples_checked"] == 50
+    assert max(check["max_errors"].values()) < 1e-12
+    assert analyze(_trial(), META)["tcp_transform_validation"]["status"] == "UNVERIFIED"
+
+
+def test_wrong_tcp_shift_sign_is_rejected_by_independent_relations():
+    rows = _tcp_trial()
+    value = rows[151]["left"]
+    sensor = np.array(value["gravity_corrected_local"])
+    offset = TCP_META["tcp_offset_sensor_m"]["left"]
+    value["tcp_gravity_corrected_local"][3:] = (sensor[3:] + np.cross(offset, sensor[:3])).tolist()
+    result = analyze(rows, TCP_META)
+    assert result["status"] == "INVALID_DATA"
+    check = result["tcp_transform_validation"]
+    assert check["status"] == "FAIL"
+    assert check["max_errors"]["moment_shift_local_Nm"] > 0.1
+    assert check["by_phase"]["B1"]["left"]["max_errors"]["reverse_shift_local_Nm"] > 0.1
+
+
+@pytest.mark.parametrize("bad", ("missing", "nonfinite", "position_shape", "force_changed"))
+def test_schema_two_cannot_pass_missing_or_corrupt_tcp_feedback(bad):
+    rows = _tcp_trial()
+    value = rows[160]["right"]
+    if bad == "missing":
+        del value["tcp_gravity_corrected_local"]
+    elif bad == "nonfinite":
+        value["tcp_gravity_corrected_world"][5] = float("nan")
+    elif bad == "position_shape":
+        value["tcp_position_m"] = [0, 0]
+    else:
+        value["tcp_gravity_corrected_world"][0] += 1.0
+    result = analyze(rows, TCP_META)
+    assert result["status"] == "INVALID_DATA"
+    assert result["tcp_transform_validation"]["status"] == "FAIL"
+    if bad != "force_changed":
+        assert not result["all_samples_finite"]
+
+
+def test_tcp_offset_metadata_and_physical_calibration_are_required():
+    rows = _tcp_trial()
+    result = analyze(rows, {**TCP_META, "tcp_offset_sensor_m": {}})
+    assert result["status"] == "INVALID_DATA"
+    result = analyze(rows, {**TCP_META, "tcp_calibration_passed": None})
+    assert result["tcp_transform_validation"]["status"] == "PASS"
+    assert result["tcp_physical_calibration_status"] == "UNVERIFIED"
+    assert result["status"] == "INCOMPLETE"
+    assert analyze(rows, {**TCP_META, "tcp_calibration_passed": False})["status"] == "SENSOR_CHECKS_FAILED"
+
+
+def test_tcp_recording_writes_sensor_and_tcp_comparison_plot(tmp_path):
+    with gzip.open(tmp_path / "wrench.jsonl.gz", "wt") as stream:
+        for row in _tcp_trial():
+            stream.write(json.dumps(row) + "\n")
+    (tmp_path / "metadata.json").write_text(json.dumps(TCP_META))
+    result = write_analysis(tmp_path)
+    assert result["tcp_transform_validation"]["status"] == "PASS"
+    assert (tmp_path / "tcp_wrench.png").read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
 
 
 def test_correct_wrench_direction_and_unequal_payload_split_pass():

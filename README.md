@@ -87,8 +87,9 @@ saves overview/sensor PNGs plus `validation/idea_one_camera_mount_smoke.json`.
 
 ## Independent Cube position comparison
 
-The experiment now logs two separate streams in
-`validation/idea_one_vision_comparison/`: `ground_truth.jsonl` records the
+The initial experiment's two separate streams are preserved in
+`validation/idea_one_vision_comparison/`. Current runs put them under
+`<output-dir>/vision/`: `ground_truth.jsonl` records the
 Isaac Sim Cube position for reference, while `camera.jsonl` contains only
 RGB/ArUco position observations (or an explicit missing observation).
 `fr3_vision.py` receives an RGB frame, fixed camera intrinsics/extrinsics,
@@ -108,7 +109,7 @@ Run the automatic task, then generate the comparison plot and statistics:
 
 ```bash
 /home/ubuntu2004/isaacsim-4.5.0/python.sh fr3_ab_visual_runner.py --close-on-finish
-python3 fr3_vision_comparison.py validation/idea_one_wrist_ft/vision/comparison.jsonl
+python3 fr3_vision_comparison.py validation/idea_one_tcp_wrist_ft/vision/comparison.jsonl
 ```
 
 The directory also contains `metadata.json`, complete paired
@@ -209,7 +210,7 @@ Start the visible automatic task with:
 
 Add `--headless` for the same task without a window. The viewer pauses at
 completion or at the first failed check and retains the scene for inspection.
-The current runtime report is `validation/idea_one_wrist_ft/runner_report.json`.
+The current runtime report is `validation/idea_one_tcp_wrist_ft/runner_report.json`.
 The earlier `validation/fr3_ab_visual_runner.json` remains a historical result.
 
 The visible runner advances one 120 Hz physics step per control sample and
@@ -256,18 +257,9 @@ not removed. Cube truth and contact-pair identifiers are not sensor inputs;
 phase names are evaluation context only. These are ideal physics signals
 without added sensor noise, latency or saturation.
 
-Run the known-load check and the complete task:
-
-```bash
-/home/ubuntu2004/isaacsim-4.5.0/python.sh tests/isaac_wrist_ft_smoke.py
-/home/ubuntu2004/isaacsim-4.5.0/python.sh fr3_ab_visual_runner.py --close-on-finish --output-dir validation/idea_one_wrist_ft
-python3 fr3_wrist_ft_analysis.py validation/idea_one_wrist_ft
-```
-
-Add `--headless` for the same physics without the viewer. Omit
-`--close-on-finish` to inspect the final scene. The viewer shows the latest
-bilateral force and torque components. `--output-dir` accepts an absolute
-or relative directory; its default is `validation/idea_one_wrist_ft`.
+The first sensor-origin acceptance used `validation/idea_one_wrist_ft_visible/`
+and `validation/idea_one_wrist_ft_headless/`; these historical directories are
+preserved. Current commands and the TCP-origin extension are documented below.
 Each run writes `runner_report.json`, `metadata.json`, `wrench.jsonl.gz`,
 and a separate `trajectory_cache.json`; camera/reference streams are under
 `vision/`. The analyzer produces `summary.json`, `wrench.png` and a B-only
@@ -325,3 +317,73 @@ classification. In particular, large opposing A loads can come from the two
 rigid attachment proxies, and geometric B2 support proximity alone does not
 prove sustained rear-wall preload. The measured limitations must be addressed
 or explicitly excluded before treating these traces as normal training data.
+
+## Sensor and TCP wrench feedback (idea-one, 2026-11-17)
+
+Actual 120 Hz sampling now retains both reference points. The existing
+`gravity_corrected_local/world` fields remain sensor-origin wrenches;
+`tcp_gravity_corrected_local/world` are the corresponding TCP-origin wrenches.
+Raw sensor reactions and the tool gravity wrench are still recorded. Both
+origins use the same raw measurement, timestamp and physics step. Metadata
+schema 2 records the origin and axes explicitly; older schema 1 logs remain
+readable, with TCP verification marked `UNVERIFIED` rather than inferred.
+
+The sensor-to-TCP displacement is taken from the same tool geometry as the
+controller: left `[0,-0.155,0.08]` m, right `[0,+0.155,0.08]` m in sensor axes.
+After removing tool gravity and its moment at the sensor, the sampling path
+applies `F_TCP=F_sensor` and `tau_TCP=tau_sensor-r_sensor_to_TCP cross F_sensor`.
+TCP local axes are parallel to the sensor axes; only the origin is translated.
+Both wrenches also have world-axis versions, still referenced to their own
+sensor/TCP origins, not to the world origin. `tcp_position_m` is calculated
+from the same sensor pose and fixed offset, without Cube truth.
+
+Run the physical calibration and a fresh visual acceptance from the repo root:
+
+```bash
+/home/ubuntu2004/isaacsim-4.5.0/python.sh tests/isaac_wrist_ft_smoke.py
+/home/ubuntu2004/isaacsim-4.5.0/python.sh fr3_ab_visual_runner.py --close-on-finish --output-dir validation/idea_one_tcp_wrist_ft_review
+python3 fr3_wrist_ft_analysis.py validation/idea_one_tcp_wrist_ft_review
+```
+
+The runner's default output directory is `validation/idea_one_tcp_wrist_ft`.
+Omit `--close-on-finish` to keep the viewer open; add `--headless` to run without
+a window. The live panel shows the common force vector and separate sensor/TCP
+torques for each arm. The analyzer retains previous plots and adds
+`tcp_wrench.png`, comparing all three moment components for both arms.
+
+The physical calibration writes `validation/idea_one_tcp_wrist_ft_load_check.json`,
+preserving the old 28-case sensor-only report. Its 52 cases include two
+orientations, both mirrored offsets, signed six-axis loads and force at the
+actual TCP. They exercise the same conversion helper used by live sampling.
+An independently calculated TCP moment verifies the lever-arm sign; a pure
+point force at the TCP has nonzero sensor moment and approximately zero TCP
+moment. All 52 passed: maximum converted component errors were `7.18e-7 N`
+and `2.92e-4 N m` against known physical loads.
+
+The offline analyzer independently recomputes each sample's force identity,
+local/world moment-shift relation, reverse shift, rotation and TCP position.
+Missing or nonfinite TCP fields in schema 2 fail verification; physical
+calibration status is reported separately. Mathematical consistency and
+physical-load agreement are distinct checks.
+
+The complete visible A/B1/B2 acceptance is preserved in
+`validation/idea_one_tcp_wrist_ft_visible/`. All 10,786 physics/control steps
+had valid bilateral sensor and TCP feedback (21,572 side-sample comparisons),
+with zero uncommanded physics steps and zero unexpected PhysX contacts.
+The recorded local/world force difference is exactly zero. Maximum local
+moment-shift error is `3.55e-15 N m`; the world moment-shift and reverse-shift
+errors are at most `3.91e-14 N m`. Maximum TCP position reconstruction error
+is `2.50e-16 m`. Every phase's relation check passed; no fields or relations
+failed. `summary.json` records TCP transformation and physical calibration
+as separate `PASS` results. The full suite has 63 passing unit tests,
+including the actual recorder-to-gzip path and corrupted-conversion rejection.
+
+The force-profile warnings are preserved: B2 left support is intermittent,
+and right/left withdrawal peaks remain 285.48/122.75 N. The overall profile
+therefore remains `PASS_FORCE_FEEDBACK_WITH_TASK_WARNINGS`, rather than being
+relabeled normal by a successful TCP conversion.
+
+TCP conversion does not change the net force or compensate tool inertia.
+The previously observed A attachment internal loads, intermittent left support,
+and B2 withdrawal spikes remain task-level issues rather than being removed
+by a change of moment reference point.

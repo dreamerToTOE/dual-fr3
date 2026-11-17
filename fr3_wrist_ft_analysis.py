@@ -17,17 +17,100 @@ SHAPES = {
     "sensor_position_m": (3,), "sensor_orientation_wxyz": (4,),
     "q_rad": (7,), "qdot_rad_s": (7,),
 }
+TCP_SHAPES = {
+    "tcp_gravity_corrected_local": (6,), "tcp_gravity_corrected_world": (6,),
+    "tcp_position_m": (3,),
+}
 
 
-def _valid_side(row, side):
+def _valid_side(row, side, shapes=SHAPES):
     try:
-        for key, shape in SHAPES.items():
+        for key, shape in shapes.items():
             value = np.asarray(row[side][key], dtype=float)
             if value.shape != shape or not np.all(np.isfinite(value)):
                 return False
         return True
     except (KeyError, TypeError, ValueError):
         return False
+
+
+def _tcp_transform_validation(rows, metadata):
+    if metadata.get("schema_version", 1) != 2:
+        return {"status": "UNVERIFIED", "reason": "legacy recording has no required TCP feedback"}
+    limits = {
+        "force_local_N": 1e-9, "force_world_N": 1e-9,
+        "moment_shift_local_Nm": 1e-9, "moment_shift_world_Nm": 1e-9,
+        "reverse_shift_local_Nm": 1e-9, "reverse_shift_world_Nm": 1e-9,
+        "tcp_position_m": 1e-6, "frame_rotation_relative": 1e-6,
+    }
+    result = {"status": "FAIL", "limits": limits, "max_errors": dict.fromkeys(limits, 0.0),
+              "valid_side_samples": dict.fromkeys(SIDES, 0), "invalid_field_samples": 0,
+              "failed_relation_samples": 0, "by_phase": {}}
+    try:
+        offsets = {side: np.asarray(metadata["tcp_offset_sensor_m"][side], dtype=float) for side in SIDES}
+        if any(r.shape != (3,) or not np.all(np.isfinite(r)) for r in offsets.values()):
+            raise ValueError("invalid TCP offset")
+    except (KeyError, TypeError, ValueError):
+        return {**result, "all_fields_finite": False, "reason": "missing or invalid TCP offset metadata"}
+    for row in rows:
+        phase = result["by_phase"].setdefault(row.get("phase", "unknown"), {})
+        for side in SIDES:
+            stats = phase.setdefault(side, {"samples_checked": 0, "invalid_field_samples": 0,
+                                            "max_errors": dict.fromkeys(limits, 0.0)})
+            if not (_valid_side(row, side) and _valid_side(row, side, TCP_SHAPES)):
+                result["invalid_field_samples"] += 1
+                stats["invalid_field_samples"] += 1
+                continue
+            values = row[side]
+            q = np.asarray(values["sensor_orientation_wxyz"], dtype=float)
+            norm = float(np.linalg.norm(q))
+            if norm < 1e-12 or abs(norm - 1) > 1e-5:
+                result["invalid_field_samples"] += 1
+                stats["invalid_field_samples"] += 1
+                continue
+            w, x, y, z = q / norm
+            rotation = np.array([
+                [1 - 2 * (y*y + z*z), 2 * (x*y - z*w), 2 * (x*z + y*w)],
+                [2 * (x*y + z*w), 1 - 2 * (x*x + z*z), 2 * (y*z - x*w)],
+                [2 * (x*z - y*w), 2 * (y*z + x*w), 1 - 2 * (x*x + y*y)],
+            ])
+            sensor_local = np.asarray(values["gravity_corrected_local"], dtype=float)
+            sensor_world = np.asarray(values["gravity_corrected_world"], dtype=float)
+            tcp_local = np.asarray(values["tcp_gravity_corrected_local"], dtype=float)
+            tcp_world = np.asarray(values["tcp_gravity_corrected_world"], dtype=float)
+            offset = offsets[side]
+            world_offset = np.asarray(values["tcp_position_m"], dtype=float) - np.asarray(
+                values["sensor_position_m"], dtype=float)
+            rotation_error = max(
+                np.linalg.norm(rotation @ local[part:part+3] - world[part:part+3])
+                / max(1.0, np.linalg.norm(world[part:part+3]))
+                for local, world in ((sensor_local, sensor_world), (tcp_local, tcp_world))
+                for part in (0, 3))
+            errors = {
+                "force_local_N": float(np.max(np.abs(tcp_local[:3] - sensor_local[:3]))),
+                "force_world_N": float(np.max(np.abs(tcp_world[:3] - sensor_world[:3]))),
+                "moment_shift_local_Nm": float(np.max(np.abs(
+                    tcp_local[3:] - sensor_local[3:] + np.cross(offset, sensor_local[:3])))),
+                "moment_shift_world_Nm": float(np.max(np.abs(
+                    tcp_world[3:] - sensor_world[3:] + np.cross(world_offset, sensor_world[:3])))),
+                "reverse_shift_local_Nm": float(np.max(np.abs(
+                    tcp_local[3:] + np.cross(offset, tcp_local[:3]) - sensor_local[3:]))),
+                "reverse_shift_world_Nm": float(np.max(np.abs(
+                    tcp_world[3:] + np.cross(world_offset, tcp_world[:3]) - sensor_world[3:]))),
+                "tcp_position_m": float(np.max(np.abs(world_offset - rotation @ offset))),
+                "frame_rotation_relative": float(rotation_error),
+            }
+            result["valid_side_samples"][side] += 1
+            stats["samples_checked"] += 1
+            if any(errors[key] > limits[key] for key in limits):
+                result["failed_relation_samples"] += 1
+            for key, error in errors.items():
+                result["max_errors"][key] = max(result["max_errors"][key], error)
+                stats["max_errors"][key] = max(stats["max_errors"][key], error)
+    result["all_fields_finite"] = not result["invalid_field_samples"]
+    if rows and result["all_fields_finite"] and not result["failed_relation_samples"]:
+        result["status"] = "PASS"
+    return result
 
 
 def _stats(values):
@@ -103,6 +186,8 @@ def analyze(rows, metadata=None):
                        and np.allclose(np.diff(times), 1 / 120, rtol=0, atol=1e-7))
     finite = bool(rows and all(count == len(rows) for count in valid_counts.values())
                   and not invalid_clock)
+    tcp_validation = _tcp_transform_validation(rows, metadata)
+    finite = finite and tcp_validation.get("all_fields_finite", True)
     result = {
         "units": {"force": "N", "torque": "N m", "time": "s", "position": "m"},
         "samples": len(rows), "valid_side_samples": valid_counts,
@@ -114,6 +199,10 @@ def analyze(rows, metadata=None):
         "calibration_status": ("PASS" if metadata.get("calibration_passed") is True else
                                "FAIL" if metadata.get("calibration_passed") is False else "UNVERIFIED"),
         "full_flow_status": metadata.get("task_status", "UNVERIFIED"),
+        "tcp_transform_validation": tcp_validation,
+        "tcp_physical_calibration_status": (
+            "PASS" if metadata.get("tcp_calibration_passed") is True else
+            "FAIL" if metadata.get("tcp_calibration_passed") is False else "UNVERIFIED"),
     }
     for phase in phases:
         result["by_phase"][phase] = {}
@@ -209,12 +298,14 @@ def analyze(rows, metadata=None):
         }
         result["release_task_issue"] |= review
     checks = [value["status"] for name, value in acceptance.items() if name != "B2_left_support"]
-    if not finite or not monotonic or not clock_120hz:
+    if not finite or not monotonic or not clock_120hz or tcp_validation["status"] == "FAIL":
         result["status"] = "INVALID_DATA"
-    elif "FAIL" in checks or "DIRECTION_MISMATCH" in checks or result["calibration_status"] == "FAIL":
+    elif ("FAIL" in checks or "DIRECTION_MISMATCH" in checks or result["calibration_status"] == "FAIL"
+          or metadata.get("schema_version") == 2 and result["tcp_physical_calibration_status"] == "FAIL"):
         result["status"] = "SENSOR_CHECKS_FAILED"
     elif ("UNVERIFIED" in checks or "NO_SUSTAINED_FORCE" in checks or "INTERMITTENT_FORCE" in checks
           or result["calibration_status"] != "PASS"
+          or metadata.get("schema_version") == 2 and result["tcp_physical_calibration_status"] != "PASS"
           or result["full_flow_status"] != "PASS_B1_B2_PROXY_CONTACT"):
         result["status"] = "INCOMPLETE"
     else:
@@ -272,6 +363,32 @@ def plot_wrenches(rows, output):
     plt.close(fig)
 
 
+def plot_tcp_torques(rows, output):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    times = np.asarray([row["time_s"] for row in rows], dtype=float)
+    fig, axes = plt.subplots(3, 2, figsize=(12, 9), sharex=True, layout="constrained")
+    for column, side in enumerate(SIDES):
+        sensor = np.asarray([row[side]["gravity_corrected_world"] if _valid_side(row, side)
+                             else [np.nan] * 6 for row in rows]).reshape((-1, 6))
+        tcp = np.asarray([row[side]["tcp_gravity_corrected_world"] if _valid_side(row, side, TCP_SHAPES)
+                          else [np.nan] * 6 for row in rows]).reshape((-1, 6))
+        for index, component in enumerate(("Tx", "Ty", "Tz")):
+            ax = axes[index, column]
+            ax.plot(times, sensor[:, index + 3], label="At sensor", linewidth=0.8, linestyle="--")
+            ax.plot(times, tcp[:, index + 3], label="At TCP", linewidth=0.8)
+            ax.set_ylabel(f"{component} (N m)")
+            ax.grid(alpha=0.2)
+            ax.legend(loc="upper right")
+        axes[0, column].set_title(side.title())
+        axes[-1, column].set_xlabel("Simulation time (s)")
+    fig.suptitle("Sensor vs TCP moment reference; world axes, tool gravity removed")
+    fig.savefig(output, dpi=150)
+    plt.close(fig)
+
+
 def write_analysis(directory):
     directory = Path(directory)
     with gzip.open(directory / "wrench.jsonl.gz", "rt") as stream:
@@ -283,6 +400,8 @@ def write_analysis(directory):
     contact_rows = [row for row in rows if str(row.get("phase", "")).startswith("B")]
     if contact_rows:
         plot_wrenches(contact_rows, directory / "wrench_contact.png")
+    if metadata.get("schema_version") == 2:
+        plot_tcp_torques(rows, directory / "tcp_wrench.png")
     return summary
 
 
@@ -292,4 +411,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     summary = write_analysis(args.directory)
     print(json.dumps({"status": summary["status"], "samples": summary["samples"],
+                      "tcp_physical_calibration_status": summary["tcp_physical_calibration_status"],
+                      "tcp_transform_validation": {key: value for key, value in
+                                                   summary["tcp_transform_validation"].items() if key != "by_phase"},
                       "acceptance": summary["acceptance"]}, indent=2, allow_nan=False))

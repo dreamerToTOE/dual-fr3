@@ -12,7 +12,29 @@ from pathlib import Path
 
 import numpy as np
 
-from fr3_wrench import gravity_wrench_local, transform_wrench
+from fr3_wrench import gravity_wrench_local, transform_wrench, wrench_at_origin
+
+
+def wrench_feedback(raw_parent_on_tool_local, R_world_from_sensor, mass_kg,
+                    com_sensor_m, gravity_world, tcp_offset_sensor_m):
+    """Return same-sample wrenches at sensor and TCP, with tool gravity removed.
+
+    TCP local axes are parallel to sensor axes. World values rotate those axes
+    while retaining their respective sensor/TCP origins, not the world origin.
+    """
+    raw = np.asarray(raw_parent_on_tool_local, dtype=float)
+    if raw.shape != (6,) or not np.all(np.isfinite(raw)):
+        raise ValueError("Raw sensor wrench must contain six finite values")
+    gravity = gravity_wrench_local(R_world_from_sensor, mass_kg, com_sensor_m, gravity_world)
+    sensor = -raw - gravity
+    tcp = wrench_at_origin(sensor[:3], sensor[3:], tcp_offset_sensor_m)
+    return {
+        "raw_parent_on_tool_local": raw.tolist(), "tool_gravity_local": gravity.tolist(),
+        "gravity_corrected_local": sensor.tolist(),
+        "gravity_corrected_world": transform_wrench(sensor, R_world_from_sensor, np.zeros(3)).tolist(),
+        "tcp_gravity_corrected_local": tcp.tolist(),
+        "tcp_gravity_corrected_world": transform_wrench(tcp, R_world_from_sensor, np.zeros(3)).tolist(),
+    }
 
 
 def add_wrist_sensor(stage, side, cfg):
@@ -66,6 +88,13 @@ class WristForceRecorder:
         self.directory.mkdir(parents=True, exist_ok=True)
         self.cfg = config["wrist_force_sensors"]
         self.gravity = np.asarray(config["physics"]["gravity_m_s2"], dtype=float)
+        geometry = config["side_suction_tool"]
+        self.tcp_offsets = {side: np.array([
+            0.0, (-1 if side == "left" else 1) * float(geometry["tcp_side_offset_m"]),
+            float(geometry["vertical_drop_m"]),
+        ]) for side in robots}
+        if not all(np.all(np.isfinite(offset)) for offset in self.tcp_offsets.values()):
+            raise ValueError("Sensor-to-TCP offsets must be finite")
         self.links, self.tools = {}, {}
         for side, robot in robots.items():
             view = robot._articulation_view
@@ -75,6 +104,7 @@ class WristForceRecorder:
             self.tools[side] = SingleXFormPrim(f"/World/{side}_fr3/ABSideTool")
         self.samples = 0
         self.metadata = {
+            "schema_version": 2,
             "scene_id": config["scene_id"], "frequency_hz": 120,
             "channels": ["Fx", "Fy", "Fz", "Tx", "Ty", "Tz"],
             "units": ["N", "N", "N", "N m", "N m", "N m"],
@@ -83,6 +113,11 @@ class WristForceRecorder:
             "raw_sign": "parent-on-tool",
             "residual_sign": "tool-on-sensor",
             "gravity_correction": "residual = -raw - tool_gravity; no payload gravity subtraction",
+            "tcp_offset_sensor_m": {side: offset.tolist() for side, offset in self.tcp_offsets.items()},
+            "tcp_conversion": "F_TCP=F_sensor; torque_TCP=torque_sensor-cross(sensor_to_TCP,F_sensor)",
+            "tcp_local_axes": "parallel to sensor axes; origin translated to nominal suction-face center",
+            "world_wrench_origins": "sensor fields at sensor origin; tcp fields at TCP origin; neither at world origin",
+            "tcp_position_source": "same-step sensor pose plus fixed tool geometry, no Cube truth",
             "dynamic_compensation": False,
             "sensor_noise_model": "ideal PhysX reaction, no added noise/latency",
             "phase_is_evaluation_context_only": True,
@@ -108,19 +143,18 @@ class WristForceRecorder:
             position, orientation = self.tools[side].get_world_pose()
             rotation = quat_to_rot_matrix(orientation)
             cfg = self.cfg[side]
-            gravity = gravity_wrench_local(
-                rotation, cfg["mass_kg"], cfg["center_of_mass_m"], self.gravity)
-            corrected = -raw - gravity
-            corrected_world = transform_wrench(corrected, rotation, np.zeros(3))
+            feedback = wrench_feedback(
+                raw, rotation, cfg["mass_kg"], cfg["center_of_mass_m"],
+                self.gravity, self.tcp_offsets[side])
+            tcp_position = position + rotation @ self.tcp_offsets[side]
             q = np.asarray(robot.get_joint_positions(joint_indices=self.joints[side]), dtype=float)
             qdot = np.asarray(robot.get_joint_velocities(joint_indices=self.joints[side]), dtype=float)
-            if not all(np.all(np.isfinite(v)) for v in (position, orientation, corrected_world, q, qdot)):
+            if not all(np.all(np.isfinite(v)) for v in (position, orientation, tcp_position, q, qdot)):
                 raise RuntimeError(f"{side} wrist sensor state is not finite")
             row[side] = {
-                "raw_parent_on_tool_local": raw.tolist(), "tool_gravity_local": gravity.tolist(),
-                "gravity_corrected_local": corrected.tolist(),
-                "gravity_corrected_world": corrected_world.tolist(),
+                **feedback,
                 "sensor_position_m": position.tolist(), "sensor_orientation_wxyz": orientation.tolist(),
+                "tcp_position_m": tcp_position.tolist(),
                 "q_rad": q.tolist(), "qdot_rad_s": qdot.tolist(),
             }
         self.log.write(json.dumps(row, allow_nan=False, separators=(",", ":")) + "\n")
@@ -131,4 +165,5 @@ class WristForceRecorder:
         self.log.close()
         return {"samples": self.samples, "frequency_hz": 120,
                 "directory": str(self.directory), "finite_wrenches_only": True,
+                "wrench_origins": ["sensor", "TCP"],
                 "dynamic_compensation": False, "sensor_noise_added": False}

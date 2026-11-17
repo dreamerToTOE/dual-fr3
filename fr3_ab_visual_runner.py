@@ -214,7 +214,7 @@ def main():
     parser.add_argument("--close-on-finish", action="store_true", help="Close instead of retaining the result in the GUI")
     parser.add_argument("--output-dir", type=Path, help="Keep this run's artifacts separate from earlier experiments")
     args = parser.parse_args()
-    output_directory = args.output_dir.resolve() if args.output_dir else ROOT / "validation" / "idea_one_wrist_ft"
+    output_directory = args.output_dir.resolve() if args.output_dir else ROOT / "validation" / "idea_one_tcp_wrist_ft"
     output_directory.mkdir(parents=True, exist_ok=True)
     report_path = output_directory / "runner_report.json"
     cache_output = output_directory / "trajectory_cache.json"
@@ -375,7 +375,7 @@ def main():
         vision_camera.set_projection_type("pinhole")
         if not args.headless:
             import omni.ui as ui
-            status_window = ui.Window("FR3 automatic task", width=520, height=180)
+            status_window = ui.Window("FR3 automatic task", width=580, height=230)
             with status_window.frame:
                 with ui.VStack():
                     status_label = ui.Label("Loading FR3...", word_wrap=True)
@@ -420,6 +420,11 @@ def main():
             calibration = json.loads(calibration_path.read_text())
             force_recorder.metadata["calibration_passed"] = calibration.get("status") == "PASS"
             force_recorder.metadata["calibration_report"] = str(calibration_path.relative_to(ROOT))
+        tcp_calibration_path = ROOT / "validation" / "idea_one_tcp_wrist_ft_load_check.json"
+        if tcp_calibration_path.exists():
+            tcp_calibration = json.loads(tcp_calibration_path.read_text())
+            force_recorder.metadata["tcp_calibration_passed"] = tcp_calibration.get("status") == "PASS"
+            force_recorder.metadata["tcp_calibration_report"] = str(tcp_calibration_path.relative_to(ROOT))
         print("FR3_AB_PHYSICS_READY", flush=True)
         checker = FR3CollisionChecker(CONFIG, solvers)
         allowed_contacts = {"left", "right"}
@@ -589,9 +594,12 @@ def main():
                     lines = ["World axes, tool gravity removed; F in N, T in N m"]
                     for side in ("left", "right"):
                         wrench = force_sample[side]["gravity_corrected_world"]
+                        tcp_wrench = force_sample[side]["tcp_gravity_corrected_world"]
                         force = ", ".join(f"{value:+.2f}" for value in wrench[:3])
                         torque = ", ".join(f"{value:+.3f}" for value in wrench[3:])
-                        lines.append(f"{side}: F [{force}]  T [{torque}]")
+                        tcp_torque = ", ".join(f"{value:+.3f}" for value in tcp_wrench[3:])
+                        lines.append(f"{side}: F [{force}] (same at sensor/TCP)\n"
+                                     f"  T_sensor [{torque}]  T_TCP [{tcp_torque}]")
                     force_label.text = "\n".join(lines)
                 contact_monitor.raise_if_collision()
                 reference_center, _ = cube.get_world_pose()
