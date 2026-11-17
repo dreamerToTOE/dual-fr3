@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "verified_physics_steps": 14599,
+  "exact_replayed_predictions": 43797,
+  "recognition_modes": [
+    "fusion",
+    "vision_only",
+    "force_only"
+  ],
+  "fresh_camera_physics_samples": 10096,
+  "max_fresh_frame_receive_latency_s": 0.0,
+  "task_force_status": "FULL_FLOW_FORCE_PASS",
+  "unexpected_physx_contacts": 0,
+  "uncommanded_physics_steps": 0,
+  "loaded_cache_phases": 13,
+  "reference_wall_rule": "PhysX contact or geometric wall adjacency within 50 micrometers",
+  "sha256": {
+    "validation/idea_one_contact_state_visible_acceptance/runner_report.json": "2b658bfbdbd906cc236a2e9210d189fd18367942d426de00cb8688cf18de499d",
+    "validation/idea_one_contact_state_visible_acceptance/summary.json": "484ceda14bceaaa4fa5ba9b9b8dda9e05ca3773721aede6143d11151158289e0",
+    "validation/idea_one_contact_state_visible_acceptance/wrench.jsonl.gz": "510b0203ab12386cda728b9f057de4501f9dbd3ac51e1dd0b1f9b1417123fefe",
+    "validation/idea_one_contact_state_visible_acceptance/contact_states/metadata.json": "feb6de07293d4ae62e8982a562fac73571cb52a8197df7ec3da55410bd888b04",
+    "validation/idea_one_contact_state_visible_acceptance/contact_states/summary.json": "59718335adcf55ec90d09d94034a38053b244909455787b936415978afd7cd81",
+    "validation/idea_one_contact_state_visible_acceptance/contact_states/sensor_inputs.jsonl.gz": "35bfd477915bd26de7ddf2a2fd4163a3d7ff127848e44ccf56b30960d4816575",
+    "validation/idea_one_contact_state_visible_acceptance/contact_states/reference.jsonl.gz": "7817507e281a80aafdd6cf37bd3645920267c1de8ccf4f1ebad8b0966bb3ec28",
+    "validation/idea_one_contact_state_visible_acceptance/contact_states/predictions.jsonl.gz": "5bc90d9aaf6d607523782cab68db33398d68656191a98c46fc2f4efdfc424f0a"
+  },
+  "wrist_gzip_file_hash_matches_headless": false,
+  "wrist_uncompressed_log_matches_headless": true
+}

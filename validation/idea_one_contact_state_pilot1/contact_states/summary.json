@@ -1,0 +1,466 @@
+{
+  "status": "COMPLETED_BASELINE_EVALUATION",
+  "samples": 14599,
+  "metrics": {
+    "fusion": {
+      "samples": 14599,
+      "reference_known_samples": 14598,
+      "reference_unknown_samples": 1,
+      "accuracy_including_abstention_as_error": 0.8410741197424305,
+      "decision_coverage": 0.856761200164406,
+      "accuracy_on_decided_samples": 0.9816902534580635,
+      "macro_f1": 0.8460386847263763,
+      "prediction_counts": {
+        "UNKNOWN": 2082,
+        "BILATERAL_SUPPORTED": 90,
+        "BILATERAL_SUSPENDED": 3860,
+        "NO_TOOL_CONTACT": 1236,
+        "LEFT_FLOOR_CONTACT": 592,
+        "INCONSISTENT": 10,
+        "LEFT_REAR_CONTACT": 4502,
+        "DUAL_REAR_CONTACT": 1640,
+        "DUAL_CORNER_CONTACT": 338,
+        "RELEASED_CORNER": 249
+      },
+      "by_state": {
+        "BILATERAL_SUPPORTED": {
+          "reference_samples": 86,
+          "predicted_samples": 90,
+          "precision": 0.7222222222222222,
+          "recall": 0.7558139534883721,
+          "f1": 0.7386363636363636
+        },
+        "BILATERAL_SUSPENDED": {
+          "reference_samples": 4041,
+          "predicted_samples": 3860,
+          "precision": 1.0,
+          "recall": 0.9552091066567682,
+          "f1": 0.977091507404126
+        },
+        "DUAL_CORNER_CONTACT": {
+          "reference_samples": 349,
+          "predicted_samples": 338,
+          "precision": 0.8757396449704142,
+          "recall": 0.8481375358166189,
+          "f1": 0.8617176128093158
+        },
+        "DUAL_REAR_CONTACT": {
+          "reference_samples": 1684,
+          "predicted_samples": 1640,
+          "precision": 1.0,
+          "recall": 0.9738717339667459,
+          "f1": 0.98676293622142
+        },
+        "LEFT_FLOOR_CONTACT": {
+          "reference_samples": 712,
+          "predicted_samples": 592,
+          "precision": 1.0,
+          "recall": 0.8314606741573034,
+          "f1": 0.9079754601226994
+        },
+        "LEFT_REAR_CONTACT": {
+          "reference_samples": 4385,
+          "predicted_samples": 4502,
+          "precision": 0.964015992892048,
+          "recall": 0.9897377423033067,
+          "f1": 0.9767075503544503
+        },
+        "NO_TOOL_CONTACT": {
+          "reference_samples": 2900,
+          "predicted_samples": 1236,
+          "precision": 1.0,
+          "recall": 0.4262068965517241,
+          "f1": 0.597678916827853
+        },
+        "RELEASED_CORNER": {
+          "reference_samples": 441,
+          "predicted_samples": 249,
+          "precision": 1.0,
+          "recall": 0.564625850340136,
+          "f1": 0.7217391304347825
+        }
+      },
+      "confusion_matrix": {
+        "BILATERAL_SUPPORTED": {
+          "UNKNOWN": 21,
+          "BILATERAL_SUPPORTED": 65
+        },
+        "BILATERAL_SUSPENDED": {
+          "UNKNOWN": 156,
+          "BILATERAL_SUPPORTED": 25,
+          "BILATERAL_SUSPENDED": 3860
+        },
+        "DUAL_CORNER_CONTACT": {
+          "DUAL_CORNER_CONTACT": 296,
+          "LEFT_REAR_CONTACT": 53
+        },
+        "DUAL_REAR_CONTACT": {
+          "LEFT_REAR_CONTACT": 2,
+          "DUAL_REAR_CONTACT": 1640,
+          "DUAL_CORNER_CONTACT": 42
+        },
+        "LEFT_FLOOR_CONTACT": {
+          "UNKNOWN": 3,
+          "LEFT_FLOOR_CONTACT": 592,
+          "INCONSISTENT": 10,
+          "LEFT_REAR_CONTACT": 107
+        },
+        "LEFT_REAR_CONTACT": {
+          "LEFT_REAR_CONTACT": 4340,
+          "UNKNOWN": 45
+        },
+        "NO_TOOL_CONTACT": {
+          "UNKNOWN": 1664,
+          "NO_TOOL_CONTACT": 1236
+        },
+        "RELEASED_CORNER": {
+          "UNKNOWN": 192,
+          "RELEASED_CORNER": 249
+        }
+      }
+    },
+    "vision_only": {
+      "samples": 14599,
+      "reference_known_samples": 14598,
+      "reference_unknown_samples": 1,
+      "accuracy_including_abstention_as_error": 0.1022742841485135,
+      "decision_coverage": 0.1046718728592958,
+      "accuracy_on_decided_samples": 0.9770942408376964,
+      "macro_f1": 0.16461930517994589,
+      "prediction_counts": {
+        "UNKNOWN": 13070,
+        "NO_TOOL_CONTACT": 1280,
+        "RELEASED_CORNER": 249
+      },
+      "by_state": {
+        "BILATERAL_SUPPORTED": {
+          "reference_samples": 86,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "BILATERAL_SUSPENDED": {
+          "reference_samples": 4041,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "DUAL_CORNER_CONTACT": {
+          "reference_samples": 349,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "DUAL_REAR_CONTACT": {
+          "reference_samples": 1684,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "LEFT_FLOOR_CONTACT": {
+          "reference_samples": 712,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "LEFT_REAR_CONTACT": {
+          "reference_samples": 4385,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "NO_TOOL_CONTACT": {
+          "reference_samples": 2900,
+          "predicted_samples": 1280,
+          "precision": 0.971875,
+          "recall": 0.4289655172413793,
+          "f1": 0.5952153110047846
+        },
+        "RELEASED_CORNER": {
+          "reference_samples": 441,
+          "predicted_samples": 249,
+          "precision": 1.0,
+          "recall": 0.564625850340136,
+          "f1": 0.7217391304347825
+        }
+      },
+      "confusion_matrix": {
+        "BILATERAL_SUPPORTED": {
+          "UNKNOWN": 83,
+          "NO_TOOL_CONTACT": 3
+        },
+        "BILATERAL_SUSPENDED": {
+          "UNKNOWN": 4009,
+          "NO_TOOL_CONTACT": 32
+        },
+        "DUAL_CORNER_CONTACT": {
+          "UNKNOWN": 349
+        },
+        "DUAL_REAR_CONTACT": {
+          "UNKNOWN": 1684
+        },
+        "LEFT_FLOOR_CONTACT": {
+          "UNKNOWN": 712
+        },
+        "LEFT_REAR_CONTACT": {
+          "UNKNOWN": 4385
+        },
+        "NO_TOOL_CONTACT": {
+          "UNKNOWN": 1656,
+          "NO_TOOL_CONTACT": 1244
+        },
+        "RELEASED_CORNER": {
+          "UNKNOWN": 192,
+          "RELEASED_CORNER": 249
+        }
+      }
+    },
+    "force_only": {
+      "samples": 14599,
+      "reference_known_samples": 14598,
+      "reference_unknown_samples": 1,
+      "accuracy_including_abstention_as_error": 0.740032881216605,
+      "decision_coverage": 0.7557199616385806,
+      "accuracy_on_decided_samples": 0.9792422044960116,
+      "macro_f1": 0.6821502649485671,
+      "prediction_counts": {
+        "UNKNOWN": 3567,
+        "BILATERAL_SUPPORTED": 90,
+        "BILATERAL_SUSPENDED": 3860,
+        "LEFT_FLOOR_CONTACT": 602,
+        "LEFT_REAR_CONTACT": 4502,
+        "DUAL_REAR_CONTACT": 1640,
+        "DUAL_CORNER_CONTACT": 338
+      },
+      "by_state": {
+        "BILATERAL_SUPPORTED": {
+          "reference_samples": 86,
+          "predicted_samples": 90,
+          "precision": 0.7222222222222222,
+          "recall": 0.7558139534883721,
+          "f1": 0.7386363636363636
+        },
+        "BILATERAL_SUSPENDED": {
+          "reference_samples": 4041,
+          "predicted_samples": 3860,
+          "precision": 1.0,
+          "recall": 0.9552091066567682,
+          "f1": 0.977091507404126
+        },
+        "DUAL_CORNER_CONTACT": {
+          "reference_samples": 349,
+          "predicted_samples": 338,
+          "precision": 0.8757396449704142,
+          "recall": 0.8481375358166189,
+          "f1": 0.8617176128093158
+        },
+        "DUAL_REAR_CONTACT": {
+          "reference_samples": 1684,
+          "predicted_samples": 1640,
+          "precision": 1.0,
+          "recall": 0.9738717339667459,
+          "f1": 0.98676293622142
+        },
+        "LEFT_FLOOR_CONTACT": {
+          "reference_samples": 712,
+          "predicted_samples": 602,
+          "precision": 1.0,
+          "recall": 0.8455056179775281,
+          "f1": 0.9162861491628616
+        },
+        "LEFT_REAR_CONTACT": {
+          "reference_samples": 4385,
+          "predicted_samples": 4502,
+          "precision": 0.964015992892048,
+          "recall": 0.9897377423033067,
+          "f1": 0.9767075503544503
+        },
+        "NO_TOOL_CONTACT": {
+          "reference_samples": 2900,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "RELEASED_CORNER": {
+          "reference_samples": 441,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "confusion_matrix": {
+        "BILATERAL_SUPPORTED": {
+          "UNKNOWN": 21,
+          "BILATERAL_SUPPORTED": 65
+        },
+        "BILATERAL_SUSPENDED": {
+          "UNKNOWN": 156,
+          "BILATERAL_SUPPORTED": 25,
+          "BILATERAL_SUSPENDED": 3860
+        },
+        "DUAL_CORNER_CONTACT": {
+          "DUAL_CORNER_CONTACT": 296,
+          "LEFT_REAR_CONTACT": 53
+        },
+        "DUAL_REAR_CONTACT": {
+          "LEFT_REAR_CONTACT": 2,
+          "DUAL_REAR_CONTACT": 1640,
+          "DUAL_CORNER_CONTACT": 42
+        },
+        "LEFT_FLOOR_CONTACT": {
+          "UNKNOWN": 3,
+          "LEFT_FLOOR_CONTACT": 602,
+          "LEFT_REAR_CONTACT": 107
+        },
+        "LEFT_REAR_CONTACT": {
+          "LEFT_REAR_CONTACT": 4340,
+          "UNKNOWN": 45
+        },
+        "NO_TOOL_CONTACT": {
+          "UNKNOWN": 2900
+        },
+        "RELEASED_CORNER": {
+          "UNKNOWN": 441
+        }
+      }
+    },
+    "fusion_camera_fully_unavailable": {
+      "samples": 14599,
+      "reference_known_samples": 14598,
+      "reference_unknown_samples": 1,
+      "accuracy_including_abstention_as_error": 0.740032881216605,
+      "decision_coverage": 0.7557199616385806,
+      "accuracy_on_decided_samples": 0.9792422044960116,
+      "macro_f1": 0.6821502649485671,
+      "prediction_counts": {
+        "UNKNOWN": 3567,
+        "BILATERAL_SUPPORTED": 90,
+        "BILATERAL_SUSPENDED": 3860,
+        "LEFT_FLOOR_CONTACT": 602,
+        "LEFT_REAR_CONTACT": 4502,
+        "DUAL_REAR_CONTACT": 1640,
+        "DUAL_CORNER_CONTACT": 338
+      },
+      "by_state": {
+        "BILATERAL_SUPPORTED": {
+          "reference_samples": 86,
+          "predicted_samples": 90,
+          "precision": 0.7222222222222222,
+          "recall": 0.7558139534883721,
+          "f1": 0.7386363636363636
+        },
+        "BILATERAL_SUSPENDED": {
+          "reference_samples": 4041,
+          "predicted_samples": 3860,
+          "precision": 1.0,
+          "recall": 0.9552091066567682,
+          "f1": 0.977091507404126
+        },
+        "DUAL_CORNER_CONTACT": {
+          "reference_samples": 349,
+          "predicted_samples": 338,
+          "precision": 0.8757396449704142,
+          "recall": 0.8481375358166189,
+          "f1": 0.8617176128093158
+        },
+        "DUAL_REAR_CONTACT": {
+          "reference_samples": 1684,
+          "predicted_samples": 1640,
+          "precision": 1.0,
+          "recall": 0.9738717339667459,
+          "f1": 0.98676293622142
+        },
+        "LEFT_FLOOR_CONTACT": {
+          "reference_samples": 712,
+          "predicted_samples": 602,
+          "precision": 1.0,
+          "recall": 0.8455056179775281,
+          "f1": 0.9162861491628616
+        },
+        "LEFT_REAR_CONTACT": {
+          "reference_samples": 4385,
+          "predicted_samples": 4502,
+          "precision": 0.964015992892048,
+          "recall": 0.9897377423033067,
+          "f1": 0.9767075503544503
+        },
+        "NO_TOOL_CONTACT": {
+          "reference_samples": 2900,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "RELEASED_CORNER": {
+          "reference_samples": 441,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "confusion_matrix": {
+        "BILATERAL_SUPPORTED": {
+          "UNKNOWN": 21,
+          "BILATERAL_SUPPORTED": 65
+        },
+        "BILATERAL_SUSPENDED": {
+          "UNKNOWN": 156,
+          "BILATERAL_SUPPORTED": 25,
+          "BILATERAL_SUSPENDED": 3860
+        },
+        "DUAL_CORNER_CONTACT": {
+          "DUAL_CORNER_CONTACT": 296,
+          "LEFT_REAR_CONTACT": 53
+        },
+        "DUAL_REAR_CONTACT": {
+          "LEFT_REAR_CONTACT": 2,
+          "DUAL_REAR_CONTACT": 1640,
+          "DUAL_CORNER_CONTACT": 42
+        },
+        "LEFT_FLOOR_CONTACT": {
+          "UNKNOWN": 3,
+          "LEFT_FLOOR_CONTACT": 602,
+          "LEFT_REAR_CONTACT": 107
+        },
+        "LEFT_REAR_CONTACT": {
+          "LEFT_REAR_CONTACT": 4340,
+          "UNKNOWN": 45
+        },
+        "NO_TOOL_CONTACT": {
+          "UNKNOWN": 2900
+        },
+        "RELEASED_CORNER": {
+          "UNKNOWN": 441
+        }
+      }
+    }
+  },
+  "input_boundary": [
+    "causal RGB/ArUco observation",
+    "wrist TCP six-axis feedback",
+    "encoder FK/tool geometry"
+  ],
+  "excluded_from_recognizer": [
+    "task phase",
+    "skill ID",
+    "Cube truth",
+    "PhysX contact report",
+    "attachment state"
+  ],
+  "reference_definition": "independent physical contacts/attachments plus 50 um wall adjacency; no wrist force or task phase",
+  "control": "observer only; skill recommendations do not change robot commands",
+  "limitations": [
+    "Single normal proxy-contact task is a baseline, not research-grade generalization evidence.",
+    "Unloaded geometric contact can be unobservable; UNKNOWN counts against accuracy/coverage.",
+    "Camera outage is sensor replay, not a simulated physical disconnection."
+  ]
+}

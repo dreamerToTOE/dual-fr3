@@ -1,0 +1,294 @@
+{
+  "fusion": {
+    "samples": 14599,
+    "reference_known_samples": 14598,
+    "reference_unknown_samples": 1,
+    "accuracy_including_abstention_as_error": 0.8413481298808055,
+    "decision_coverage": 0.8570352103027812,
+    "accuracy_on_decided_samples": 0.9816961074254655,
+    "macro_f1": 0.8464433461750693,
+    "prediction_counts": {
+      "UNKNOWN": 2088,
+      "BILATERAL_SUPPORTED": 90,
+      "BILATERAL_SUSPENDED": 3860,
+      "NO_TOOL_CONTACT": 1232,
+      "LEFT_FLOOR_CONTACT": 602,
+      "LEFT_REAR_CONTACT": 4502,
+      "DUAL_REAR_CONTACT": 1640,
+      "DUAL_CORNER_CONTACT": 338,
+      "RELEASED_CORNER": 247
+    },
+    "predictions_on_unknown_reference": {
+      "UNKNOWN": 1
+    },
+    "stable_contact_events": [
+      {
+        "state": "NO_TOOL_CONTACT",
+        "reference_start_sample": 0,
+        "duration_s": 10.308333333333334,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "BILATERAL_SUPPORTED",
+        "reference_start_sample": 1237,
+        "duration_s": 0.6416666666666667,
+        "recognition_delay_s": 0.025
+      },
+      {
+        "state": "BILATERAL_SUSPENDED",
+        "reference_start_sample": 1314,
+        "duration_s": 33.675,
+        "recognition_delay_s": 0.3333333333333333
+      },
+      {
+        "state": "NO_TOOL_CONTACT",
+        "reference_start_sample": 5365,
+        "duration_s": 13.858333333333333,
+        "recognition_delay_s": 1.3166666666666667
+      },
+      {
+        "state": "LEFT_FLOOR_CONTACT",
+        "reference_start_sample": 7028,
+        "duration_s": 5.316666666666666,
+        "recognition_delay_s": 0.025
+      },
+      {
+        "state": "LEFT_FLOOR_CONTACT",
+        "reference_start_sample": 7699,
+        "duration_s": 0.45,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "LEFT_REAR_CONTACT",
+        "reference_start_sample": 7753,
+        "duration_s": 30.275,
+        "recognition_delay_s": 0.0
+      },
+      {
+        "state": "DUAL_REAR_CONTACT",
+        "reference_start_sample": 11386,
+        "duration_s": 14.033333333333333,
+        "recognition_delay_s": 0.016666666666666666
+      },
+      {
+        "state": "DUAL_CORNER_CONTACT",
+        "reference_start_sample": 13070,
+        "duration_s": 2.475,
+        "recognition_delay_s": 0.0
+      },
+      {
+        "state": "LEFT_REAR_CONTACT",
+        "reference_start_sample": 13449,
+        "duration_s": 5.833333333333333,
+        "recognition_delay_s": 0.0
+      },
+      {
+        "state": "RELEASED_CORNER",
+        "reference_start_sample": 14149,
+        "duration_s": 0.2916666666666667,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "RELEASED_CORNER",
+        "reference_start_sample": 14194,
+        "duration_s": 3.375,
+        "recognition_delay_s": 1.3166666666666667
+      }
+    ],
+    "stable_event_definition": "physical reference constant for >=0.25 s; accuracy still uses every sample",
+    "stable_event_misses": 3,
+    "recognition_delay_p95_s": 1.3166666666666667
+  },
+  "vision_only": {
+    "samples": 14599,
+    "reference_known_samples": 14598,
+    "reference_unknown_samples": 1,
+    "accuracy_including_abstention_as_error": 0.1015892588025757,
+    "decision_coverage": 0.10241128921770105,
+    "accuracy_on_decided_samples": 0.9919732441471572,
+    "macro_f1": 0.1642466388957413,
+    "prediction_counts": {
+      "UNKNOWN": 13104,
+      "NO_TOOL_CONTACT": 1248,
+      "RELEASED_CORNER": 247
+    },
+    "predictions_on_unknown_reference": {
+      "UNKNOWN": 1
+    },
+    "stable_contact_events": [
+      {
+        "state": "NO_TOOL_CONTACT",
+        "reference_start_sample": 0,
+        "duration_s": 10.308333333333334,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "BILATERAL_SUPPORTED",
+        "reference_start_sample": 1237,
+        "duration_s": 0.6416666666666667,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "BILATERAL_SUSPENDED",
+        "reference_start_sample": 1314,
+        "duration_s": 33.675,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "NO_TOOL_CONTACT",
+        "reference_start_sample": 5365,
+        "duration_s": 13.858333333333333,
+        "recognition_delay_s": 1.2833333333333334
+      },
+      {
+        "state": "LEFT_FLOOR_CONTACT",
+        "reference_start_sample": 7028,
+        "duration_s": 5.316666666666666,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "LEFT_FLOOR_CONTACT",
+        "reference_start_sample": 7699,
+        "duration_s": 0.45,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "LEFT_REAR_CONTACT",
+        "reference_start_sample": 7753,
+        "duration_s": 30.275,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "DUAL_REAR_CONTACT",
+        "reference_start_sample": 11386,
+        "duration_s": 14.033333333333333,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "DUAL_CORNER_CONTACT",
+        "reference_start_sample": 13070,
+        "duration_s": 2.475,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "LEFT_REAR_CONTACT",
+        "reference_start_sample": 13449,
+        "duration_s": 5.833333333333333,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "RELEASED_CORNER",
+        "reference_start_sample": 14149,
+        "duration_s": 0.2916666666666667,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "RELEASED_CORNER",
+        "reference_start_sample": 14194,
+        "duration_s": 3.375,
+        "recognition_delay_s": 1.3166666666666667
+      }
+    ],
+    "stable_event_definition": "physical reference constant for >=0.25 s; accuracy still uses every sample",
+    "stable_event_misses": 10,
+    "recognition_delay_p95_s": 1.315
+  },
+  "force_only": {
+    "samples": 14599,
+    "reference_known_samples": 14598,
+    "reference_unknown_samples": 1,
+    "accuracy_including_abstention_as_error": 0.740032881216605,
+    "decision_coverage": 0.7557199616385806,
+    "accuracy_on_decided_samples": 0.9792422044960116,
+    "macro_f1": 0.6821502649485671,
+    "prediction_counts": {
+      "UNKNOWN": 3567,
+      "BILATERAL_SUPPORTED": 90,
+      "BILATERAL_SUSPENDED": 3860,
+      "LEFT_FLOOR_CONTACT": 602,
+      "LEFT_REAR_CONTACT": 4502,
+      "DUAL_REAR_CONTACT": 1640,
+      "DUAL_CORNER_CONTACT": 338
+    },
+    "predictions_on_unknown_reference": {
+      "UNKNOWN": 1
+    },
+    "stable_contact_events": [
+      {
+        "state": "NO_TOOL_CONTACT",
+        "reference_start_sample": 0,
+        "duration_s": 10.308333333333334,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "BILATERAL_SUPPORTED",
+        "reference_start_sample": 1237,
+        "duration_s": 0.6416666666666667,
+        "recognition_delay_s": 0.025
+      },
+      {
+        "state": "BILATERAL_SUSPENDED",
+        "reference_start_sample": 1314,
+        "duration_s": 33.675,
+        "recognition_delay_s": 0.3333333333333333
+      },
+      {
+        "state": "NO_TOOL_CONTACT",
+        "reference_start_sample": 5365,
+        "duration_s": 13.858333333333333,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "LEFT_FLOOR_CONTACT",
+        "reference_start_sample": 7028,
+        "duration_s": 5.316666666666666,
+        "recognition_delay_s": 0.025
+      },
+      {
+        "state": "LEFT_FLOOR_CONTACT",
+        "reference_start_sample": 7699,
+        "duration_s": 0.45,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "LEFT_REAR_CONTACT",
+        "reference_start_sample": 7753,
+        "duration_s": 30.275,
+        "recognition_delay_s": 0.0
+      },
+      {
+        "state": "DUAL_REAR_CONTACT",
+        "reference_start_sample": 11386,
+        "duration_s": 14.033333333333333,
+        "recognition_delay_s": 0.016666666666666666
+      },
+      {
+        "state": "DUAL_CORNER_CONTACT",
+        "reference_start_sample": 13070,
+        "duration_s": 2.475,
+        "recognition_delay_s": 0.0
+      },
+      {
+        "state": "LEFT_REAR_CONTACT",
+        "reference_start_sample": 13449,
+        "duration_s": 5.833333333333333,
+        "recognition_delay_s": 0.0
+      },
+      {
+        "state": "RELEASED_CORNER",
+        "reference_start_sample": 14149,
+        "duration_s": 0.2916666666666667,
+        "recognition_delay_s": null
+      },
+      {
+        "state": "RELEASED_CORNER",
+        "reference_start_sample": 14194,
+        "duration_s": 3.375,
+        "recognition_delay_s": null
+      }
+    ],
+    "stable_event_definition": "physical reference constant for >=0.25 s; accuracy still uses every sample",
+    "stable_event_misses": 5,
+    "recognition_delay_p95_s": 0.24083333333333312
+  }
+}

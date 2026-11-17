@@ -566,3 +566,115 @@ steps, with the same accepted force peaks, complete B2 hold coverage and no
 unexpected contact. The diagnosis directory includes an independent raw-force
 audit and the source/log hashes for the complete verification. Vision/force
 fusion classification has not been connected in this force-baseline change.
+
+### Contact-state skill library and multisource recognition baseline
+
+`fr3_contact_skills.json` contains eight physical contact states plus
+`UNKNOWN` and `INCONSISTENT`, and ten skill descriptions tied to existing
+runtime callables. Each skill declares entry/target states, controller,
+success conditions and abort conditions. They cover alignment, attachment
+proxy establishment, bilateral transport, landing/release, front pushing,
+rear preload, right-arm plane alignment, lateral pushing, unloading/retreat,
+and holding/reobserving. This is a robot skill catalog; the current observer
+recommends eligible skills without taking over the validated controller.
+
+| State | Evidence required by the baseline |
+| --- | --- |
+| `NO_TOOL_CONTACT` | Fresh visual Cube box separated from both encoder TCPs; fusion also requires unloaded wrists |
+| `BILATERAL_SUPPORTED` | Opposed side loads and loaded-FK centers at support height |
+| `BILATERAL_SUSPENDED` | Both wrists carry vertical payload |
+| `LEFT_FLOOR_CONTACT` | Loaded front TCP, support height, outside rear-wall band |
+| `LEFT_REAR_CONTACT` | Loaded front TCP and rear-wall constraint geometry |
+| `DUAL_REAR_CONTACT` | Front and side loads with rear-wall geometry |
+| `DUAL_CORNER_CONTACT` | Front and side loads with both wall constraints |
+| `RELEASED_CORNER` | Unloaded wrists and both TCPs separated from the visual Cube in the coarse corner zone |
+| `UNKNOWN` / `INCONSISTENT` | Insufficient evidence / conflicting evidence or overload |
+
+`fr3_contact_state.py` accepts only timestamped camera observations, TCP
+six-axis wrenches, encoder-FK TCP positions/cup normals and static scene
+geometry. Task phase, desired skill, trajectory progress, Cube ground truth,
+attachment state and PhysX contact events are excluded from this interface.
+Thresholds come from the library's `observation_contract`. Camera observations
+are available only after their receive time and expire after 0.25 s; a miss
+never becomes a zero-error pose. Three consecutive classifications confirm a
+state; loss of evidence and overload are reported immediately.
+
+The observer runs at 120 Hz. Its force-only ablation retains encoder FK and
+static geometry but ignores the camera; vision-only retains encoder geometry
+but ignores force. Loaded FK predicts a face-aligned Cube center only when
+normal force supports the contact hypothesis. Camera consistency is checked
+at a coarse 120 mm band because historical B1 visual outliers reached 130 mm.
+Wall constraints use loaded FK, not a claim of micrometer visual accuracy.
+The rear/side FK band is 0.2 mm. These explicit rules establish an explainable
+baseline; they do not establish a learned fusion contribution.
+
+The independent evaluator records current PhysX pair lifecycles and normal
+impulses for Cube/cups, support and walls, plus actual attachment joints and
+Cube geometry. Positive contact-offset manifolds are distinguished from
+geometric touching; old impulses are not reused as current force. Physical
+wall contact and 50 um geometric adjacency are logged separately. Reference
+state labels use their union to account for wall solver offsets. Missing
+physical snapshots become unknown reference labels, not free-space labels.
+
+Each run writes independent compressed sensor-input, reference and prediction
+streams under `contact_states/`, plus a state timeline, per-class confusion,
+precision/recall/F1, coverage and event-delay results. Unknown predictions
+count against accuracy and coverage; decided-only accuracy is shown separately.
+Only unknown **reference** samples are excluded, with their predictions reported
+separately. Event delays use reference intervals lasting at least 0.25 s and
+do not trim samples from the accuracy calculation. Full-camera-outage replay
+is a sensor ablation, not a physical disconnection experiment.
+
+Run a new visual review without replacing previous experiment artifacts:
+
+```bash
+/home/ubuntu2004/isaacsim-4.5.0/python.sh fr3_ab_visual_runner.py --output-dir validation/idea_one_contact_state_review
+python3 fr3_wrist_ft_analysis.py validation/idea_one_contact_state_review
+python3 fr3_contact_state_validation.py validation/idea_one_contact_state_review/contact_states
+```
+
+The default output is `validation/idea_one_contact_state`. Skill selection is
+still observation-only. Force sensors remain ideal PhysX reactions, and the
+attachment is still a proxy. Normal-flow replay alone cannot validate slip,
+disconnection recovery, unmodeled objects or real hardware.
+
+The exploratory headless run in `validation/idea_one_contact_state_pilot1/`
+completed all 14,599 steps and retained `FULL_FLOW_FORCE_PASS`, with no
+unexpected collisions. All eight physical reference states occurred. Its
+independent audit recomputes the confusion matrices directly from the saved
+streams: fusion accuracy is 84.107% and decision coverage 85.676%, with
+98.169% accuracy among decided samples. Unknown predictions are errors in
+the first metric. Force/FK accuracy is 74.003%; removing all visual inputs
+reproduces that ablation. Conservative vision/encoder accuracy is 10.227%.
+The one unknown physical reference is reported separately (counting it as
+an error makes fusion accuracy 84.102%).
+
+These are **normal-flow engineering baselines**, not a fair comparison with
+published visual methods: the conservative vision rule intentionally refuses
+to assert load-bearing contacts from images alone. Most unknowns are unloaded
+or obscured contacts. The audit also retains 107 premature rear-wall and 42
+premature corner classifications; loaded point-contact FK is not an exact
+Cube/constraint measurement. No thresholds or reference labels were changed
+to remove those errors. Pilot1 began before startup source-hash metadata was
+added, so its audit explicitly records that provenance limit; the subsequent
+visual run uses the locked library and startup hashes.
+
+The complete visual run in `validation/idea_one_contact_state_visible_acceptance/`
+used the same 13 cached phases and one rail transfer. All 14,599 steps
+passed `FULL_FLOW_FORCE_PASS` with zero unexpected contacts. Replaying its
+sensor stream reproduced all 43,797 per-mode outputs exactly. The raw wrist
+samples match the headless run after gzip decompression.
+
+| Inputs | Accuracy over known-reference samples | Decision coverage | Macro F1 |
+| --- | ---: | ---: | ---: |
+| Camera, wrist wrench, encoder FK | 84.13% | 85.70% | 0.8464 |
+| Wrist wrench and encoder FK | 74.00% | 75.57% | 0.6822 |
+| Camera and encoder geometry (conservative) | 10.16% | 10.24% | 0.1642 |
+
+Vision adds 1,479 correct decisions to the force/FK baseline: 1,232 tool
+separations and 247 corner releases. It leaves recall unchanged for the six
+load-bearing states. Fusion detects 9 of 12 reference intervals lasting at
+least 0.25 s. It still classifies 107 floor-contact samples as rear-wall
+contact and 42 rear-only samples as corner contact. The event-delay metric
+reports the first match inside each reference interval, so it cannot quantify
+early switches. The confusion matrix retains those errors.

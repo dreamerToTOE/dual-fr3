@@ -1,0 +1,352 @@
+{
+  "schema_version": 1,
+  "scene_config": {
+    "scene_id": "dual_fr3_four_wall_150mm_5goal",
+    "meters_per_unit": 1.0,
+    "cube_size_m": 0.15,
+    "floor_top_m": 0.712,
+    "supply_cube_center_m": [
+      0.0,
+      -0.3,
+      0.787
+    ],
+    "goal_cube_centers_m": [
+      [
+        -0.245,
+        1.076,
+        0.787
+      ],
+      [
+        0.245,
+        1.076,
+        0.787
+      ],
+      [
+        -0.125,
+        1.076,
+        0.787
+      ],
+      [
+        0.125,
+        1.076,
+        0.787
+      ],
+      [
+        0.0,
+        1.076,
+        0.787
+      ]
+    ],
+    "static_boxes": [
+      [
+        "table",
+        [
+          0.0,
+          0.6,
+          0.675
+        ],
+        [
+          1.2,
+          2.4,
+          0.05
+        ]
+      ],
+      [
+        "floor",
+        [
+          0.0,
+          0.7145,
+          0.706
+        ],
+        [
+          0.664,
+          0.921,
+          0.012
+        ]
+      ],
+      [
+        "wall_front",
+        [
+          0.0,
+          0.272,
+          0.787
+        ],
+        [
+          0.64,
+          0.012,
+          0.15
+        ]
+      ],
+      [
+        "wall_back",
+        [
+          0.0,
+          1.157,
+          0.787
+        ],
+        [
+          0.64,
+          0.012,
+          0.15
+        ]
+      ],
+      [
+        "wall_left",
+        [
+          -0.326,
+          0.7145,
+          0.787
+        ],
+        [
+          0.012,
+          0.897,
+          0.15
+        ]
+      ],
+      [
+        "wall_right",
+        [
+          0.326,
+          0.7145,
+          0.787
+        ],
+        [
+          0.012,
+          0.897,
+          0.15
+        ]
+      ],
+      [
+        "supply",
+        [
+          0.0,
+          -0.31,
+          0.706
+        ],
+        [
+          0.21,
+          0.19,
+          0.012
+        ]
+      ]
+    ],
+    "fr3": {
+      "asset": "Robots/Franka/FR3/fr3.usd",
+      "bases": {
+        "left": [
+          -0.44,
+          0.2,
+          0.745,
+          0.0
+        ],
+        "right": [
+          0.44,
+          0.2,
+          0.745,
+          3.141592653589793
+        ]
+      },
+      "official_start_q_rad": [
+        0.0,
+        -0.7853981633974483,
+        0.0,
+        -2.356194490192345,
+        0.0,
+        1.5707963267948966,
+        0.7853981633974483
+      ]
+    },
+    "side_suction_tool": {
+      "mount_link": "fr3_link8",
+      "vertical_drop_m": 0.08,
+      "lateral_standoff_m": 0.13,
+      "tcp_side_offset_m": 0.155,
+      "cup_radius_m": 0.01,
+      "cup_length_m": 0.01
+    },
+    "wrist_force_sensors": {
+      "left": {
+        "mass_kg": 0.3,
+        "center_of_mass_m": [
+          0.0,
+          -0.06,
+          0.055
+        ],
+        "diagonal_inertia_kg_m2": [
+          0.0015,
+          0.0007,
+          0.0012
+        ]
+      },
+      "right": {
+        "mass_kg": 0.3,
+        "center_of_mass_m": [
+          0.0,
+          0.06,
+          0.055
+        ],
+        "diagonal_inertia_kg_m2": [
+          0.0015,
+          0.0007,
+          0.0012
+        ]
+      }
+    },
+    "rails": {
+      "axis": "Y",
+      "travel_limits_m": [
+        -0.22,
+        1.5
+      ],
+      "beam_size_m": [
+        0.15,
+        2.35,
+        0.025
+      ],
+      "beam_local_center_m": [
+        0.0,
+        0.425,
+        0.0
+      ],
+      "carriage_size_m": [
+        0.2,
+        0.18,
+        0.02
+      ]
+    },
+    "vision": {
+      "camera_model": "Intel RealSense D455",
+      "camera_asset": "Isaac/Sensors/Intel/RealSense/rsd455.usd",
+      "camera_root_path": "/World/D455",
+      "camera_path": "/World/D455/RSD455/Camera_OmniVision_OV9782_Color",
+      "depth_camera_path": "/World/D455/RSD455/Camera_Pseudo_Depth",
+      "camera_position_m": [
+        0.0,
+        1.35,
+        1.8
+      ],
+      "camera_look_at_m": [
+        0.0,
+        1.0,
+        0.82
+      ],
+      "resolution": [
+        640,
+        480
+      ],
+      "frequency_hz": 15,
+      "aruco_dictionary": "DICT_4X4_50",
+      "aruco_marker_id": 23,
+      "aruco_marker_size_m": 0.105,
+      "aruco_marker_face": "top",
+      "mount": {
+        "enabled": true,
+        "base_center_m": [
+          0.0,
+          1.42,
+          0.715
+        ],
+        "base_size_m": [
+          0.34,
+          0.28,
+          0.03
+        ],
+        "pole_size_m": [
+          0.05,
+          0.05,
+          1.07
+        ],
+        "housing_size_m": [
+          0.18,
+          0.1,
+          0.1
+        ]
+      }
+    },
+    "task": {
+      "scope": "single_cube_A_B1_B2",
+      "phase_A": {
+        "goal": "\u53cc\u81c2\u4ece\u4f9b\u6599\u4f4d\u4e2d\u5fc3\u5438\u9644\uff0c\u62ac\u9ad8\u8d8a\u8fc7\u524d\u5899\uff0c\u653e\u5230\u524d\u5899\u5185 landing \u4f4d",
+        "landing_center_m": [
+          0.0,
+          0.736,
+          0.787
+        ],
+        "lift_center_m": [
+          0.0,
+          -0.3,
+          1.107
+        ],
+        "over_front_center_m": [
+          0.0,
+          0.4,
+          1.107
+        ]
+      },
+      "phase_B1": {
+        "goal": "\u5de6\u81c2\u4ece cube \u524d\u4fa7\u9762\u4e2d\u5fc3\u6cbf +Y \u63a8\u5230\u540e\u5899",
+        "target_center_m": [
+          0.0,
+          1.076,
+          0.787
+        ],
+        "direction_world": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "active_arm": "left"
+      },
+      "phase_B2": {
+        "goal": "\u5de6\u81c2\u6301\u7eed\u6cbf +Y \u538b\u5411\u540e\u5899\uff0c\u53f3\u81c2\u6cbf -X \u63a8\u5230\u5de6\u5899",
+        "target_center_m": [
+          -0.245,
+          1.076,
+          0.787
+        ],
+        "direction_world": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "active_arm": "right",
+        "support_arm": "left",
+        "back_wall_contact_required": true,
+        "rail_assist": {
+          "base_y_m": 0.65,
+          "tcp_orientation_wxyz": [
+            0.0,
+            0.7071067811865476,
+            -0.7071067811865476,
+            0.0
+          ],
+          "path_samples": 42
+        }
+      },
+      "phase_B_exit": {
+        "goal": "\u786e\u8ba4\u91ca\u653e\u4e14 cube \u9759\u6b62\u540e\u518d\u56de\u64a4\u53cc\u81c2"
+      }
+    },
+    "physics": {
+      "cube_mass_kg": 1.25,
+      "gravity_m_s2": [
+        0.0,
+        0.0,
+        -9.81
+      ],
+      "settle_speed_threshold_m_s": 0.01,
+      "settle_hold_s": 0.25
+    },
+    "scope": "four_wall_150mm_A_B_geometry_and_dynamic_smoke",
+    "dynamic_validation": false,
+    "ab_runtime": "not_implemented"
+  },
+  "skill_library_sha256": "fbed7223c1da83ff662d794257d3a40fba29135281379986c853c5598908506a",
+  "recognizer_sha256": "8a1d823675f03a629e4a862f8c6a45929d8811427c7c643664da4b782309b1c8",
+  "modes": {
+    "fusion": "camera + wrist wrench + encoder FK + static geometry",
+    "vision_only": "camera + encoder geometry; no force input",
+    "force_only": "wrist wrench + encoder FK + static geometry; no camera"
+  },
+  "reference_clock": "snapshot.physics_step_index is the absolute World step; log physics_step is relative control tick"
+}

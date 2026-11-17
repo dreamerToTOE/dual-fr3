@@ -1,0 +1,313 @@
+{
+  "schema_version": 1,
+  "scope": "robot contact skills for the existing FR3 A/B1/B2 runtime; declarative recommendations, not a new task executor",
+  "states": [
+    {
+      "id": "NO_TOOL_CONTACT",
+      "name": "工具与箱体分离",
+      "definition": "Fresh camera and both TCPs geometrically separated; fusion also requires low wrist load."
+    },
+    {
+      "id": "BILATERAL_SUPPORTED",
+      "name": "双臂侧接触、箱体受支撑",
+      "definition": "Opposed side loads with loaded-FK center at the known support plane."
+    },
+    {
+      "id": "BILATERAL_SUSPENDED",
+      "name": "双臂悬空搬运",
+      "definition": "Both wrists bear vertical payload; a camera view is not required."
+    },
+    {
+      "id": "LEFT_FLOOR_CONTACT",
+      "name": "左臂接触、桌面推送",
+      "definition": "Loaded front TCP implies supported Cube away from the rear contact band."
+    },
+    {
+      "id": "LEFT_REAR_CONTACT",
+      "name": "左臂接触、后墙约束",
+      "definition": "Loaded front TCP implies rear-wall contact within the declared geometry band."
+    },
+    {
+      "id": "DUAL_REAR_CONTACT",
+      "name": "双臂接触、后墙约束",
+      "definition": "Loaded front and right-side TCPs with rear-wall constraint; motion is a separate feature."
+    },
+    {
+      "id": "DUAL_CORNER_CONTACT",
+      "name": "双臂接触、双墙约束",
+      "definition": "Loaded front and side contacts imply rear and side wall constraints."
+    },
+    {
+      "id": "RELEASED_CORNER",
+      "name": "角落工具撤离",
+      "definition": "Both TCPs separate from the fresh visual Cube box in the coarse corner zone."
+    },
+    {
+      "id": "UNKNOWN",
+      "name": "证据不足",
+      "definition": "Do not infer contact or continue a skill from missing observations."
+    },
+    {
+      "id": "INCONSISTENT",
+      "name": "传感器冲突或超载",
+      "definition": "Loaded contact geometry conflicts or raw wrench exceeds the baseline envelope."
+    }
+  ],
+  "observation_contract": {
+    "inputs": [
+      "camera RGB/ArUco position at receive time",
+      "left/right TCP six-axis external wrench",
+      "encoder-FK TCP positions and inward cup normals",
+      "static scene geometry"
+    ],
+    "excluded_inputs": [
+      "task phase",
+      "task clock progress",
+      "planned waypoint or skill ID",
+      "Isaac Cube pose",
+      "PhysX contact truth",
+      "attachment enabled truth"
+    ],
+    "camera_max_age_s": 0.25,
+    "contact_normal_threshold_N": 0.3,
+    "rear_side_geometry_band_m": 0.0002,
+    "visual_consistency_band_m": 0.12,
+    "visual_corner_zone_m": 0.04,
+    "confirmation_samples": 3,
+    "limitations": [
+      "Wrist unloading does not prove geometric separation.",
+      "Force-loaded TCP center assumes an aligned flat Cube face and configured Cube size.",
+      "Vision-only proximity cannot prove force-bearing contact.",
+      "Static scene geometry is a prior, not measured Cube truth.",
+      "This baseline is not a learned multi-source fusion model or real-suction validation."
+    ],
+    "loaded_centers_consistency_band_m": 0.025,
+    "support_height_band_m": 0.015,
+    "cup_normal_axis_min_cosine": 0.95,
+    "visual_TCP_separation_min_m": 0.012,
+    "unloaded_force_max_N": 0.15,
+    "suspended_each_vertical_force_max_N": -2.0,
+    "suspended_combined_vertical_force_max_N": -6.0,
+    "supported_combined_vertical_force_abs_max_N": 3.0,
+    "baseline_individual_force_max_N": 30.0,
+    "baseline_TCP_torque_max_Nm": 3.0
+  },
+  "skills": [
+    {
+      "id": "align",
+      "name": "侧吸对准",
+      "entry_states": [
+        "NO_TOOL_CONTACT"
+      ],
+      "target_states": [
+        "BILATERAL_SUPPORTED"
+      ],
+      "runtime_existing_functions": [
+        "dual_target",
+        "move"
+      ],
+      "control": {
+        "method": "collision-checked approach; preserve cup orientation"
+      },
+      "success": "Loaded opposed side contacts at support height",
+      "abort": "Unexpected contact, invalid geometry or overload"
+    },
+    {
+      "id": "establish_proxy",
+      "name": "建立双臂连接代理",
+      "entry_states": [
+        "BILATERAL_SUPPORTED"
+      ],
+      "target_states": [
+        "BILATERAL_SUPPORTED"
+      ],
+      "runtime_existing_functions": [
+        "attach",
+        "step"
+      ],
+      "control": {
+        "method": "temporary bilateral fixed joints; no real suction claim"
+      },
+      "success": "Settled grasp geometry and finite wrist feedback",
+      "abort": "TCP grasp error > 2 mm or Cube drift > 15 mm"
+    },
+    {
+      "id": "dual_transport",
+      "name": "同步双臂搬运",
+      "entry_states": [
+        "BILATERAL_SUPPORTED",
+        "BILATERAL_SUSPENDED"
+      ],
+      "target_states": [
+        "BILATERAL_SUSPENDED"
+      ],
+      "runtime_existing_functions": [
+        "dual_path"
+      ],
+      "control": {
+        "method": "shared Cartesian translation with paired position/velocity commands",
+        "sample_hz": 120
+      },
+      "success": "Both wrists bear suspended payload; endpoint and collision guards pass",
+      "abort": "Individual force > 30 N, TCP moment > 3 Nm, opposing force > 15 N, or collision"
+    },
+    {
+      "id": "land_release",
+      "name": "落地并释放代理",
+      "entry_states": [
+        "BILATERAL_SUSPENDED"
+      ],
+      "target_states": [
+        "BILATERAL_SUPPORTED",
+        "NO_TOOL_CONTACT"
+      ],
+      "runtime_existing_functions": [
+        "dual_path",
+        "step",
+        "move"
+      ],
+      "control": {
+        "method": "lower along synchronized path; remove fixed proxies; retract"
+      },
+      "success": "Supported landing and no significant residual wrist load",
+      "abort": "Landing error > 15 mm, collision or force-envelope failure"
+    },
+    {
+      "id": "left_push",
+      "name": "左臂桌面推送",
+      "entry_states": [
+        "NO_TOOL_CONTACT",
+        "LEFT_FLOOR_CONTACT"
+      ],
+      "target_states": [
+        "LEFT_REAR_CONTACT"
+      ],
+      "runtime_existing_functions": [
+        "solve",
+        "move",
+        "contact_path"
+      ],
+      "control": {
+        "method": "front face normal aligned with +Y; collision-checked push"
+      },
+      "success": "Front normal load and rear-wall geometry evidence",
+      "abort": "Individual force > 30 N, TCP moment > 3 Nm or unexpected contact"
+    },
+    {
+      "id": "rear_preload",
+      "name": "后墙压紧保持",
+      "entry_states": [
+        "LEFT_FLOOR_CONTACT",
+        "LEFT_REAR_CONTACT",
+        "DUAL_REAR_CONTACT"
+      ],
+      "target_states": [
+        "LEFT_REAR_CONTACT"
+      ],
+      "runtime_existing_functions": [
+        "seat_against_wall",
+        "NormalForceController",
+        "step"
+      ],
+      "control": {
+        "target_normal_force_N": 2,
+        "method": "live bounded normal admittance"
+      },
+      "success": "Sustained front normal load in rear-wall geometry band",
+      "abort": "Force > 10 N, TCP moment > 1 Nm, preload timeout or contact loss"
+    },
+    {
+      "id": "right_align",
+      "name": "右臂在吸附高度平面对准",
+      "entry_states": [
+        "LEFT_REAR_CONTACT"
+      ],
+      "target_states": [
+        "LEFT_REAR_CONTACT",
+        "DUAL_REAR_CONTACT"
+      ],
+      "runtime_existing_functions": [
+        "execute_joint_path",
+        "move_robot_base"
+      ],
+      "control": {
+        "method": "lift; rail transfer; descend at stand-off; approach horizontally",
+        "left_hold_live": true
+      },
+      "success": "Right cup normal aligned with -X before side contact",
+      "abort": "Unexpected contact, left-hold loss or force-envelope violation"
+    },
+    {
+      "id": "right_push",
+      "name": "双臂协同沿后墙推入",
+      "entry_states": [
+        "DUAL_REAR_CONTACT"
+      ],
+      "target_states": [
+        "DUAL_CORNER_CONTACT"
+      ],
+      "runtime_existing_functions": [
+        "execute_joint_path",
+        "NormalForceController"
+      ],
+      "control": {
+        "method": "15 s synchronized Cartesian quintic with live left preload",
+        "duration_s": 15
+      },
+      "success": "Loaded rear and side constraints; corner geometry and settling pass",
+      "abort": "Force > 10 N, TCP moment > 1 Nm, support dropout > 0.05 s or unexpected contact"
+    },
+    {
+      "id": "unload_retreat",
+      "name": "顺序卸载与撤离",
+      "entry_states": [
+        "DUAL_REAR_CONTACT",
+        "DUAL_CORNER_CONTACT",
+        "LEFT_REAR_CONTACT"
+      ],
+      "target_states": [
+        "RELEASED_CORNER",
+        "NO_TOOL_CONTACT"
+      ],
+      "runtime_existing_functions": [
+        "unload_normal",
+        "cartesian_move",
+        "settle_cube"
+      ],
+      "control": {
+        "method": "right unload/retreat while left holds, then left unload/retreat",
+        "unloaded_threshold_N": 0.1,
+        "consecutive_unloaded_steps": 30,
+        "retreat_m": 0.035
+      },
+      "success": "Both TCPs retracted; load removed; visual corner observation when available",
+      "abort": "Force > 10 N, TCP moment > 1 Nm, inward retreat > 20 um or settling failure"
+    },
+    {
+      "id": "hold_reobserve",
+      "name": "保持并重新观测",
+      "entry_states": [
+        "UNKNOWN",
+        "INCONSISTENT"
+      ],
+      "target_states": [
+        "NO_TOOL_CONTACT",
+        "BILATERAL_SUPPORTED",
+        "BILATERAL_SUSPENDED",
+        "LEFT_FLOOR_CONTACT",
+        "LEFT_REAR_CONTACT",
+        "DUAL_REAR_CONTACT",
+        "DUAL_CORNER_CONTACT",
+        "RELEASED_CORNER"
+      ],
+      "runtime_existing_functions": [
+        "step"
+      ],
+      "control": {
+        "method": "observation recommendation only; never automatically continue after overload"
+      },
+      "success": "Fresh consistent evidence or explicit operator recovery",
+      "abort": "Persistent inconsistent/overload evidence requires stopped-task recovery"
+    }
+  ]
+}

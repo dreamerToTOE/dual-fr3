@@ -1,0 +1,692 @@
+{
+  "status": "PASS_AUDIT",
+  "scope": "Independent audit of headless pilot1 saved streams; no algorithm/threshold changes; pilot summary retained unchanged.",
+  "samples": 14599,
+  "checks": {
+    "all_stream_lengths_match": true,
+    "clock_rows_aligned": true,
+    "control_steps_consecutive": true,
+    "sample_clock_120hz": true,
+    "sensor_boundary_exact": true,
+    "camera_boundary_exact": true,
+    "no_future_camera_receive": true,
+    "camera_capture_not_after_receive": true,
+    "physical_contact_snapshots_valid": true,
+    "constant_absolute_relative_step_offset": true,
+    "reference_recomputed_without_phase_or_wrench": true,
+    "force_full_flow_pass": true,
+    "physical_run_pass": true,
+    "command_physics_wrench_recognition_samples_match": true,
+    "no_uncommanded_physics": true,
+    "no_unexpected_contact": true,
+    "fusion_core_metrics_match_independent_counts": true,
+    "fusion_per_class_metrics_use_known_reference_only": true,
+    "force_only_core_metrics_match_independent_counts": true,
+    "force_only_per_class_metrics_use_known_reference_only": true,
+    "vision_only_core_metrics_match_independent_counts": true,
+    "vision_only_per_class_metrics_use_known_reference_only": true
+  },
+  "physical_reference_state_counts": {
+    "NO_TOOL_CONTACT": 2900,
+    "BILATERAL_SUPPORTED": 86,
+    "BILATERAL_SUSPENDED": 4041,
+    "UNKNOWN": 1,
+    "LEFT_FLOOR_CONTACT": 712,
+    "LEFT_REAR_CONTACT": 4385,
+    "DUAL_REAR_CONTACT": 1684,
+    "DUAL_CORNER_CONTACT": 349,
+    "RELEASED_CORNER": 441
+  },
+  "absolute_world_step_minus_control_tick_counts": {
+    "2": 14599
+  },
+  "metrics_recomputed_with_current_consistent_denominators": {
+    "fusion": {
+      "samples": 14599,
+      "reference_known_samples": 14598,
+      "reference_unknown_samples": 1,
+      "accuracy_including_abstention_as_error": 0.8410741197424305,
+      "decision_coverage": 0.856761200164406,
+      "accuracy_on_decided_samples": 0.9816902534580635,
+      "macro_f1": 0.8460386847263763,
+      "prediction_counts": {
+        "UNKNOWN": 2082,
+        "BILATERAL_SUPPORTED": 90,
+        "BILATERAL_SUSPENDED": 3860,
+        "NO_TOOL_CONTACT": 1236,
+        "LEFT_FLOOR_CONTACT": 592,
+        "INCONSISTENT": 10,
+        "LEFT_REAR_CONTACT": 4502,
+        "DUAL_REAR_CONTACT": 1640,
+        "DUAL_CORNER_CONTACT": 338,
+        "RELEASED_CORNER": 249
+      },
+      "predictions_on_unknown_reference": {
+        "UNKNOWN": 1
+      },
+      "stable_contact_events": [
+        {
+          "state": "NO_TOOL_CONTACT",
+          "reference_start_sample": 0,
+          "duration_s": 10.308333333333334,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "BILATERAL_SUPPORTED",
+          "reference_start_sample": 1237,
+          "duration_s": 0.6416666666666667,
+          "recognition_delay_s": 0.025
+        },
+        {
+          "state": "BILATERAL_SUSPENDED",
+          "reference_start_sample": 1314,
+          "duration_s": 33.675,
+          "recognition_delay_s": 0.3333333333333333
+        },
+        {
+          "state": "NO_TOOL_CONTACT",
+          "reference_start_sample": 5365,
+          "duration_s": 13.858333333333333,
+          "recognition_delay_s": 0.008333333333333333
+        },
+        {
+          "state": "LEFT_FLOOR_CONTACT",
+          "reference_start_sample": 7028,
+          "duration_s": 5.316666666666666,
+          "recognition_delay_s": 0.025
+        },
+        {
+          "state": "LEFT_FLOOR_CONTACT",
+          "reference_start_sample": 7699,
+          "duration_s": 0.45,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "LEFT_REAR_CONTACT",
+          "reference_start_sample": 7753,
+          "duration_s": 30.275,
+          "recognition_delay_s": 0.0
+        },
+        {
+          "state": "DUAL_REAR_CONTACT",
+          "reference_start_sample": 11386,
+          "duration_s": 14.033333333333333,
+          "recognition_delay_s": 0.016666666666666666
+        },
+        {
+          "state": "DUAL_CORNER_CONTACT",
+          "reference_start_sample": 13070,
+          "duration_s": 2.475,
+          "recognition_delay_s": 0.0
+        },
+        {
+          "state": "LEFT_REAR_CONTACT",
+          "reference_start_sample": 13449,
+          "duration_s": 5.833333333333333,
+          "recognition_delay_s": 0.0
+        },
+        {
+          "state": "RELEASED_CORNER",
+          "reference_start_sample": 14149,
+          "duration_s": 0.2916666666666667,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "RELEASED_CORNER",
+          "reference_start_sample": 14194,
+          "duration_s": 3.375,
+          "recognition_delay_s": 1.3
+        }
+      ],
+      "stable_event_definition": "physical reference constant for >=0.25 s; accuracy still uses every sample",
+      "stable_event_misses": 3,
+      "recognition_delay_p95_s": 0.913333333333333,
+      "by_state": {
+        "BILATERAL_SUPPORTED": {
+          "reference_samples": 86,
+          "predicted_samples": 90,
+          "precision": 0.7222222222222222,
+          "recall": 0.7558139534883721,
+          "f1": 0.7386363636363636
+        },
+        "BILATERAL_SUSPENDED": {
+          "reference_samples": 4041,
+          "predicted_samples": 3860,
+          "precision": 1.0,
+          "recall": 0.9552091066567682,
+          "f1": 0.977091507404126
+        },
+        "DUAL_CORNER_CONTACT": {
+          "reference_samples": 349,
+          "predicted_samples": 338,
+          "precision": 0.8757396449704142,
+          "recall": 0.8481375358166189,
+          "f1": 0.8617176128093158
+        },
+        "DUAL_REAR_CONTACT": {
+          "reference_samples": 1684,
+          "predicted_samples": 1640,
+          "precision": 1.0,
+          "recall": 0.9738717339667459,
+          "f1": 0.98676293622142
+        },
+        "LEFT_FLOOR_CONTACT": {
+          "reference_samples": 712,
+          "predicted_samples": 592,
+          "precision": 1.0,
+          "recall": 0.8314606741573034,
+          "f1": 0.9079754601226994
+        },
+        "LEFT_REAR_CONTACT": {
+          "reference_samples": 4385,
+          "predicted_samples": 4502,
+          "precision": 0.964015992892048,
+          "recall": 0.9897377423033067,
+          "f1": 0.9767075503544503
+        },
+        "NO_TOOL_CONTACT": {
+          "reference_samples": 2900,
+          "predicted_samples": 1236,
+          "precision": 1.0,
+          "recall": 0.4262068965517241,
+          "f1": 0.597678916827853
+        },
+        "RELEASED_CORNER": {
+          "reference_samples": 441,
+          "predicted_samples": 249,
+          "precision": 1.0,
+          "recall": 0.564625850340136,
+          "f1": 0.7217391304347825
+        }
+      },
+      "confusion_matrix": {
+        "BILATERAL_SUPPORTED": {
+          "UNKNOWN": 21,
+          "BILATERAL_SUPPORTED": 65
+        },
+        "BILATERAL_SUSPENDED": {
+          "UNKNOWN": 156,
+          "BILATERAL_SUPPORTED": 25,
+          "BILATERAL_SUSPENDED": 3860
+        },
+        "DUAL_CORNER_CONTACT": {
+          "DUAL_CORNER_CONTACT": 296,
+          "LEFT_REAR_CONTACT": 53
+        },
+        "DUAL_REAR_CONTACT": {
+          "LEFT_REAR_CONTACT": 2,
+          "DUAL_REAR_CONTACT": 1640,
+          "DUAL_CORNER_CONTACT": 42
+        },
+        "LEFT_FLOOR_CONTACT": {
+          "UNKNOWN": 3,
+          "LEFT_FLOOR_CONTACT": 592,
+          "INCONSISTENT": 10,
+          "LEFT_REAR_CONTACT": 107
+        },
+        "LEFT_REAR_CONTACT": {
+          "LEFT_REAR_CONTACT": 4340,
+          "UNKNOWN": 45
+        },
+        "NO_TOOL_CONTACT": {
+          "UNKNOWN": 1664,
+          "NO_TOOL_CONTACT": 1236
+        },
+        "RELEASED_CORNER": {
+          "UNKNOWN": 192,
+          "RELEASED_CORNER": 249
+        }
+      },
+      "accuracy_all_reference_samples_with_unknown_reference_as_error": 0.8410165079799986,
+      "correct_known_reference_predictions": 12278,
+      "known_reference_wrong_decisions": 229
+    },
+    "force_only": {
+      "samples": 14599,
+      "reference_known_samples": 14598,
+      "reference_unknown_samples": 1,
+      "accuracy_including_abstention_as_error": 0.740032881216605,
+      "decision_coverage": 0.7557199616385806,
+      "accuracy_on_decided_samples": 0.9792422044960116,
+      "macro_f1": 0.6821502649485671,
+      "prediction_counts": {
+        "UNKNOWN": 3567,
+        "BILATERAL_SUPPORTED": 90,
+        "BILATERAL_SUSPENDED": 3860,
+        "LEFT_FLOOR_CONTACT": 602,
+        "LEFT_REAR_CONTACT": 4502,
+        "DUAL_REAR_CONTACT": 1640,
+        "DUAL_CORNER_CONTACT": 338
+      },
+      "predictions_on_unknown_reference": {
+        "UNKNOWN": 1
+      },
+      "stable_contact_events": [
+        {
+          "state": "NO_TOOL_CONTACT",
+          "reference_start_sample": 0,
+          "duration_s": 10.308333333333334,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "BILATERAL_SUPPORTED",
+          "reference_start_sample": 1237,
+          "duration_s": 0.6416666666666667,
+          "recognition_delay_s": 0.025
+        },
+        {
+          "state": "BILATERAL_SUSPENDED",
+          "reference_start_sample": 1314,
+          "duration_s": 33.675,
+          "recognition_delay_s": 0.3333333333333333
+        },
+        {
+          "state": "NO_TOOL_CONTACT",
+          "reference_start_sample": 5365,
+          "duration_s": 13.858333333333333,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "LEFT_FLOOR_CONTACT",
+          "reference_start_sample": 7028,
+          "duration_s": 5.316666666666666,
+          "recognition_delay_s": 0.025
+        },
+        {
+          "state": "LEFT_FLOOR_CONTACT",
+          "reference_start_sample": 7699,
+          "duration_s": 0.45,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "LEFT_REAR_CONTACT",
+          "reference_start_sample": 7753,
+          "duration_s": 30.275,
+          "recognition_delay_s": 0.0
+        },
+        {
+          "state": "DUAL_REAR_CONTACT",
+          "reference_start_sample": 11386,
+          "duration_s": 14.033333333333333,
+          "recognition_delay_s": 0.016666666666666666
+        },
+        {
+          "state": "DUAL_CORNER_CONTACT",
+          "reference_start_sample": 13070,
+          "duration_s": 2.475,
+          "recognition_delay_s": 0.0
+        },
+        {
+          "state": "LEFT_REAR_CONTACT",
+          "reference_start_sample": 13449,
+          "duration_s": 5.833333333333333,
+          "recognition_delay_s": 0.0
+        },
+        {
+          "state": "RELEASED_CORNER",
+          "reference_start_sample": 14149,
+          "duration_s": 0.2916666666666667,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "RELEASED_CORNER",
+          "reference_start_sample": 14194,
+          "duration_s": 3.375,
+          "recognition_delay_s": null
+        }
+      ],
+      "stable_event_definition": "physical reference constant for >=0.25 s; accuracy still uses every sample",
+      "stable_event_misses": 5,
+      "recognition_delay_p95_s": 0.24083333333333312,
+      "by_state": {
+        "BILATERAL_SUPPORTED": {
+          "reference_samples": 86,
+          "predicted_samples": 90,
+          "precision": 0.7222222222222222,
+          "recall": 0.7558139534883721,
+          "f1": 0.7386363636363636
+        },
+        "BILATERAL_SUSPENDED": {
+          "reference_samples": 4041,
+          "predicted_samples": 3860,
+          "precision": 1.0,
+          "recall": 0.9552091066567682,
+          "f1": 0.977091507404126
+        },
+        "DUAL_CORNER_CONTACT": {
+          "reference_samples": 349,
+          "predicted_samples": 338,
+          "precision": 0.8757396449704142,
+          "recall": 0.8481375358166189,
+          "f1": 0.8617176128093158
+        },
+        "DUAL_REAR_CONTACT": {
+          "reference_samples": 1684,
+          "predicted_samples": 1640,
+          "precision": 1.0,
+          "recall": 0.9738717339667459,
+          "f1": 0.98676293622142
+        },
+        "LEFT_FLOOR_CONTACT": {
+          "reference_samples": 712,
+          "predicted_samples": 602,
+          "precision": 1.0,
+          "recall": 0.8455056179775281,
+          "f1": 0.9162861491628616
+        },
+        "LEFT_REAR_CONTACT": {
+          "reference_samples": 4385,
+          "predicted_samples": 4502,
+          "precision": 0.964015992892048,
+          "recall": 0.9897377423033067,
+          "f1": 0.9767075503544503
+        },
+        "NO_TOOL_CONTACT": {
+          "reference_samples": 2900,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "RELEASED_CORNER": {
+          "reference_samples": 441,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "confusion_matrix": {
+        "BILATERAL_SUPPORTED": {
+          "UNKNOWN": 21,
+          "BILATERAL_SUPPORTED": 65
+        },
+        "BILATERAL_SUSPENDED": {
+          "UNKNOWN": 156,
+          "BILATERAL_SUPPORTED": 25,
+          "BILATERAL_SUSPENDED": 3860
+        },
+        "DUAL_CORNER_CONTACT": {
+          "DUAL_CORNER_CONTACT": 296,
+          "LEFT_REAR_CONTACT": 53
+        },
+        "DUAL_REAR_CONTACT": {
+          "LEFT_REAR_CONTACT": 2,
+          "DUAL_REAR_CONTACT": 1640,
+          "DUAL_CORNER_CONTACT": 42
+        },
+        "LEFT_FLOOR_CONTACT": {
+          "UNKNOWN": 3,
+          "LEFT_FLOOR_CONTACT": 602,
+          "LEFT_REAR_CONTACT": 107
+        },
+        "LEFT_REAR_CONTACT": {
+          "LEFT_REAR_CONTACT": 4340,
+          "UNKNOWN": 45
+        },
+        "NO_TOOL_CONTACT": {
+          "UNKNOWN": 2900
+        },
+        "RELEASED_CORNER": {
+          "UNKNOWN": 441
+        }
+      },
+      "accuracy_all_reference_samples_with_unknown_reference_as_error": 0.7399821905609973,
+      "correct_known_reference_predictions": 10803,
+      "known_reference_wrong_decisions": 229
+    },
+    "vision_only": {
+      "samples": 14599,
+      "reference_known_samples": 14598,
+      "reference_unknown_samples": 1,
+      "accuracy_including_abstention_as_error": 0.1022742841485135,
+      "decision_coverage": 0.1046718728592958,
+      "accuracy_on_decided_samples": 0.9770942408376964,
+      "macro_f1": 0.16463710894014585,
+      "prediction_counts": {
+        "UNKNOWN": 13070,
+        "NO_TOOL_CONTACT": 1280,
+        "RELEASED_CORNER": 249
+      },
+      "predictions_on_unknown_reference": {
+        "NO_TOOL_CONTACT": 1
+      },
+      "stable_contact_events": [
+        {
+          "state": "NO_TOOL_CONTACT",
+          "reference_start_sample": 0,
+          "duration_s": 10.308333333333334,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "BILATERAL_SUPPORTED",
+          "reference_start_sample": 1237,
+          "duration_s": 0.6416666666666667,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "BILATERAL_SUSPENDED",
+          "reference_start_sample": 1314,
+          "duration_s": 33.675,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "NO_TOOL_CONTACT",
+          "reference_start_sample": 5365,
+          "duration_s": 13.858333333333333,
+          "recognition_delay_s": 0.0
+        },
+        {
+          "state": "LEFT_FLOOR_CONTACT",
+          "reference_start_sample": 7028,
+          "duration_s": 5.316666666666666,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "LEFT_FLOOR_CONTACT",
+          "reference_start_sample": 7699,
+          "duration_s": 0.45,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "LEFT_REAR_CONTACT",
+          "reference_start_sample": 7753,
+          "duration_s": 30.275,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "DUAL_REAR_CONTACT",
+          "reference_start_sample": 11386,
+          "duration_s": 14.033333333333333,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "DUAL_CORNER_CONTACT",
+          "reference_start_sample": 13070,
+          "duration_s": 2.475,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "LEFT_REAR_CONTACT",
+          "reference_start_sample": 13449,
+          "duration_s": 5.833333333333333,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "RELEASED_CORNER",
+          "reference_start_sample": 14149,
+          "duration_s": 0.2916666666666667,
+          "recognition_delay_s": null
+        },
+        {
+          "state": "RELEASED_CORNER",
+          "reference_start_sample": 14194,
+          "duration_s": 3.375,
+          "recognition_delay_s": 1.3
+        }
+      ],
+      "stable_event_definition": "physical reference constant for >=0.25 s; accuracy still uses every sample",
+      "stable_event_misses": 10,
+      "recognition_delay_p95_s": 1.2349999999999999,
+      "by_state": {
+        "BILATERAL_SUPPORTED": {
+          "reference_samples": 86,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "BILATERAL_SUSPENDED": {
+          "reference_samples": 4041,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "DUAL_CORNER_CONTACT": {
+          "reference_samples": 349,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "DUAL_REAR_CONTACT": {
+          "reference_samples": 1684,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "LEFT_FLOOR_CONTACT": {
+          "reference_samples": 712,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "LEFT_REAR_CONTACT": {
+          "reference_samples": 4385,
+          "predicted_samples": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "NO_TOOL_CONTACT": {
+          "reference_samples": 2900,
+          "predicted_samples": 1279,
+          "precision": 0.9726348709929633,
+          "recall": 0.4289655172413793,
+          "f1": 0.5953577410863843
+        },
+        "RELEASED_CORNER": {
+          "reference_samples": 441,
+          "predicted_samples": 249,
+          "precision": 1.0,
+          "recall": 0.564625850340136,
+          "f1": 0.7217391304347825
+        }
+      },
+      "confusion_matrix": {
+        "BILATERAL_SUPPORTED": {
+          "UNKNOWN": 83,
+          "NO_TOOL_CONTACT": 3
+        },
+        "BILATERAL_SUSPENDED": {
+          "UNKNOWN": 4009,
+          "NO_TOOL_CONTACT": 32
+        },
+        "DUAL_CORNER_CONTACT": {
+          "UNKNOWN": 349
+        },
+        "DUAL_REAR_CONTACT": {
+          "UNKNOWN": 1684
+        },
+        "LEFT_FLOOR_CONTACT": {
+          "UNKNOWN": 712
+        },
+        "LEFT_REAR_CONTACT": {
+          "UNKNOWN": 4385
+        },
+        "NO_TOOL_CONTACT": {
+          "UNKNOWN": 1656,
+          "NO_TOOL_CONTACT": 1244
+        },
+        "RELEASED_CORNER": {
+          "UNKNOWN": 192,
+          "RELEASED_CORNER": 249
+        }
+      },
+      "accuracy_all_reference_samples_with_unknown_reference_as_error": 0.10226727858072471,
+      "correct_known_reference_predictions": 1493,
+      "known_reference_wrong_decisions": 35
+    }
+  },
+  "camera_causality": {
+    "unique_camera_observations": 1824,
+    "detected_observations": 1261,
+    "detected_receive_minus_capture_max_s": 0.0,
+    "detected_receive_minus_capture_p95_s": 0.0,
+    "online_rule": "Observation enters only at received_time_s; capture_time_s controls age, not early access."
+  },
+  "force_validation": {
+    "task_force_status": "FULL_FLOW_FORCE_PASS",
+    "a_status": "PASS",
+    "b1_status": "PASS",
+    "b2_status": "PASS"
+  },
+  "sensor_boundary": {
+    "recognizer_keys": [
+      "camera",
+      "cup_normals_world",
+      "left_wrench_world",
+      "right_wrench_world",
+      "tcp_positions_m",
+      "time_s"
+    ],
+    "wrapper_only": [
+      "physics_step"
+    ],
+    "not_present": [
+      "task phase",
+      "skill ID",
+      "Cube truth",
+      "contact report",
+      "attachment status"
+    ],
+    "force_only_actual_inputs": "wrist wrench + encoder FK + static scene geometry; not pure force",
+    "vision_only_actual_inputs": "camera + encoder geometry; no wrench"
+  },
+  "identified_limitations": {
+    "point_FK_rear_contact_false_positives": {
+      "samples": 107,
+      "first_physics_step": 7634,
+      "last_physics_step": 7753,
+      "reference_gap_min_m": 0.00019627225772060608,
+      "reference_gap_max_m": 0.00019627225772060608,
+      "estimated_rear_gap_min_m": 1.9379034941646722e-05,
+      "estimated_rear_gap_max_m": 0.00016704631490327415
+    },
+    "point_FK_corner_false_positives": {
+      "samples": 42,
+      "first_physics_step": 13029,
+      "last_physics_step": 13070
+    },
+    "interpretation": [
+      "Loaded TCP center is a point approximation, so 0.2 mm FK wall gating can declare a wall constraint before the independent physical reference meets 50 um adjacency/contact.",
+      "The vision-only baseline intentionally abstains from force-bearing labels; its ~10% full-window score is not a competitive vision method result or a fair paper-level superiority claim.",
+      "Single normal trajectory and ideal simulated forces establish an engineering baseline, not generalization or abnormal-event detection performance.",
+      "Independent reference includes attachments and 50 um wall adjacency; geometric adjacency is not identical to measured contact load.",
+      "Headless pilot1 predates contact-state metadata hashing. Source log hashes below fix this audit input, but recognizer-at-run hash was not captured and cannot be retroactively proven."
+    ]
+  },
+  "sha256": {
+    "validation/idea_one_contact_state_pilot1/contact_states/sensor_inputs.jsonl.gz": "f992ca256e081806f3210b176aa25e30c7f7129c33ed0df7280ab2133775a7f2",
+    "validation/idea_one_contact_state_pilot1/contact_states/reference.jsonl.gz": "306025168593529e71cbd9fc68a00125d524a60b0b6abe8649507f658b3e673a",
+    "validation/idea_one_contact_state_pilot1/contact_states/predictions.jsonl.gz": "8c11403cb74b856a78bf2e17d2cc20a0b0a829c3298a493fa973912ef22a5b4a",
+    "validation/idea_one_contact_state_pilot1/contact_states/summary.json": "490882c0041380aa241495519857c351c910ca40f8696a50d5c99c630452f4a5",
+    "validation/idea_one_contact_state_pilot1/runner_report.json": "74d4377fb713f52340ce01b4628e374c5baa7b4f3f18e9ba7ce9b6c2b4baa3ec",
+    "validation/idea_one_contact_state_pilot1/summary.json": "484ceda14bceaaa4fa5ba9b9b8dda9e05ca3773721aede6143d11151158289e0",
+    "validation/idea_one_contact_state_pilot1/metadata.json": "cb1f339a7dc6b0aadab41ee2273882b41aa39bd7c0ba422d5b11d17decbbb4fa",
+    "fr3_contact_state_validation.py": "dfb8725ae807fbbef9cd672aba6106eca384d02d0b7581f5a565dc8f8ce03ce6"
+  }
+}

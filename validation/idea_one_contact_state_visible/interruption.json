@@ -1,0 +1,8 @@
+{
+  "status": "INTERRUPTED_NOT_ACCEPTED",
+  "exit_code": 143,
+  "signal": "SIGTERM",
+  "last_recorded_phase": "B1_contact",
+  "cause": "unknown; no Python exception or graceful finalization in log",
+  "note": "Partial gzip streams may lack trailers. This run is not a complete visual acceptance."
+}

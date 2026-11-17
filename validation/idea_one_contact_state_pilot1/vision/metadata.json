@@ -1,0 +1,73 @@
+{
+  "scene_id": "dual_fr3_four_wall_150mm_5goal",
+  "camera_model": "Intel RealSense D455",
+  "execution_mode": "headless",
+  "simulation_time_origin_s": 0.01666666753590107,
+  "camera_mode": "d455_calibrated_pinhole_fallback",
+  "camera_matrix": [
+    [
+      317.0431213378906,
+      0.0,
+      320.0
+    ],
+    [
+      0.0,
+      317.0431213378906,
+      240.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "camera_to_world_ros": [
+    [
+      -1.0,
+      1.2066786629992418e-16,
+      -2.0901333466571815e-17,
+      -2.390550627242559e-24
+    ],
+    [
+      1.2066786629992418e-16,
+      0.9417419097674722,
+      -0.336336443177748,
+      1.350000087205376
+    ],
+    [
+      -2.0901333466571812e-17,
+      -0.336336443177748,
+      -0.9417419097674724,
+      1.8000001112620214
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "resolution": [
+    640,
+    480
+  ],
+  "frequency_hz": 15,
+  "aruco_dictionary": "DICT_4X4_50",
+  "aruco_marker_id": 23,
+  "aruco_marker_size_m": 0.105,
+  "cube_size_m": 0.15,
+  "marker_surface_offset_m": 0.0085,
+  "ground_truth_source": "Isaac Sim PhysX Cube.get_world_pose at exposure time",
+  "camera_source": "RGB + ArUco + solvePnP + fixed camera calibration only",
+  "camera_uses_cube_truth": false,
+  "control_state_source": "unchanged Isaac Sim state",
+  "pairing": "nearest 120 Hz reference within half a physics step; duplicate images excluded",
+  "distortion": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "hardware_calibration_validated": false
+}

@@ -250,7 +250,7 @@ def main():
     parser.add_argument("--close-on-finish", action="store_true", help="Close instead of retaining the result in the GUI")
     parser.add_argument("--output-dir", type=Path, help="Keep this run's artifacts separate from earlier experiments")
     args = parser.parse_args()
-    output_directory = args.output_dir.resolve() if args.output_dir else ROOT / "validation" / "idea_one_a_force_control"
+    output_directory = args.output_dir.resolve() if args.output_dir else ROOT / "validation" / "idea_one_contact_state"
     output_directory.mkdir(parents=True, exist_ok=True)
     report_path = output_directory / "runner_report.json"
     cache_output = output_directory / "trajectory_cache.json"
@@ -314,6 +314,7 @@ def main():
     vision_task = None
     vision_comparison = None
     force_recorder = None
+    contact_experiment = None
     try:
         import numpy as np
         import omni.client
@@ -592,8 +593,12 @@ def main():
         truth_history = [{"time_s": float(world.current_time), "physics_step": tick,
                           "phase": contact_monitor.phase, "position_m": initial_center.tolist()}]
         seen_vision_frames = set()
+        latest_camera_observation = None
+        from fr3_contact_state_validation import ContactStateExperiment
+        contact_experiment = ContactStateExperiment(output_directory / "contact_states", CONFIG)
 
         def sample_vision(render=True):
+            nonlocal latest_camera_observation
             if render:
                 render_only()
             # Snapshot image and exposure metadata together; reading a newer RGB
@@ -616,6 +621,10 @@ def main():
                     seen_vision_frames.add(frame_id)
                     report["vision"]["unique_frames"] += 1
                     observation = vision_estimator.estimate(rgba.astype(np.uint8, copy=False))
+            latest_camera_observation = {
+                "status": observation["status"], "position_m": observation["cube_position_m"],
+                "capture_time_s": capture_time, "received_time_s": receive_time, "frame_id": frame_id,
+            }
             report["vision"]["samples"] += 1
             paired = vision_comparison.append(
                 sample_id=report["vision"]["samples"],
@@ -713,7 +722,7 @@ def main():
                                      f"  T_sensor [{torque}]  T_TCP [{tcp_torque}]")
                     force_label.text = "\n".join(lines)
                 contact_monitor.raise_if_collision()
-                reference_center, _ = cube.get_world_pose()
+                reference_center, reference_orientation = cube.get_world_pose()
                 truth_history.append({"time_s": float(world.current_time), "physics_step": tick,
                                       "phase": contact_monitor.phase,
                                       "position_m": reference_center.tolist()})
@@ -727,6 +736,31 @@ def main():
                         vision_task = asyncio.ensure_future(sample_vision_async())
                 if not args.headless and tick % 2 == 0:
                     render_only()
+                measured = joint_state()
+                sensor_poses = {side: tcp_fk(side, measured[side]) for side in robots}
+                recognized = contact_experiment.append(
+                    physics_step=tick,
+                    sensors={
+                        "time_s": float(world.current_time),
+                        "left_wrench_world": force_sample["left"]["tcp_gravity_corrected_world"],
+                        "right_wrench_world": force_sample["right"]["tcp_gravity_corrected_world"],
+                        "tcp_positions_m": {side: pose[0].tolist() for side, pose in sensor_poses.items()},
+                        "cup_normals_world": {side: (pose[1] @ np.array([
+                            0., -1. if side == "left" else 1., 0.])).tolist()
+                            for side, pose in sensor_poses.items()},
+                        "camera": latest_camera_observation,
+                    },
+                    truth={
+                        "cube_position_m": reference_center.tolist(),
+                        "cube_rotation_world": quat_to_rot_matrix(reference_orientation).tolist(),
+                        "attachments": {side: stage.GetPrimAtPath(f"/World/Attachment_{side}").IsValid()
+                                        for side in robots},
+                        "cube_contacts": contact_monitor.cube_contact_snapshot(),
+                    })
+                if status_label is not None and tick % 12 == 0:
+                    status_label.text = (f"{contact_monitor.phase}: executing\n"
+                                         f"Contact estimate: {recognized['state']}\n"
+                                         f"Skills: {', '.join(recognized['recommended_skills'])}")
 
         def record(name, state, **extra):
             position, orientation = cube.get_world_pose()
@@ -1635,6 +1669,8 @@ def main():
                 vision_task.cancel()
         if vision_comparison is not None:
             report["vision"]["comparison_summary"] = vision_comparison.finalize()
+        if contact_experiment is not None:
+            report["contact_state_recognition"] = contact_experiment.close(report.get("status", "UNVERIFIED"))
         if force_recorder is not None:
             report["wrist_force_sensors"] = force_recorder.close()
             force_recorder.metadata["task_status"] = report["status"]
