@@ -95,7 +95,7 @@ class FR3CollisionChecker:
         flange, rotation = self.solvers[side].compute_forward_kinematics("fr3_link8", q)
         flange, rotation = np.asarray(flange).reshape(3), np.asarray(rotation).reshape(3, 3)
         sign = -1 if side == "left" else 1
-        # Match ABSideTool geometry authored by the visual runner exactly.
+        # The vertical envelope contains the sensor housing plus shortened stem.
         specs = [("vertical", [0, 0, .04], [.028, .028, .08]),
                  ("lateral", [0, sign * .065, .08], [.018, .13, .018]),
                  ("manifold", [0, sign * .138, .08], [.07, .014, .07])]

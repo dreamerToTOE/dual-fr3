@@ -22,8 +22,10 @@ def is_unexpected_robot_contact(path0, path1, allowed_cube_contacts=(), separati
         side = _robot_side(cup)
         if side not in allowed_cube_contacts or other != "/World/Cube":
             continue
-        tool = f"/World/{side}_fr3/fr3_link8/ABSideTool/"
-        if cup in {tool + f"cup_r{r}_c{c}" for r in (1, 2) for c in (1, 2)}:
+        root = f"/World/{side}_fr3"
+        # The standalone loading smoke still uses flange-owned tool geometry.
+        tools = (f"{root}/ABSideTool/", f"{root}/fr3_link8/ABSideTool/")
+        if cup in {tool + f"cup_r{r}_c{c}" for tool in tools for r in (1, 2) for c in (1, 2)}:
             return separation_m < -0.003
     return True
 

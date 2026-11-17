@@ -108,7 +108,7 @@ Run the automatic task, then generate the comparison plot and statistics:
 
 ```bash
 /home/ubuntu2004/isaacsim-4.5.0/python.sh fr3_ab_visual_runner.py --close-on-finish
-python3 fr3_vision_comparison.py validation/idea_one_vision_comparison/comparison.jsonl
+python3 fr3_vision_comparison.py validation/idea_one_wrist_ft/vision/comparison.jsonl
 ```
 
 The directory also contains `metadata.json`, complete paired
@@ -209,7 +209,8 @@ Start the visible automatic task with:
 
 Add `--headless` for the same task without a window. The viewer pauses at
 completion or at the first failed check and retains the scene for inspection.
-The runtime report is `validation/fr3_ab_visual_runner.json`.
+The current runtime report is `validation/idea_one_wrist_ft/runner_report.json`.
+The earlier `validation/fr3_ab_visual_runner.json` remains a historical result.
 
 The visible runner advances one 120 Hz physics step per control sample and
 uses render-only updates for the 60 Hz viewport. Planning progress therefore
@@ -229,3 +230,98 @@ phase-authorized cup/Cube contact up to 3 mm penetration is allowed. The
 planning geometry is conservative spheres/boxes, not a swept-mesh certificate.
 A still uses labelled temporary PhysX fixed joints; Surface Gripper validation
 is separate. A successful Cube endpoint alone is insufficient to pass the task.
+
+## Virtual six-axis wrist force feedback (idea-one, 2026-11-17)
+
+Each arm now has an articulated fixed-joint sensor between `fr3_link8` and
+the independent `ABSideTool` rigid body. The blue 12 mm sensor housing replaces
+the first part of the original tool stem, retaining the TCP and the previous
+conservative collision envelope. Every tool collider remains enabled. A's
+temporary Cube attachment is connected to the tool body downstream of the
+sensor, so the payload does not bypass the measurement.
+
+Each virtual tool assembly has mass 0.3 kg, COM `[0, -0.06, 0.055]` m on the
+left and `[0, 0.06, 0.055]` m on the right, and principal inertia
+`[0.0015, 0.0007, 0.0012]` kg m². These are declared simulation parameters,
+not a hardware calibration. They are stored in `wrist_force_sensors` in the
+scene configuration and in each recording's `metadata.json`.
+
+The 120 Hz recording reads actual PhysX incoming joint reactions in
+`[Fx,Fy,Fz,Tx,Ty,Tz]` order (N and N m), not commanded gravity compensation
+or controller efforts. The raw sign is parent-on-tool; the local frame and
+origin coincide with the flange joint anchor. The residual is
+`-raw_reaction - tool_gravity_wrench`, expressed both locally and in world
+axes, with moments still referenced to the sensor origin. Tool inertia is
+not removed. Cube truth and contact-pair identifiers are not sensor inputs;
+phase names are evaluation context only. These are ideal physics signals
+without added sensor noise, latency or saturation.
+
+Run the known-load check and the complete task:
+
+```bash
+/home/ubuntu2004/isaacsim-4.5.0/python.sh tests/isaac_wrist_ft_smoke.py
+/home/ubuntu2004/isaacsim-4.5.0/python.sh fr3_ab_visual_runner.py --close-on-finish --output-dir validation/idea_one_wrist_ft
+python3 fr3_wrist_ft_analysis.py validation/idea_one_wrist_ft
+```
+
+Add `--headless` for the same physics without the viewer. Omit
+`--close-on-finish` to inspect the final scene. The viewer shows the latest
+bilateral force and torque components. `--output-dir` accepts an absolute
+or relative directory; its default is `validation/idea_one_wrist_ft`.
+Each run writes `runner_report.json`, `metadata.json`, `wrench.jsonl.gz`,
+and a separate `trajectory_cache.json`; camera/reference streams are under
+`vision/`. The analyzer produces `summary.json`, `wrench.png` and a B-only
+`wrench_contact.png`. Saved nominal A/B1/B2 paths are still loaded from
+`validation/fr3_trajectory_cache.json`, with the existing deviation/contact
+guards. New runs do not overwrite that baseline cache or the earlier
+`idea_one_vision_comparison` results. Use a fresh output directory to retain
+multiple force-feedback runs.
+
+The 28 actual PhysX load cases cover two sensor orientations, gravity,
+all six positive/negative channels, and the moment of an offset force.
+All passed, with maximum component errors `5.37e-7 N` and `2.92e-4 N m`;
+the complete calibration record is `validation/idea_one_wrist_ft_load_check.json`.
+The analyzer separately checks empty-tool residuals, the suspended bilateral
+payload force against the configured Cube weight, B1/B2 pushing directions,
+and the continuity of B2's left support force. A 1.5 s stationary window is
+recorded after lifting and after crossing the front wall for this load check.
+
+The complete visible acceptance is preserved in `validation/idea_one_wrist_ft_visible/`:
+10,786 matching control/physics samples, zero uncommanded physics steps, and no
+unexpected PhysX contact. Empty-tool residuals passed. Suspended combined
+vertical forces were -12.2656 N after lift and -12.2615 N after crossing,
+versus the configured -12.2625 N weight. B1 left median Fy was -0.9763 N;
+B2 right median Fx was +0.7673 N in the central moving windows. All six
+force/torque channels were finite throughout; the independent load check
+validates their scale, sign, rotation and torque lever arm.
+
+Sensor checks passed, but the force profile has task-level warnings:
+
+- A transfer's opposing-force diagnostic peaked at 317.77 N while bilateral
+  net force remained approximately `[0.019,0.064,-12.220]` N. This is consistent
+  with internal loading of the two position-driven rigid attachment proxies;
+  it is not evidence that a real suction connection would behave this way.
+- B2 left median Fy was -0.3042 N, but only 58.6% of the evaluated moving
+  window exceeded 0.1 N in the pressing direction: sustained preload is not
+  established by the previous geometric hold check.
+- Right and left withdrawal force peaks were 285.48 N and 122.75 N,
+  respectively, during roughly the first 0.1 s of each withdrawal. The
+  recorded TCPs initially moved slightly toward the Cube and PhysX still
+  reported cup/Cube contact in these intervals. They are contact/control
+  transients to investigate before claiming a normal-force baseline.
+
+`summary.json` distinguishes sensor checks from these task warnings as
+`PASS_FORCE_FEEDBACK_WITH_TASK_WARNINGS`. The release-peak screening rule
+is relative to push forces; it is not a robot or sensor safety rating.
+The earlier complete headless pilot in `idea_one_wrist_ft_headless/` retains
+10,546 samples and its shorter 0.5 s suspended holds; those hold windows had
+not fully settled and are honestly marked `UNVERIFIED` in that pilot summary.
+The visible rerun uses the longer holds and passes both payload checks.
+There are 51 passing unit tests, plus the 28 actual PhysX load cases and the
+headless/visible complete task runs. The original `base` history is unchanged.
+
+This sensor acceptance does not validate real suction or establish contact-state
+classification. In particular, large opposing A loads can come from the two
+rigid attachment proxies, and geometric B2 support proximity alone does not
+prove sustained rear-wall preload. The measured limitations must be addressed
+or explicitly excluded before treating these traces as normal training data.

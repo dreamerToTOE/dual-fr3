@@ -1,11 +1,14 @@
 import sys
 from types import SimpleNamespace
 
+import pytest
+
 from fr3_contact_monitor import PhysxContactMonitor, is_unexpected_robot_contact
 
 
-def test_contact_policy_allows_only_phase_authorized_cups():
-    cup = "/World/left_fr3/fr3_link8/ABSideTool/cup_r1_c1"
+@pytest.mark.parametrize("tool", ["ABSideTool", "fr3_link8/ABSideTool"])
+def test_contact_policy_allows_only_phase_authorized_cups(tool):
+    cup = f"/World/left_fr3/{tool}/cup_r1_c1"
     cube = "/World/Cube"
     assert is_unexpected_robot_contact(cup, cube)
     assert not is_unexpected_robot_contact(cup, cube, {"left"})

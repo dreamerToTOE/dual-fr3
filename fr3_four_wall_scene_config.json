@@ -39,6 +39,18 @@
     "cup_radius_m": 0.01,
     "cup_length_m": 0.01
   },
+  "wrist_force_sensors": {
+    "left": {
+      "mass_kg": 0.3,
+      "center_of_mass_m": [0.0, -0.06, 0.055],
+      "diagonal_inertia_kg_m2": [0.0015, 0.0007, 0.0012]
+    },
+    "right": {
+      "mass_kg": 0.3,
+      "center_of_mass_m": [0.0, 0.06, 0.055],
+      "diagonal_inertia_kg_m2": [0.0015, 0.0007, 0.0012]
+    }
+  },
   "rails": {
     "axis": "Y",
     "travel_limits_m": [-0.22, 1.5],

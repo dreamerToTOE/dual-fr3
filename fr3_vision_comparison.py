@@ -98,7 +98,7 @@ def _write_analysis(directory, records, metadata):
     (directory / "summary.json").write_text(
         json.dumps(summary, indent=2, ensure_ascii=False, allow_nan=False) + "\n")
     with (directory / "comparison.csv").open("w", newline="") as stream:
-        writer = csv.writer(stream)
+        writer = csv.writer(stream, lineterminator="\n")
         writer.writerow(["sample_id", "phase", "physics_step", "capture_time_s", "frame_id", "status", "paired",
                          "truth_x_m", "truth_y_m", "truth_z_m", "camera_x_m", "camera_y_m", "camera_z_m",
                          "error_x_m", "error_y_m", "error_z_m", "position_error_m"])

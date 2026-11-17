@@ -17,10 +17,10 @@ from fr3_ab_ik_preflight import FRONT_ROTATION, SIDE_ROTATION, solve_waypoint
 from fr3_trajectory import plan_collision_free_path, plan_joint_trajectory
 from fr3_collision import FR3CollisionChecker
 from fr3_contact_monitor import PhysxContactMonitor
+from fr3_wrist_ft import add_wrist_sensor, WristForceRecorder
 
 ROOT = Path(__file__).resolve().parent
 CONFIG = json.loads((ROOT / "fr3_four_wall_scene_config.json").read_text())
-REPORT = ROOT / "validation" / "fr3_ab_visual_runner.json"
 TRAJECTORY_CACHE = ROOT / "validation" / "fr3_trajectory_cache.json"
 
 ARUCO_4X4_23_BITS = (
@@ -181,8 +181,17 @@ def _add_robot(stage, side, asset_url):
                 if child.HasAPI(UsdPhysics.CollisionAPI):
                     UsdPhysics.CollisionAPI(child).CreateCollisionEnabledAttr(False)
     # Every custom tool shape remains collidable throughout execution.
-    tool = f"{root}/fr3_link8/ABSideTool"
-    _box(stage, f"{tool}/vertical", (0.0, 0.0, 0.04), (0.028, 0.028, 0.08), collision=True)
+    tool = add_wrist_sensor(stage, side, CONFIG["wrist_force_sensors"][side])
+    # The sensor occupies the first 12 mm of the original stem: TCP and the
+    # conservative collision envelope stay unchanged for cached trajectories.
+    sensor = UsdGeom.Cylinder.Define(stage, f"{tool}/sensor_housing")
+    sensor.CreateAxisAttr(UsdGeom.Tokens.z)
+    sensor.CreateRadiusAttr(0.014)
+    sensor.CreateHeightAttr(0.012)
+    sensor.AddTranslateOp().Set(Gf.Vec3d(0, 0, 0.006))
+    sensor.CreateDisplayColorAttr([Gf.Vec3f(0.10, 0.35, 0.65)])
+    UsdPhysics.CollisionAPI.Apply(sensor.GetPrim())
+    _box(stage, f"{tool}/vertical", (0.0, 0.0, 0.046), (0.028, 0.028, 0.068), collision=True)
     sign = -1.0 if side == "left" else 1.0
     _box(stage, f"{tool}/lateral", (0.0, sign * 0.065, 0.08), (0.018, 0.13, 0.018), collision=True)
     _box(stage, f"{tool}/manifold", (0.0, sign * 0.138, 0.08), (0.07, 0.014, 0.07), collision=True)
@@ -203,7 +212,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--headless", action="store_true", help="Run the same simulation without a window")
     parser.add_argument("--close-on-finish", action="store_true", help="Close instead of retaining the result in the GUI")
+    parser.add_argument("--output-dir", type=Path, help="Keep this run's artifacts separate from earlier experiments")
     args = parser.parse_args()
+    output_directory = args.output_dir.resolve() if args.output_dir else ROOT / "validation" / "idea_one_wrist_ft"
+    output_directory.mkdir(parents=True, exist_ok=True)
+    report_path = output_directory / "runner_report.json"
+    cache_output = output_directory / "trajectory_cache.json"
     from isaacsim import SimulationApp
 
     app = SimulationApp({"headless": args.headless, "width": 1400, "height": 900})
@@ -249,12 +263,14 @@ def main():
     cache_enabled = False
     world = None
     status_label = None
+    force_label = None
     contact_monitor = None
     vision_camera = None
     vision_viewport = None
     vision_loop = None
     vision_task = None
     vision_comparison = None
+    force_recorder = None
     try:
         import numpy as np
         import omni.client
@@ -359,9 +375,11 @@ def main():
         vision_camera.set_projection_type("pinhole")
         if not args.headless:
             import omni.ui as ui
-            status_window = ui.Window("FR3 automatic task", width=420, height=110)
+            status_window = ui.Window("FR3 automatic task", width=520, height=180)
             with status_window.frame:
-                status_label = ui.Label("Loading FR3...", word_wrap=True)
+                with ui.VStack():
+                    status_label = ui.Label("Loading FR3...", word_wrap=True)
+                    force_label = ui.Label("Wrist F/T: waiting for physics", word_wrap=True)
         robots, solvers, joints, flanges = {}, {}, {}, {}
         for side, base in CONFIG["fr3"]["bases"].items():
             robots[side] = world.scene.add(SingleArticulation(f"/World/{side}_fr3", name=f"{side}_robot"))
@@ -396,6 +414,12 @@ def main():
             robot.set_joint_positions(np.array(CONFIG["fr3"]["official_start_q_rad"]), joint_indices=joints[side])
             robot.get_articulation_controller().apply_action(ArticulationAction(
                 joint_positions=np.array(CONFIG["fr3"]["official_start_q_rad"]), joint_indices=joints[side]))
+        force_recorder = WristForceRecorder(robots, joints, CONFIG, output_directory)
+        calibration_path = ROOT / "validation" / "idea_one_wrist_ft_load_check.json"
+        if calibration_path.exists():
+            calibration = json.loads(calibration_path.read_text())
+            force_recorder.metadata["calibration_passed"] = calibration.get("status") == "PASS"
+            force_recorder.metadata["calibration_report"] = str(calibration_path.relative_to(ROOT))
         print("FR3_AB_PHYSICS_READY", flush=True)
         checker = FR3CollisionChecker(CONFIG, solvers)
         allowed_contacts = {"left", "right"}
@@ -451,7 +475,7 @@ def main():
             marker_surface_offset_m=0.0085,
             dictionary_name=vision_cfg["aruco_dictionary"],
         )
-        comparison_directory = ROOT / "validation" / "idea_one_vision_comparison"
+        comparison_directory = output_directory / "vision"
         vision_comparison = VisionComparison(comparison_directory, metadata={
             "scene_id": CONFIG["scene_id"], "camera_model": vision_cfg["camera_model"],
             "execution_mode": "headless" if args.headless else "visible",
@@ -471,7 +495,7 @@ def main():
             "distortion": [0.0] * 5,
             "hardware_calibration_validated": False,
         })
-        report["vision"]["comparison_directory"] = str(comparison_directory.relative_to(ROOT))
+        report["vision"]["comparison_directory"] = str(comparison_directory)
         report["vision"]["camera_uses_cube_truth"] = False
         report["vision"]["unique_frames"] = 0
         report["vision"]["duplicate_frames"] = 0
@@ -559,8 +583,17 @@ def main():
                 # One command advances one physics tick in both execution modes.
                 contact_monitor.physics_step_index = world.current_time_step_index + 1
                 world.step(render=False)
-                contact_monitor.raise_if_collision()
                 tick += 1
+                force_sample = force_recorder.sample(float(world.current_time), tick, contact_monitor.phase)
+                if force_label is not None and tick % 12 == 0:
+                    lines = ["World axes, tool gravity removed; F in N, T in N m"]
+                    for side in ("left", "right"):
+                        wrench = force_sample[side]["gravity_corrected_world"]
+                        force = ", ".join(f"{value:+.2f}" for value in wrench[:3])
+                        torque = ", ".join(f"{value:+.3f}" for value in wrench[3:])
+                        lines.append(f"{side}: F [{force}]  T [{torque}]")
+                    force_label.text = "\n".join(lines)
+                contact_monitor.raise_if_collision()
                 reference_center, _ = cube.get_world_pose()
                 truth_history.append({"time_s": float(world.current_time), "physics_step": tick,
                                       "phase": contact_monitor.phase,
@@ -590,8 +623,8 @@ def main():
             if status_label is not None:
                 status_label.text = f"{name}: {state}\nAttachment: fixed joint proxy (not suction validation)"
             print("FR3_AB " + json.dumps(item), flush=True)
-            REPORT.parent.mkdir(parents=True, exist_ok=True)
-            REPORT.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
+            report_path.parent.mkdir(parents=True, exist_ok=True)
+            report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
 
         def joint_state():
             return {side: np.asarray(robot.get_joint_positions(joint_indices=joints[side]), dtype=float)
@@ -1025,9 +1058,9 @@ def main():
             return max_speed
 
         def attach(side):
-            path = f"/World/{side}_fr3/fr3_link8"
+            path = f"/World/{side}_fr3/ABSideTool"
             assert stage.GetPrimAtPath(path).HasAPI(UsdPhysics.RigidBodyAPI), "Attachment must reference a rigid body"
-            anchor, flange_quat = flanges[side].get_world_pose()
+            anchor, flange_quat = force_recorder.tools[side].get_world_pose()
             # Joint offsets are in the scaled Cube prim coordinates.
             cube_pos, cube_quat = cube.get_world_pose()
             joint = UsdPhysics.FixedJoint.Define(stage, f"/World/Attachment_{side}")
@@ -1085,6 +1118,9 @@ def main():
             record(name, "RUNNING")
             dual_path(previous, center)
             record(name, "REACHED_WITH_ATTACHMENT_PROXY")
+            if name in ("A_lift", "A_over_front"):
+                # Stationary suspended windows independently verify payload load.
+                step(180)
             previous = center
         for side in robots:
             stage.RemovePrim(f"/World/Attachment_{side}")
@@ -1309,22 +1345,32 @@ def main():
                 vision_task.cancel()
         if vision_comparison is not None:
             report["vision"]["comparison_summary"] = vision_comparison.finalize()
+        if force_recorder is not None:
+            report["wrist_force_sensors"] = force_recorder.close()
+            force_recorder.metadata["task_status"] = report["status"]
+            (output_directory / "metadata.json").write_text(
+                json.dumps(force_recorder.metadata, indent=2, allow_nan=False) + "\n")
         if contact_monitor is not None:
             report["physx_contacts"] = contact_monitor.report()
             contact_monitor.close()
         trajectory_cache["status"] = (
             "COMPLETE" if report.get("status") == "PASS_B1_B2_PROXY_CONTACT" else "INCOMPLETE"
         )
-        trajectory_cache["runtime_report"] = str(REPORT.relative_to(ROOT))
-        TRAJECTORY_CACHE.parent.mkdir(parents=True, exist_ok=True)
-        TRAJECTORY_CACHE.write_text(
+        trajectory_cache["runtime_report"] = str(report_path)
+        cache_output.parent.mkdir(parents=True, exist_ok=True)
+        cache_output.write_text(
             json.dumps(trajectory_cache, indent=2, ensure_ascii=False, allow_nan=False) + "\n"
         )
-        REPORT.parent.mkdir(parents=True, exist_ok=True)
-        REPORT.write_text(json.dumps(report, indent=2, ensure_ascii=False, allow_nan=False) + "\n")
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False, allow_nan=False) + "\n")
         print("FR3_AB_RESULT " + json.dumps(report, ensure_ascii=False), flush=True)
         if world is not None:
             world.pause()
+        if vision_viewport is not None and app.is_running():
+            from omni.kit.viewport.utility import capture_viewport_to_file
+            capture = capture_viewport_to_file(vision_viewport, str(output_directory / "overview.png"))
+            for _ in range(12):
+                app.update()
         if not args.headless and not args.close_on_finish:
             print("Task stopped. Inspect the scene; close the window to exit.", flush=True)
             while app.is_running():
