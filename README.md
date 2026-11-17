@@ -109,7 +109,7 @@ Run the automatic task, then generate the comparison plot and statistics:
 
 ```bash
 /home/ubuntu2004/isaacsim-4.5.0/python.sh fr3_ab_visual_runner.py --close-on-finish
-python3 fr3_vision_comparison.py validation/idea_one_tcp_wrist_ft/vision/comparison.jsonl
+python3 fr3_vision_comparison.py validation/idea_one_b2_force_control/vision/comparison.jsonl
 ```
 
 The directory also contains `metadata.json`, complete paired
@@ -210,7 +210,7 @@ Start the visible automatic task with:
 
 Add `--headless` for the same task without a window. The viewer pauses at
 completion or at the first failed check and retains the scene for inspection.
-The current runtime report is `validation/idea_one_tcp_wrist_ft/runner_report.json`.
+The current runtime report is `validation/idea_one_b2_force_control/runner_report.json`.
 The earlier `validation/fr3_ab_visual_runner.json` remains a historical result.
 
 The visible runner advances one 120 Hz physics step per control sample and
@@ -345,7 +345,7 @@ Run the physical calibration and a fresh visual acceptance from the repo root:
 python3 fr3_wrist_ft_analysis.py validation/idea_one_tcp_wrist_ft_review
 ```
 
-The runner's default output directory is `validation/idea_one_tcp_wrist_ft`.
+The current default output directory is `validation/idea_one_b2_force_control`.
 Omit `--close-on-finish` to keep the viewer open; add `--headless` to run without
 a window. The live panel shows the common force vector and separate sensor/TCP
 torques for each arm. The analyzer retains previous plots and adds
@@ -387,3 +387,92 @@ TCP conversion does not change the net force or compensate tool inertia.
 The previously observed A attachment internal loads, intermittent left support,
 and B2 withdrawal spikes remain task-level issues rather than being removed
 by a change of moment reference point.
+
+## B2 pressure hold and bilateral force release
+
+Full historical B2 push evaluation gave only 50.1% left contact coverage and
+a 1.4 s dropout; descent/approach had effectively no sustained preload.
+Withdrawal commands also moved inward first: 0.861 mm on the right and
+0.602 mm on the left, producing the measured 285/123 N peaks. The cause was
+a duplicated-start Hermite spline tangent, reproduced exactly from saved
+waypoints. Stationary segments now have zero tangents at both ends, preserving
+intentional holds and their durations.
+
+After B1, the left TCP rises by 4 mm, slowly seats the Cube against the rear
+wall, then acquires a 2 N normal preload. Seating checks the rotated Cube
+support radius against the known wall, allowing 20 um contact tolerance
+and requiring force confirmation. This uses existing simulation state for
+task control; it is not a fused state estimate or a sensor input.
+
+The left arm tracks Cartesian X while retaining its acquired height and
+orientation. Absolute world Y follows bounded force admittance:
+`2e-5 m/(N s)`, 0.05 mm/s speed limit, 2 mm offset bound, 10 N overload stop.
+It overrides nominal commands before every physics step, including right-arm
+approach, rail movement and right release, without accumulating corrections
+onto an already corrected path. B2 pushing uses a synchronized 15 s Cartesian
+quintic with fixed orientations; the old joint-interpolated push is rejected.
+
+Each arm ramps its normal target to zero, confirms less than 0.1 N for 30
+consecutive steps, then retracts 35 mm straight outward over 3 s. The left
+hold stays active until the right arm has retracted and Cube settling has
+been checked. Measured forces are not clipped or replaced. Sensor/TCP
+wrenches remain logged; `control.position_targets_rad` separately records
+actually issued joint targets alongside measured joints.
+
+Acceptance covers every declared hold sample, including stationary periods.
+Coverage above 0.1 N and within 0.1--6 N must be at least 98%, with no dropout
+longer than 0.05 s. All B2 phases, including acquisition/unloading, must stay
+within 10 N total force and 1 N m TCP moment. Retreat must reach 30 mm with
+at most 20 um inward excursion/backtracking. These are declared simulation
+acceptance criteria, not hardware safety ratings; phase endpoints and spikes
+are not discarded. Missing required phases fail validation.
+
+The separate `validation/fr3_force_control_trajectory_cache.json` is preferred
+only when controller revision, complete scene configuration, controller
+parameters and recorded B2 force acceptance match. B2 additionally checks
+its command/TCP start and endpoint before direct 120 Hz replay. A mismatch
+rebuilds the contact path. Otherwise the legacy cache can supply the unchanged
+prefix, while its old B2 push/withdrawal entries are explicitly invalidated.
+Acquisition, force correction, unloading and withdrawal always run live.
+The cache is nominal; actual corrected targets are in `wrench.jsonl.gz`.
+The baseline cache and `base` history remain preserved.
+
+Run the current scene and acceptance analysis from the repository root:
+
+```bash
+/home/ubuntu2004/isaacsim-4.5.0/python.sh fr3_ab_visual_runner.py --output-dir validation/idea_one_b2_force_review
+python3 fr3_wrist_ft_analysis.py validation/idea_one_b2_force_review
+```
+
+Add `--close-on-finish` to close at completion, or `--headless` to omit the
+window. The cold-cache headless acceptance is in `idea_one_b2_force_pilot4`.
+The first three pilot directories retain guarded failures: center-only seating
+was too strict, the initial force gain was too small, and the old push path
+was not smooth enough. These are not normal training examples.
+
+A still uses two rigid attachment proxies and retains its previously measured
+opposing internal loads. B2 acceptance does not establish normal A forces or
+validate real suction. Vision/force fusion is not connected by this change.
+
+The complete warm-cache visual acceptance is in
+`validation/idea_one_b2_force_visible/`: 13,459 matching command/physics steps,
+zero uncommanded steps and zero unexpected PhysX contacts. The versioned cache
+was loaded for the prefix and new B2 push; the obsolete withdrawal entries
+were excluded. Sensor/TCP transformation checks also passed.
+All declared hold phases had 100% normal contact/in-band coverage and zero
+contact dropout. During B2 push, left normal force had median 2.1257 N and
+range 0.9334--5.6925 N. Every B2 force/moment envelope check passed.
+
+Right withdrawal reached 34.9373 mm with peak force 0.09957 N, peak TCP moment
+0.003927 N m and maximum inward excursion 0.204 um. Left withdrawal reached
+34.9891 mm with peak force 0.32526 N, peak TCP moment 0.009267 N m and maximum
+inward excursion 1.711 um. Cube settling speed was zero at completion;
+the final center was `[-0.244998,1.076000,0.787000]` m.
+The cold headless run produced the same accepted B2 measurements. There are
+91 passing unit tests, including duplicated-knot regression, delayed contact
+response, rotated-Cube seating and versioned-cache rejection checks.
+
+`b2_force_control_validation.status=PASS` applies specifically to B2 hold,
+push and bilateral release. A's opposing-force diagnostic remains 317.77 N;
+the complete A/B force profile is not declared normal, and A's proxy data
+must not be labeled normal fusion-training data without further work.

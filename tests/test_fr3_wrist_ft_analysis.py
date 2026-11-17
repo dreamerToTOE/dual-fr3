@@ -250,3 +250,123 @@ def test_gzip_recording_writes_reviewable_summary_and_plot(tmp_path):
     assert saved["status"] == result["status"] == "PASS_FORCE_FEEDBACK"
     assert (tmp_path / "wrench.png").read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
     assert (tmp_path / "wrench_contact.png").read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+
+
+CONTROL_META = {**TCP_META, "b2_force_control_validation": {
+    "held_phases": ["B2_hold", "B2_push", "B2_right_unload", "B2_right_retreat", "B2_right_release"],
+    "release_phases": {"right": ["B2_right_retreat"], "left": ["B2_left_retreat"]},
+    "normal_force_min_N": .1, "normal_force_max_N": 6., "min_contact_coverage": .98,
+    "max_dropout_s": .05, "max_force_N": 10., "max_tcp_torque_Nm": 1.,
+    "max_inward_m": .00002, "minimum_retreat_m": .03,
+}}
+
+
+def _scale_wrench(value, scale):
+    for name in ("gravity_corrected_local", "gravity_corrected_world",
+                 "tcp_gravity_corrected_local", "tcp_gravity_corrected_world"):
+        value[name] = (np.asarray(value[name]) * scale).tolist()
+
+
+def _move_tcp(value, delta):
+    for name in ("sensor_position_m", "tcp_position_m"):
+        value[name] = (np.asarray(value[name]) + delta).tolist()
+
+
+def _renumber(rows):
+    for index, row in enumerate(rows, 1):
+        row["physics_step"], row["time_s"] = index, index / 120
+    return rows
+
+
+def _controlled_trial():
+    rows = _tcp_trial()
+    push_start = next(index for index, row in enumerate(rows) if row["phase"] == "B2_push")
+    hold = []
+    for _ in range(50):
+        row = deepcopy(rows[push_start])
+        row["phase"] = "B2_hold"
+        row["left"]["qdot_rad_s"] = [0.] * 7
+        hold.append(row)
+    rows[push_start:push_start] = hold
+    for phase, active in (("B2_right_unload", "right"), ("B2_right_retreat", "right"),
+                          ("B2_right_release", "right"), ("B2_left_unload", "left"),
+                          ("B2_left_retreat", "left")):
+        start = deepcopy(rows[-1])
+        for index in range(50):
+            row = deepcopy(start)
+            row["phase"] = phase
+            row["left"]["qdot_rad_s"] = [0.] * 7
+            if "unload" in phase:
+                _scale_wrench(row[active], 1 - (index + 1) / 50)
+            if "retreat" in phase:
+                direction = np.array([1., 0., 0.]) if active == "right" else np.array([0., -1., 0.])
+                _move_tcp(row[active], direction * (.035 * (index + 1) / 50))
+            rows.append(row)
+    return _renumber(rows)
+
+
+def test_controlled_b2_checks_stationary_support_and_both_full_retreats():
+    result = analyze(_controlled_trial(), CONTROL_META)
+    assert result["status"] == "PASS_FORCE_FEEDBACK"
+    check = result["b2_force_control_validation"]
+    assert check["status"] == "PASS"
+    assert check["held_phases"]["B2_hold"]["samples"] == 50
+    assert check["held_phases"]["B2_hold"]["contact_coverage"] == 1.
+    assert check["held_phases"]["B2_right_release"]["longest_contact_dropout_s"] == 0.
+    for side in ("left", "right"):
+        assert check["releases"][side]["status"] == "PASS"
+        assert np.isclose(check["releases"][side]["final_outward_distance_m"], .035)
+        assert check["releases"][side]["maximum_inward_excursion_m"] == 0.
+    assert result["release_transients"]["right"]["phase"] == "B2_right_retreat"
+
+
+def test_stationary_support_dropout_is_not_hidden_by_qdot_filter():
+    rows = _controlled_trial()
+    held = [row for row in rows if row["phase"] == "B2_hold"]
+    for row in held[10:20]:
+        _scale_wrench(row["left"], 0.)
+    result = analyze(rows, CONTROL_META)
+    assert result["acceptance"]["B2_left_support"]["status"] == "CONSISTENT"
+    check = result["b2_force_control_validation"]
+    assert check["status"] == "FAIL"
+    assert check["held_phases"]["B2_hold"]["longest_contact_dropout_s"] == 10 / 120
+    assert check["held_phases"]["B2_hold"]["contact_coverage"] == .8
+    assert result["status"] == "PASS_FORCE_FEEDBACK_WITH_TASK_WARNINGS"
+
+
+def test_unload_ramp_is_not_exempt_from_force_spike_envelope():
+    rows = _controlled_trial()
+    row = next(row for row in rows if row["phase"] == "B2_left_unload")
+    _scale_wrench(row["left"], 100.)
+    result = analyze(rows, CONTROL_META)
+    check = result["b2_force_control_validation"]
+    assert check["phase_peaks"]["B2_left_unload"]["left"]["force_norm_max_N"] > 40
+    assert check["phase_peaks"]["B2_left_unload"]["left"]["status"] == "FAIL"
+    assert check["status"] == "FAIL"
+    assert result["status"] == "PASS_FORCE_FEEDBACK_WITH_TASK_WARNINGS"
+
+
+@pytest.mark.parametrize("which", ("first_sample", "later_backtrack"))
+def test_retreat_cannot_hide_inward_tcp_motion(which):
+    rows = _controlled_trial()
+    indices = [index for index, row in enumerate(rows) if row["phase"] == "B2_right_retreat"]
+    index = indices[0] if which == "first_sample" else indices[15]
+    prior = rows[index - 1]["right"]["tcp_position_m"]
+    current = rows[index]["right"]["tcp_position_m"]
+    _move_tcp(rows[index]["right"], np.array(prior) - current + [-.0001, 0., 0.])
+    check = analyze(rows, CONTROL_META)["b2_force_control_validation"]
+    assert check["status"] == "FAIL"
+    assert check["releases"]["right"]["maximum_backtrack_m"] > .00009
+    if which == "first_sample":
+        assert check["releases"]["right"]["maximum_inward_excursion_m"] > .00009
+    else:
+        assert check["releases"]["right"]["maximum_inward_excursion_m"] == 0.
+
+
+def test_missing_required_retreat_fails_and_schema_three_keeps_tcp_checks():
+    rows = _controlled_trial()
+    assert analyze(rows, {**CONTROL_META, "schema_version": 3})["tcp_transform_validation"]["status"] == "PASS"
+    rows = _renumber([row for row in rows if row["phase"] != "B2_right_retreat"])
+    check = analyze(rows, CONTROL_META)["b2_force_control_validation"]
+    assert check["status"] == "FAIL"
+    assert check["missing_required_phases"] == ["B2_right_retreat"]

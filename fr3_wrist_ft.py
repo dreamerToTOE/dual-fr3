@@ -136,6 +136,8 @@ class WristForceRecorder:
         from isaacsim.core.utils.rotations import quat_to_rot_matrix
 
         row = {"time_s": float(time_s), "physics_step": int(physics_step), "phase": phase}
+        if hasattr(self, "command_context"):
+            row["control"] = self.command_context
         for side, robot in self.robots.items():
             raw = np.asarray(robot.get_measured_joint_forces(), dtype=float)[self.links[side]]
             if raw.shape != (6,) or not np.all(np.isfinite(raw)):

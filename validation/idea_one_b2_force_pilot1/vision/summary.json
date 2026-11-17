@@ -1,0 +1,460 @@
+{
+  "metadata": {
+    "scene_id": "dual_fr3_four_wall_150mm_5goal",
+    "camera_model": "Intel RealSense D455",
+    "execution_mode": "headless",
+    "simulation_time_origin_s": 0.01666666753590107,
+    "camera_mode": "d455_calibrated_pinhole_fallback",
+    "camera_matrix": [
+      [
+        317.0431213378906,
+        0.0,
+        320.0
+      ],
+      [
+        0.0,
+        317.0431213378906,
+        240.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "camera_to_world_ros": [
+      [
+        -1.0,
+        1.2066786629992418e-16,
+        -2.0901333466571815e-17,
+        -2.390550627242559e-24
+      ],
+      [
+        1.2066786629992418e-16,
+        0.9417419097674722,
+        -0.336336443177748,
+        1.350000087205376
+      ],
+      [
+        -2.0901333466571812e-17,
+        -0.336336443177748,
+        -0.9417419097674724,
+        1.8000001112620214
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "resolution": [
+      640,
+      480
+    ],
+    "frequency_hz": 15,
+    "aruco_dictionary": "DICT_4X4_50",
+    "aruco_marker_id": 23,
+    "aruco_marker_size_m": 0.105,
+    "cube_size_m": 0.15,
+    "marker_surface_offset_m": 0.0085,
+    "ground_truth_source": "Isaac Sim PhysX Cube.get_world_pose at exposure time",
+    "camera_source": "RGB + ArUco + solvePnP + fixed camera calibration only",
+    "camera_uses_cube_truth": false,
+    "control_state_source": "unchanged Isaac Sim state",
+    "pairing": "nearest 120 Hz reference within half a physics step; duplicate images excluded",
+    "distortion": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "hardware_calibration_validated": false
+  },
+  "units": {
+    "positions": "m",
+    "errors": "m",
+    "detection_rate": "fraction"
+  },
+  "overall": {
+    "attempts": 1169,
+    "camera_detections": 725,
+    "matched": 725,
+    "misses": 444,
+    "unpaired": 0,
+    "detection_rate": 0.6201881950384944,
+    "status_counts": {
+      "no_frame": 2,
+      "marker_not_visible": 442,
+      "detected": 725
+    },
+    "xyz_bias_m": [
+      0.0023277733212014014,
+      -0.015502075422825234,
+      -0.02105810628507232
+    ],
+    "xyz_mae_m": [
+      0.0026464433965277556,
+      0.015508917079659783,
+      0.02217269858412348
+    ],
+    "euclidean_mean_m": 0.028935445097936115,
+    "euclidean_median_m": 0.021395122351282405,
+    "euclidean_rmse_m": 0.034760507235944885,
+    "euclidean_p95_m": 0.05694653209466368,
+    "euclidean_max_m": 0.13593707025204635
+  },
+  "by_phase": {
+    "initialization": {
+      "attempts": 15,
+      "camera_detections": 0,
+      "matched": 0,
+      "misses": 15,
+      "unpaired": 0,
+      "detection_rate": 0.0,
+      "status_counts": {
+        "no_frame": 2,
+        "marker_not_visible": 13
+      },
+      "xyz_bias_m": null,
+      "xyz_mae_m": null,
+      "euclidean_mean_m": null,
+      "euclidean_median_m": null,
+      "euclidean_rmse_m": null,
+      "euclidean_p95_m": null,
+      "euclidean_max_m": null
+    },
+    "A_approach_transit": {
+      "attempts": 110,
+      "camera_detections": 0,
+      "matched": 0,
+      "misses": 110,
+      "unpaired": 0,
+      "detection_rate": 0.0,
+      "status_counts": {
+        "marker_not_visible": 110
+      },
+      "xyz_bias_m": null,
+      "xyz_mae_m": null,
+      "euclidean_mean_m": null,
+      "euclidean_median_m": null,
+      "euclidean_rmse_m": null,
+      "euclidean_p95_m": null,
+      "euclidean_max_m": null
+    },
+    "A_approach_transit_transit": {
+      "attempts": 37,
+      "camera_detections": 0,
+      "matched": 0,
+      "misses": 37,
+      "unpaired": 0,
+      "detection_rate": 0.0,
+      "status_counts": {
+        "marker_not_visible": 37
+      },
+      "xyz_bias_m": null,
+      "xyz_mae_m": null,
+      "euclidean_mean_m": null,
+      "euclidean_median_m": null,
+      "euclidean_rmse_m": null,
+      "euclidean_p95_m": null,
+      "euclidean_max_m": null
+    },
+    "A_transfer": {
+      "attempts": 310,
+      "camera_detections": 120,
+      "matched": 120,
+      "misses": 190,
+      "unpaired": 0,
+      "detection_rate": 0.3870967741935484,
+      "status_counts": {
+        "marker_not_visible": 190,
+        "detected": 120
+      },
+      "xyz_bias_m": [
+        0.0018458606853299438,
+        -0.030851049163282643,
+        -0.022171570878759022
+      ],
+      "xyz_mae_m": [
+        0.002006351383211264,
+        0.030851049163282643,
+        0.025251769741398762
+      ],
+      "euclidean_mean_m": 0.040705313230975634,
+      "euclidean_median_m": 0.03798390366849893,
+      "euclidean_rmse_m": 0.046505212468728026,
+      "euclidean_p95_m": 0.07470048566298573,
+      "euclidean_max_m": 0.13331528726594097
+    },
+    "A_lift": {
+      "attempts": 22,
+      "camera_detections": 0,
+      "matched": 0,
+      "misses": 22,
+      "unpaired": 0,
+      "detection_rate": 0.0,
+      "status_counts": {
+        "marker_not_visible": 22
+      },
+      "xyz_bias_m": null,
+      "xyz_mae_m": null,
+      "euclidean_mean_m": null,
+      "euclidean_median_m": null,
+      "euclidean_rmse_m": null,
+      "euclidean_p95_m": null,
+      "euclidean_max_m": null
+    },
+    "A_over_front": {
+      "attempts": 23,
+      "camera_detections": 0,
+      "matched": 0,
+      "misses": 23,
+      "unpaired": 0,
+      "detection_rate": 0.0,
+      "status_counts": {
+        "marker_not_visible": 23
+      },
+      "xyz_bias_m": null,
+      "xyz_mae_m": null,
+      "euclidean_mean_m": null,
+      "euclidean_median_m": null,
+      "euclidean_rmse_m": null,
+      "euclidean_p95_m": null,
+      "euclidean_max_m": null
+    },
+    "A_landing": {
+      "attempts": 15,
+      "camera_detections": 15,
+      "matched": 15,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 15
+      },
+      "xyz_bias_m": [
+        0.002890978380187051,
+        -0.036441321870259585,
+        -0.0149805224808357
+      ],
+      "xyz_mae_m": [
+        0.0030002354524434763,
+        0.036441321870259585,
+        0.02132858347245364
+      ],
+      "euclidean_mean_m": 0.04782880349777086,
+      "euclidean_median_m": 0.02970642691548323,
+      "euclidean_rmse_m": 0.05839481950489634,
+      "euclidean_p95_m": 0.10209887252599972,
+      "euclidean_max_m": 0.10235353521732567
+    },
+    "A_landing_transit": {
+      "attempts": 21,
+      "camera_detections": 21,
+      "matched": 21,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 21
+      },
+      "xyz_bias_m": [
+        0.0013407517601727865,
+        -0.0215369694711411,
+        -0.026037221493527933
+      ],
+      "xyz_mae_m": [
+        0.0022289938171871455,
+        0.0215369694711411,
+        0.026037221493527933
+      ],
+      "euclidean_mean_m": 0.0358251158006134,
+      "euclidean_median_m": 0.029278061678993786,
+      "euclidean_rmse_m": 0.04195411025328881,
+      "euclidean_p95_m": 0.06781081915164446,
+      "euclidean_max_m": 0.10941854155099456
+    },
+    "B1_contact_transit": {
+      "attempts": 209,
+      "camera_detections": 162,
+      "matched": 162,
+      "misses": 47,
+      "unpaired": 0,
+      "detection_rate": 0.7751196172248804,
+      "status_counts": {
+        "detected": 162,
+        "marker_not_visible": 47
+      },
+      "xyz_bias_m": [
+        2.2562499383792858e-05,
+        -0.020721913336157662,
+        -0.022821360380398434
+      ],
+      "xyz_mae_m": [
+        0.001152975717383827,
+        0.020752531862114742,
+        0.024538901970450742
+      ],
+      "euclidean_mean_m": 0.03363684526594216,
+      "euclidean_median_m": 0.0285011149067189,
+      "euclidean_rmse_m": 0.040409490003241955,
+      "euclidean_p95_m": 0.05556466523166179,
+      "euclidean_max_m": 0.13593707025204635
+    },
+    "B1": {
+      "attempts": 73,
+      "camera_detections": 73,
+      "matched": 73,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 73
+      },
+      "xyz_bias_m": [
+        0.002629080766273848,
+        -0.022134733759914538,
+        -0.03140475746413857
+      ],
+      "xyz_mae_m": [
+        0.0027435744685847274,
+        0.022134733759914538,
+        0.032295071174173906
+      ],
+      "euclidean_mean_m": 0.04097682668401283,
+      "euclidean_median_m": 0.036850302299518294,
+      "euclidean_rmse_m": 0.04475689164547153,
+      "euclidean_p95_m": 0.07637008645284184,
+      "euclidean_max_m": 0.10443712563278204
+    },
+    "B2_acquire": {
+      "attempts": 334,
+      "camera_detections": 334,
+      "matched": 334,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 334
+      },
+      "xyz_bias_m": [
+        0.003589921832715039,
+        -0.004686218772680272,
+        -0.017501321515398398
+      ],
+      "xyz_mae_m": [
+        0.003589921832715039,
+        0.004686218772680272,
+        0.017501321515398398
+      ],
+      "euclidean_mean_m": 0.018512944140693398,
+      "euclidean_median_m": 0.018360005122994447,
+      "euclidean_rmse_m": 0.018764653764974146,
+      "euclidean_p95_m": 0.02473787276404072,
+      "euclidean_max_m": 0.028534359384799656
+    }
+  },
+  "by_stage": {
+    "Setup": {
+      "attempts": 15,
+      "camera_detections": 0,
+      "matched": 0,
+      "misses": 15,
+      "unpaired": 0,
+      "detection_rate": 0.0,
+      "status_counts": {
+        "no_frame": 2,
+        "marker_not_visible": 13
+      },
+      "xyz_bias_m": null,
+      "xyz_mae_m": null,
+      "euclidean_mean_m": null,
+      "euclidean_median_m": null,
+      "euclidean_rmse_m": null,
+      "euclidean_p95_m": null,
+      "euclidean_max_m": null
+    },
+    "A": {
+      "attempts": 538,
+      "camera_detections": 156,
+      "matched": 156,
+      "misses": 382,
+      "unpaired": 0,
+      "detection_rate": 0.2899628252788104,
+      "status_counts": {
+        "marker_not_visible": 382,
+        "detected": 156
+      },
+      "xyz_bias_m": [
+        0.0018783573391412019,
+        -0.030134756965011382,
+        -0.022000499961716068
+      ],
+      "xyz_mae_m": [
+        0.0021318882559803456,
+        0.030134756965011382,
+        0.024980274182171434
+      ],
+      "euclidean_mean_m": 0.04073331456408026,
+      "euclidean_median_m": 0.03664787379928739,
+      "euclidean_rmse_m": 0.04720662391703838,
+      "euclidean_p95_m": 0.10208068233376216,
+      "euclidean_max_m": 0.13331528726594097
+    },
+    "B1": {
+      "attempts": 282,
+      "camera_detections": 235,
+      "matched": 235,
+      "misses": 47,
+      "unpaired": 0,
+      "detection_rate": 0.8333333333333334,
+      "status_counts": {
+        "detected": 235,
+        "marker_not_visible": 47
+      },
+      "xyz_bias_m": [
+        0.0008322468971836824,
+        -0.021160789467792766,
+        -0.02548769224045388
+      ],
+      "xyz_mae_m": [
+        0.0016470766060547445,
+        0.021181896706963185,
+        0.026948265169905172
+      ],
+      "euclidean_mean_m": 0.035916924600066236,
+      "euclidean_median_m": 0.031577176431115475,
+      "euclidean_rmse_m": 0.04180839005022129,
+      "euclidean_p95_m": 0.07571002025487598,
+      "euclidean_max_m": 0.13593707025204635
+    },
+    "B2": {
+      "attempts": 334,
+      "camera_detections": 334,
+      "matched": 334,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 334
+      },
+      "xyz_bias_m": [
+        0.003589921832715039,
+        -0.004686218772680272,
+        -0.017501321515398398
+      ],
+      "xyz_mae_m": [
+        0.003589921832715039,
+        0.004686218772680272,
+        0.017501321515398398
+      ],
+      "euclidean_mean_m": 0.018512944140693398,
+      "euclidean_median_m": 0.018360005122994447,
+      "euclidean_rmse_m": 0.018764653764974146,
+      "euclidean_p95_m": 0.02473787276404072,
+      "euclidean_max_m": 0.028534359384799656
+    }
+  }
+}

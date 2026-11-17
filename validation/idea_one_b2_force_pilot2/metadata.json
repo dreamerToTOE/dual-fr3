@@ -1,0 +1,130 @@
+{
+  "schema_version": 2,
+  "scene_id": "dual_fr3_four_wall_150mm_5goal",
+  "frequency_hz": 120,
+  "channels": [
+    "Fx",
+    "Fy",
+    "Fz",
+    "Tx",
+    "Ty",
+    "Tz"
+  ],
+  "units": [
+    "N",
+    "N",
+    "N",
+    "N m",
+    "N m",
+    "N m"
+  ],
+  "source": "PhysX articulation link incoming fixed-joint reaction",
+  "local_frame": "child joint frame at flange origin; localPos1=0, localRot1=identity",
+  "raw_sign": "parent-on-tool",
+  "residual_sign": "tool-on-sensor",
+  "gravity_correction": "residual = -raw - tool_gravity; no payload gravity subtraction",
+  "tcp_offset_sensor_m": {
+    "left": [
+      0.0,
+      -0.155,
+      0.08
+    ],
+    "right": [
+      0.0,
+      0.155,
+      0.08
+    ]
+  },
+  "tcp_conversion": "F_TCP=F_sensor; torque_TCP=torque_sensor-cross(sensor_to_TCP,F_sensor)",
+  "tcp_local_axes": "parallel to sensor axes; origin translated to nominal suction-face center",
+  "world_wrench_origins": "sensor fields at sensor origin; tcp fields at TCP origin; neither at world origin",
+  "tcp_position_source": "same-step sensor pose plus fixed tool geometry, no Cube truth",
+  "dynamic_compensation": false,
+  "sensor_noise_model": "ideal PhysX reaction, no added noise/latency",
+  "phase_is_evaluation_context_only": true,
+  "cube_truth_used_in_sensor": false,
+  "tool_parameters": {
+    "left": {
+      "mass_kg": 0.3,
+      "center_of_mass_m": [
+        0.0,
+        -0.06,
+        0.055
+      ],
+      "diagonal_inertia_kg_m2": [
+        0.0015,
+        0.0007,
+        0.0012
+      ]
+    },
+    "right": {
+      "mass_kg": 0.3,
+      "center_of_mass_m": [
+        0.0,
+        0.06,
+        0.055
+      ],
+      "diagonal_inertia_kg_m2": [
+        0.0015,
+        0.0007,
+        0.0012
+      ]
+    }
+  },
+  "cube_mass_kg_reference": 1.25,
+  "gravity_world_m_s2": [
+    0.0,
+    0.0,
+    -9.81
+  ],
+  "link_indices": {
+    "left": 10,
+    "right": 10
+  },
+  "rail_transfer_note": "articulation base teleport; transients are not inertial calibration data",
+  "b2_force_control_validation": {
+    "held_phases": [
+      "B2_hold",
+      "B2_lift_from_measured_state",
+      "B2_lift_from_measured_state_transit",
+      "B2_rail_transfer",
+      "B2_descent",
+      "B2_suction_plane_approach",
+      "B2_push",
+      "B2_right_seat",
+      "B2_right_unload",
+      "B2_right_retreat",
+      "B2_right_release"
+    ],
+    "release_phases": {
+      "right": [
+        "B2_right_retreat"
+      ],
+      "left": [
+        "B2_left_retreat"
+      ]
+    },
+    "normal_force_min_N": 0.1,
+    "normal_force_max_N": 6.0,
+    "min_contact_coverage": 0.98,
+    "max_dropout_s": 0.05,
+    "max_force_N": 10.0,
+    "max_tcp_torque_Nm": 1.0,
+    "max_inward_m": 2e-05,
+    "minimum_retreat_m": 0.03
+  },
+  "b2_controller": {
+    "type": "absolute_normal_position_admittance_with_Cartesian_position_tracking",
+    "left_target_force_N": 2.0,
+    "gain_m_per_Ns": 1e-06,
+    "normal_position_speed_limit_m_s": 5e-05,
+    "overload_limit_N": 10.0,
+    "seating_guard_uses_existing_simulation_Cube_state": true,
+    "release": "force ramp to zero, then straight outward Cartesian motion"
+  },
+  "calibration_passed": true,
+  "calibration_report": "validation/idea_one_wrist_ft_load_check.json",
+  "tcp_calibration_passed": true,
+  "tcp_calibration_report": "validation/idea_one_tcp_wrist_ft_load_check.json",
+  "task_status": "STOPPED"
+}

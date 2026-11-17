@@ -108,6 +108,10 @@ def plan_joint_trajectory(
     if len(q) > 2 and not stop_at_waypoints:
         velocities[1:-1] = (q[2:] - q[:-2]) / (knot_times[2:, None] - knot_times[:-2, None])
         velocities[1:-1] = np.clip(velocities[1:-1], -max_joint_speed, max_joint_speed)
+        # A duplicate knot is a hold, not a spline tangent that reverses into contact.
+        stationary = np.flatnonzero(displacement <= 1e-12)
+        velocities[stationary] = 0.0
+        velocities[stationary + 1] = 0.0
 
     sample_count = max(2, int(np.ceil(knot_times[-1] * sample_hz)) + 1)
     times = np.linspace(0.0, knot_times[-1], sample_count)

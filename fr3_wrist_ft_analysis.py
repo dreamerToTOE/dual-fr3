@@ -35,7 +35,7 @@ def _valid_side(row, side, shapes=SHAPES):
 
 
 def _tcp_transform_validation(rows, metadata):
-    if metadata.get("schema_version", 1) != 2:
+    if metadata.get("schema_version", 1) not in (2, 3):
         return {"status": "UNVERIFIED", "reason": "legacy recording has no required TCP feedback"}
     limits = {
         "force_local_N": 1e-9, "force_world_N": 1e-9,
@@ -164,6 +164,121 @@ def _direction(rows, phase, side, component, sign):
             "window_basis": "middle 60 percent of joint-moving samples"}
 
 
+def _b2_force_control_validation(rows, metadata):
+    """Check declared contact windows without filtering on motion or force."""
+    cfg = metadata.get("b2_force_control_validation")
+    if cfg is None:
+        return {"status": "UNVERIFIED", "reason": "legacy run has no force-control acceptance contract"}
+    result = {"status": "FAIL", "held_phases": {}, "releases": {}, "phase_peaks": {}}
+    try:
+        held = cfg["held_phases"]
+        releases = {side: cfg["release_phases"][side] for side in SIDES}
+        limits = {name: float(cfg[name]) for name in (
+            "normal_force_min_N", "normal_force_max_N", "min_contact_coverage", "max_dropout_s",
+            "max_force_N", "max_tcp_torque_Nm", "max_inward_m", "minimum_retreat_m")}
+        if (not isinstance(held, (list, tuple)) or not held or "B2_push" not in held
+                or not all(isinstance(p, str) for p in held)
+                or any(not isinstance(phases, (list, tuple)) or not phases
+                       or not all(isinstance(p, str) for p in phases) for phases in releases.values())
+                or not all(np.isfinite(value) for value in limits.values())
+                or not 0 < limits["normal_force_min_N"] < limits["normal_force_max_N"]
+                or not 0 < limits["min_contact_coverage"] <= 1
+                or any(limits[name] < 0 for name in ("max_dropout_s", "max_inward_m"))
+                or any(limits[name] <= 0 for name in ("max_force_N", "max_tcp_torque_Nm", "minimum_retreat_m"))):
+            raise ValueError("invalid acceptance contract")
+    except (KeyError, TypeError, ValueError):
+        return {**result, "reason": "invalid force-control acceptance contract"}
+    result.update(limits=limits, release_phases=releases)
+    phases = set(row.get("phase") for row in rows)
+    required = {"B2_push"} | set(phase for names in releases.values() for phase in names)
+    result["missing_required_phases"] = sorted(required - phases)
+
+    def valid(selected, side):
+        return bool(selected) and all(_valid_side(row, side) and _valid_side(row, side, TCP_SHAPES)
+                                      for row in selected)
+
+    def peaks(selected, side):
+        force = np.asarray([row[side]["gravity_corrected_world"][:3] for row in selected])
+        torque = np.asarray([row[side]["tcp_gravity_corrected_world"][3:] for row in selected])
+        return {"samples": len(selected),
+                "force_norm_p95_N": float(np.percentile(np.linalg.norm(force, axis=1), 95)),
+                "force_norm_max_N": float(np.max(np.linalg.norm(force, axis=1))),
+                "tcp_torque_norm_p95_Nm": float(np.percentile(np.linalg.norm(torque, axis=1), 95)),
+                "tcp_torque_norm_max_Nm": float(np.max(np.linalg.norm(torque, axis=1)))}
+
+    for name in dict.fromkeys(row.get("phase", "") for row in rows if str(row.get("phase", "")).startswith("B2")):
+        selected = [row for row in rows if row.get("phase") == name]
+        result["phase_peaks"][name] = {}
+        for side in SIDES:
+            if not valid(selected, side):
+                result["phase_peaks"][name][side] = {"status": "FAIL", "reason": "invalid force/TCP feedback"}
+                continue
+            metrics = peaks(selected, side)
+            metrics["status"] = ("PASS" if metrics["force_norm_max_N"] <= limits["max_force_N"]
+                                  and metrics["tcp_torque_norm_max_Nm"] <= limits["max_tcp_torque_Nm"] else "FAIL")
+            result["phase_peaks"][name][side] = metrics
+    for name in held:
+        selected = [row for row in rows if row.get("phase") == name]
+        if not selected:
+            continue
+        if not valid(selected, "left"):
+            result["held_phases"][name] = {"status": "FAIL", "reason": "invalid support feedback"}
+            continue
+        normal = -np.asarray([row["left"]["gravity_corrected_world"][1] for row in selected])
+        contact = normal > limits["normal_force_min_N"]
+        in_band = contact & (normal <= limits["normal_force_max_N"])
+        run, longest, previous = 0, 0, None
+        for row, touching in zip(selected, contact):
+            if previous is not None and row["physics_step"] != previous + 1:
+                run = 0
+            run = 0 if touching else run + 1
+            longest = max(longest, run)
+            previous = row["physics_step"]
+        coverage, band_coverage = float(np.mean(contact)), float(np.mean(in_band))
+        metrics = {
+            **peaks(selected, "left"), "normal_force_min_observed_N": float(np.min(normal)),
+            "normal_force_median_N": float(np.median(normal)), "normal_force_max_observed_N": float(np.max(normal)),
+            "contact_coverage": coverage, "normal_force_in_band_proportion": band_coverage,
+            "longest_contact_dropout_s": longest / 120,
+            "window_basis": "all declared held samples; no qdot filter or phase trimming",
+        }
+        metrics["status"] = ("PASS" if coverage >= limits["min_contact_coverage"]
+                              and band_coverage >= limits["min_contact_coverage"]
+                              and metrics["longest_contact_dropout_s"] <= limits["max_dropout_s"] else "FAIL")
+        result["held_phases"][name] = metrics
+    for side, names in releases.items():
+        indices = [index for index, row in enumerate(rows) if row.get("phase") in names]
+        selected = [rows[index] for index in indices]
+        if (not indices or indices[0] == 0 or not valid(selected, side)
+                or not _valid_side(rows[indices[0] - 1], side, TCP_SHAPES)):
+            result["releases"][side] = {"status": "FAIL", "reason": "missing release data or preceding TCP reference"}
+            continue
+        origin = np.asarray(rows[indices[0] - 1][side]["tcp_position_m"])
+        direction = np.array([1., 0., 0.]) if side == "right" else np.array([0., -1., 0.])
+        positions = np.asarray([row[side]["tcp_position_m"] for row in selected])
+        outward = np.r_[0., (positions - origin) @ direction]
+        metrics = {
+            **peaks(selected, side), "phases": names,
+            "reference_physics_step": rows[indices[0] - 1]["physics_step"],
+            "outward_direction_world": direction.tolist(),
+            "final_outward_distance_m": float(outward[-1]),
+            "maximum_inward_excursion_m": float(max(0., -np.min(outward))),
+            "maximum_backtrack_m": float(np.max(np.maximum.accumulate(outward) - outward)),
+        }
+        metrics["status"] = ("PASS" if metrics["final_outward_distance_m"] >= limits["minimum_retreat_m"]
+                              and metrics["maximum_inward_excursion_m"] <= limits["max_inward_m"]
+                              and metrics["maximum_backtrack_m"] <= limits["max_inward_m"]
+                              and metrics["force_norm_max_N"] <= limits["max_force_N"]
+                              and metrics["tcp_torque_norm_max_Nm"] <= limits["max_tcp_torque_Nm"] else "FAIL")
+        result["releases"][side] = metrics
+    if (not result["missing_required_phases"] and result["held_phases"]
+            and all(item["status"] == "PASS" for item in result["held_phases"].values())
+            and all(item["status"] == "PASS" for item in result["releases"].values())
+            and all(item["status"] == "PASS" for phase in result["phase_peaks"].values() for item in phase.values())):
+        result["status"] = "PASS"
+    return result
+
+
 def analyze(rows, metadata=None):
     """Return strict finite-data checks, phase statistics and independent load checks."""
     rows, metadata = list(rows), metadata or {}
@@ -187,6 +302,7 @@ def analyze(rows, metadata=None):
     finite = bool(rows and all(count == len(rows) for count in valid_counts.values())
                   and not invalid_clock)
     tcp_validation = _tcp_transform_validation(rows, metadata)
+    b2_validation = _b2_force_control_validation(rows, metadata)
     finite = finite and tcp_validation.get("all_fields_finite", True)
     result = {
         "units": {"force": "N", "torque": "N m", "time": "s", "position": "m"},
@@ -200,6 +316,7 @@ def analyze(rows, metadata=None):
                                "FAIL" if metadata.get("calibration_passed") is False else "UNVERIFIED"),
         "full_flow_status": metadata.get("task_status", "UNVERIFIED"),
         "tcp_transform_validation": tcp_validation,
+        "b2_force_control_validation": b2_validation,
         "tcp_physical_calibration_status": (
             "PASS" if metadata.get("tcp_calibration_passed") is True else
             "FAIL" if metadata.get("tcp_calibration_passed") is False else "UNVERIFIED"),
@@ -259,6 +376,8 @@ def analyze(rows, metadata=None):
     support = acceptance["B2_left_support"]
     result["support_task_issue"] = support["status"] in (
         "NO_SUSTAINED_FORCE", "DIRECTION_MISMATCH", "INTERMITTENT_FORCE")
+    result["support_task_issue"] |= any(item["status"] == "FAIL"
+                                        for item in b2_validation.get("held_phases", {}).values())
     transfer = [row for row in rows if row.get("phase") == "A_transfer"
                 and all(_valid_side(row, side) for side in SIDES)]
     result["A_attachment_internal_load"] = {"status": "UNVERIFIED", "samples": len(transfer)}
@@ -278,8 +397,10 @@ def analyze(rows, metadata=None):
         }
     result["release_transients"] = {}
     result["release_task_issue"] = False
-    for side, phase in (("right", "B2_push_transit"), ("left", "B2_push_transit_transit")):
-        selected = [row for row in rows if row.get("phase") == phase and _valid_side(row, side)]
+    release_names = b2_validation.get("release_phases", {
+        "right": ["B2_push_transit"], "left": ["B2_push_transit_transit"]})
+    for side, names in release_names.items():
+        selected = [row for row in rows if row.get("phase") in names and _valid_side(row, side)]
         if not selected:
             continue
         wrenches = np.asarray([row[side]["gravity_corrected_world"] for row in selected])
@@ -289,7 +410,7 @@ def analyze(rows, metadata=None):
             "gravity_corrected_world", {}).get("force_norm_p95_N", 0.0)
         review = bool(norms[index] > max(10.0, 10 * push_p95))
         result["release_transients"][side] = {
-            "phase": phase, "peak_force_N": float(norms[index]),
+            "phase": " + ".join(names), "peak_force_N": float(norms[index]),
             "peak_wrench_world": wrenches[index].tolist(),
             "peak_time_s": selected[index]["time_s"],
             "peak_physics_step": selected[index]["physics_step"],
@@ -297,19 +418,22 @@ def analyze(rows, metadata=None):
             "review_rule": "peak > max(10 N, 10 * push P95); screening heuristic, not a safety rating",
         }
         result["release_task_issue"] |= review
+    result["release_task_issue"] |= any(item["status"] == "FAIL"
+                                        for item in b2_validation.get("releases", {}).values())
     checks = [value["status"] for name, value in acceptance.items() if name != "B2_left_support"]
     if not finite or not monotonic or not clock_120hz or tcp_validation["status"] == "FAIL":
         result["status"] = "INVALID_DATA"
     elif ("FAIL" in checks or "DIRECTION_MISMATCH" in checks or result["calibration_status"] == "FAIL"
-          or metadata.get("schema_version") == 2 and result["tcp_physical_calibration_status"] == "FAIL"):
+          or metadata.get("schema_version") in (2, 3) and result["tcp_physical_calibration_status"] == "FAIL"):
         result["status"] = "SENSOR_CHECKS_FAILED"
     elif ("UNVERIFIED" in checks or "NO_SUSTAINED_FORCE" in checks or "INTERMITTENT_FORCE" in checks
           or result["calibration_status"] != "PASS"
-          or metadata.get("schema_version") == 2 and result["tcp_physical_calibration_status"] != "PASS"
+          or metadata.get("schema_version") in (2, 3) and result["tcp_physical_calibration_status"] != "PASS"
           or result["full_flow_status"] != "PASS_B1_B2_PROXY_CONTACT"):
         result["status"] = "INCOMPLETE"
     else:
-        result["status"] = ("PASS_FORCE_FEEDBACK_WITH_TASK_WARNINGS" if result["release_task_issue"] else
+        result["status"] = ("PASS_FORCE_FEEDBACK_WITH_TASK_WARNINGS" if result["release_task_issue"]
+                            or b2_validation["status"] == "FAIL" else
                             "PASS_FORCE_FEEDBACK_WITH_SUPPORT_WARNING" if result["support_task_issue"] else
                             "PASS_FORCE_FEEDBACK")
     result["limitations"] = [
@@ -400,7 +524,7 @@ def write_analysis(directory):
     contact_rows = [row for row in rows if str(row.get("phase", "")).startswith("B")]
     if contact_rows:
         plot_wrenches(contact_rows, directory / "wrench_contact.png")
-    if metadata.get("schema_version") == 2:
+    if metadata.get("schema_version") in (2, 3):
         plot_tcp_torques(rows, directory / "tcp_wrench.png")
     return summary
 
@@ -411,6 +535,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
     summary = write_analysis(args.directory)
     print(json.dumps({"status": summary["status"], "samples": summary["samples"],
+                      "b2_force_control_validation": {key: value for key, value in
+                                                      summary["b2_force_control_validation"].items()
+                                                      if key != "phase_peaks"},
                       "tcp_physical_calibration_status": summary["tcp_physical_calibration_status"],
                       "tcp_transform_validation": {key: value for key, value in
                                                    summary["tcp_transform_validation"].items() if key != "by_phase"},

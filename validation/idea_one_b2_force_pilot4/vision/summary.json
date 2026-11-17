@@ -1,0 +1,798 @@
+{
+  "metadata": {
+    "scene_id": "dual_fr3_four_wall_150mm_5goal",
+    "camera_model": "Intel RealSense D455",
+    "execution_mode": "headless",
+    "simulation_time_origin_s": 0.01666666753590107,
+    "camera_mode": "d455_calibrated_pinhole_fallback",
+    "camera_matrix": [
+      [
+        317.0431213378906,
+        0.0,
+        320.0
+      ],
+      [
+        0.0,
+        317.0431213378906,
+        240.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "camera_to_world_ros": [
+      [
+        -1.0,
+        1.2066786629992418e-16,
+        -2.0901333466571815e-17,
+        -2.390550627242559e-24
+      ],
+      [
+        1.2066786629992418e-16,
+        0.9417419097674722,
+        -0.336336443177748,
+        1.350000087205376
+      ],
+      [
+        -2.0901333466571812e-17,
+        -0.336336443177748,
+        -0.9417419097674724,
+        1.8000001112620214
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "resolution": [
+      640,
+      480
+    ],
+    "frequency_hz": 15,
+    "aruco_dictionary": "DICT_4X4_50",
+    "aruco_marker_id": 23,
+    "aruco_marker_size_m": 0.105,
+    "cube_size_m": 0.15,
+    "marker_surface_offset_m": 0.0085,
+    "ground_truth_source": "Isaac Sim PhysX Cube.get_world_pose at exposure time",
+    "camera_source": "RGB + ArUco + solvePnP + fixed camera calibration only",
+    "camera_uses_cube_truth": false,
+    "control_state_source": "unchanged Isaac Sim state",
+    "pairing": "nearest 120 Hz reference within half a physics step; duplicate images excluded",
+    "distortion": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "hardware_calibration_validated": false
+  },
+  "units": {
+    "positions": "m",
+    "errors": "m",
+    "detection_rate": "fraction"
+  },
+  "overall": {
+    "attempts": 1682,
+    "camera_detections": 1239,
+    "matched": 1239,
+    "misses": 443,
+    "unpaired": 0,
+    "detection_rate": 0.7366230677764566,
+    "status_counts": {
+      "no_frame": 2,
+      "marker_not_visible": 441,
+      "detected": 1239
+    },
+    "xyz_bias_m": [
+      0.0016327667218222362,
+      -0.012207702425663169,
+      -0.02012137571724655
+    ],
+    "xyz_mae_m": [
+      0.002528936968425754,
+      0.012219864795268839,
+      0.020865969864773726
+    ],
+    "euclidean_mean_m": 0.025798497318325255,
+    "euclidean_median_m": 0.019955131237511015,
+    "euclidean_rmse_m": 0.030976776002920238,
+    "euclidean_p95_m": 0.0537191767508635,
+    "euclidean_max_m": 0.13586593188419313
+  },
+  "by_phase": {
+    "initialization": {
+      "attempts": 15,
+      "camera_detections": 0,
+      "matched": 0,
+      "misses": 15,
+      "unpaired": 0,
+      "detection_rate": 0.0,
+      "status_counts": {
+        "no_frame": 2,
+        "marker_not_visible": 13
+      },
+      "xyz_bias_m": null,
+      "xyz_mae_m": null,
+      "euclidean_mean_m": null,
+      "euclidean_median_m": null,
+      "euclidean_rmse_m": null,
+      "euclidean_p95_m": null,
+      "euclidean_max_m": null
+    },
+    "A_approach_transit": {
+      "attempts": 110,
+      "camera_detections": 0,
+      "matched": 0,
+      "misses": 110,
+      "unpaired": 0,
+      "detection_rate": 0.0,
+      "status_counts": {
+        "marker_not_visible": 110
+      },
+      "xyz_bias_m": null,
+      "xyz_mae_m": null,
+      "euclidean_mean_m": null,
+      "euclidean_median_m": null,
+      "euclidean_rmse_m": null,
+      "euclidean_p95_m": null,
+      "euclidean_max_m": null
+    },
+    "A_approach_transit_transit": {
+      "attempts": 37,
+      "camera_detections": 0,
+      "matched": 0,
+      "misses": 37,
+      "unpaired": 0,
+      "detection_rate": 0.0,
+      "status_counts": {
+        "marker_not_visible": 37
+      },
+      "xyz_bias_m": null,
+      "xyz_mae_m": null,
+      "euclidean_mean_m": null,
+      "euclidean_median_m": null,
+      "euclidean_rmse_m": null,
+      "euclidean_p95_m": null,
+      "euclidean_max_m": null
+    },
+    "A_transfer": {
+      "attempts": 310,
+      "camera_detections": 120,
+      "matched": 120,
+      "misses": 190,
+      "unpaired": 0,
+      "detection_rate": 0.3870967741935484,
+      "status_counts": {
+        "marker_not_visible": 190,
+        "detected": 120
+      },
+      "xyz_bias_m": [
+        0.0017139069376529462,
+        -0.031239649108654333,
+        -0.02149688470593909
+      ],
+      "xyz_mae_m": [
+        0.001854219049958848,
+        0.031239649108654333,
+        0.024998559425754033
+      ],
+      "euclidean_mean_m": 0.040905031807106355,
+      "euclidean_median_m": 0.037869370081412765,
+      "euclidean_rmse_m": 0.04670457987980442,
+      "euclidean_p95_m": 0.09179075193409421,
+      "euclidean_max_m": 0.13310113264240803
+    },
+    "A_lift": {
+      "attempts": 22,
+      "camera_detections": 0,
+      "matched": 0,
+      "misses": 22,
+      "unpaired": 0,
+      "detection_rate": 0.0,
+      "status_counts": {
+        "marker_not_visible": 22
+      },
+      "xyz_bias_m": null,
+      "xyz_mae_m": null,
+      "euclidean_mean_m": null,
+      "euclidean_median_m": null,
+      "euclidean_rmse_m": null,
+      "euclidean_p95_m": null,
+      "euclidean_max_m": null
+    },
+    "A_over_front": {
+      "attempts": 23,
+      "camera_detections": 0,
+      "matched": 0,
+      "misses": 23,
+      "unpaired": 0,
+      "detection_rate": 0.0,
+      "status_counts": {
+        "marker_not_visible": 23
+      },
+      "xyz_bias_m": null,
+      "xyz_mae_m": null,
+      "euclidean_mean_m": null,
+      "euclidean_median_m": null,
+      "euclidean_rmse_m": null,
+      "euclidean_p95_m": null,
+      "euclidean_max_m": null
+    },
+    "A_landing": {
+      "attempts": 15,
+      "camera_detections": 15,
+      "matched": 15,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 15
+      },
+      "xyz_bias_m": [
+        0.0023037428620127807,
+        -0.043525430556894444,
+        -0.014098115569365754
+      ],
+      "xyz_mae_m": [
+        0.0024113281912005115,
+        0.043525430556894444,
+        0.02098735366924087
+      ],
+      "euclidean_mean_m": 0.054213004722588116,
+      "euclidean_median_m": 0.03768303246178836,
+      "euclidean_rmse_m": 0.06454597090994399,
+      "euclidean_p95_m": 0.10243703670340791,
+      "euclidean_max_m": 0.10289104987850847
+    },
+    "A_landing_transit": {
+      "attempts": 21,
+      "camera_detections": 21,
+      "matched": 21,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 21
+      },
+      "xyz_bias_m": [
+        0.0010979306952638064,
+        -0.02302098936030964,
+        -0.02064452011133983
+      ],
+      "xyz_mae_m": [
+        0.0018674707137246059,
+        0.02302098936030964,
+        0.023878017424120383
+      ],
+      "euclidean_mean_m": 0.03578050590849686,
+      "euclidean_median_m": 0.02598415106600187,
+      "euclidean_rmse_m": 0.04330655220102317,
+      "euclidean_p95_m": 0.0987766060737829,
+      "euclidean_max_m": 0.10125325261781568
+    },
+    "B1_contact_transit": {
+      "attempts": 209,
+      "camera_detections": 163,
+      "matched": 163,
+      "misses": 46,
+      "unpaired": 0,
+      "detection_rate": 0.7799043062200957,
+      "status_counts": {
+        "detected": 163,
+        "marker_not_visible": 46
+      },
+      "xyz_bias_m": [
+        4.329849448441364e-05,
+        -0.02147376340201019,
+        -0.023744573539559354
+      ],
+      "xyz_mae_m": [
+        0.001237210020014001,
+        0.021552970122383486,
+        0.025377199030906412
+      ],
+      "euclidean_mean_m": 0.034789309615345564,
+      "euclidean_median_m": 0.029429107902813077,
+      "euclidean_rmse_m": 0.04154347369523675,
+      "euclidean_p95_m": 0.060748661120335626,
+      "euclidean_max_m": 0.13586593188419313
+    },
+    "B1": {
+      "attempts": 73,
+      "camera_detections": 73,
+      "matched": 73,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 73
+      },
+      "xyz_bias_m": [
+        0.002568954136355766,
+        -0.02186761312562569,
+        -0.03095749902687891
+      ],
+      "xyz_mae_m": [
+        0.002682926298075566,
+        0.02186761312562569,
+        0.031847789605677385
+      ],
+      "euclidean_mean_m": 0.04045297401151694,
+      "euclidean_median_m": 0.03648999434678614,
+      "euclidean_rmse_m": 0.04409640325599572,
+      "euclidean_p95_m": 0.07534219112804764,
+      "euclidean_max_m": 0.10442638443054272
+    },
+    "B2_acquire": {
+      "attempts": 45,
+      "camera_detections": 45,
+      "matched": 45,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 45
+      },
+      "xyz_bias_m": [
+        0.0035553754944701367,
+        -0.006328712273509253,
+        -0.022800525725666942
+      ],
+      "xyz_mae_m": [
+        0.0035553754944701367,
+        0.006328712273509253,
+        0.022800525725666942
+      ],
+      "euclidean_mean_m": 0.02395925451124684,
+      "euclidean_median_m": 0.023749174957729158,
+      "euclidean_rmse_m": 0.024041355808443663,
+      "euclidean_p95_m": 0.026719226284401276,
+      "euclidean_max_m": 0.028965120964556907
+    },
+    "B2_hold": {
+      "attempts": 8,
+      "camera_detections": 8,
+      "matched": 8,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 8
+      },
+      "xyz_bias_m": [
+        0.00384458601325651,
+        -0.006116244498707346,
+        -0.02042313502804348
+      ],
+      "xyz_mae_m": [
+        0.00384458601325651,
+        0.006116244498707346,
+        0.02042313502804348
+      ],
+      "euclidean_mean_m": 0.02167049512758235,
+      "euclidean_median_m": 0.021393104366220987,
+      "euclidean_rmse_m": 0.0217065288421077,
+      "euclidean_p95_m": 0.023302959058840233,
+      "euclidean_max_m": 0.023375001970901078
+    },
+    "B2_lift_from_measured_state": {
+      "attempts": 71,
+      "camera_detections": 71,
+      "matched": 71,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 71
+      },
+      "xyz_bias_m": [
+        0.003971232701078438,
+        -0.004498301724296252,
+        -0.01591852332012327
+      ],
+      "xyz_mae_m": [
+        0.003971232701078438,
+        0.004498301724296252,
+        0.01591852332012327
+      ],
+      "euclidean_mean_m": 0.017079310495914227,
+      "euclidean_median_m": 0.017917144496809357,
+      "euclidean_rmse_m": 0.017339476674776366,
+      "euclidean_p95_m": 0.020831750235358763,
+      "euclidean_max_m": 0.02133756128833803
+    },
+    "B2_lift_from_measured_state_transit": {
+      "attempts": 77,
+      "camera_detections": 77,
+      "matched": 77,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 77
+      },
+      "xyz_bias_m": [
+        0.003665455405808004,
+        -0.0037782854797518512,
+        -0.014773265273760269
+      ],
+      "xyz_mae_m": [
+        0.003665455405808004,
+        0.0037782854797518512,
+        0.014773265273760269
+      ],
+      "euclidean_mean_m": 0.015713472411864774,
+      "euclidean_median_m": 0.015913055256538744,
+      "euclidean_rmse_m": 0.015805240935902836,
+      "euclidean_p95_m": 0.017978369306465247,
+      "euclidean_max_m": 0.018869368462563152
+    },
+    "B2_rail_transfer": {
+      "attempts": 113,
+      "camera_detections": 113,
+      "matched": 113,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 113
+      },
+      "xyz_bias_m": [
+        0.0030379527690232396,
+        -0.004839875429774613,
+        -0.01663351359392841
+      ],
+      "xyz_mae_m": [
+        0.0030379527690232396,
+        0.004839875429774613,
+        0.01663351359392841
+      ],
+      "euclidean_mean_m": 0.017624779599795238,
+      "euclidean_median_m": 0.017913894237173832,
+      "euclidean_rmse_m": 0.017839010432086706,
+      "euclidean_p95_m": 0.021035209277790623,
+      "euclidean_max_m": 0.023873911064765423
+    },
+    "B2_descent": {
+      "attempts": 96,
+      "camera_detections": 96,
+      "matched": 96,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 96
+      },
+      "xyz_bias_m": [
+        0.0034914335060597366,
+        -0.004330486303399707,
+        -0.01522994981843795
+      ],
+      "xyz_mae_m": [
+        0.0034914335060597366,
+        0.004350979197219144,
+        0.01522994981843795
+      ],
+      "euclidean_mean_m": 0.016260926620892,
+      "euclidean_median_m": 0.01670178464330435,
+      "euclidean_rmse_m": 0.016494168914677605,
+      "euclidean_p95_m": 0.020023323890288717,
+      "euclidean_max_m": 0.021144088701943554
+    },
+    "B2_suction_plane_approach": {
+      "attempts": 32,
+      "camera_detections": 32,
+      "matched": 32,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 32
+      },
+      "xyz_bias_m": [
+        0.002713836542545498,
+        -0.004161050661439569,
+        -0.014962523644844856
+      ],
+      "xyz_mae_m": [
+        0.002713836542545498,
+        0.004161050661439569,
+        0.014962523644844856
+      ],
+      "euclidean_mean_m": 0.015799033941600406,
+      "euclidean_median_m": 0.016250454832437446,
+      "euclidean_rmse_m": 0.01591107265468834,
+      "euclidean_p95_m": 0.018257638742938075,
+      "euclidean_max_m": 0.01851830592130691
+    },
+    "B2_push": {
+      "attempts": 232,
+      "camera_detections": 232,
+      "matched": 232,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 232
+      },
+      "xyz_bias_m": [
+        0.0015305020312745407,
+        -0.012117005358144185,
+        -0.02667890422538047
+      ],
+      "xyz_mae_m": [
+        0.0026179772491589774,
+        0.012117005358144185,
+        0.02667890422538047
+      ],
+      "euclidean_mean_m": 0.03007539431134581,
+      "euclidean_median_m": 0.029206361513862134,
+      "euclidean_rmse_m": 0.03177191265686619,
+      "euclidean_p95_m": 0.04711662975753981,
+      "euclidean_max_m": 0.06310296977382367
+    },
+    "B2_right_seat": {
+      "attempts": 2,
+      "camera_detections": 2,
+      "matched": 2,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 2
+      },
+      "xyz_bias_m": [
+        -0.0011803589482646676,
+        -0.0014697789402576822,
+        -0.012380054963722298
+      ],
+      "xyz_mae_m": [
+        0.0011803589482646676,
+        0.0014697789402576822,
+        0.012380054963722298
+      ],
+      "euclidean_mean_m": 0.012523788206126603,
+      "euclidean_median_m": 0.012523788206126603,
+      "euclidean_rmse_m": 0.012524080602513771,
+      "euclidean_p95_m": 0.012600810048094685,
+      "euclidean_max_m": 0.012609368030535584
+    },
+    "B2_right_unload": {
+      "attempts": 34,
+      "camera_detections": 34,
+      "matched": 34,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 34
+      },
+      "xyz_bias_m": [
+        -0.0012355080591638433,
+        -0.0010457932950990896,
+        -0.011482159987660959
+      ],
+      "xyz_mae_m": [
+        0.0012355080591638433,
+        0.0010457932950990896,
+        0.011482159987660959
+      ],
+      "euclidean_mean_m": 0.011600029809606484,
+      "euclidean_median_m": 0.011643833764156238,
+      "euclidean_rmse_m": 0.011609597323706736,
+      "euclidean_p95_m": 0.012253345784460775,
+      "euclidean_max_m": 0.012583285721881655
+    },
+    "B2_right_retreat": {
+      "attempts": 45,
+      "camera_detections": 45,
+      "matched": 45,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 45
+      },
+      "xyz_bias_m": [
+        -0.0010920649430319926,
+        -0.0008933802366559273,
+        -0.010831388649872795
+      ],
+      "xyz_mae_m": [
+        0.0010944751926311989,
+        0.000897628296965146,
+        0.010831388649872795
+      ],
+      "euclidean_mean_m": 0.010936659784615178,
+      "euclidean_median_m": 0.01084706404252151,
+      "euclidean_rmse_m": 0.010975446854099185,
+      "euclidean_p95_m": 0.01255423071050976,
+      "euclidean_max_m": 0.013151204578422655
+    },
+    "B2_right_release": {
+      "attempts": 7,
+      "camera_detections": 7,
+      "matched": 7,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 7
+      },
+      "xyz_bias_m": [
+        -0.00219104876467965,
+        -0.0013913773788108191,
+        -0.011940591864987906
+      ],
+      "xyz_mae_m": [
+        0.00219104876467965,
+        0.0013913773788108191,
+        0.011940591864987906
+      ],
+      "euclidean_mean_m": 0.012226373650029017,
+      "euclidean_median_m": 0.01227710510534549,
+      "euclidean_rmse_m": 0.012247214014684251,
+      "euclidean_p95_m": 0.013244530589535987,
+      "euclidean_max_m": 0.013435161864410858
+    },
+    "B2_left_unload": {
+      "attempts": 32,
+      "camera_detections": 32,
+      "matched": 32,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 32
+      },
+      "xyz_bias_m": [
+        -0.002125212522472307,
+        -0.0027663699562015184,
+        -0.013437030350326527
+      ],
+      "xyz_mae_m": [
+        0.002125212522472307,
+        0.0027663699562015184,
+        0.013437030350326527
+      ],
+      "euclidean_mean_m": 0.01389704595043429,
+      "euclidean_median_m": 0.013816575160084912,
+      "euclidean_rmse_m": 0.013908905908538566,
+      "euclidean_p95_m": 0.014710193361131087,
+      "euclidean_max_m": 0.01486108818815959
+    },
+    "B2_left_retreat": {
+      "attempts": 53,
+      "camera_detections": 53,
+      "matched": 53,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 53
+      },
+      "xyz_bias_m": [
+        -0.0025160659496105114,
+        -0.002184546760687293,
+        -0.013060746204799205
+      ],
+      "xyz_mae_m": [
+        0.0025160659496105114,
+        0.002184546760687293,
+        0.013060746204799205
+      ],
+      "euclidean_mean_m": 0.013504288256340573,
+      "euclidean_median_m": 0.01345665784411691,
+      "euclidean_rmse_m": 0.013533091351560179,
+      "euclidean_p95_m": 0.014917197109938626,
+      "euclidean_max_m": 0.015305751250762611
+    }
+  },
+  "by_stage": {
+    "Setup": {
+      "attempts": 15,
+      "camera_detections": 0,
+      "matched": 0,
+      "misses": 15,
+      "unpaired": 0,
+      "detection_rate": 0.0,
+      "status_counts": {
+        "no_frame": 2,
+        "marker_not_visible": 13
+      },
+      "xyz_bias_m": null,
+      "xyz_mae_m": null,
+      "euclidean_mean_m": null,
+      "euclidean_median_m": null,
+      "euclidean_rmse_m": null,
+      "euclidean_p95_m": null,
+      "euclidean_max_m": null
+    },
+    "A": {
+      "attempts": 538,
+      "camera_detections": 156,
+      "matched": 156,
+      "misses": 382,
+      "unpaired": 0,
+      "detection_rate": 0.2899628252788104,
+      "status_counts": {
+        "marker_not_visible": 382,
+        "detected": 156
+      },
+      "xyz_bias_m": [
+        0.0016877020515967008,
+        -0.03131461620486179,
+        -0.020670723208918673
+      ],
+      "xyz_mae_m": [
+        0.0019095711144313215,
+        0.03131461620486179,
+        0.024462024372023237
+      ],
+      "euclidean_mean_m": 0.04149480456262833,
+      "euclidean_median_m": 0.03649116552711927,
+      "euclidean_rmse_m": 0.04828039602919706,
+      "euclidean_p95_m": 0.10210824545407836,
+      "euclidean_max_m": 0.13310113264240803
+    },
+    "B1": {
+      "attempts": 282,
+      "camera_detections": 236,
+      "matched": 236,
+      "misses": 46,
+      "unpaired": 0,
+      "detection_rate": 0.8368794326241135,
+      "status_counts": {
+        "detected": 236,
+        "marker_not_visible": 46
+      },
+      "xyz_bias_m": [
+        0.0008245394345547894,
+        -0.021595589799569225,
+        -0.025975690321653956
+      ],
+      "xyz_mae_m": [
+        0.0016844019195838913,
+        0.021650296136098243,
+        0.027378695268017766
+      ],
+      "euclidean_mean_m": 0.036541205805686705,
+      "euclidean_median_m": 0.03184051584252458,
+      "euclidean_rmse_m": 0.04234959361035661,
+      "euclidean_p95_m": 0.0740981686244254,
+      "euclidean_max_m": 0.13586593188419313
+    },
+    "B2": {
+      "attempts": 847,
+      "camera_detections": 847,
+      "matched": 847,
+      "misses": 0,
+      "unpaired": 0,
+      "detection_rate": 1.0,
+      "status_counts": {
+        "detected": 847
+      },
+      "xyz_bias_m": [
+        0.0018478455038178675,
+        -0.006072850041015199,
+        -0.018389006820740045
+      ],
+      "xyz_mae_m": [
+        0.002878324624564846,
+        0.006075398424156382,
+        0.018389006820740045
+      ],
+      "euclidean_mean_m": 0.019914314162329288,
+      "euclidean_median_m": 0.01748224371829471,
+      "euclidean_rmse_m": 0.02178560838665974,
+      "euclidean_p95_m": 0.03819053426141116,
+      "euclidean_max_m": 0.06310296977382367
+    }
+  }
+}
