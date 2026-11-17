@@ -210,7 +210,7 @@ Start the visible automatic task with:
 
 Add `--headless` for the same task without a window. The viewer pauses at
 completion or at the first failed check and retains the scene for inspection.
-The current runtime report is `validation/idea_one_b2_force_control/runner_report.json`.
+The current runtime report is `validation/idea_one_a_force_control/runner_report.json`.
 The earlier `validation/fr3_ab_visual_runner.json` remains a historical result.
 
 The visible runner advances one 120 Hz physics step per control sample and
@@ -345,7 +345,7 @@ Run the physical calibration and a fresh visual acceptance from the repo root:
 python3 fr3_wrist_ft_analysis.py validation/idea_one_tcp_wrist_ft_review
 ```
 
-The current default output directory is `validation/idea_one_b2_force_control`.
+For this historical B2-only revision, the default output directory was `validation/idea_one_b2_force_control`.
 Omit `--close-on-finish` to keep the viewer open; add `--headless` to run without
 a window. The live panel shows the common force vector and separate sensor/TCP
 torques for each arm. The analyzer retains previous plots and adds
@@ -450,7 +450,7 @@ The first three pilot directories retain guarded failures: center-only seating
 was too strict, the initial force gain was too small, and the old push path
 was not smooth enough. These are not normal training examples.
 
-A still uses two rigid attachment proxies and retains its previously measured
+At this B2-only revision, A still used two rigid attachment proxies and retained its previously measured
 opposing internal loads. B2 acceptance does not establish normal A forces or
 validate real suction. Vision/force fusion is not connected by this change.
 
@@ -472,7 +472,97 @@ The cold headless run produced the same accepted B2 measurements. There are
 91 passing unit tests, including duplicated-knot regression, delayed contact
 response, rotated-Cube seating and versioned-cache rejection checks.
 
-`b2_force_control_validation.status=PASS` applies specifically to B2 hold,
-push and bilateral release. A's opposing-force diagnostic remains 317.77 N;
-the complete A/B force profile is not declared normal, and A's proxy data
-must not be labeled normal fusion-training data without further work.
+For the B2-only run above, `b2_force_control_validation.status=PASS` applies
+specifically to B2 hold, push and bilateral release. A's opposing-force
+diagnostic was 317.77 N; that earlier A data must not be labeled normal
+fusion-training data.
+
+### A closed-chain force correction
+
+The original A commands were independently interpolated in joint space.
+Offline official-URDF FK found up to 2.763 mm and 0.4266 degrees of relative
+TCP drift inside a nominally rigid bilateral grasp. The two fixed attachments
+opposed those inconsistent commands: the 317.77 N individual forces largely
+cancelled, so checking only their sum against Cube weight missed the fault.
+`validation/idea_one_a_force_diagnosis/` records the original force and command
+evidence without modifying the historical logs.
+
+A now samples one shared Cartesian quintic translation at 120 Hz, retaining
+both tool orientations and relative grasp geometry at every sample. Local
+IK uses the existing TCP-aware Jacobian. Samples are collision-checked and
+executed directly, without another joint spline. The fixed attachment and
+sensor models, Cube mass, robot/tool collisions and measured wrench signals
+are unchanged.
+
+The first geometry-only pilot still reached 124.11 N. Its joint tracking
+lag fitted about 0.095 s: the position-only commands left the PD drive's
+velocity target at zero, so damping resisted the motion. A transfer now
+also commands the derivative of the same joint samples. Velocity targets
+are explicitly zero at endpoints, in holds/other phases, and on exit or
+failure. Actual position and velocity targets are recorded separately from
+measured joints. No additional six-axis admittance loop or softer attachment
+was needed for this correction.
+
+`idea_one_a_force_pilot1` retains the geometry-only failure. In
+`idea_one_a_force_pilot2`, A passed, but B2 side-wall seating reached the
+10.158 N stop while its measured geometric gap remained 23.568 um: the old
+20 um seating condition kept pressing. Seating now accepts 30 um, with the
+same minimum contact-force condition and unchanged 10 N force protection.
+The saved-pose regression covers that solver residual. Neither failed pilot
+is a normal full-flow training example.
+
+The predeclared A envelope covers **all** A samples, including attachment,
+release and stationary transitions: each arm must stay within 30 N and
+3 N m at the TCP, and the bilateral difference-force diagnostic within
+15 N. The live A guard stops on an exceedance after recording the failing
+sample. B1 uses the same individual force/moment limits over every B1 sample;
+the earlier B2 force/contact/release contract remains required. These are
+simulation acceptance criteria, not hardware safety ratings.
+
+`task_force_status=FULL_FLOW_FORCE_PASS` additionally requires A/B1/B2
+envelopes, independent suspended-payload checks, sensor/TCP calibration,
+per-sample wrench transforms and successful physical task completion.
+Missing phase samples or contracts cannot receive that result.
+
+The new `validation/fr3_full_force_trajectory_cache.json` is eligible only
+after complete force acceptance with matching scene, A revision/envelopes
+and B2 controller parameters. A replay retains paired position/velocity
+commands and live force/contact guards. The earlier B2-only cache and
+baseline artifacts remain separate. Force-dependent B2 acquisition,
+unloading and withdrawal still run live.
+
+The default output directory is now `validation/idea_one_a_force_control`.
+Use a fresh directory to retain an additional review run:
+
+```bash
+/home/ubuntu2004/isaacsim-4.5.0/python.sh fr3_ab_visual_runner.py --output-dir validation/idea_one_a_force_review
+python3 fr3_wrist_ft_analysis.py validation/idea_one_a_force_review
+```
+
+The complete cold-cache acceptance is preserved in
+`validation/idea_one_a_force_pilot3/`, with `task_force_status=FULL_FLOW_FORCE_PASS`.
+All 14,599 physical steps have matching command and wrist samples, with zero
+uncommanded steps and zero unexpected PhysX contacts. A force/moment peaks
+are 15.2624 N / 2.80626 N m; its difference-force peak is 13.66596 N, down
+from the original 317.77 N. B1 peaks are 9.04897 N / 0.255236 N m; B2 peaks
+are 5.54234 N / 0.230033 N m. Static suspended-payload P95 errors are
+0.10352 N and 0.07582 N, below the unchanged 0.5 N bound.
+
+Every one of the ten sampled B2 hold windows has 100% contact/in-band coverage
+and zero dropout. Side-wall seating was already within 30 um at entry, so
+`B2_right_seat` has zero physical steps, not an omitted force interval.
+Right withdrawal peaks at 0.006515 N / 0.0001881 N m and reaches 34.9391 mm;
+left peaks at 0.40340 N / 0.011160 N m and reaches 34.9891 mm. Maximum
+backtracking is 0 and 1.8603 um respectively. Both withdrawals pass.
+There are 106 passing unit tests. The original A failures remain excluded
+from normal fusion data; the new accepted baseline still uses attachment
+proxies and does not establish real suction or real-hardware behavior.
+
+`validation/idea_one_a_force_visible/` preserves the complete visual warm-cache
+acceptance. All 13 saved phases and the rail transfer were loaded with no
+fallback; sampled paths and timings match the cold accepted cache exactly.
+It independently passed `FULL_FLOW_FORCE_PASS` over the same 14,599 physical
+steps, with the same accepted force peaks, complete B2 hold coverage and no
+unexpected contact. The diagnosis directory includes an independent raw-force
+audit and the source/log hashes for the complete verification. Vision/force
+fusion classification has not been connected in this force-baseline change.

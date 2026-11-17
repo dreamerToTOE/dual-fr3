@@ -19,6 +19,19 @@ def test_seating_uses_rotated_cube_support_and_micrometer_contact_tolerance():
     assert oriented_wall_gap(-.24498, [1, 0, 0], .075, -.245, -1) == pytest.approx(20e-6)
 
 
+def test_seating_tolerance_covers_saved_physx_wall_residual():
+    from scipy.spatial.transform import Rotation
+    from fr3_ab_visual_runner import B2_CONTROLLER_PARAMETERS
+    from fr3_contact_control import oriented_wall_gap
+
+    # A-force pilot2 reached 10.158 N while the wall solver retained this gap.
+    center = -.24497638642787933
+    row_x = Rotation.from_quat([-4.212975923678641e-8, -1.1511872344271978e-7,
+                               -1.859634011225353e-7, 1.0]).as_matrix()[0]
+    gap = oriented_wall_gap(center, row_x, .075, -.245, -1)
+    assert 20e-6 < gap <= B2_CONTROLLER_PARAMETERS["seating_gap_tolerance_m"] <= 30e-6
+
+
 def test_compression_sign_and_absolute_position():
     controller = NormalForceController(1.001)
     before = controller.position_m

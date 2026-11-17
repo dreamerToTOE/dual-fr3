@@ -1,0 +1,122 @@
+{
+  "status": "FAIL",
+  "scope": "A_transfer command closed-chain geometry only; no force or collision validation",
+  "phases": [
+    {
+      "cache_phase_index": 2,
+      "phase": "A_transfer",
+      "duration_s": 3.578005232273552,
+      "status": "FAIL",
+      "samples": 431,
+      "reference": "first sample; relative right TCP pose expressed in left TCP axes",
+      "initial_relative_position_m": [
+        6.895490422012821e-06,
+        -0.15000533032380559,
+        -3.0208392948832393e-06
+      ],
+      "initial_relative_rotation_matrix": [
+        [
+          0.9999999965575306,
+          -8.265691808345402e-05,
+          7.264499883680059e-06
+        ],
+        [
+          8.265719586500503e-05,
+          0.999999995852506,
+          -3.8246258290944716e-05
+        ],
+        [
+          -7.261338535642938e-06,
+          3.824685862240534e-05,
+          0.9999999992422253
+        ]
+      ],
+      "maximum_translation_drift_m": 0.0027632967358406394,
+      "maximum_translation_drift_sample": 315,
+      "maximum_rotation_drift_rad": 0.007446358999347807,
+      "maximum_rotation_drift_sample": 315,
+      "limits": {
+        "translation_m": 2e-05,
+        "rotation_rad": 0.0001
+      }
+    },
+    {
+      "cache_phase_index": 3,
+      "phase": "A_transfer",
+      "duration_s": 8.262252517705319,
+      "status": "FAIL",
+      "samples": 993,
+      "reference": "first sample; relative right TCP pose expressed in left TCP axes",
+      "initial_relative_position_m": [
+        -0.0001125894547070927,
+        -0.1500304583635446,
+        -1.016210275676274e-05
+      ],
+      "initial_relative_rotation_matrix": [
+        [
+          0.9999998259143337,
+          0.0005852824554455305,
+          -7.493830908069153e-05
+        ],
+        [
+          -0.0005853305701754481,
+          0.9999996215488334,
+          -0.000643653877434858
+        ],
+        [
+          7.456156139839418e-05,
+          0.0006436976290669638,
+          0.9999997900469464
+        ]
+      ],
+      "maximum_translation_drift_m": 0.001121548866714434,
+      "maximum_translation_drift_sample": 67,
+      "maximum_rotation_drift_rad": 0.0023377615540847926,
+      "maximum_rotation_drift_sample": 956,
+      "limits": {
+        "translation_m": 2e-05,
+        "rotation_rad": 0.0001
+      }
+    },
+    {
+      "cache_phase_index": 4,
+      "phase": "A_transfer",
+      "duration_s": 8.835646282121635,
+      "status": "FAIL",
+      "samples": 1062,
+      "reference": "first sample; relative right TCP pose expressed in left TCP axes",
+      "initial_relative_position_m": [
+        3.57341043952177e-06,
+        -0.15000546529086603,
+        3.820273083738806e-06
+      ],
+      "initial_relative_rotation_matrix": [
+        [
+          0.9999999669554462,
+          -0.00023770965229264718,
+          9.789396193149406e-05
+        ],
+        [
+          0.0002377378505176261,
+          0.9999999302286479,
+          -0.0002881378364180536
+        ],
+        [
+          -9.78254619561735e-05,
+          0.00028816109999657243,
+          0.9999999536966785
+        ]
+      ],
+      "maximum_translation_drift_m": 0.0018548882385140057,
+      "maximum_translation_drift_sample": 623,
+      "maximum_rotation_drift_rad": 0.005057617269245663,
+      "maximum_rotation_drift_sample": 626,
+      "limits": {
+        "translation_m": 2e-05,
+        "rotation_rad": 0.0001
+      }
+    }
+  ],
+  "cache": "validation/idea_one_b2_force_visible/trajectory_cache.json",
+  "urdf": "/home/ubuntu2004/isaacsim-4.5.0/exts/isaacsim.robot_motion.motion_generation/motion_policy_configs/FR3/fr3.urdf"
+}

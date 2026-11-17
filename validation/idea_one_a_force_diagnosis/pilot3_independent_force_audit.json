@@ -1,0 +1,568 @@
+{
+  "status": "INDEPENDENT_FORCE_AUDIT_PASS",
+  "generated_at_UTC": "2026-11-17T03:42:43.355771+00:00",
+  "source_directory": "validation/idea_one_a_force_pilot3",
+  "source_sha256": {
+    "wrench.jsonl.gz": "7c67708fc4e1b91e7167a9300a3b5cacf812aa438ca72a9c67fe4b661aa7d933",
+    "metadata.json": "cb1f339a7dc6b0aadab41ee2273882b41aa39bd7c0ba422d5b11d17decbbb4fa",
+    "runner_report.json": "e3b2117288f49fecbc73ce07324d43454b92d3a34677ce21876e2074084fb81d",
+    "summary.json": "484ceda14bceaaa4fa5ba9b9b8dda9e05ca3773721aede6143d11151158289e0"
+  },
+  "method": "Recompute full phase maxima, held force coverage, release displacement and raw-to-corrected/TCP algebra from original gzip log without importing the acceptance analyzer. No force clipping, motion filter or endpoint trimming. Suspended payload check alone uses the declared last 30 static samples.",
+  "step_counts": {
+    "wrench_rows": 14599,
+    "report_control_steps": 14599,
+    "report_physics_steps": 14599,
+    "report_sensor_samples": 14599,
+    "summary_samples": 14599,
+    "uncommanded_physics_steps": 0
+  },
+  "unexpected_contact_count": 0,
+  "maximum_contact_solver_overlap_m": 0.00018825757433660328,
+  "maximum_raw_gravity_TCP_conversion_error": 7.105427357601002e-15,
+  "maximum_TCP_position_error_m": 2.498001805406602e-16,
+  "stage_metrics": {
+    "A": {
+      "samples": 5512,
+      "maximum_force_norm_N": 15.262366081695085,
+      "maximum_TCP_torque_norm_Nm": 2.80625835503445,
+      "limits": {
+        "max_force_N": 30.0,
+        "max_tcp_torque_Nm": 3.0,
+        "max_internal_force_N": 15.0
+      },
+      "maximum_internal_force_norm_N": 13.66595848513389
+    },
+    "B1": {
+      "samples": 1974,
+      "maximum_force_norm_N": 9.048974602951821,
+      "maximum_TCP_torque_norm_Nm": 0.25523611786342665,
+      "limits": {
+        "max_force_N": 30.0,
+        "max_tcp_torque_Nm": 3.0
+      }
+    },
+    "B2": {
+      "samples": 6993,
+      "maximum_force_norm_N": 5.54234224620824,
+      "maximum_TCP_torque_norm_Nm": 0.23003307643346174,
+      "limits": {
+        "max_dropout_s": 0.05,
+        "max_force_N": 10.0,
+        "max_tcp_torque_Nm": 1.0,
+        "max_inward_m": 2e-05
+      }
+    }
+  },
+  "phase_metrics": {
+    "A_approach_transit": {
+      "samples": 884,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 0.31751062442616274,
+          "maximum_TCP_torque_norm_Nm": 0.017038201475439357,
+          "maximum_raw_force_norm_N": 3.1020341822415154
+        },
+        "right": {
+          "maximum_force_norm_N": 0.25024320222790003,
+          "maximum_TCP_torque_norm_Nm": 0.021935195437108663,
+          "maximum_raw_force_norm_N": 3.0613182820035134
+        }
+      }
+    },
+    "A_approach_transit_transit": {
+      "samples": 233,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 0.29317757928393096,
+          "maximum_TCP_torque_norm_Nm": 0.025510174170242955,
+          "maximum_raw_force_norm_N": 3.221423879848987
+        },
+        "right": {
+          "maximum_force_norm_N": 0.28706232869020454,
+          "maximum_TCP_torque_norm_Nm": 0.025268945018554364,
+          "maximum_raw_force_norm_N": 3.220925742742223
+        }
+      }
+    },
+    "A_attach": {
+      "samples": 60,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 1.0934712490005454,
+          "maximum_TCP_torque_norm_Nm": 0.2183905702575993,
+          "maximum_raw_force_norm_N": 3.132122290576728
+        },
+        "right": {
+          "maximum_force_norm_N": 1.0992768324096482,
+          "maximum_TCP_torque_norm_Nm": 0.13719503175853784,
+          "maximum_raw_force_norm_N": 3.0626868524702875
+        }
+      }
+    },
+    "A_transfer": {
+      "samples": 3707,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 14.76831197087924,
+          "maximum_TCP_torque_norm_Nm": 2.80625835503445,
+          "maximum_raw_force_norm_N": 16.120174652903284
+        },
+        "right": {
+          "maximum_force_norm_N": 15.262366081695085,
+          "maximum_TCP_torque_norm_Nm": 2.7244177920668236,
+          "maximum_raw_force_norm_N": 16.837331831781874
+        }
+      }
+    },
+    "A_lift": {
+      "samples": 180,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 6.702555727386419,
+          "maximum_TCP_torque_norm_Nm": 1.317629273451724,
+          "maximum_raw_force_norm_N": 9.563150716107474
+        },
+        "right": {
+          "maximum_force_norm_N": 6.4254999982278465,
+          "maximum_TCP_torque_norm_Nm": 1.3138111416091691,
+          "maximum_raw_force_norm_N": 9.28712245452403
+        }
+      }
+    },
+    "A_over_front": {
+      "samples": 180,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 6.67661915825462,
+          "maximum_TCP_torque_norm_Nm": 2.2509381541277143,
+          "maximum_raw_force_norm_N": 9.441811352874609
+        },
+        "right": {
+          "maximum_force_norm_N": 7.172157607872095,
+          "maximum_TCP_torque_norm_Nm": 2.137240650449388,
+          "maximum_raw_force_norm_N": 10.106212773830862
+        }
+      }
+    },
+    "A_release": {
+      "samples": 120,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 0.0029075967830347817,
+          "maximum_TCP_torque_norm_Nm": 0.00024933638093691007,
+          "maximum_raw_force_norm_N": 2.943004259151497
+        },
+        "right": {
+          "maximum_force_norm_N": 0.005396522912666506,
+          "maximum_TCP_torque_norm_Nm": 0.0006027354798968468,
+          "maximum_raw_force_norm_N": 2.943001174393452
+        }
+      }
+    },
+    "A_release_transit": {
+      "samples": 148,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 0.4259978452343972,
+          "maximum_TCP_torque_norm_Nm": 0.010949535389334025,
+          "maximum_raw_force_norm_N": 2.9706837141886036
+        },
+        "right": {
+          "maximum_force_norm_N": 0.42585326779281146,
+          "maximum_TCP_torque_norm_Nm": 0.010943686741926566,
+          "maximum_raw_force_norm_N": 2.9710442354750706
+        }
+      }
+    },
+    "B1_contact_transit": {
+      "samples": 1396,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 0.08809921360383566,
+          "maximum_TCP_torque_norm_Nm": 0.0075463133086717165,
+          "maximum_raw_force_norm_N": 3.017565849401682
+        },
+        "right": {
+          "maximum_force_norm_N": 0.005315221588006702,
+          "maximum_TCP_torque_norm_Nm": 0.00034996496155281266,
+          "maximum_raw_force_norm_N": 2.9442514826352095
+        }
+      }
+    },
+    "B1": {
+      "samples": 578,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 9.048974602951821,
+          "maximum_TCP_torque_norm_Nm": 0.25523611786342665,
+          "maximum_raw_force_norm_N": 8.198355641940893
+        },
+        "right": {
+          "maximum_force_norm_N": 1.3002411955571923e-06,
+          "maximum_TCP_torque_norm_Nm": 6.611638692950308e-08,
+          "maximum_raw_force_norm_N": 2.943000316814615
+        }
+      }
+    },
+    "B2_acquire": {
+      "samples": 301,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 1.6978778033859863,
+          "maximum_TCP_torque_norm_Nm": 0.06721487749103866,
+          "maximum_raw_force_norm_N": 4.296305191775433
+        },
+        "right": {
+          "maximum_force_norm_N": 2.1231124304727594e-07,
+          "maximum_TCP_torque_norm_Nm": 5.029447607311667e-08,
+          "maximum_raw_force_norm_N": 2.9430000784036605
+        }
+      }
+    },
+    "B2_hold": {
+      "samples": 60,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 1.7961479837392562,
+          "maximum_TCP_torque_norm_Nm": 0.07645936095597569,
+          "maximum_raw_force_norm_N": 3.804443463566955
+        },
+        "right": {
+          "maximum_force_norm_N": 2.1231124304727594e-07,
+          "maximum_TCP_torque_norm_Nm": 5.029447607311667e-08,
+          "maximum_raw_force_norm_N": 2.9430000784036605
+        }
+      }
+    },
+    "B2_lift_from_measured_state": {
+      "samples": 568,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 3.1296088804434166,
+          "maximum_TCP_torque_norm_Nm": 0.12201164984317053,
+          "maximum_raw_force_norm_N": 4.597937721149374
+        },
+        "right": {
+          "maximum_force_norm_N": 0.15779015495659487,
+          "maximum_TCP_torque_norm_Nm": 0.015089754812596065,
+          "maximum_raw_force_norm_N": 3.1007665663710524
+        }
+      }
+    },
+    "B2_lift_from_measured_state_transit": {
+      "samples": 830,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 2.6254494144186427,
+          "maximum_TCP_torque_norm_Nm": 0.10820306622707501,
+          "maximum_raw_force_norm_N": 4.407574905658757
+        },
+        "right": {
+          "maximum_force_norm_N": 1.8744030093728499,
+          "maximum_TCP_torque_norm_Nm": 0.17735702966266403,
+          "maximum_raw_force_norm_N": 2.967476976858868
+        }
+      }
+    },
+    "B2_rail_transfer": {
+      "samples": 900,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 2.449874058415639,
+          "maximum_TCP_torque_norm_Nm": 0.10041609944000003,
+          "maximum_raw_force_norm_N": 4.279728655328217
+        },
+        "right": {
+          "maximum_force_norm_N": 0.34083354721494585,
+          "maximum_TCP_torque_norm_Nm": 0.02531762499789454,
+          "maximum_raw_force_norm_N": 3.2400544979298003
+        }
+      }
+    },
+    "B2_descent": {
+      "samples": 770,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 2.5133205697902468,
+          "maximum_TCP_torque_norm_Nm": 0.1049266911478856,
+          "maximum_raw_force_norm_N": 4.247875060534211
+        },
+        "right": {
+          "maximum_force_norm_N": 0.09504437504089866,
+          "maximum_TCP_torque_norm_Nm": 0.00905863119721291,
+          "maximum_raw_force_norm_N": 3.0380319943572625
+        }
+      }
+    },
+    "B2_suction_plane_approach": {
+      "samples": 254,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 2.429322673108989,
+          "maximum_TCP_torque_norm_Nm": 0.09877230148012399,
+          "maximum_raw_force_norm_N": 4.358144920132767
+        },
+        "right": {
+          "maximum_force_norm_N": 1.3892242423666146,
+          "maximum_TCP_torque_norm_Nm": 0.13200151448532854,
+          "maximum_raw_force_norm_N": 4.332216427364555
+        }
+      }
+    },
+    "B2_push": {
+      "samples": 1861,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 5.093069143282777,
+          "maximum_TCP_torque_norm_Nm": 0.16476231213359924,
+          "maximum_raw_force_norm_N": 5.838325383759807
+        },
+        "right": {
+          "maximum_force_norm_N": 5.54234224620824,
+          "maximum_TCP_torque_norm_Nm": 0.23003307643346174,
+          "maximum_raw_force_norm_N": 5.64753914679075
+        }
+      }
+    },
+    "B2_right_unload": {
+      "samples": 327,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 3.6041056309522297,
+          "maximum_TCP_torque_norm_Nm": 0.11847757084876051,
+          "maximum_raw_force_norm_N": 4.134003214336673
+        },
+        "right": {
+          "maximum_force_norm_N": 4.410879433575809,
+          "maximum_TCP_torque_norm_Nm": 0.18680035027870304,
+          "maximum_raw_force_norm_N": 4.355729326554037
+        }
+      }
+    },
+    "B2_right_retreat": {
+      "samples": 360,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 3.122079122926814,
+          "maximum_TCP_torque_norm_Nm": 0.10703678775383417,
+          "maximum_raw_force_norm_N": 4.050112303368748
+        },
+        "right": {
+          "maximum_force_norm_N": 0.006514907840988969,
+          "maximum_TCP_torque_norm_Nm": 0.00018805694668621472,
+          "maximum_raw_force_norm_N": 2.94349909397548
+        }
+      }
+    },
+    "B2_right_release": {
+      "samples": 60,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 2.0197833883957634,
+          "maximum_TCP_torque_norm_Nm": 0.07901929349514124,
+          "maximum_raw_force_norm_N": 3.7176104473565705
+        },
+        "right": {
+          "maximum_force_norm_N": 0.0018727331187007056,
+          "maximum_TCP_torque_norm_Nm": 3.932695364738272e-05,
+          "maximum_raw_force_norm_N": 2.943004668435529
+        }
+      }
+    },
+    "B2_left_unload": {
+      "samples": 282,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 2.6215889488471373,
+          "maximum_TCP_torque_norm_Nm": 0.10994657411247721,
+          "maximum_raw_force_norm_N": 3.83117774010181
+        },
+        "right": {
+          "maximum_force_norm_N": 1.5284539719725087e-06,
+          "maximum_TCP_torque_norm_Nm": 1.1319923928724475e-07,
+          "maximum_raw_force_norm_N": 2.9430006153274215
+        }
+      }
+    },
+    "B2_left_retreat": {
+      "samples": 420,
+      "sides": {
+        "left": {
+          "maximum_force_norm_N": 0.40340115644564195,
+          "maximum_TCP_torque_norm_Nm": 0.011159775219561947,
+          "maximum_raw_force_norm_N": 3.1451920294375904
+        },
+        "right": {
+          "maximum_force_norm_N": 1.4616118357458762e-06,
+          "maximum_TCP_torque_norm_Nm": 1.1122657575153753e-07,
+          "maximum_raw_force_norm_N": 2.943000615336867
+        }
+      }
+    }
+  },
+  "suspended_payload": {
+    "A_lift": {
+      "samples": 30,
+      "force_error_P95_N": 0.10352143375468752,
+      "maximum_qdot_rad_s": 0.003860100172460079
+    },
+    "A_over_front": {
+      "samples": 30,
+      "force_error_P95_N": 0.07582393441025789,
+      "maximum_qdot_rad_s": 0.00575762614607811
+    }
+  },
+  "B2_actual_nonzero_step_held_windows": {
+    "B2_hold": {
+      "samples": 60,
+      "normal_force_min_N": 1.2050837970111934,
+      "normal_force_max_N": 1.7106193031006205,
+      "contact_coverage": 1.0,
+      "longest_dropout_s": 0.0
+    },
+    "B2_lift_from_measured_state": {
+      "samples": 568,
+      "normal_force_min_N": 0.8711851185285628,
+      "normal_force_max_N": 2.8488407827223305,
+      "contact_coverage": 1.0,
+      "longest_dropout_s": 0.0
+    },
+    "B2_lift_from_measured_state_transit": {
+      "samples": 830,
+      "normal_force_min_N": 1.7713868719588028,
+      "normal_force_max_N": 2.5425832414124083,
+      "contact_coverage": 1.0,
+      "longest_dropout_s": 0.0
+    },
+    "B2_rail_transfer": {
+      "samples": 900,
+      "normal_force_min_N": 1.5787940899365414,
+      "normal_force_max_N": 2.3743950519961103,
+      "contact_coverage": 1.0,
+      "longest_dropout_s": 0.0
+    },
+    "B2_descent": {
+      "samples": 770,
+      "normal_force_min_N": 1.6379117073397282,
+      "normal_force_max_N": 2.4542031073151414,
+      "contact_coverage": 1.0,
+      "longest_dropout_s": 0.0
+    },
+    "B2_suction_plane_approach": {
+      "samples": 254,
+      "normal_force_min_N": 1.6486689912950532,
+      "normal_force_max_N": 2.26742335415558,
+      "contact_coverage": 1.0,
+      "longest_dropout_s": 0.0
+    },
+    "B2_push": {
+      "samples": 1861,
+      "normal_force_min_N": 0.801946533166454,
+      "normal_force_max_N": 4.552599068749086,
+      "contact_coverage": 1.0,
+      "longest_dropout_s": 0.0
+    },
+    "B2_right_unload": {
+      "samples": 327,
+      "normal_force_min_N": 1.2467205921845026,
+      "normal_force_max_N": 3.361282276961989,
+      "contact_coverage": 1.0,
+      "longest_dropout_s": 0.0
+    },
+    "B2_right_retreat": {
+      "samples": 360,
+      "normal_force_min_N": 1.4124190751728734,
+      "normal_force_max_N": 3.051416445798124,
+      "contact_coverage": 1.0,
+      "longest_dropout_s": 0.0
+    },
+    "B2_right_release": {
+      "samples": 60,
+      "normal_force_min_N": 1.9995726840127561,
+      "normal_force_max_N": 1.9995836518427723,
+      "contact_coverage": 1.0,
+      "longest_dropout_s": 0.0
+    }
+  },
+  "B2_zero_step_phases": [
+    {
+      "phase": "B2_right_seat",
+      "next_phase": "B2_right_unload",
+      "simulation_time_s": 109.58333333333333,
+      "explanation": "Seating tolerance was already satisfied on entry; immediate return with zero physics advancement. No physical samples were omitted."
+    }
+  ],
+  "B2_releases": {
+    "right": {
+      "samples": 360,
+      "outward_distance_m": 0.03493907601463339,
+      "maximum_inward_excursion_m": 0.0,
+      "maximum_backtrack_m": 0.0,
+      "maximum_force_N": 0.006514907840988969,
+      "maximum_TCP_torque_Nm": 0.00018805694668621472
+    },
+    "left": {
+      "samples": 420,
+      "outward_distance_m": 0.03498914838172851,
+      "maximum_inward_excursion_m": 1.8592426889174618e-06,
+      "maximum_backtrack_m": 1.8602851419302624e-06,
+      "maximum_force_N": 0.40340115644564195,
+      "maximum_TCP_torque_Nm": 0.011159775219561947
+    }
+  },
+  "A_transfer_endpoint_physics_steps": [
+    [
+      1298,
+      1728
+    ],
+    [
+      1909,
+      3878
+    ],
+    [
+      4059,
+      5364
+    ]
+  ],
+  "checks": {
+    "all_step_counts_equal": true,
+    "contiguous_physics_steps": true,
+    "clock_120Hz": true,
+    "no_uncommanded_steps": true,
+    "no_unexpected_contacts": true,
+    "left_all_channels_finite": true,
+    "right_all_channels_finite": true,
+    "independent_raw_gravity_and_TCP_conversion": true,
+    "A_all_samples_force_and_TCP_torque": true,
+    "A_internal_force": true,
+    "B1_all_samples_force_and_TCP_torque": true,
+    "B2_all_samples_force_and_TCP_torque": true,
+    "phase_summary_matches_independent_raw_statistics": true,
+    "A_lift_stationary_payload": true,
+    "A_over_front_stationary_payload": true,
+    "B2_hold_left_hold": true,
+    "B2_lift_from_measured_state_left_hold": true,
+    "B2_lift_from_measured_state_transit_left_hold": true,
+    "B2_rail_transfer_left_hold": true,
+    "B2_descent_left_hold": true,
+    "B2_suction_plane_approach_left_hold": true,
+    "B2_push_left_hold": true,
+    "B2_right_unload_left_hold": true,
+    "B2_right_retreat_left_hold": true,
+    "B2_right_release_left_hold": true,
+    "right_release": true,
+    "left_release": true,
+    "three_A_transfer_segments_zero_velocity_endpoints": true,
+    "complete_measured_flow": true,
+    "sensor_and_TCP_calibration_reports_pass": true,
+    "declared_stage_contracts_pass": true,
+    "reported_full_flow_force_pass": true
+  },
+  "limitations": [
+    "Task acceptance is for the ideal PhysX fixed-joint attachment proxy, not validated physical suction or hardware safety.",
+    "A/B1 limits remain 30 N and 3 N m; A internal-force limit remains 15 N; B2 limits remain 10 N and 1 N m.",
+    "Seating gap tolerance is 30 micrometers, not a change to the force or moment envelopes.",
+    "Existing static sensor and TCP calibration reports were checked; hardware and visual warm-cache runs are outside this audit."
+  ]
+}

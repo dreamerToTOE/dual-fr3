@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "diagnostic": "A-transfer tracking lag with zero joint-velocity targets",
+  "source": {
+    "wrench_log": "validation/idea_one_a_force_pilot1/wrench.jsonl.gz",
+    "sha256": "6880719746ee8f30b9609fc3bcac9a9090e79218a15bd3b440a978d7bf5bcef2",
+    "metadata_file": "validation/idea_one_a_force_pilot1/metadata.json",
+    "metadata_sha256": "830b0aea36fb9e14ba42c17df1b4bca77ae17043f3496aadf7336882c09a219a",
+    "task_status": "STOPPED",
+    "a_transfer_revision": "shared_rigid_Cartesian_translation_v1",
+    "record_count": 13492,
+    "a_transfer_record_count": 3707,
+    "physics_step_first": 1,
+    "physics_step_last": 13492,
+    "velocity_targets_logged": false
+  },
+  "units": {
+    "tau": "s",
+    "position_error": "rad",
+    "velocity": "rad/s",
+    "acceleration": "rad/s^2",
+    "intercept": "rad"
+  },
+  "method": {
+    "sample_frequency_hz": 120,
+    "sample_interval_s": 0.008333333333333333,
+    "command_field": "control.position_targets_rad[side]",
+    "measurement_field": "[side].q_rad",
+    "position_error": "q_command - q_measured_after_physics_step",
+    "velocity": "numpy.gradient(q_command, 1/120, axis=0), over complete contiguous recording",
+    "acceleration": "numpy.gradient(velocity, 1/120, axis=0)",
+    "selected_phase": "A_transfer",
+    "velocity_window": "abs(command_velocity)>0.1 rad/s",
+    "acceleration_window": "abs(command_acceleration)<0.1 rad/s^2",
+    "regression": "ordinary least squares: position_error = tau * command_velocity + intercept",
+    "derivative_edges": "numpy default edge_order=1; start/end of low-velocity profiles excluded by velocity window",
+    "maximum_position_error_scope": "all A_transfer samples, independent of regression selection"
+  },
+  "interpretation": {
+    "hypothesis": "Nonzero drive damping with zero velocity target produces steady position error approximately (Kd/Kp)*command_velocity.",
+    "limitation": "Fitted tau is an empirical lag, not a direct measurement of Kd/Kp; load, inertia, hard closed-chain coupling and post-step timestamp alignment also affect it.",
+    "velocity_target_evidence": "This revision sent position actions without velocity targets. Velocity targets were not recorded in this source; verify actual gains and targets in the velocity-feedforward follow-up."
+  },
+  "arms": {
+    "left": {
+      "qerror_max_rad": 0.029964682594115777,
+      "qerror_abs_p95_rad": 0.016849946880086362,
+      "joints": {
+        "fr3_joint1": {
+          "sample_count": 309,
+          "tau_s": 0.09682380151108377,
+          "intercept_rad": 3.899357311428811e-05,
+          "median_error_over_velocity_s": 0.09728757261538297,
+          "regression_rmse_rad": 0.00013421504879440084,
+          "r_squared": 0.9765142447796659,
+          "selected_qerror_max_rad": 0.012575648748442303,
+          "a_transfer_qerror_max_rad": 0.012575648748442303,
+          "selected_physics_step_first": 3009,
+          "selected_physics_step_last": 3317
+        },
+        "fr3_joint2": {
+          "sample_count": 1314,
+          "tau_s": 0.09637760910583963,
+          "intercept_rad": -0.00013909590795674215,
+          "median_error_over_velocity_s": 0.09580799427352166,
+          "regression_rmse_rad": 0.0005335966418948532,
+          "r_squared": 0.992052633896055,
+          "selected_qerror_max_rad": 0.027578028122647757,
+          "a_transfer_qerror_max_rad": 0.027578028122647757,
+          "selected_physics_step_first": 1438,
+          "selected_physics_step_last": 5096
+        },
+        "fr3_joint3": {
+          "sample_count": 498,
+          "tau_s": 0.09269662002353675,
+          "intercept_rad": 0.0006097098015764451,
+          "median_error_over_velocity_s": 0.09699506811068123,
+          "regression_rmse_rad": 0.00026788302244671225,
+          "r_squared": 0.9974038047087028,
+          "selected_qerror_max_rad": 0.029964682594115777,
+          "a_transfer_qerror_max_rad": 0.029964682594115777,
+          "selected_physics_step_first": 1481,
+          "selected_physics_step_last": 3188
+        },
+        "fr3_joint4": {
+          "sample_count": 1115,
+          "tau_s": 0.09551407140224598,
+          "intercept_rad": 4.730812102115058e-06,
+          "median_error_over_velocity_s": 0.09566085385349893,
+          "regression_rmse_rad": 0.00032048979212966164,
+          "r_squared": 0.9994215662830203,
+          "selected_qerror_max_rad": 0.015796830223175462,
+          "a_transfer_qerror_max_rad": 0.015796830223175462,
+          "selected_physics_step_first": 1561,
+          "selected_physics_step_last": 5096
+        },
+        "fr3_joint5": {
+          "sample_count": 766,
+          "tau_s": 0.09477199541438543,
+          "intercept_rad": 2.6529098388206626e-05,
+          "median_error_over_velocity_s": 0.09451380834567111,
+          "regression_rmse_rad": 0.0003326200758869109,
+          "r_squared": 0.9927573891672198,
+          "selected_qerror_max_rad": 0.02627375391979414,
+          "a_transfer_qerror_max_rad": 0.02627375391979414,
+          "selected_physics_step_first": 1477,
+          "selected_physics_step_last": 4826
+        },
+        "fr3_joint6": {
+          "sample_count": 859,
+          "tau_s": 0.0949282973433434,
+          "intercept_rad": 0.00012885422142863421,
+          "median_error_over_velocity_s": 0.09554977255578694,
+          "regression_rmse_rad": 0.00044431054553845236,
+          "r_squared": 0.9983358435724947,
+          "selected_qerror_max_rad": 0.019200211175252058,
+          "a_transfer_qerror_max_rad": 0.019200211175252058,
+          "selected_physics_step_first": 1462,
+          "selected_physics_step_last": 4790
+        },
+        "fr3_joint7": {
+          "sample_count": 819,
+          "tau_s": 0.0957718313800693,
+          "intercept_rad": 2.8343177068681972e-05,
+          "median_error_over_velocity_s": 0.0951579098322862,
+          "regression_rmse_rad": 0.00023719283321505444,
+          "r_squared": 0.989304826744513,
+          "selected_qerror_max_rad": 0.01695129078638935,
+          "a_transfer_qerror_max_rad": 0.01695129078638935,
+          "selected_physics_step_first": 2508,
+          "selected_physics_step_last": 3326
+        }
+      }
+    },
+    "right": {
+      "qerror_max_rad": 0.02997776491053683,
+      "qerror_abs_p95_rad": 0.01684800839891478,
+      "joints": {
+        "fr3_joint1": {
+          "sample_count": 309,
+          "tau_s": 0.09632127036638147,
+          "intercept_rad": -6.45340616403691e-05,
+          "median_error_over_velocity_s": 0.0969276283465468,
+          "regression_rmse_rad": 9.720456922789606e-05,
+          "r_squared": 0.9874143502121284,
+          "selected_qerror_max_rad": 0.012533397870421847,
+          "a_transfer_qerror_max_rad": 0.012533397870421847,
+          "selected_physics_step_first": 3009,
+          "selected_physics_step_last": 3317
+        },
+        "fr3_joint2": {
+          "sample_count": 1314,
+          "tau_s": 0.09606232391502238,
+          "intercept_rad": -8.858681415437625e-05,
+          "median_error_over_velocity_s": 0.09580083356605965,
+          "regression_rmse_rad": 0.0005305700745305937,
+          "r_squared": 0.9920897196201879,
+          "selected_qerror_max_rad": 0.027540723180108334,
+          "a_transfer_qerror_max_rad": 0.027540723180108334,
+          "selected_physics_step_first": 1438,
+          "selected_physics_step_last": 5096
+        },
+        "fr3_joint3": {
+          "sample_count": 498,
+          "tau_s": 0.09282742522477859,
+          "intercept_rad": -0.0005742125486310593,
+          "median_error_over_velocity_s": 0.09679333480620418,
+          "regression_rmse_rad": 0.0002684107163027336,
+          "r_squared": 0.9974009234909534,
+          "selected_qerror_max_rad": 0.02997776491053683,
+          "a_transfer_qerror_max_rad": 0.02997776491053683,
+          "selected_physics_step_first": 1481,
+          "selected_physics_step_last": 3188
+        },
+        "fr3_joint4": {
+          "sample_count": 1115,
+          "tau_s": 0.0949262287786333,
+          "intercept_rad": 4.6381863751237454e-05,
+          "median_error_over_velocity_s": 0.09502706679896832,
+          "regression_rmse_rad": 0.00031493842623809225,
+          "r_squared": 0.9994344734345383,
+          "selected_qerror_max_rad": 0.01575789671726957,
+          "a_transfer_qerror_max_rad": 0.01575789671726957,
+          "selected_physics_step_first": 1561,
+          "selected_physics_step_last": 5096
+        },
+        "fr3_joint5": {
+          "sample_count": 766,
+          "tau_s": 0.09494414678273182,
+          "intercept_rad": -0.00011624612830835233,
+          "median_error_over_velocity_s": 0.09552800163326991,
+          "regression_rmse_rad": 0.00039225659448046307,
+          "r_squared": 0.9899917631601878,
+          "selected_qerror_max_rad": 0.026256408362308914,
+          "a_transfer_qerror_max_rad": 0.026256408362308914,
+          "selected_physics_step_first": 1477,
+          "selected_physics_step_last": 4826
+        },
+        "fr3_joint6": {
+          "sample_count": 859,
+          "tau_s": 0.09501389095446887,
+          "intercept_rad": 0.00014492727783177014,
+          "median_error_over_velocity_s": 0.09565829713224659,
+          "regression_rmse_rad": 0.0004526363049765679,
+          "r_squared": 0.9982760613964499,
+          "selected_qerror_max_rad": 0.019245461374251427,
+          "a_transfer_qerror_max_rad": 0.019245461374251427,
+          "selected_physics_step_first": 1462,
+          "selected_physics_step_last": 4790
+        },
+        "fr3_joint7": {
+          "sample_count": 819,
+          "tau_s": 0.09573622040015645,
+          "intercept_rad": -3.174185609930187e-05,
+          "median_error_over_velocity_s": 0.09514300869166578,
+          "regression_rmse_rad": 0.00023730410962023187,
+          "r_squared": 0.9892882433098988,
+          "selected_qerror_max_rad": 0.016948275019997183,
+          "a_transfer_qerror_max_rad": 0.016948275019997183,
+          "selected_physics_step_first": 2508,
+          "selected_physics_step_last": 3326
+        }
+      }
+    }
+  }
+}

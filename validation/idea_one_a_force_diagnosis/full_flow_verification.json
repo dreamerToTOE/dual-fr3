@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "scope": "complete A/B1/B2 PhysX attachment-proxy force acceptance; no fusion classifier",
+  "headless_run": "validation/idea_one_a_force_pilot3",
+  "visible_run": "validation/idea_one_a_force_visible",
+  "task_force_status": "FULL_FLOW_FORCE_PASS",
+  "samples": 14599,
+  "cached_phases_bitwise_equal": 13,
+  "cached_rail_transfers": 1,
+  "cache_fallback_reason": null,
+  "uncommanded_physics_steps": 0,
+  "unexpected_physx_contact_count": 0,
+  "unit_tests": {
+    "command": "python3 -m pytest -q",
+    "passed": 106,
+    "failed": 0
+  },
+  "sha256": {
+    "fr3_ab_visual_runner.py": "bf82a0da85b6cf69d9a2de64fb7f671640699a0b830927f044f914d560b0c699",
+    "fr3_wrist_ft_analysis.py": "67a5fbcb57920afcb495aceb99ec0f284cb31d15dd53ef7027f55043325fd206",
+    "fr3_a_closure_analysis.py": "79ae5f27a2158bc0ffb1f95e4476efddecb68b7205c8383ee050fd6080f40cbf",
+    "fr3_four_wall_scene_config.json": "d19440a30268e138b9f92a7cee4ad702b52cddd9b8f4c8c400a8ea353611173d",
+    "validation/fr3_full_force_trajectory_cache.json": "9fa0dbdbf91c830691818045a17cd83762e32bcdbf85e39d91966fab87e074af",
+    "validation/idea_one_a_force_pilot3/summary.json": "484ceda14bceaaa4fa5ba9b9b8dda9e05ca3773721aede6143d11151158289e0",
+    "validation/idea_one_a_force_pilot3/wrench.jsonl.gz": "7c67708fc4e1b91e7167a9300a3b5cacf812aa438ca72a9c67fe4b661aa7d933",
+    "validation/idea_one_a_force_visible/summary.json": "484ceda14bceaaa4fa5ba9b9b8dda9e05ca3773721aede6143d11151158289e0",
+    "validation/idea_one_a_force_visible/wrench.jsonl.gz": "989496d75d7f54ee466ee4bae71dcac0e80996ed33582206f97a84279f1610a2"
+  }
+}

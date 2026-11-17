@@ -1,0 +1,252 @@
+{
+  "status": "FAIL",
+  "source_wrench_log": "validation/idea_one_b2_force_visible/wrench.jsonl.gz",
+  "source_summary": "validation/idea_one_b2_force_visible/summary.json",
+  "scope": "Unmodified accepted B2 baseline; A raw closed-chain evidence only",
+  "planned_diagnostic_limits": {
+    "internal_force_N": 15,
+    "individual_force_N": 30,
+    "individual_tcp_torque_Nm": 3
+  },
+  "internal_force_peak": {
+    "status": "OBSERVED",
+    "samples": 2486,
+    "definition": "norm((F_left - F_right) / 2), world axes; diagnostic only",
+    "peak_internal_force_norm_N": 317.77024598153275,
+    "peak_time_s": 21.05000109784305,
+    "peak_physics_step": 2524,
+    "combined_force_at_peak_world_N": [
+      0.019234088572659402,
+      0.06365135725835636,
+      -12.220284184310703
+    ],
+    "individual_force_at_peak_world_N": {
+      "left": [
+        316.94690587344417,
+        12.714821287924073,
+        13.06864314469978
+      ],
+      "right": [
+        -316.9276717848715,
+        -12.651169930665716,
+        -25.288927329010484
+      ]
+    }
+  },
+  "combined_torque_at_peak_about_tcp_midpoint_Nm": [
+    -0.012792618146026058,
+    0.3545726424259499,
+    -0.01317351257045285
+  ],
+  "independent_urdf_fk_max_position_error_against_measured_tcp_m": 9.49844362258043e-07,
+  "urdf": "/home/ubuntu2004/isaacsim-4.5.0/exts/isaacsim.robot_motion.motion_generation/motion_policy_configs/FR3/fr3.urdf",
+  "contiguous_A_windows": [
+    {
+      "phase": "A_approach_transit",
+      "samples": 884,
+      "time_range_s": [
+        1.0250000534579158,
+        8.383333770558238
+      ],
+      "internal_force_norm_max_N": 0.040153343297827424,
+      "internal_force_norm_p95_N": 0.006791760639744225,
+      "combined_force_mean_world_N": [
+        1.6982968162160997e-05,
+        0.0001789925343682053,
+        -0.00012034368943587288
+      ],
+      "raw_force_norm_max_N_by_side": {
+        "left": 3.1020341822415154,
+        "right": 3.0613182820035134
+      },
+      "tcp_torque_norm_max_Nm_by_side": {
+        "left": 0.017038201475439357,
+        "right": 0.021935195437108663
+      }
+    },
+    {
+      "phase": "A_approach_transit_transit",
+      "samples": 293,
+      "time_range_s": [
+        8.391667104326189,
+        10.825000564567745
+      ],
+      "internal_force_norm_max_N": 0.9981606782156606,
+      "internal_force_norm_p95_N": 0.8351192678801271,
+      "combined_force_mean_world_N": [
+        -0.02844911626704163,
+        0.055132013665657835,
+        0.046986547726053
+      ],
+      "raw_force_norm_max_N_by_side": {
+        "left": 3.221423879848987,
+        "right": 3.220925742742223
+      },
+      "tcp_torque_norm_max_Nm_by_side": {
+        "left": 0.2183905702575993,
+        "right": 0.13719503175853784
+      }
+    },
+    {
+      "phase": "A_transfer",
+      "samples": 431,
+      "time_range_s": [
+        10.833333898335695,
+        14.416667418554425
+      ],
+      "internal_force_norm_max_N": 140.84368334294234,
+      "internal_force_norm_p95_N": 135.55456625887524,
+      "combined_force_mean_world_N": [
+        0.00030086941558584926,
+        0.0011783058436293343,
+        -11.965939317476913
+      ],
+      "raw_force_norm_max_N_by_side": {
+        "left": 140.88981062989836,
+        "right": 142.221322332792
+      },
+      "tcp_torque_norm_max_Nm_by_side": {
+        "left": 23.900862083582794,
+        "right": 21.116958389354306
+      }
+    },
+    {
+      "phase": "A_lift",
+      "samples": 180,
+      "time_range_s": [
+        14.425000752322376,
+        15.916667496785522
+      ],
+      "internal_force_norm_max_N": 14.100501984943286,
+      "internal_force_norm_p95_N": 11.875432944556485,
+      "combined_force_mean_world_N": [
+        -4.561131141689076e-05,
+        -0.0013083436804396781,
+        -12.070493197544218
+      ],
+      "raw_force_norm_max_N_by_side": {
+        "left": 16.513039197798847,
+        "right": 15.837183627663743
+      },
+      "tcp_torque_norm_max_Nm_by_side": {
+        "left": 8.249667733938793,
+        "right": 8.378670086649507
+      }
+    },
+    {
+      "phase": "A_transfer",
+      "samples": 993,
+      "time_range_s": [
+        15.925000830553472,
+        24.191667928360403
+      ],
+      "internal_force_norm_max_N": 317.77024598153275,
+      "internal_force_norm_p95_N": 165.1741419091546,
+      "combined_force_mean_world_N": [
+        0.00018889001691016269,
+        -0.01883208883963529,
+        -12.263306002320473
+      ],
+      "raw_force_norm_max_N_by_side": {
+        "left": 317.36341388418975,
+        "right": 318.4340480606687
+      },
+      "tcp_torque_norm_max_Nm_by_side": {
+        "left": 52.88452935419606,
+        "right": 55.519952953596636
+      }
+    },
+    {
+      "phase": "A_over_front",
+      "samples": 180,
+      "time_range_s": [
+        24.200001262128353,
+        25.6916680065915
+      ],
+      "internal_force_norm_max_N": 33.588663967666456,
+      "internal_force_norm_p95_N": 11.888720740153563,
+      "combined_force_mean_world_N": [
+        -0.000658429044364638,
+        0.1038610372960782,
+        -12.261079794530927
+      ],
+      "raw_force_norm_max_N_by_side": {
+        "left": 35.73509433481385,
+        "right": 33.79705106397629
+      },
+      "tcp_torque_norm_max_Nm_by_side": {
+        "left": 3.686533640913758,
+        "right": 4.321267850227635
+      }
+    },
+    {
+      "phase": "A_transfer",
+      "samples": 1062,
+      "time_range_s": [
+        25.70000134035945,
+        34.54166846815497
+      ],
+      "internal_force_norm_max_N": 43.71655732853391,
+      "internal_force_norm_p95_N": 32.01110269934372,
+      "combined_force_mean_world_N": [
+        -0.00018685367003895526,
+        -0.0106128059730176,
+        -12.25275457025377
+      ],
+      "raw_force_norm_max_N_by_side": {
+        "left": 46.21773977962773,
+        "right": 45.20377564802848
+      },
+      "tcp_torque_norm_max_Nm_by_side": {
+        "left": 14.758491786613126,
+        "right": 15.544297657666174
+      }
+    },
+    {
+      "phase": "A_landing",
+      "samples": 120,
+      "time_range_s": [
+        34.55000180192292,
+        35.54166852030903
+      ],
+      "internal_force_norm_max_N": 0.8149660455560934,
+      "internal_force_norm_p95_N": 0.10665979437988639,
+      "combined_force_mean_world_N": [
+        -0.02328797501589256,
+        0.025032032040850142,
+        -0.03146170073212066
+      ],
+      "raw_force_norm_max_N_by_side": {
+        "left": 4.053298329308177,
+        "right": 3.117389983176054
+      },
+      "tcp_torque_norm_max_Nm_by_side": {
+        "left": 0.08273325459605592,
+        "right": 0.019865259364948235
+      }
+    },
+    {
+      "phase": "A_landing_transit",
+      "samples": 164,
+      "time_range_s": [
+        35.55000185407698,
+        36.90833525825292
+      ],
+      "internal_force_norm_max_N": 19.09766586299905,
+      "internal_force_norm_p95_N": 0.17890388204215066,
+      "combined_force_mean_world_N": [
+        -0.020406856605752158,
+        -0.2479341358198641,
+        0.4645741017652195
+      ],
+      "raw_force_norm_max_N_by_side": {
+        "left": 20.52114304158731,
+        "right": 20.305183266358682
+      },
+      "tcp_torque_norm_max_Nm_by_side": {
+        "left": 0.8458075666389859,
+        "right": 0.7965144566318074
+      }
+    }
+  ]
+}

@@ -1,0 +1,286 @@
+{
+  "status": "INCOMPLETE",
+  "samples": 13492,
+  "task_force_status": "FULL_FLOW_FORCE_FAIL",
+  "a_force_control_validation": {
+    "status": "FAIL",
+    "limits": {
+      "max_force_N": 30.0,
+      "max_tcp_torque_Nm": 3.0,
+      "max_internal_force_N": 15.0
+    },
+    "missing_required_phases": [],
+    "window_basis": "all A samples; no motion filter, endpoint trimming or force clipping",
+    "peak_internal_force_norm_N": 124.11002861051367,
+    "internal_force_definition": "norm((F_left - F_right) / 2), world axes; includes unequal payload sharing"
+  },
+  "b1_force_control_validation": {
+    "status": "UNVERIFIED",
+    "reason": "legacy run has no B1 force acceptance contract"
+  },
+  "b2_force_control_validation": {
+    "status": "FAIL",
+    "held_phases": {
+      "B2_hold": {
+        "samples": 60,
+        "force_norm_p95_N": 1.844645208997214,
+        "force_norm_max_N": 2.154781060595692,
+        "tcp_torque_norm_p95_Nm": 0.07686817125485813,
+        "tcp_torque_norm_max_Nm": 0.08858416104514084,
+        "normal_force_min_observed_N": 1.5541010858545456,
+        "normal_force_median_N": 1.6378990935760032,
+        "normal_force_max_observed_N": 2.0183474480813675,
+        "contact_coverage": 1.0,
+        "normal_force_in_band_proportion": 1.0,
+        "longest_contact_dropout_s": 0.0,
+        "window_basis": "all declared held samples; no qdot filter or phase trimming",
+        "status": "PASS"
+      },
+      "B2_lift_from_measured_state": {
+        "samples": 568,
+        "force_norm_p95_N": 2.173621239203662,
+        "force_norm_max_N": 2.4427748528273643,
+        "tcp_torque_norm_p95_Nm": 0.09189279180872328,
+        "tcp_torque_norm_max_Nm": 0.10156159857284262,
+        "normal_force_min_observed_N": 1.264019808813108,
+        "normal_force_median_N": 1.942824416660504,
+        "normal_force_max_observed_N": 2.3513055108228853,
+        "contact_coverage": 1.0,
+        "normal_force_in_band_proportion": 1.0,
+        "longest_contact_dropout_s": 0.0,
+        "window_basis": "all declared held samples; no qdot filter or phase trimming",
+        "status": "PASS"
+      },
+      "B2_lift_from_measured_state_transit": {
+        "samples": 831,
+        "force_norm_p95_N": 2.2395032618410164,
+        "force_norm_max_N": 2.540567193882839,
+        "tcp_torque_norm_p95_Nm": 0.09442967076847711,
+        "tcp_torque_norm_max_Nm": 0.10521450646432039,
+        "normal_force_min_observed_N": 1.7861578645363285,
+        "normal_force_median_N": 2.003542190709084,
+        "normal_force_max_observed_N": 2.41292305612688,
+        "contact_coverage": 1.0,
+        "normal_force_in_band_proportion": 1.0,
+        "longest_contact_dropout_s": 0.0,
+        "window_basis": "all declared held samples; no qdot filter or phase trimming",
+        "status": "PASS"
+      },
+      "B2_rail_transfer": {
+        "samples": 900,
+        "force_norm_p95_N": 2.241008264841596,
+        "force_norm_max_N": 2.6047544725149177,
+        "tcp_torque_norm_p95_Nm": 0.09409073877506235,
+        "tcp_torque_norm_max_Nm": 0.10715875131147222,
+        "normal_force_min_observed_N": 1.768241867233648,
+        "normal_force_median_N": 2.001172602036992,
+        "normal_force_max_observed_N": 2.4211802303368084,
+        "contact_coverage": 1.0,
+        "normal_force_in_band_proportion": 1.0,
+        "longest_contact_dropout_s": 0.0,
+        "window_basis": "all declared held samples; no qdot filter or phase trimming",
+        "status": "PASS"
+      },
+      "B2_descent": {
+        "samples": 770,
+        "force_norm_p95_N": 2.2287565044831523,
+        "force_norm_max_N": 2.47162987640537,
+        "tcp_torque_norm_p95_Nm": 0.09373824639177859,
+        "tcp_torque_norm_max_Nm": 0.10227701065737659,
+        "normal_force_min_observed_N": 1.7340274471501307,
+        "normal_force_median_N": 1.9828886201208562,
+        "normal_force_max_observed_N": 2.387621876159096,
+        "contact_coverage": 1.0,
+        "normal_force_in_band_proportion": 1.0,
+        "longest_contact_dropout_s": 0.0,
+        "window_basis": "all declared held samples; no qdot filter or phase trimming",
+        "status": "PASS"
+      },
+      "B2_suction_plane_approach": {
+        "samples": 254,
+        "force_norm_p95_N": 2.3216855184592737,
+        "force_norm_max_N": 2.5069829237016767,
+        "tcp_torque_norm_p95_Nm": 0.09728869791134662,
+        "tcp_torque_norm_max_Nm": 0.1043112228033138,
+        "normal_force_min_observed_N": 1.7859553140246374,
+        "normal_force_median_N": 1.9906263619076545,
+        "normal_force_max_observed_N": 2.395828334162009,
+        "contact_coverage": 1.0,
+        "normal_force_in_band_proportion": 1.0,
+        "longest_contact_dropout_s": 0.0,
+        "window_basis": "all declared held samples; no qdot filter or phase trimming",
+        "status": "PASS"
+      },
+      "B2_push": {
+        "samples": 1861,
+        "force_norm_p95_N": 3.192138806917947,
+        "force_norm_max_N": 6.399292617969692,
+        "tcp_torque_norm_p95_Nm": 0.11933723366462326,
+        "tcp_torque_norm_max_Nm": 0.20787874902901815,
+        "normal_force_min_observed_N": 0.7116629898306374,
+        "normal_force_median_N": 2.091681304733128,
+        "normal_force_max_observed_N": 5.722571644159838,
+        "contact_coverage": 1.0,
+        "normal_force_in_band_proportion": 1.0,
+        "longest_contact_dropout_s": 0.0,
+        "window_basis": "all declared held samples; no qdot filter or phase trimming",
+        "status": "PASS"
+      },
+      "B2_right_seat": {
+        "samples": 153,
+        "force_norm_p95_N": 2.4020617479040163,
+        "force_norm_max_N": 2.634295806021253,
+        "tcp_torque_norm_p95_Nm": 0.09684061086172818,
+        "tcp_torque_norm_max_Nm": 0.1059806602246036,
+        "normal_force_min_observed_N": 1.6819030757981646,
+        "normal_force_median_N": 1.991426840079748,
+        "normal_force_max_observed_N": 2.3553303618209402,
+        "contact_coverage": 1.0,
+        "normal_force_in_band_proportion": 1.0,
+        "longest_contact_dropout_s": 0.0,
+        "window_basis": "all declared held samples; no qdot filter or phase trimming",
+        "status": "PASS"
+      }
+    },
+    "releases": {
+      "left": {
+        "status": "FAIL",
+        "reason": "missing release data or preceding TCP reference"
+      },
+      "right": {
+        "status": "FAIL",
+        "reason": "missing release data or preceding TCP reference"
+      }
+    },
+    "limits": {
+      "normal_force_min_N": 0.1,
+      "normal_force_max_N": 6.0,
+      "min_contact_coverage": 0.98,
+      "max_dropout_s": 0.05,
+      "max_force_N": 10.0,
+      "max_tcp_torque_Nm": 1.0,
+      "max_inward_m": 2e-05,
+      "minimum_retreat_m": 0.03
+    },
+    "release_phases": {
+      "left": [
+        "B2_left_retreat"
+      ],
+      "right": [
+        "B2_right_retreat"
+      ]
+    },
+    "missing_required_phases": [
+      "B2_left_retreat",
+      "B2_right_retreat"
+    ]
+  },
+  "tcp_physical_calibration_status": "PASS",
+  "tcp_transform_validation": {
+    "status": "PASS",
+    "limits": {
+      "force_local_N": 1e-09,
+      "force_world_N": 1e-09,
+      "moment_shift_local_Nm": 1e-09,
+      "moment_shift_world_Nm": 1e-09,
+      "reverse_shift_local_Nm": 1e-09,
+      "reverse_shift_world_Nm": 1e-09,
+      "tcp_position_m": 1e-06,
+      "frame_rotation_relative": 1e-06
+    },
+    "max_errors": {
+      "force_local_N": 0.0,
+      "force_world_N": 0.0,
+      "moment_shift_local_Nm": 1.7763568394002505e-15,
+      "moment_shift_world_Nm": 1.9539925233402755e-14,
+      "reverse_shift_local_Nm": 8.881784197001252e-16,
+      "reverse_shift_world_Nm": 1.9539925233402755e-14,
+      "tcp_position_m": 2.498001805406602e-16,
+      "frame_rotation_relative": 1.2087570408772103e-15
+    },
+    "valid_side_samples": {
+      "left": 13492,
+      "right": 13492
+    },
+    "invalid_field_samples": 0,
+    "failed_relation_samples": 0,
+    "all_fields_finite": true
+  },
+  "acceptance": {
+    "static_initialization": {
+      "status": "PASS",
+      "samples": 30,
+      "limits": {
+        "force_N": 0.3,
+        "torque_Nm": 0.03
+      },
+      "left": {
+        "force_norm_p95_N": 3.2404780902176725e-07,
+        "torque_norm_p95_Nm": 3.7004076734236405e-08
+      },
+      "right": {
+        "force_norm_p95_N": 3.322746661289723e-07,
+        "torque_norm_p95_Nm": 5.823498588576122e-08
+      }
+    },
+    "A_lift_payload": {
+      "status": "PASS",
+      "samples": 30,
+      "expected_combined_force_world_N": [
+        0.0,
+        0.0,
+        -12.262500000000001
+      ],
+      "combined_force_world_mean_N": [
+        -0.0024017041719974095,
+        0.0011597364548733954,
+        -12.258895330294282
+      ],
+      "combined_force_error_norm_p95_N": 0.062203812985212034,
+      "error_limit_N": 0.5
+    },
+    "A_over_front_payload": {
+      "status": "PASS",
+      "samples": 30,
+      "expected_combined_force_world_N": [
+        0.0,
+        0.0,
+        -12.262500000000001
+      ],
+      "combined_force_world_mean_N": [
+        -0.000905637781970059,
+        -2.5630203709960108e-05,
+        -12.261710778202458
+      ],
+      "combined_force_error_norm_p95_N": 0.08806099159597426,
+      "error_limit_N": 0.5
+    },
+    "B1_left_push_direction": {
+      "status": "CONSISTENT",
+      "samples": 364,
+      "component": "Fy",
+      "median_N": -0.7443561270917893,
+      "expected_sign": -1,
+      "expected_direction_above_0_1N_proportion": 1.0,
+      "window_basis": "middle 60 percent of joint-moving samples"
+    },
+    "B2_right_push_direction": {
+      "status": "CONSISTENT",
+      "samples": 1079,
+      "component": "Fx",
+      "median_N": 1.8015601931239786,
+      "expected_sign": 1,
+      "expected_direction_above_0_1N_proportion": 1.0,
+      "window_basis": "middle 60 percent of joint-moving samples"
+    },
+    "B2_left_support": {
+      "status": "CONSISTENT",
+      "samples": 1083,
+      "component": "Fy",
+      "median_N": -2.156193286874803,
+      "expected_sign": -1,
+      "expected_direction_above_0_1N_proportion": 1.0,
+      "window_basis": "middle 60 percent of joint-moving samples"
+    }
+  }
+}

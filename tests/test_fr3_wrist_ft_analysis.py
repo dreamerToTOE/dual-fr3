@@ -370,3 +370,121 @@ def test_missing_required_retreat_fails_and_schema_three_keeps_tcp_checks():
     check = analyze(rows, CONTROL_META)["b2_force_control_validation"]
     assert check["status"] == "FAIL"
     assert check["missing_required_phases"] == ["B2_right_retreat"]
+
+
+A_CONTROL_META = {**CONTROL_META, "a_force_control_validation": {
+    "required_phases": ["A_approach_transit", "A_attach", "A_transfer", "A_lift", "A_over_front", "A_release"],
+    "max_force_N": 30., "max_tcp_torque_Nm": 3., "max_internal_force_N": 15.,
+}, "b1_force_control_validation": {
+    "required_phases": ["B1"], "max_force_N": 30., "max_tcp_torque_Nm": 3.,
+}}
+
+
+def _set_world_wrench(row, side, wrench):
+    value = row[side]
+    w, x, y, z = value["sensor_orientation_wxyz"]
+    rotation = np.array([[1 - 2 * (y*y + z*z), 2 * (x*y - z*w), 2 * (x*z + y*w)],
+                         [2 * (x*y + z*w), 1 - 2 * (x*x + z*z), 2 * (y*z - x*w)],
+                         [2 * (x*z - y*w), 2 * (y*z + x*w), 1 - 2 * (x*x + y*y)]])
+    local = np.r_[rotation.T @ wrench[:3], rotation.T @ wrench[3:]]
+    offset = np.asarray(TCP_META["tcp_offset_sensor_m"][side])
+    value["gravity_corrected_world"] = list(wrench)
+    value["gravity_corrected_local"] = local.tolist()
+    value["raw_parent_on_tool_local"] = (-local).tolist()
+    value["tcp_gravity_corrected_local"] = np.r_[local[:3], local[3:] - np.cross(offset, local[:3])].tolist()
+    value["tcp_gravity_corrected_world"] = np.r_[wrench[:3], wrench[3:] - np.cross(rotation @ offset, wrench[:3])].tolist()
+
+
+def _a_controlled_trial():
+    rows = _controlled_trial()
+    for phase in ("A_approach_transit", "A_attach", "A_transfer", "A_release"):
+        start = deepcopy(next(row for row in rows if row["phase"] == "A_lift"))
+        start["phase"] = phase
+        rows.insert(50, start)
+    return _renumber(rows)
+
+
+def test_full_force_pass_requires_a_b2_payload_and_sensor_checks():
+    result = analyze(_a_controlled_trial(), A_CONTROL_META)
+    assert result["a_force_control_validation"]["status"] == "PASS"
+    assert result["task_force_status"] == "FULL_FLOW_FORCE_PASS"
+    assert analyze(_controlled_trial(), CONTROL_META)["task_force_status"] == "UNVERIFIED"
+    result = analyze(_a_controlled_trial(), {**A_CONTROL_META, "calibration_passed": None})
+    assert result["task_force_status"] != "FULL_FLOW_FORCE_PASS"
+
+
+def test_a_opposing_force_is_task_failure_even_with_correct_payload_sum():
+    rows = _a_controlled_trial()
+    row = next(row for row in rows if row["phase"] == "A_transfer")
+    for side, sign in (("left", 1), ("right", -1)):
+        wrench = np.asarray(row[side]["gravity_corrected_world"])
+        wrench[0] = sign * 20.
+        _set_world_wrench(row, side, wrench)
+    result = analyze(rows, A_CONTROL_META)
+    check = result["a_force_control_validation"]
+    assert check["phase_peaks"]["A_transfer"]["left"]["force_norm_max_N"] < 30.
+    assert check["peak_internal_force_norm_N"] > 20.
+    assert check["status"] == "FAIL"
+    assert result["task_force_status"] == "FULL_FLOW_FORCE_FAIL"
+    assert result["status"] == "PASS_FORCE_FEEDBACK_WITH_TASK_WARNINGS"
+    assert result["calibration_status"] == "PASS"
+    assert result["acceptance"]["A_lift_payload"]["status"] == "PASS"
+
+
+@pytest.mark.parametrize("phase", ("A_approach_transit", "A_attach", "A_release"))
+def test_a_contact_transitions_cannot_hide_force_spikes(phase):
+    rows = _a_controlled_trial()
+    row = next(row for row in rows if row["phase"] == phase)
+    _set_world_wrench(row, "left", [31., 0., 0., 0., 0., 0.])
+    result = analyze(rows, A_CONTROL_META)
+    assert result["a_force_control_validation"]["status"] == "FAIL"
+    assert result["a_force_control_validation"]["phase_peaks"][phase]["left"]["raw_force_norm_max_N"] == 31.
+    assert result["task_force_status"] == "FULL_FLOW_FORCE_FAIL"
+
+
+def test_a_tcp_moment_and_missing_transition_are_independent_failures():
+    rows = _a_controlled_trial()
+    row = next(row for row in rows if row["phase"] == "A_attach")
+    _set_world_wrench(row, "right", [0., 0., 0., 0., 3.1, 0.])
+    check = analyze(rows, A_CONTROL_META)["a_force_control_validation"]
+    assert check["status"] == "FAIL"
+    assert check["phase_peaks"]["A_attach"]["right"]["tcp_torque_norm_max_Nm"] == 3.1
+    rows = _renumber([row for row in _a_controlled_trial() if row["phase"] != "A_release"])
+    check = analyze(rows, A_CONTROL_META)["a_force_control_validation"]
+    assert check["status"] == "FAIL"
+    assert check["missing_required_phases"] == ["A_release"]
+
+
+@pytest.mark.parametrize("contract", ({}, {"required_phases": ["A_transfer"]},
+    {**A_CONTROL_META["a_force_control_validation"], "max_force_N": float("nan")},
+    {**A_CONTROL_META["a_force_control_validation"], "required_phases": "A_transfer"}))
+def test_invalid_a_contract_cannot_pass(contract):
+    result = analyze(_a_controlled_trial(), {**A_CONTROL_META, "a_force_control_validation": contract})
+    assert result["a_force_control_validation"]["status"] == "FAIL"
+    assert result["task_force_status"] == "FULL_FLOW_FORCE_FAIL"
+
+
+def test_full_force_pass_requires_b1_envelope_and_all_transition_samples():
+    rows = _a_controlled_trial()
+    metadata = {**A_CONTROL_META}
+    del metadata["b1_force_control_validation"]
+    assert analyze(rows, metadata)["task_force_status"] == "UNVERIFIED"
+    row = next(row for row in rows if row["phase"] == "B1")
+    _set_world_wrench(row, "left", [0., -31., 0., 0., 0., 0.])
+    result = analyze(rows, A_CONTROL_META)
+    assert result["b1_force_control_validation"]["status"] == "FAIL"
+    assert result["b1_force_control_validation"]["phase_peaks"]["B1"]["left"]["force_norm_max_N"] == 31.
+    assert result["task_force_status"] == "FULL_FLOW_FORCE_FAIL"
+
+
+def test_b1_transition_moment_spike_is_not_hidden_by_moving_window():
+    rows = _a_controlled_trial()
+    row = deepcopy(next(row for row in rows if row["phase"] == "B1"))
+    row["phase"] = "B1_contact_transit"
+    row["left"]["qdot_rad_s"] = [0.] * 7
+    _set_world_wrench(row, "left", [0., 0., 0., 0., 3.1, 0.])
+    rows.insert(50, row)
+    result = analyze(_renumber(rows), A_CONTROL_META)
+    assert result["b1_force_control_validation"]["status"] == "FAIL"
+    assert result["calibration_status"] == "PASS"
+    assert result["status"] == "PASS_FORCE_FEEDBACK_WITH_TASK_WARNINGS"

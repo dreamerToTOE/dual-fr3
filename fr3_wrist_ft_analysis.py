@@ -279,6 +279,64 @@ def _b2_force_control_validation(rows, metadata):
     return result
 
 
+def _phase_force_control_validation(rows, metadata, prefix):
+    """Check every stage sample, including contact transitions and stopped motion."""
+    cfg = metadata.get(prefix.lower() + "_force_control_validation")
+    if cfg is None:
+        return {"status": "UNVERIFIED", "reason": f"legacy run has no {prefix} force acceptance contract"}
+    result = {"status": "FAIL", "phase_peaks": {}}
+    try:
+        required = cfg["required_phases"]
+        names = ["max_force_N", "max_tcp_torque_Nm"] + (["max_internal_force_N"] if prefix == "A" else [])
+        limits = {key: float(cfg[key]) for key in names}
+        mandatory = ({"A_approach_transit", "A_attach", "A_transfer", "A_lift", "A_over_front", "A_release"}
+                     if prefix == "A" else {"B1"})
+        if (not isinstance(required, (list, tuple)) or not required
+                or not all(isinstance(phase, str) and phase.startswith(prefix) for phase in required)
+                or not mandatory.issubset(required)
+                or not all(np.isfinite(value) and value > 0 for value in limits.values())):
+            raise ValueError("invalid acceptance contract")
+    except (KeyError, TypeError, ValueError):
+        return {**result, "reason": f"invalid {prefix} force acceptance contract"}
+    phases = list(dict.fromkeys(row.get("phase", "") for row in rows
+                                if str(row.get("phase", "")).startswith(prefix)))
+    result.update(limits=limits, missing_required_phases=sorted(set(required) - set(phases)),
+                  window_basis=f"all {prefix} samples; no motion filter, endpoint trimming or force clipping")
+    peak_internal = 0.0
+    for phase in phases:
+        selected = [row for row in rows if row.get("phase") == phase]
+        metrics = {"status": "FAIL", "samples": len(selected)}
+        result["phase_peaks"][phase] = metrics
+        if not all(_valid_side(row, side) and _valid_side(row, side, TCP_SHAPES)
+                   for row in selected for side in SIDES):
+            metrics["reason"] = "invalid force/TCP feedback"
+            continue
+        if prefix == "A":
+            forces = np.asarray([[row[side]["gravity_corrected_world"][:3] for side in SIDES]
+                                 for row in selected])
+            internal = np.linalg.norm((forces[:, 0] - forces[:, 1]) / 2, axis=1)
+            metrics["internal_force_norm_max_N"] = float(np.max(internal))
+            peak_internal = max(peak_internal, metrics["internal_force_norm_max_N"])
+        for side in SIDES:
+            stats = _stats([row[side]["tcp_gravity_corrected_world"] for row in selected])
+            metrics[side] = {"force_norm_max_N": stats["force_norm_max_N"],
+                             "tcp_torque_norm_max_Nm": stats["torque_norm_max_Nm"],
+                             "raw_force_norm_max_N": _stats([row[side]["raw_parent_on_tool_local"]
+                                                              for row in selected])["force_norm_max_N"]}
+        if ((prefix != "A" or metrics["internal_force_norm_max_N"] <= limits["max_internal_force_N"])
+                and all(metrics[side]["force_norm_max_N"] <= limits["max_force_N"]
+                        and metrics[side]["tcp_torque_norm_max_Nm"] <= limits["max_tcp_torque_Nm"]
+                        for side in SIDES)):
+            metrics["status"] = "PASS"
+    if prefix == "A":
+        result["peak_internal_force_norm_N"] = peak_internal
+        result["internal_force_definition"] = "norm((F_left - F_right) / 2), world axes; includes unequal payload sharing"
+    if (not result["missing_required_phases"] and result["phase_peaks"]
+            and all(metrics["status"] == "PASS" for metrics in result["phase_peaks"].values())):
+        result["status"] = "PASS"
+    return result
+
+
 def analyze(rows, metadata=None):
     """Return strict finite-data checks, phase statistics and independent load checks."""
     rows, metadata = list(rows), metadata or {}
@@ -303,6 +361,8 @@ def analyze(rows, metadata=None):
                   and not invalid_clock)
     tcp_validation = _tcp_transform_validation(rows, metadata)
     b2_validation = _b2_force_control_validation(rows, metadata)
+    a_validation = _phase_force_control_validation(rows, metadata, "A")
+    b1_validation = _phase_force_control_validation(rows, metadata, "B1")
     finite = finite and tcp_validation.get("all_fields_finite", True)
     result = {
         "units": {"force": "N", "torque": "N m", "time": "s", "position": "m"},
@@ -317,6 +377,8 @@ def analyze(rows, metadata=None):
         "full_flow_status": metadata.get("task_status", "UNVERIFIED"),
         "tcp_transform_validation": tcp_validation,
         "b2_force_control_validation": b2_validation,
+        "a_force_control_validation": a_validation,
+        "b1_force_control_validation": b1_validation,
         "tcp_physical_calibration_status": (
             "PASS" if metadata.get("tcp_calibration_passed") is True else
             "FAIL" if metadata.get("tcp_calibration_passed") is False else "UNVERIFIED"),
@@ -433,9 +495,15 @@ def analyze(rows, metadata=None):
         result["status"] = "INCOMPLETE"
     else:
         result["status"] = ("PASS_FORCE_FEEDBACK_WITH_TASK_WARNINGS" if result["release_task_issue"]
-                            or b2_validation["status"] == "FAIL" else
+                            or "FAIL" in (b2_validation["status"], a_validation["status"], b1_validation["status"]) else
                             "PASS_FORCE_FEEDBACK_WITH_SUPPORT_WARNING" if result["support_task_issue"] else
                             "PASS_FORCE_FEEDBACK")
+    result["task_force_status"] = (
+        "FULL_FLOW_FORCE_FAIL" if "FAIL" in (a_validation["status"], b1_validation["status"], b2_validation["status"])
+        or result["status"] in ("INVALID_DATA", "SENSOR_CHECKS_FAILED") else
+        "FULL_FLOW_FORCE_PASS" if a_validation["status"] == b1_validation["status"] == b2_validation["status"] == "PASS"
+        and result["status"] == "PASS_FORCE_FEEDBACK" and tcp_validation["status"] == "PASS"
+        and result["tcp_physical_calibration_status"] == "PASS" else "UNVERIFIED")
     result["limitations"] = [
         "Gravity compensation does not remove tool inertia during motion.",
         "Payload check uses reference Cube mass and gravity metadata in a static suspended window.",
@@ -535,6 +603,13 @@ if __name__ == "__main__":
     args = parser.parse_args()
     summary = write_analysis(args.directory)
     print(json.dumps({"status": summary["status"], "samples": summary["samples"],
+                      "task_force_status": summary["task_force_status"],
+                      "a_force_control_validation": {key: value for key, value in
+                                                     summary["a_force_control_validation"].items()
+                                                     if key != "phase_peaks"},
+                      "b1_force_control_validation": {key: value for key, value in
+                                                      summary["b1_force_control_validation"].items()
+                                                      if key != "phase_peaks"},
                       "b2_force_control_validation": {key: value for key, value in
                                                       summary["b2_force_control_validation"].items()
                                                       if key != "phase_peaks"},

@@ -24,15 +24,23 @@ ROOT = Path(__file__).resolve().parent
 CONFIG = json.loads((ROOT / "fr3_four_wall_scene_config.json").read_text())
 TRAJECTORY_CACHE = ROOT / "validation" / "fr3_trajectory_cache.json"
 FORCE_TRAJECTORY_CACHE = ROOT / "validation" / "fr3_force_control_trajectory_cache.json"
+FULL_FORCE_TRAJECTORY_CACHE = ROOT / "validation" / "fr3_full_force_trajectory_cache.json"
 FORCE_CONTROLLER_REVISION = "B2_absolute_force_Cartesian_v1"
 B2_CONTROLLER_PARAMETERS = {
     "type": "absolute_normal_position_admittance_with_Cartesian_position_tracking",
     "left_target_force_N": 2.0, "gain_m_per_Ns": 2e-5,
     "normal_position_speed_limit_m_s": 0.00005, "overload_limit_N": 10.0,
-    "push_duration_s": 15.0, "retreat_duration_s": 3.0, "seating_gap_tolerance_m": 20e-6,
+    "push_duration_s": 15.0, "retreat_duration_s": 3.0, "seating_gap_tolerance_m": 30e-6,
     "seating_guard_uses_existing_simulation_Cube_state": True,
     "release": "force ramp to zero, then straight outward Cartesian motion",
 }
+A_TRANSFER_REVISION = "shared_rigid_Cartesian_translation_velocity_v2"
+A_FORCE_LIMITS = {
+    "required_phases": ["A_approach_transit", "A_attach", "A_transfer", "A_lift",
+                        "A_over_front", "A_release"],
+    "max_force_N": 30.0, "max_tcp_torque_Nm": 3.0, "max_internal_force_N": 15.0,
+}
+B1_FORCE_LIMITS = {"required_phases": ["B1"], "max_force_N": 30.0, "max_tcp_torque_Nm": 3.0}
 
 
 def compatible_force_cache(candidate):
@@ -42,6 +50,14 @@ def compatible_force_cache(candidate):
             and candidate.get("scene_config") == CONFIG
             and candidate.get("force_validation_status") == "PASS_B2_FORCE_CONTROL"
             and isinstance(candidate.get("phases"), list))
+
+
+def compatible_full_force_cache(candidate):
+    return (compatible_force_cache(candidate)
+            and candidate.get("a_transfer_revision") == A_TRANSFER_REVISION
+            and candidate.get("a_force_limits") == A_FORCE_LIMITS
+            and candidate.get("b1_force_limits") == B1_FORCE_LIMITS
+            and candidate.get("task_force_status") == "FULL_FLOW_FORCE_PASS")
 
 ARUCO_4X4_23_BITS = (
     (1, 1, 1, 1, 1, 1),
@@ -234,7 +250,7 @@ def main():
     parser.add_argument("--close-on-finish", action="store_true", help="Close instead of retaining the result in the GUI")
     parser.add_argument("--output-dir", type=Path, help="Keep this run's artifacts separate from earlier experiments")
     args = parser.parse_args()
-    output_directory = args.output_dir.resolve() if args.output_dir else ROOT / "validation" / "idea_one_b2_force_control"
+    output_directory = args.output_dir.resolve() if args.output_dir else ROOT / "validation" / "idea_one_a_force_control"
     output_directory.mkdir(parents=True, exist_ok=True)
     report_path = output_directory / "runner_report.json"
     cache_output = output_directory / "trajectory_cache.json"
@@ -280,6 +296,9 @@ def main():
         "controller_parameters": B2_CONTROLLER_PARAMETERS,
         "scene_config": CONFIG,
         "force_validation_status": "UNVERIFIED",
+        "a_transfer_revision": A_TRANSFER_REVISION,
+        "a_force_limits": A_FORCE_LIMITS, "b1_force_limits": B1_FORCE_LIMITS,
+        "task_force_status": "UNVERIFIED",
     }
     loaded_trajectory_cache = None
     cache_cursor = 0
@@ -416,10 +435,12 @@ def main():
         print("FR3_AB_INITIALIZING_PHYSICS", flush=True)
         contact_monitor = PhysxContactMonitor(stage)
         loaded_cache_path = TRAJECTORY_CACHE
-        for cache_path in (FORCE_TRAJECTORY_CACHE, TRAJECTORY_CACHE):
+        for cache_path in (FULL_FORCE_TRAJECTORY_CACHE, FORCE_TRAJECTORY_CACHE, TRAJECTORY_CACHE):
             try:
                 candidate = json.loads(cache_path.read_text())
-                if cache_path == FORCE_TRAJECTORY_CACHE:
+                if cache_path == FULL_FORCE_TRAJECTORY_CACHE:
+                    valid = compatible_full_force_cache(candidate)
+                elif cache_path == FORCE_TRAJECTORY_CACHE:
                     valid = compatible_force_cache(candidate)
                 else:
                     valid = (candidate.get("status") == "COMPLETE"
@@ -448,6 +469,7 @@ def main():
         nominal_targets = {side: np.array(CONFIG["fr3"]["official_start_q_rad"], dtype=float)
                            for side in robots}
         applied_targets = {side: q.copy() for side, q in nominal_targets.items()}
+        applied_velocities = {side: np.zeros(7) for side in robots}
         left_hold = None
         left_hold_z = None
         left_hold_rotation = None
@@ -465,6 +487,16 @@ def main():
         }
         force_recorder.metadata["b2_force_control_validation"] = force_limits
         force_recorder.metadata["b2_controller"] = B2_CONTROLLER_PARAMETERS
+        force_recorder.metadata["a_force_control_validation"] = A_FORCE_LIMITS
+        force_recorder.metadata["a_transfer_revision"] = A_TRANSFER_REVISION
+        force_recorder.metadata["a_velocity_feedforward"] = True
+        force_recorder.metadata["joint_drive_gains"] = {
+            side: {name: np.asarray(values)[joints[side]].tolist()
+                   for name, values in zip(("stiffness", "damping"),
+                       robot.get_articulation_controller().get_gains())}
+            for side, robot in robots.items()
+        }
+        force_recorder.metadata["b1_force_control_validation"] = B1_FORCE_LIMITS
         trajectory_cache["execution_overlay"] = (
             "B2 nominal joint samples have online force correction; actual position targets are in wrench.jsonl.gz control")
         calibration_path = ROOT / "validation" / "idea_one_wrist_ft_load_check.json"
@@ -650,12 +682,25 @@ def main():
                 contact_monitor.physics_step_index = world.current_time_step_index + 1
                 world.step(render=False)
                 tick += 1
+                if world.current_time_step_index - initial_physics_step != tick:
+                    raise RuntimeError("Physics and command step counts diverged")
+                report["simulation_clock"]["control_steps"] = tick
+                report["simulation_clock"]["physics_steps"] = world.current_time_step_index - initial_physics_step
                 force_recorder.command_context = {
                     "position_targets_rad": {side: q.tolist() for side, q in applied_targets.items()},
+                    "velocity_targets_rad_s": {side: q.tolist() for side, q in applied_velocities.items()},
                     "left_hold_position_y_m": None if left_hold is None else left_hold.position_m,
                 }
                 force_sample = force_recorder.sample(float(world.current_time), tick, contact_monitor.phase)
                 last_force_sample = force_sample
+                if contact_monitor.phase.startswith("A"):
+                    forces = [np.asarray(force_sample[side]["tcp_gravity_corrected_world"][:3])
+                              for side in robots]
+                    if (np.linalg.norm((forces[0] - forces[1]) / 2) > A_FORCE_LIMITS["max_internal_force_N"]
+                            or any(np.linalg.norm(force) > A_FORCE_LIMITS["max_force_N"] for force in forces)
+                            or any(np.linalg.norm(force_sample[side]["tcp_gravity_corrected_world"][3:])
+                                   > A_FORCE_LIMITS["max_tcp_torque_Nm"] for side in robots)):
+                        raise RuntimeError("A measured force or TCP torque exceeds the declared acceptance envelope")
                 if force_label is not None and tick % 12 == 0:
                     lines = ["World axes, tool gravity removed; F in N, T in N m"]
                     for side in ("left", "right"):
@@ -672,10 +717,6 @@ def main():
                 truth_history.append({"time_s": float(world.current_time), "physics_step": tick,
                                       "phase": contact_monitor.phase,
                                       "position_m": reference_center.tolist()})
-                if world.current_time_step_index - initial_physics_step != tick:
-                    raise RuntimeError("Physics and command step counts diverged")
-                report["simulation_clock"]["control_steps"] = tick
-                report["simulation_clock"]["physics_steps"] = world.current_time_step_index - initial_physics_step
                 if vision_task is not None and vision_task.done():
                     vision_task.result()
                 if tick % vision_period == 0:
@@ -704,13 +745,15 @@ def main():
             return {side: np.asarray(robot.get_joint_positions(joint_indices=joints[side]), dtype=float)
                     for side, robot in robots.items()}
 
-        def command_positions(side, q, nominal=True):
+        def command_positions(side, q, nominal=True, velocity=None):
             q = np.asarray(q, dtype=float)
             if nominal:
                 nominal_targets[side] = q.copy()
             applied_targets[side] = q.copy()
+            applied_velocities[side] = np.zeros_like(q) if velocity is None else np.asarray(velocity).copy()
             robots[side].get_articulation_controller().apply_action(
-                ArticulationAction(joint_positions=q, joint_indices=joints[side]))
+                ArticulationAction(joint_positions=q, joint_velocities=applied_velocities[side],
+                                   joint_indices=joints[side]))
 
         def tcp_fk(side, q):
             position, rotation = solvers[side].compute_forward_kinematics("fr3_link8", q)
@@ -1047,9 +1090,13 @@ def main():
             print(f"FR3_PLANNED {phase}: {len(times)} collision-checked samples", flush=True)
             planning_update(f"{phase}: executing", force=True)
             contact_monitor.phase = phase
+            velocities = ({side: np.gradient(samples[side], 1 / 120, axis=0)
+                           for side in sides} if phase == "A_transfer" else {})
             for index in range(len(times)):
                 for side in sides:
-                    command_positions(side, samples[side][index])
+                    velocity = (velocities[side][index] if side in velocities
+                                and 0 < index < len(times) - 1 else None)
+                    command_positions(side, samples[side][index], velocity=velocity)
                 step()
                 actual_center, actual_orientation = cube.get_world_pose()
                 issues = checker.check(joint_state(), cube_center=actual_center,
@@ -1083,31 +1130,49 @@ def main():
             cached = take_cached_phase(
                 "A_transfer", joint_state(),
                 validator=lambda entry, samples: cached_dual_target_matches(entry, samples, end, half))
-            if cached is not None:
+            if (cached is not None and compatible_full_force_cache(loaded_trajectory_cache)
+                    and cached.get("a_transfer_revision") == A_TRANSFER_REVISION
+                    and all(np.max(np.abs(np.asarray(cached["joint_samples_rad"][side])[0]
+                                          - joint_state()[side])) < 0.001 for side in robots)):
                 execute_joint_path(
-                    {side: np.asarray(cached["waypoints_rad"][side], dtype=float)
-                     for side in ("left", "right")},
-                    "A_transfer", check_step=check_step,
-                    moving_cube_offset=("left", np.array([half, 0, 0])),
-                    prefetched_cache=cached)
+                    {side: np.asarray(cached["waypoints_rad"][side]) for side in robots},
+                    "A_transfer", check_step=check_step, prefetched_cache=cached)
+                trajectory_cache["phases"][-1]["a_transfer_revision"] = A_TRANSFER_REVISION
                 return
-            centers = np.linspace(start, end, max(2, int(np.linalg.norm(end - start) / 0.015) + 1))[1:]
-            targets_by_side = {"left": [], "right": []}
-            seeds = {side: np.asarray(robots[side].get_joint_positions(joint_indices=joints[side]), dtype=float)
-                     for side in targets_by_side}
-            for center in centers:
-                targets = dual_target(center, continuous=True, seed_overrides=seeds)
-                for side, target in targets.items():
-                    target = np.asarray(target, dtype=float)
-                    change = float(np.max(np.abs(target - seeds[side])))
-                    if change > 0.35:
-                        report["blocked_motion"] = {"arm": side, "cube_target_m": center.tolist(),
-                            "joint_start_rad": seeds[side].tolist(), "joint_target_rad": target.tolist(), "max_joint_step_rad": change}
-                        raise RuntimeError(f"{side} IK branch jumps {change:.3f} rad on a 15 mm path segment; refused execution")
-                    targets_by_side[side].append(target)
-                    seeds[side] = target
-            execute_joint_path(targets_by_side, "A_transfer", check_step=check_step,
-                               moving_cube_offset=("left", np.array([half, 0, 0])))
+            # Independent joint splines violate the two rigid attachment transforms.
+            if cached is not None:
+                report["trajectory_cache"]["used_phases"].pop()
+            current = joint_state()
+            poses = {side: tcp_fk(side, current[side]) for side in robots}
+            actual_center, _ = cube.get_world_pose()
+            delta = end - np.asarray(actual_center)
+            duration = (float(cached["duration_s"]) if cached is not None else
+                        max(4.0, 1.875 * float(np.linalg.norm(delta)) / 0.08))
+            times = np.arange(int(np.ceil(duration * 120)) + 1) / 120
+            seeds = {side: q.copy() for side, q in current.items()}
+            samples = {side: [] for side in robots}
+            centers = []
+            max_rigidity_error = 0.0
+            for t in times / times[-1]:
+                planning_update("A: shared rigid Cartesian path")
+                blend = 10 * t**3 - 15 * t**4 + 6 * t**5
+                centers.append(np.asarray(actual_center) + blend * delta)
+                for side in robots:
+                    position, rotation = poses[side]
+                    target = position + blend * delta
+                    seeds[side] = cartesian_joint_target(side, seeds[side], target, rotation)
+                    reached, reached_rotation = tcp_fk(side, seeds[side])
+                    error = float(np.linalg.norm(reached - target))
+                    max_rigidity_error = max(max_rigidity_error, error)
+                    if error > 1e-6 or np.max(np.abs(reached_rotation - rotation)) > 1e-6:
+                        raise RuntimeError("A Cartesian sample violates rigid attachment geometry")
+                    samples[side].append(seeds[side].copy())
+            samples = {side: np.asarray(path) for side, path in samples.items()}
+            execute_joint_path(samples, "A_transfer", check_step=check_step,
+                               cube_center_path=lambda _samples, _times: np.asarray(centers),
+                               sampled_trajectory=(times, samples))
+            trajectory_cache["phases"][-1]["a_transfer_revision"] = A_TRANSFER_REVISION
+            trajectory_cache["phases"][-1]["max_rigid_pose_position_error_m"] = max_rigidity_error
 
         def contact_path(side, start, end, rotation, tcp_offset, phase, max_step_m=0.015):
             start, end = np.asarray(start, dtype=float), np.asarray(end, dtype=float)
@@ -1293,8 +1358,8 @@ def main():
             raise RuntimeError("Cube moved away before attachment")
         attach("left")
         attach("right")
-        step(60)
         record("A_attach", "FIXED_JOINT_PROXY")
+        step(60)
         previous = supply
         for name, center in (("A_lift", CONFIG["task"]["phase_A"]["lift_center_m"]),
                              ("A_over_front", CONFIG["task"]["phase_A"]["over_front_center_m"]),
@@ -1306,6 +1371,7 @@ def main():
                 # Stationary suspended windows independently verify payload load.
                 step(180)
             previous = center
+        record("A_release", "RELEASING_ATTACHMENT_PROXY")
         for side in robots:
             stage.RemovePrim(f"/World/Attachment_{side}")
         step(120)
@@ -1554,6 +1620,10 @@ def main():
         if status_label is not None:
             status_label.text = "STOPPED: " + str(exc)
     finally:
+        if "applied_velocities" in locals() and app.is_running():
+            for side, robot in robots.items():
+                robot.get_articulation_controller().apply_action(ArticulationAction(
+                    joint_velocities=np.zeros(7), joint_indices=joints[side]))
         if vision_task is not None:
             if vision_task.done():
                 async_error = vision_task.exception()

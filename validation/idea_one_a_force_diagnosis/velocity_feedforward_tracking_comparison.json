@@ -1,0 +1,350 @@
+{
+  "schema_version": 1,
+  "diagnostic": "A tracking comparison: unchanged rigid Cartesian position generation, add joint velocity feedforward",
+  "baseline_diagnostic": "validation/idea_one_a_force_diagnosis/zero_velocity_tracking_lag.json",
+  "baseline_diagnostic_sha256": "03fea1d62ed57cacea268096a20d9b1e8b7caf3152c6c3ee5be9474360d2aa24",
+  "baseline_raw_log": "validation/idea_one_a_force_pilot1/wrench.jsonl.gz",
+  "baseline_raw_log_sha256": "6880719746ee8f30b9609fc3bcac9a9090e79218a15bd3b440a978d7bf5bcef2",
+  "velocity_feedforward_source": {
+    "wrench_log": "validation/idea_one_a_force_pilot2/wrench.jsonl.gz",
+    "sha256": "94d0b81148ee1fedf02454d24953a6c900dee353c9f4752a94e27e26340d1ca8",
+    "metadata_file": "validation/idea_one_a_force_pilot2/metadata.json",
+    "metadata_sha256": "3bd61243044989aa5eeb6b2822703f205f8049a7faaaabfd459c2e2bd12281e3",
+    "task_status": "STOPPED",
+    "a_transfer_revision": "shared_rigid_Cartesian_translation_velocity_v2",
+    "record_count": 13307,
+    "a_transfer_record_count": 3707,
+    "joint_drive_gains": {
+      "left": {
+        "stiffness": [
+          3437746.75,
+          3437746.75,
+          3437746.75,
+          3437746.75,
+          3437746.75,
+          3437746.75,
+          3437746.75
+        ],
+        "damping": [
+          343774.6875,
+          343774.6875,
+          343774.6875,
+          343774.6875,
+          343774.6875,
+          343774.6875,
+          343774.6875
+        ]
+      },
+      "right": {
+        "stiffness": [
+          3437746.75,
+          3437746.75,
+          3437746.75,
+          3437746.75,
+          3437746.75,
+          3437746.75,
+          3437746.75
+        ],
+        "damping": [
+          343774.6875,
+          343774.6875,
+          343774.6875,
+          343774.6875,
+          343774.6875,
+          343774.6875,
+          343774.6875
+        ]
+      }
+    }
+  },
+  "scope": "A-only diagnosis. Pilot2 later stopped during B2_right_seat; this comparison is not a full A/B acceptance.",
+  "method": {
+    "sample_frequency_hz": 120,
+    "sample_interval_s": 0.008333333333333333,
+    "command_field": "control.position_targets_rad[side]",
+    "measurement_field": "[side].q_rad",
+    "position_error": "q_command - q_measured_after_physics_step",
+    "velocity": "numpy.gradient(q_command, 1/120, axis=0), over complete contiguous recording",
+    "acceleration": "numpy.gradient(velocity, 1/120, axis=0)",
+    "selected_phase": "A_transfer",
+    "velocity_window": "abs(command_velocity)>0.1 rad/s",
+    "acceleration_window": "abs(command_acceleration)<0.1 rad/s^2",
+    "regression": "ordinary least squares: position_error = tau * command_velocity + intercept",
+    "derivative_edges": "numpy default edge_order=1; start/end of low-velocity profiles excluded by velocity window",
+    "maximum_position_error_scope": "all A_transfer samples, independent of regression selection"
+  },
+  "units": {
+    "tau": "s",
+    "position_error": "rad",
+    "velocity": "rad/s",
+    "acceleration": "rad/s^2",
+    "intercept": "rad"
+  },
+  "arms": {
+    "left": {
+      "qerror_max_rad": 0.00014729074869612724,
+      "baseline_qerror_max_rad": 0.029964682594115777,
+      "qerror_max_reduction_factor": 203.43899979716545,
+      "qerror_abs_p95_rad": 7.126811779034623e-05,
+      "position_command_difference_max_rad": 1.7175255654588995e-05,
+      "velocity_target_checks": {
+        "A_max_abs_rad_s": 0.3149754745904154,
+        "outside_A_max_abs_rad_s": 0.0,
+        "A_segment_boundary_max_abs_rad_s": 0.0,
+        "A_segment_velocity_vs_position_derivative_max_error_rad_s": 0.0,
+        "A_segment_count": 3
+      },
+      "joints": {
+        "fr3_joint1": {
+          "sample_count": 309,
+          "tau_s": 0.0005079611468200169,
+          "intercept_rad": -3.4981629294863096e-05,
+          "regression_rmse_rad": 4.52867785852453e-06,
+          "r_squared": 0.5012898752287926,
+          "selected_qerror_max_rad": 3.729212806824478e-05,
+          "a_transfer_qerror_max_rad": 0.00011782960462891623,
+          "drive_stiffness": 3437746.75,
+          "drive_damping": 343774.6875,
+          "drive_damping_over_stiffness_s": 0.10000000363610263,
+          "baseline_tau_s": 0.09682380151108377
+        },
+        "fr3_joint2": {
+          "sample_count": 1314,
+          "tau_s": -4.0746173599072704e-05,
+          "intercept_rad": -1.2534615985630312e-05,
+          "regression_rmse_rad": 4.27712901605754e-05,
+          "r_squared": 0.003460524942097254,
+          "selected_qerror_max_rad": 0.00010088170569044763,
+          "a_transfer_qerror_max_rad": 0.00011988405227580934,
+          "drive_stiffness": 3437746.75,
+          "drive_damping": 343774.6875,
+          "drive_damping_over_stiffness_s": 0.10000000363610263,
+          "baseline_tau_s": 0.09637760910583963
+        },
+        "fr3_joint3": {
+          "sample_count": 498,
+          "tau_s": -0.00011297446778622992,
+          "intercept_rad": 6.572175193873876e-05,
+          "regression_rmse_rad": 8.980805049899132e-06,
+          "r_squared": 0.33674545191461136,
+          "selected_qerror_max_rad": 6.218135671043346e-05,
+          "a_transfer_qerror_max_rad": 0.00014729074869612724,
+          "drive_stiffness": 3437746.75,
+          "drive_damping": 343774.6875,
+          "drive_damping_over_stiffness_s": 0.10000000363610263,
+          "baseline_tau_s": 0.09269662002353675
+        },
+        "fr3_joint4": {
+          "sample_count": 1115,
+          "tau_s": 8.819767514869646e-06,
+          "intercept_rad": 5.216909076523482e-07,
+          "regression_rmse_rad": 1.569235537402221e-05,
+          "r_squared": 0.006107549162474912,
+          "selected_qerror_max_rad": 4.61609612698588e-05,
+          "a_transfer_qerror_max_rad": 8.482102477391784e-05,
+          "drive_stiffness": 3437746.75,
+          "drive_damping": 343774.6875,
+          "drive_damping_over_stiffness_s": 0.10000000363610263,
+          "baseline_tau_s": 0.09551407140224598
+        },
+        "fr3_joint5": {
+          "sample_count": 766,
+          "tau_s": -9.27640153506152e-05,
+          "intercept_rad": -1.647503798099639e-06,
+          "regression_rmse_rad": 2.0555328442238747e-05,
+          "r_squared": 0.03324517657218462,
+          "selected_qerror_max_rad": 7.184237546109529e-05,
+          "a_transfer_qerror_max_rad": 0.00011087994695446746,
+          "drive_stiffness": 3437746.75,
+          "drive_damping": 343774.6875,
+          "drive_damping_over_stiffness_s": 0.10000000363610263,
+          "baseline_tau_s": 0.09477199541438543
+        },
+        "fr3_joint6": {
+          "sample_count": 859,
+          "tau_s": -6.721431471781295e-05,
+          "intercept_rad": 7.198741466764836e-06,
+          "regression_rmse_rad": 1.871795901461386e-05,
+          "r_squared": 0.1449053302467136,
+          "selected_qerror_max_rad": 5.885088684087769e-05,
+          "a_transfer_qerror_max_rad": 7.857409590239506e-05,
+          "drive_stiffness": 3437746.75,
+          "drive_damping": 343774.6875,
+          "drive_damping_over_stiffness_s": 0.10000000363610263,
+          "baseline_tau_s": 0.0949282973433434
+        },
+        "fr3_joint7": {
+          "sample_count": 819,
+          "tau_s": -1.3068770659703133e-05,
+          "intercept_rad": 1.884590549996971e-06,
+          "regression_rmse_rad": 1.1228619868910758e-05,
+          "r_squared": 0.0007679978754484562,
+          "selected_qerror_max_rad": 2.5278509552695283e-05,
+          "a_transfer_qerror_max_rad": 4.1297667151773965e-05,
+          "drive_stiffness": 3437746.75,
+          "drive_damping": 343774.6875,
+          "drive_damping_over_stiffness_s": 0.10000000363610263,
+          "baseline_tau_s": 0.0957718313800693
+        }
+      },
+      "sensor_force_peak_N": 14.76831197087924,
+      "sensor_moment_peak_Nm": 1.7824552387077959,
+      "tcp_force_peak_N": 14.76831197087924,
+      "tcp_moment_peak_Nm": 2.80625835503445
+    },
+    "right": {
+      "qerror_max_rad": 0.00013283182466583554,
+      "baseline_qerror_max_rad": 0.02997776491053683,
+      "qerror_max_reduction_factor": 225.68209829197008,
+      "qerror_abs_p95_rad": 8.02858095946934e-05,
+      "position_command_difference_max_rad": 1.4477611582408567e-05,
+      "velocity_target_checks": {
+        "A_max_abs_rad_s": 0.31497584203987294,
+        "outside_A_max_abs_rad_s": 0.0,
+        "A_segment_boundary_max_abs_rad_s": 0.0,
+        "A_segment_velocity_vs_position_derivative_max_error_rad_s": 0.0,
+        "A_segment_count": 3
+      },
+      "joints": {
+        "fr3_joint1": {
+          "sample_count": 309,
+          "tau_s": -7.343420524353484e-05,
+          "intercept_rad": -7.635743514726936e-06,
+          "regression_rmse_rad": 6.030394477625917e-06,
+          "r_squared": 0.011709897840026628,
+          "selected_qerror_max_rad": 1.3375705719020914e-05,
+          "a_transfer_qerror_max_rad": 0.00010219517836396186,
+          "drive_stiffness": 3437746.75,
+          "drive_damping": 343774.6875,
+          "drive_damping_over_stiffness_s": 0.10000000363610263,
+          "baseline_tau_s": 0.09632127036638147
+        },
+        "fr3_joint2": {
+          "sample_count": 1314,
+          "tau_s": -0.0001834840760702915,
+          "intercept_rad": 5.394592043307879e-06,
+          "regression_rmse_rad": 4.688273837367544e-05,
+          "r_squared": 0.05535786283489019,
+          "selected_qerror_max_rad": 0.00011362341367293638,
+          "a_transfer_qerror_max_rad": 0.00013283182466583554,
+          "drive_stiffness": 3437746.75,
+          "drive_damping": 343774.6875,
+          "drive_damping_over_stiffness_s": 0.10000000363610263,
+          "baseline_tau_s": 0.09606232391502238
+        },
+        "fr3_joint3": {
+          "sample_count": 498,
+          "tau_s": -2.8821191773543752e-05,
+          "intercept_rad": -4.112281007360023e-05,
+          "regression_rmse_rad": 7.05349234503319e-06,
+          "r_squared": 0.050844729072504036,
+          "selected_qerror_max_rad": 5.5461668514000806e-05,
+          "a_transfer_qerror_max_rad": 0.0001153719378808038,
+          "drive_stiffness": 3437746.75,
+          "drive_damping": 343774.6875,
+          "drive_damping_over_stiffness_s": 0.10000000363610263,
+          "baseline_tau_s": 0.09282742522477859
+        },
+        "fr3_joint4": {
+          "sample_count": 1115,
+          "tau_s": -0.0003190207628427603,
+          "intercept_rad": 1.7280457215513517e-05,
+          "regression_rmse_rad": 2.0287488812867554e-05,
+          "r_squared": 0.8278897456732477,
+          "selected_qerror_max_rad": 7.146965851978493e-05,
+          "a_transfer_qerror_max_rad": 0.0001023407220384076,
+          "drive_stiffness": 3437746.75,
+          "drive_damping": 343774.6875,
+          "drive_damping_over_stiffness_s": 0.10000000363610263,
+          "baseline_tau_s": 0.0949262287786333
+        },
+        "fr3_joint5": {
+          "sample_count": 766,
+          "tau_s": 4.26351711591098e-05,
+          "intercept_rad": -2.2208320813252054e-06,
+          "regression_rmse_rad": 3.8635461395564555e-05,
+          "r_squared": 0.002051921882483154,
+          "selected_qerror_max_rad": 7.269191785497231e-05,
+          "a_transfer_qerror_max_rad": 9.122481279355554e-05,
+          "drive_stiffness": 3437746.75,
+          "drive_damping": 343774.6875,
+          "drive_damping_over_stiffness_s": 0.10000000363610263,
+          "baseline_tau_s": 0.09494414678273182
+        },
+        "fr3_joint6": {
+          "sample_count": 859,
+          "tau_s": -2.42342764889729e-05,
+          "intercept_rad": 8.384791736419254e-06,
+          "regression_rmse_rad": 1.8518860973360448e-05,
+          "r_squared": 0.022010024574408593,
+          "selected_qerror_max_rad": 5.125377089565397e-05,
+          "a_transfer_qerror_max_rad": 7.283515564471266e-05,
+          "drive_stiffness": 3437746.75,
+          "drive_damping": 343774.6875,
+          "drive_damping_over_stiffness_s": 0.10000000363610263,
+          "baseline_tau_s": 0.09501389095446887
+        },
+        "fr3_joint7": {
+          "sample_count": 819,
+          "tau_s": -1.5071943383506405e-05,
+          "intercept_rad": -2.137189428695925e-06,
+          "regression_rmse_rad": 1.1656343203589278e-05,
+          "r_squared": 0.0009478215971611137,
+          "selected_qerror_max_rad": 2.6235969042609497e-05,
+          "a_transfer_qerror_max_rad": 4.131646101379616e-05,
+          "drive_stiffness": 3437746.75,
+          "drive_damping": 343774.6875,
+          "drive_damping_over_stiffness_s": 0.10000000363610263,
+          "baseline_tau_s": 0.09573622040015645
+        }
+      },
+      "sensor_force_peak_N": 15.262366081695085,
+      "sensor_moment_peak_Nm": 1.5880648332478629,
+      "tcp_force_peak_N": 15.262366081695085,
+      "tcp_moment_peak_Nm": 2.7244177920668236
+    }
+  },
+  "internal_force_diagnostic": {
+    "baseline": {
+      "definition": "norm((F_left-F_right)/2), world axes, diagnostic load sharing only",
+      "peak_N": 124.11002861051367,
+      "peak_physics_step": 3088,
+      "combined_force_at_peak_world_N": [
+        -0.01099341176141877,
+        0.016547924852426732,
+        -12.222467971897013
+      ]
+    },
+    "velocity_feedforward": {
+      "definition": "norm((F_left-F_right)/2), world axes, diagnostic load sharing only",
+      "peak_N": 13.66595848513389,
+      "peak_physics_step": 3048,
+      "combined_force_at_peak_world_N": [
+        9.402117628276585e-05,
+        0.006158394640632725,
+        -12.294356136681621
+      ]
+    }
+  },
+  "interpretation": {
+    "pd_law": "tau_drive = Kp*(q_target-q) + Kd*(velocity_target-qdot)",
+    "prediction": "Zero velocity targets require velocity-proportional position error to balance damping; matched velocity targets remove most of this lag without changing gains or the rigid connection.",
+    "limitation": "Regression tau is empirical, affected by post-step timing, loads and closed-chain dynamics; do not interpret it as an independent exact measurement of Kd/Kp."
+  },
+  "acceptance_scope": {
+    "A_only_status": "PASS",
+    "A_force_limits": {
+      "max_force_N": 30.0,
+      "max_tcp_torque_Nm": 3.0,
+      "max_internal_force_N": 15.0
+    },
+    "full_flow_status": "FAIL",
+    "runtime_status": "STOPPED",
+    "overall_force_status": "FULL_FLOW_FORCE_FAIL",
+    "stopped_phase": "B2_right_seat",
+    "stopped_reason": "right wall acquisition overload: 10.158 N",
+    "summary_file": "validation/idea_one_a_force_pilot2/summary.json",
+    "summary_sha256": "1b8fe34e492f7532ece61397f47a909d04c89e8a624b0de362043f55aaa3f8f7",
+    "note": "A tracking/force improvement is verified; pilot2 is not a successful complete A/B1/B2 run."
+  }
+}
