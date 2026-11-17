@@ -254,6 +254,7 @@ def main():
     vision_viewport = None
     vision_loop = None
     vision_task = None
+    vision_comparison = None
     try:
         import numpy as np
         import omni.client
@@ -436,94 +437,106 @@ def main():
                 status_label.text = message
                 render_only()
 
+        from fr3_vision import ArucoCubeEstimator
+        from fr3_vision_comparison import VisionComparison, match_reference
+
         vision_period = max(1, int(round(120 / vision_cfg["frequency_hz"])))
-        vision_detector = None
-        vision_dictionary = None
-        try:
-            import cv2
-            dictionary_type = getattr(cv2.aruco, vision_cfg["aruco_dictionary"])
-            if hasattr(cv2.aruco, "getPredefinedDictionary"):
-                vision_dictionary = cv2.aruco.getPredefinedDictionary(dictionary_type)
-            else:
-                vision_dictionary = cv2.aruco.Dictionary_get(dictionary_type)
-            if hasattr(cv2.aruco, "DetectorParameters"):
-                vision_parameters = cv2.aruco.DetectorParameters()
-            else:
-                vision_parameters = cv2.aruco.DetectorParameters_create()
-            if hasattr(cv2.aruco, "ArucoDetector"):
-                vision_detector = cv2.aruco.ArucoDetector(vision_dictionary, vision_parameters)
-        except (AttributeError, ImportError) as exc:
-            report["vision"]["detector_error"] = str(exc)
+        camera_matrix = np.asarray(vision_camera.get_intrinsics_matrix(), dtype=float)
+        camera_to_world = np.linalg.inv(np.asarray(vision_camera.get_view_matrix_ros(), dtype=float))
+        vision_estimator = ArucoCubeEstimator(
+            camera_matrix, camera_to_world,
+            marker_id=vision_cfg["aruco_marker_id"],
+            marker_size_m=vision_cfg["aruco_marker_size_m"],
+            cube_size_m=CONFIG["cube_size_m"],
+            marker_surface_offset_m=0.0085,
+            dictionary_name=vision_cfg["aruco_dictionary"],
+        )
+        comparison_directory = ROOT / "validation" / "idea_one_vision_comparison"
+        vision_comparison = VisionComparison(comparison_directory, metadata={
+            "scene_id": CONFIG["scene_id"], "camera_model": vision_cfg["camera_model"],
+            "execution_mode": "headless" if args.headless else "visible",
+            "simulation_time_origin_s": float(world.current_time),
+            "camera_mode": report["vision"]["camera_mode"],
+            "camera_matrix": camera_matrix.tolist(),
+            "camera_to_world_ros": camera_to_world.tolist(),
+            "resolution": vision_cfg["resolution"], "frequency_hz": vision_cfg["frequency_hz"],
+            "aruco_dictionary": vision_cfg["aruco_dictionary"],
+            "aruco_marker_id": vision_cfg["aruco_marker_id"],
+            "aruco_marker_size_m": vision_cfg["aruco_marker_size_m"],
+            "cube_size_m": CONFIG["cube_size_m"], "marker_surface_offset_m": 0.0085,
+            "ground_truth_source": "Isaac Sim PhysX Cube.get_world_pose at exposure time",
+            "camera_source": "RGB + ArUco + solvePnP + fixed camera calibration only",
+            "camera_uses_cube_truth": False, "control_state_source": "unchanged Isaac Sim state",
+            "pairing": "nearest 120 Hz reference within half a physics step; duplicate images excluded",
+            "distortion": [0.0] * 5,
+            "hardware_calibration_validated": False,
+        })
+        report["vision"]["comparison_directory"] = str(comparison_directory.relative_to(ROOT))
+        report["vision"]["camera_uses_cube_truth"] = False
+        report["vision"]["unique_frames"] = 0
+        report["vision"]["duplicate_frames"] = 0
+        initial_center, _ = cube.get_world_pose()
+        truth_history = [{"time_s": float(world.current_time), "physics_step": tick,
+                          "phase": contact_monitor.phase, "position_m": initial_center.tolist()}]
+        seen_vision_frames = set()
 
         def sample_vision(render=True):
-            if vision_camera is None or vision_dictionary is None:
-                return
             if render:
                 render_only()
-            try:
-                rgba = np.asarray(vision_camera.get_rgba())
-                if rgba.ndim != 3 or rgba.shape[2] < 3 or rgba.shape[0] == 0:
-                    report["vision"]["misses"] += 1
-                    return
-                rgb = rgba[..., :3].astype(np.uint8, copy=False)
-                gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
-                if vision_detector is not None:
-                    corners, ids, _ = vision_detector.detectMarkers(gray)
+            # Snapshot image and exposure metadata together; reading a newer RGB
+            # buffer with an older timestamp would compare different instants.
+            frame = vision_camera.get_current_frame(clone=True)
+            frame_id = int(frame.get("rendering_frame", 0))
+            raw_capture_time = float(frame.get("rendering_time", 0.0))
+            receive_time = float(world.current_time)
+            capture_time = (raw_capture_time if frame_id > 0 and np.isfinite(raw_capture_time)
+                            else receive_time)
+            reference = match_reference(truth_history, capture_time)
+            observation = {"status": "no_frame", "cube_position_m": None}
+            rgba = np.asarray(frame.get("rgba", []))
+            expected_shape = (vision_cfg["resolution"][1], vision_cfg["resolution"][0], 4)
+            if frame_id > 0 and np.isfinite(raw_capture_time) and rgba.shape == expected_shape:
+                if frame_id in seen_vision_frames:
+                    observation["status"] = "duplicate_frame"
+                    report["vision"]["duplicate_frames"] += 1
                 else:
-                    corners, ids, _ = cv2.aruco.detectMarkers(
-                        gray, vision_dictionary, parameters=vision_parameters)
-                report["vision"]["samples"] += 1
-                if ids is None:
-                    report["vision"]["misses"] += 1
-                    return
-                ids = np.asarray(ids).reshape(-1)
-                matches = np.flatnonzero(ids == vision_cfg["aruco_marker_id"])
-                if len(matches) == 0:
-                    report["vision"]["misses"] += 1
-                    return
-                match = int(matches[0])
-                pixel_center = np.mean(np.asarray(corners[match])[0], axis=0)
-                camera_matrix = vision_camera.get_intrinsics_matrix()
-                distortion = np.zeros((5, 1), dtype=float)
-                if hasattr(cv2.aruco, "estimatePoseSingleMarkers"):
-                    _, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(
-                        corners, vision_cfg["aruco_marker_size_m"], camera_matrix, distortion)
-                else:
-                    marker_half = vision_cfg["aruco_marker_size_m"] / 2.0
-                    object_points = np.array([
-                        [-marker_half, marker_half, 0.0],
-                        [marker_half, marker_half, 0.0],
-                        [marker_half, -marker_half, 0.0],
-                        [-marker_half, -marker_half, 0.0],
-                    ], dtype=np.float32)
-                    tvecs = []
-                    for marker_corners in corners:
-                        solved, _, tvec = cv2.solvePnP(
-                            object_points, np.asarray(marker_corners).reshape(4, 2),
-                            camera_matrix, distortion, flags=cv2.SOLVEPNP_IPPE_SQUARE)
-                        if not solved:
-                            raise RuntimeError("solvePnP failed for the ArUco marker")
-                        tvecs.append(tvec.reshape(3))
-                    tvecs = np.asarray(tvecs, dtype=float).reshape(-1, 1, 3)
-                tvec = np.asarray(tvecs[match][0], dtype=float)
-                marker_center = np.asarray(vision_camera.get_world_points_from_image_coords(
-                    np.asarray([pixel_center]), np.asarray([tvec[2]]))[0], dtype=float)
-                cube_estimate = marker_center - np.array([0, 0, CONFIG["cube_size_m"] / 2 + 0.008])
-                actual_center, _ = cube.get_world_pose()
-                error = float(np.linalg.norm(cube_estimate - np.asarray(actual_center, dtype=float)))
-                detection = {
-                    "physics_step": tick,
-                    "pixel_center": pixel_center.tolist(),
-                    "cube_position_estimate_m": cube_estimate.tolist(),
-                    "cube_position_actual_m": np.asarray(actual_center, dtype=float).tolist(),
-                    "position_error_m": error,
-                }
-                report["vision"]["detections"] += 1
-                report["vision"]["last_detection"] = detection
-                report["vision"]["detection_log"].append(detection)
-                report["vision"]["detection_log"] = report["vision"]["detection_log"][-20:]
-            except (AttributeError, IndexError, TypeError, ValueError, RuntimeError) as exc:
-                report["vision"]["detector_error"] = str(exc)
+                    seen_vision_frames.add(frame_id)
+                    report["vision"]["unique_frames"] += 1
+                    observation = vision_estimator.estimate(rgba.astype(np.uint8, copy=False))
+            report["vision"]["samples"] += 1
+            paired = vision_comparison.append(
+                sample_id=report["vision"]["samples"],
+                phase=contact_monitor.phase if reference is None else reference["phase"],
+                physics_step=None if reference is None else reference["physics_step"],
+                capture_time_s=capture_time,
+                truth_position_m=None if reference is None else reference["position_m"],
+                camera_position_m=observation["cube_position_m"],
+                status=observation["status"], frame_id=frame_id,
+                frame_metadata={
+                    "reported_capture_time_s": raw_capture_time if np.isfinite(raw_capture_time) else None,
+                    "received_time_s": receive_time, "received_physics_step": tick,
+                    "truth_time_s": None if reference is None else reference["time_s"],
+                    "pair_time_delta_s": None if reference is None else reference["time_s"] - capture_time,
+                    "image_shape": list(rgba.shape),
+                    "reprojection_error_px": observation.get("reprojection_error_px"),
+                },
+            )
+            if observation["cube_position_m"] is None:
+                report["vision"]["misses"] += 1
+                return
+            detection = {
+                "physics_step": paired["physics_step"], "capture_time_s": capture_time,
+                "received_physics_step": tick, "frame_id": frame_id,
+                "pixel_center": observation["pixel_center"],
+                "cube_position_estimate_m": observation["cube_position_m"],
+                "cube_position_actual_m": paired["truth_position_m"],
+                "position_error_m": paired["position_error_m"],
+                "reprojection_error_px": observation["reprojection_error_px"],
+            }
+            report["vision"]["detections"] += 1
+            report["vision"]["last_detection"] = detection
+            report["vision"]["detection_log"].append(detection)
+            report["vision"]["detection_log"] = report["vision"]["detection_log"][-20:]
 
         async def sample_vision_async():
             await asyncio.sleep(0)
@@ -548,10 +561,16 @@ def main():
                 world.step(render=False)
                 contact_monitor.raise_if_collision()
                 tick += 1
+                reference_center, _ = cube.get_world_pose()
+                truth_history.append({"time_s": float(world.current_time), "physics_step": tick,
+                                      "phase": contact_monitor.phase,
+                                      "position_m": reference_center.tolist()})
                 if world.current_time_step_index - initial_physics_step != tick:
                     raise RuntimeError("Physics and command step counts diverged")
                 report["simulation_clock"]["control_steps"] = tick
                 report["simulation_clock"]["physics_steps"] = world.current_time_step_index - initial_physics_step
+                if vision_task is not None and vision_task.done():
+                    vision_task.result()
                 if tick % vision_period == 0:
                     if vision_loop is None:
                         sample_vision()
@@ -1279,6 +1298,17 @@ def main():
         if status_label is not None:
             status_label.text = "STOPPED: " + str(exc)
     finally:
+        if vision_task is not None:
+            if vision_task.done():
+                async_error = vision_task.exception()
+                if async_error is not None:
+                    report["status"] = "STOPPED"
+                    report["ab_status"] = "BLOCKED"
+                    report.setdefault("error", str(async_error))
+            else:
+                vision_task.cancel()
+        if vision_comparison is not None:
+            report["vision"]["comparison_summary"] = vision_comparison.finalize()
         if contact_monitor is not None:
             report["physx_contacts"] = contact_monitor.report()
             contact_monitor.close()

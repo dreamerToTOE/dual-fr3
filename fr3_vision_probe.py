@@ -27,8 +27,9 @@ def main():
         from isaacsim.core.api import World
         from isaacsim.sensors.camera import Camera
         from isaacsim.storage.native import get_assets_root_path
-        from pxr import Gf, UsdGeom, UsdLux
+        from pxr import Gf, Usd, UsdGeom, UsdLux
         from fr3_ab_visual_runner import _add_aruco_marker, _add_camera_mount, _box
+        from fr3_vision import ArucoCubeEstimator
 
         if args.headless:
             raise RuntimeError("Run the vision probe without --headless so the viewport render product is active")
@@ -97,6 +98,16 @@ def main():
         world.reset()
         camera.initialize()
         viewport.set_active_camera(capture_path)
+        camera_matrix = np.asarray(camera.get_intrinsics_matrix(), dtype=float)
+        camera_to_world = np.linalg.inv(np.asarray(camera.get_view_matrix_ros(), dtype=float))
+        estimator = ArucoCubeEstimator(
+            camera_matrix, camera_to_world,
+            marker_id=CONFIG["vision"]["aruco_marker_id"],
+            marker_size_m=CONFIG["vision"]["aruco_marker_size_m"],
+            cube_size_m=CONFIG["cube_size_m"],
+            marker_surface_offset_m=0.0085,
+            dictionary_name=CONFIG["vision"]["aruco_dictionary"],
+        )
         for _ in range(60):
             app.update()
             world.step(render=True)
@@ -113,46 +124,24 @@ def main():
             loop.run_until_complete(asyncio.sleep(0))
         future.result()
 
-        rgba = np.asarray(camera.get_rgba())
-        if rgba.ndim != 3 or rgba.shape[2] < 3 or rgba.size == 0:
-            raise RuntimeError(f"Viewport render product returned an empty frame with shape {rgba.shape}")
+        frame = camera.get_current_frame(clone=True)
+        rgba = np.asarray(frame["rgba"])
+        expected_shape = (CONFIG["vision"]["resolution"][1], CONFIG["vision"]["resolution"][0], 4)
+        capture_frame = int(frame["rendering_frame"])
+        capture_time = float(frame["rendering_time"])
+        if (rgba.shape != expected_shape or capture_frame <= 0
+                or not np.isfinite(capture_time) or capture_time <= 0):
+            raise RuntimeError(
+                f"No valid sensor frame: shape={rgba.shape}, frame={capture_frame}, time={capture_time}")
         rgb = rgba[..., :3].astype(np.uint8, copy=False)
-        gray = cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY)
-        dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
-        if hasattr(cv2.aruco, "ArucoDetector"):
-            detector = cv2.aruco.ArucoDetector(dictionary, cv2.aruco.DetectorParameters())
-            corners, ids, _ = detector.detectMarkers(gray)
-            if ids is None and hasattr(cv2.aruco, "detectMarkers"):
-                corners, ids, _ = cv2.aruco.detectMarkers(
-                    gray, dictionary, parameters=cv2.aruco.DetectorParameters_create()
-                )
-        else:
-            corners, ids, _ = cv2.aruco.detectMarkers(
-                gray, dictionary, parameters=cv2.aruco.DetectorParameters_create()
-            )
-        detections = 0 if ids is None else int(np.sum(ids.reshape(-1) == CONFIG["vision"]["aruco_marker_id"]))
-        cube_estimate = None
-        position_error = None
-        if detections:
-            match = int(np.flatnonzero(np.asarray(ids).reshape(-1) == CONFIG["vision"]["aruco_marker_id"])[0])
-            marker_half = CONFIG["vision"]["aruco_marker_size_m"] / 2.0
-            object_points = np.array([
-                [-marker_half, marker_half, 0.0], [marker_half, marker_half, 0.0],
-                [marker_half, -marker_half, 0.0], [-marker_half, -marker_half, 0.0],
-            ], dtype=np.float32)
-            solved, _, tvec = cv2.solvePnP(
-                object_points, np.asarray(corners[match]).reshape(4, 2),
-                camera.get_intrinsics_matrix(), np.zeros((5, 1), dtype=float),
-                flags=cv2.SOLVEPNP_IPPE_SQUARE)
-            if solved:
-                tvec = np.asarray(tvec, dtype=float).reshape(3)
-                marker_center = np.asarray(camera.get_world_points_from_image_coords(
-                    np.asarray([np.mean(np.asarray(corners[match])[0], axis=0)]),
-                    np.asarray([tvec[2]]))[0], dtype=float)
-                cube_estimate = marker_center - np.array(
-                    [0.0, 0.0, CONFIG["cube_size_m"] / 2 + 0.008])
-                actual_center = np.asarray(CONFIG["task"]["phase_B1"]["target_center_m"], dtype=float)
-                position_error = float(np.linalg.norm(cube_estimate - actual_center))
+        observation = estimator.estimate(rgb)
+        detections = int(observation["status"] == "detected")
+        cube_estimate = observation["cube_position_m"]
+        # Reference state is read only after the camera-only estimate is complete.
+        actual_center = np.asarray(UsdGeom.Xformable(cube.GetPrim()).ComputeLocalToWorldTransform(
+            Usd.TimeCode.Default()).ExtractTranslation(), dtype=float)
+        position_error = (None if cube_estimate is None else
+                          float(np.linalg.norm(np.asarray(cube_estimate) - actual_center)))
         image_path = "/tmp/idea_one_viewport_d455_probe.png"
         cv2.imwrite(image_path, cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR))
         result = {
@@ -173,9 +162,16 @@ def main():
             "aruco_dictionary": CONFIG["vision"]["aruco_dictionary"],
             "aruco_marker_id": CONFIG["vision"]["aruco_marker_id"],
             "frame_shape": list(rgba.shape),
+            "capture_frame": capture_frame,
+            "capture_time_s": capture_time,
+            "camera_matrix": camera_matrix.tolist(),
+            "camera_to_world_ros_optical": camera_to_world.tolist(),
+            "estimator_only_uses_rgb_and_calibration": True,
+            "estimator_status": observation["status"],
+            "reprojection_error_px": observation["reprojection_error_px"],
             "detections": detections,
-            "cube_position_estimate_m": None if cube_estimate is None else cube_estimate.tolist(),
-            "cube_position_actual_m": CONFIG["task"]["phase_B1"]["target_center_m"] if detections else None,
+            "cube_position_estimate_m": cube_estimate,
+            "cube_position_actual_m": actual_center.tolist(),
             "position_error_m": position_error,
             "status": "PASS_ARUCO_DETECTED" if detections else "NO_ARUCO_DETECTION",
             "image": image_path,

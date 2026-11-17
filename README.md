@@ -68,24 +68,71 @@ report. The image and result are recorded in
 `validation/idea_one_d455_aruco_probe.json`. The automatic runner uses an
 independent sensor render product in visible mode and schedules ArUco
 sampling as an asyncio task, without calling a render API that advances
-PhysX. The completed headless A/B1/B2 replay produced 1,301 samples and
-905 detections;
-the last Cube position estimate was 3.5 cm from the PhysX center, with no
-detector error and zero uncommanded physics steps.
+PhysX. Full reference-versus-camera statistics are recorded in the
+independent comparison experiment below.
 The overview viewport stays at 1400x900 while the D455 sensor keeps its own
 640x480 render product, so the UI is not enlarged from the sensor frame.
 Isaac Sim Cube poses, robot joints, and flange poses remain available to
 the existing controller and safety checks. Visual pose estimates are only
 logged and compared against ground truth; a fusion estimator has not yet
 replaced the controller state inputs.
-The visible acceptance run also passed A/B1/B2 with 1,303 samples,
-905 detections, no detector errors, and 10,426 matching control/physics steps.
-Its 1400x900 capture is `validation/idea_one_camera_full_scene.png`.
+The earlier camera-mount acceptance passed A/B1/B2 with matching
+control/physics steps. Its 1400x900 capture is
+`validation/idea_one_camera_full_scene.png`.
 
 Run the visible stand/render check with
 `/home/ubuntu2004/isaacsim-4.5.0/python.sh tests/isaac_camera_mount_smoke.py`.
 It verifies separate image sizes, marker ID 23, and no stand colliders, and
 saves overview/sensor PNGs plus `validation/idea_one_camera_mount_smoke.json`.
+
+## Independent Cube position comparison
+
+The experiment now logs two separate streams in
+`validation/idea_one_vision_comparison/`: `ground_truth.jsonl` records the
+Isaac Sim Cube position for reference, while `camera.jsonl` contains only
+RGB/ArUco position observations (or an explicit missing observation).
+`fr3_vision.py` receives an RGB frame, fixed camera intrinsics/extrinsics,
+and known marker/Cube dimensions. It never receives a Cube ground-truth
+position. The controller still uses its existing simulation state; this
+experiment measures perception accuracy before connecting a fusion estimator.
+
+Each camera observation uses its own rendering frame ID and exposure time.
+The evaluator matches it to the 120 Hz reference history within half a
+physics step. It records readout latency, excludes duplicate image frames,
+and leaves missing detections empty instead of substituting ground truth.
+Pose recovery uses the full PnP translation/rotation and marker-to-Cube offset.
+The camera calibration is fixed before the run; no ground-truth bias fitting
+is performed.
+
+Run the automatic task, then generate the comparison plot and statistics:
+
+```bash
+/home/ubuntu2004/isaacsim-4.5.0/python.sh fr3_ab_visual_runner.py --close-on-finish
+python3 fr3_vision_comparison.py validation/idea_one_vision_comparison/comparison.jsonl
+```
+
+The directory also contains `metadata.json`, complete paired
+`comparison.jsonl`, `comparison.csv`, `summary.json`, and `comparison.png`.
+Statistics include XYZ bias/absolute error and 3D mean, median, RMSE, P95,
+and maximum error, both overall and by task phase. Error statistics use
+only valid time-matched detections; visibility/missing-frame counts remain
+separate. The headless comparison is preserved independently in
+`validation/idea_one_vision_comparison_headless/`.
+
+The completed visible run had 906 matched detections out of 1,303 sampling
+attempts (69.5%). Its 3D mean/RMSE/P95/maximum errors were respectively
+24.8/29.9/56.5/134.8 mm. Stage mean errors were A 35.6 mm, B1 34.9 mm,
+and B2 16.8 mm; the worst observation was during `B1_contact_transit`.
+The mean signed XYZ errors were [+2.7, -12.5, -19.4] mm. All missing and
+large-error observations are retained; no ground-truth correction or outlier
+removal was applied. In visible mode, image readout lagged exposure by
+16.7 ms; every matched reference used the exposure time (zero pairing delta).
+Both headless and visible A/B1/B2 proxy-contact runs passed with 10,426
+matching control/physics steps and zero uncommanded physics steps.
+
+This is a comparison of simulated RGB sensing with PhysX ground truth.
+The pinhole model has zero distortion; physical D455 calibration/noise and
+fusion-based control are not validated by this comparison.
 
 The recorded scene parameters are `cube_size_m=0.15`, Cube supply center
 `[0.0,-0.3,0.787]`, back-wall target center `[0.0,1.076,0.787]`, B2 left-wall
