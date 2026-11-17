@@ -304,7 +304,7 @@
     "aruco_dictionary": "DICT_4X4_50",
     "aruco_marker_id": 23,
     "aruco_marker_face": "top",
-    "samples": 1301,
+    "samples": 1303,
     "detections": 905,
     "misses": 398,
     "last_detection": {
@@ -491,38 +491,38 @@
       {
         "physics_step": 10344,
         "pixel_center": [
-          400.0,
+          399.75,
           258.0
         ],
         "cube_position_estimate_m": [
-          -0.25277309393028546,
-          1.0666357675480969,
-          0.7544816017802588
+          -0.2517871038084361,
+          1.0668562601150915,
+          0.7552305603174677
         ],
         "cube_position_actual_m": [
           -0.24488462507724762,
           1.0759828090667725,
           0.7870000004768372
         ],
-        "position_error_m": 0.03474250105831218
+        "position_error_m": 0.033767372365075946
       },
       {
         "physics_step": 10352,
         "pixel_center": [
-          400.0,
+          399.75,
           258.0
         ],
         "cube_position_estimate_m": [
-          -0.25277309393028546,
-          1.0666357675480969,
-          0.7544816017802588
+          -0.2517871038084361,
+          1.0668562601150915,
+          0.7552305603174677
         ],
         "cube_position_actual_m": [
           -0.24488462507724762,
           1.0759828090667725,
           0.7870000004768372
         ],
-        "position_error_m": 0.03474250105831218
+        "position_error_m": 0.033767372365075946
       },
       {
         "physics_step": 10360,
@@ -545,56 +545,56 @@
       {
         "physics_step": 10368,
         "pixel_center": [
-          399.75,
+          400.0,
           258.0
         ],
         "cube_position_estimate_m": [
-          -0.251795414891504,
-          1.0668469139957084,
-          0.7551988138690631
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
         ],
         "cube_position_actual_m": [
           -0.24488462507724762,
           1.0759828090667725,
           0.7870000004768372
         ],
-        "position_error_m": 0.033801465415996275
+        "position_error_m": 0.03474250105831218
       },
       {
         "physics_step": 10376,
         "pixel_center": [
-          399.75,
+          400.0,
           258.0
         ],
         "cube_position_estimate_m": [
-          -0.251795414891504,
-          1.0668469139957084,
-          0.7551988138690631
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
         ],
         "cube_position_actual_m": [
           -0.24488462507724762,
           1.0759828090667725,
           0.7870000004768372
         ],
-        "position_error_m": 0.033801465415996275
+        "position_error_m": 0.03474250105831218
       },
       {
         "physics_step": 10384,
         "pixel_center": [
-          399.75,
+          400.0,
           258.0
         ],
         "cube_position_estimate_m": [
-          -0.2517871038084361,
-          1.0668562601150915,
-          0.7552305603174677
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
         ],
         "cube_position_actual_m": [
           -0.24488462507724762,
           1.0759828090667725,
           0.7870000004768372
         ],
-        "position_error_m": 0.033767372365075946
+        "position_error_m": 0.03474250105831218
       },
       {
         "physics_step": 10392,
@@ -635,38 +635,38 @@
       {
         "physics_step": 10408,
         "pixel_center": [
-          399.75,
-          257.75
+          400.0,
+          258.0
         ],
         "cube_position_estimate_m": [
-          -0.25135609806855674,
-          1.0665988962158877,
-          0.7571419206614085
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
         ],
         "cube_position_actual_m": [
           -0.24488462507724762,
           1.0759828090667725,
           0.7870000004768372
         ],
-        "position_error_m": 0.03196001741762279
+        "position_error_m": 0.03474250105831218
       },
       {
         "physics_step": 10416,
         "pixel_center": [
-          399.75,
+          400.0,
           258.0
         ],
         "cube_position_estimate_m": [
-          -0.251795414891504,
-          1.0668469139957084,
-          0.7551988138690631
+          -0.25277309393028546,
+          1.0666357675480969,
+          0.7544816017802588
         ],
         "cube_position_actual_m": [
           -0.24488462507724762,
           1.0759828090667725,
           0.7870000004768372
         ],
-        "position_error_m": 0.033801465415996275
+        "position_error_m": 0.03474250105831218
       },
       {
         "physics_step": 10424,
@@ -691,7 +691,12 @@
     "d455_color_prim": "/World/D455/RSD455/Camera_OmniVision_OV9782_Color",
     "d455_color_prim_renderable": false,
     "fallback_reason": "Isaac Sim 4.5 D455 USD color prim carries unsupported cameraProjectionType metadata; capture uses a pinhole camera with the D455 color intrinsics",
-    "sampling_mode": "sync_sensor"
+    "overview_resolution": [
+      1400,
+      900
+    ],
+    "independent_render_product": true,
+    "sampling_mode": "async_sensor"
   },
   "trajectory_cache": {
     "loaded": true,
@@ -719,7 +724,7 @@
   "simulation_clock": {
     "control_hz": 120,
     "render_hz": 60,
-    "render_count": 1303,
+    "render_count": 6547,
     "uncommanded_physics_steps": 0,
     "control_steps": 10426,
     "physics_steps": 10426

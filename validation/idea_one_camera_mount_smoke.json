@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "sensor_shape": [
+    480,
+    640,
+    4
+  ],
+  "overview_shape": [
+    900,
+    1400,
+    4
+  ],
+  "marker_ids": [
+    23
+  ],
+  "mount_collisions": false,
+  "overview_camera_eye_m": [
+    1.65,
+    -1.7,
+    2.05
+  ],
+  "overview_camera_target_m": [
+    0,
+    0.6,
+    1.0
+  ],
+  "overview_focal_length_mm": 14.0,
+  "overview_horizontal_aperture_mm": 20.954999923706055,
+  "overview_vertical_aperture_mm": 13.471071379525322,
+  "sensor_image": "idea_one_camera_mount_sensor.png",
+  "overview_image": "idea_one_camera_mount_overview.png"
+}

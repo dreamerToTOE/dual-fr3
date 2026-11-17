@@ -53,18 +53,39 @@ The camera is placed behind and above the back wall so occlusion remains part
 of the experiment. The first probe records missed observations instead of
 moving the camera to guarantee global visibility.
 
+The visible scene includes a simplified D455 housing with three lenses and a
+table-mounted stand behind the rear wall. These meshes are visualization only
+and have no colliders. The housing and lenses stay behind the optical plane
+so the sensor does not see its own housing. Mount dimensions are recorded
+in `vision.mount`.
+
 The 2026-11-17 visual D455 probe loaded the asset, rendered the back-wall
 scene, and detected ArUco ID 23 on the Cube once in a 640x480 frame. Isaac
 Sim 4.5 leaves the D455 color prim with unsupported projection metadata and
 its direct render is blank, so the capture uses a pinhole camera with the
 D455 color intrinsics while retaining the D455 asset and camera path in the
 report. The image and result are recorded in
-`validation/idea_one_d455_aruco_probe.json`. The automatic runner uses the
-same viewport render product in visible mode and schedules ArUco sampling as
-an asyncio task, without calling a render API that advances PhysX. The
-completed headless A/B1/B2 replay produced 1,301 samples and 905 detections;
+`validation/idea_one_d455_aruco_probe.json`. The automatic runner uses an
+independent sensor render product in visible mode and schedules ArUco
+sampling as an asyncio task, without calling a render API that advances
+PhysX. The completed headless A/B1/B2 replay produced 1,301 samples and
+905 detections;
 the last Cube position estimate was 3.5 cm from the PhysX center, with no
 detector error and zero uncommanded physics steps.
+The overview viewport stays at 1400x900 while the D455 sensor keeps its own
+640x480 render product, so the UI is not enlarged from the sensor frame.
+Isaac Sim Cube poses, robot joints, and flange poses remain available to
+the existing controller and safety checks. Visual pose estimates are only
+logged and compared against ground truth; a fusion estimator has not yet
+replaced the controller state inputs.
+The visible acceptance run also passed A/B1/B2 with 1,303 samples,
+905 detections, no detector errors, and 10,426 matching control/physics steps.
+Its 1400x900 capture is `validation/idea_one_camera_full_scene.png`.
+
+Run the visible stand/render check with
+`/home/ubuntu2004/isaacsim-4.5.0/python.sh tests/isaac_camera_mount_smoke.py`.
+It verifies separate image sizes, marker ID 23, and no stand colliders, and
+saves overview/sensor PNGs plus `validation/idea_one_camera_mount_smoke.json`.
 
 The recorded scene parameters are `cube_size_m=0.15`, Cube supply center
 `[0.0,-0.3,0.787]`, back-wall target center `[0.0,1.076,0.787]`, B2 left-wall

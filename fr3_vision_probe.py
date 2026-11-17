@@ -28,7 +28,7 @@ def main():
         from isaacsim.sensors.camera import Camera
         from isaacsim.storage.native import get_assets_root_path
         from pxr import Gf, UsdGeom, UsdLux
-        from fr3_ab_visual_runner import _add_aruco_marker, _box
+        from fr3_ab_visual_runner import _add_aruco_marker, _add_camera_mount, _box
 
         if args.headless:
             raise RuntimeError("Run the vision probe without --headless so the viewport render product is active")
@@ -68,6 +68,8 @@ def main():
             rsd_xf = UsdGeom.Xformable(rsd_root)
             rsd_xf.ClearXformOpOrder()
             rsd_xf.AddTransformOp().Set(Gf.Matrix4d(1.0))
+
+        _add_camera_mount(stage, CONFIG["vision"])
 
         viewport = get_active_viewport()
         capture_path = "/World/D455/CalibratedColorCamera" if d455_available else "/World/VisionViewportCamera"

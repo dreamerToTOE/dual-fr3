@@ -59,7 +59,14 @@
     "aruco_dictionary": "DICT_4X4_50",
     "aruco_marker_id": 23,
     "aruco_marker_size_m": 0.105,
-    "aruco_marker_face": "top"
+    "aruco_marker_face": "top",
+    "mount": {
+      "enabled": true,
+      "base_center_m": [0.0, 1.42, 0.715],
+      "base_size_m": [0.34, 0.28, 0.03],
+      "pole_size_m": [0.05, 0.05, 1.07],
+      "housing_size_m": [0.18, 0.10, 0.10]
+    }
   },
   "task": {
     "scope": "single_cube_A_B1_B2",

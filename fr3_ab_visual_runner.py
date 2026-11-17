@@ -86,6 +86,60 @@ def _add_aruco_marker(stage, cube_size, marker_size):
             cell.CreateDisplayColorAttr([Gf.Vec3f(color, color, color)])
 
 
+def _add_camera_mount(stage, vision_cfg):
+    """Add a non-colliding, visible stand and housing for the rear D455."""
+    from pxr import Gf, UsdGeom
+
+    mount = vision_cfg.get("mount", {})
+    if not mount.get("enabled", True):
+        return
+    camera = [float(v) for v in vision_cfg["camera_position_m"]]
+    base = [float(v) for v in mount.get(
+        "base_center_m", [camera[0], camera[1] + 0.07, 0.715])]
+    base_size = mount.get("base_size_m", [0.34, 0.28, 0.03])
+    pole_size = mount.get("pole_size_m", [0.05, 0.05, 1.07])
+    housing_size = mount.get("housing_size_m", [0.18, 0.10, 0.10])
+
+    def visual_box(path, center, size, color):
+        prim = _box(stage, path, center, size)
+        UsdGeom.Gprim(prim).CreateDisplayColorAttr([Gf.Vec3f(*color)])
+        return prim
+
+    root = "/World/D455/Mount"
+    visual_box(f"{root}/base", base, base_size, (0.16, 0.19, 0.23))
+    visual_box(
+        f"{root}/pole",
+        [base[0], base[1], base[2] + 0.5 * pole_size[2] + 0.015],
+        pole_size,
+        (0.20, 0.24, 0.29),
+    )
+    visual_box(
+        f"{root}/top_arm",
+        [camera[0], 0.5 * (base[1] + camera[1] + 0.08), camera[2] - 0.02],
+        [pole_size[0], abs(camera[1] + 0.08 - base[1]) + 0.02, 0.04],
+        (0.20, 0.24, 0.29),
+    )
+    body = UsdGeom.Xform.Define(stage, f"{root}/CameraBody")
+    UsdGeom.Xformable(body.GetPrim()).AddTransformOp().Set(
+        Gf.Matrix4d().SetLookAt(
+            Gf.Vec3d(*camera), Gf.Vec3d(*vision_cfg["camera_look_at_m"]),
+            Gf.Vec3d(0, 0, 1),
+        ).GetInverse()
+    )
+    # USD cameras look down -Z; visible hardware stays behind the optical plane.
+    visual_box(f"{body.GetPath()}/housing", [0, 0, 0.07], housing_size, (0.07, 0.10, 0.14))
+
+    for name, x_offset, radius in (("color_lens", 0.0, 0.019),
+                                   ("left_lens", -0.058, 0.023),
+                                   ("right_lens", 0.058, 0.023)):
+        lens = UsdGeom.Cylinder.Define(stage, f"{body.GetPath()}/{name}")
+        lens.CreateAxisAttr(UsdGeom.Tokens.z)
+        lens.CreateRadiusAttr(radius)
+        lens.CreateHeightAttr(0.022)
+        UsdGeom.Xformable(lens.GetPrim()).AddTranslateOp().Set(Gf.Vec3d(x_offset, 0, 0.014))
+        lens.CreateDisplayColorAttr([Gf.Vec3f(0.03, 0.06, 0.08)])
+
+
 def _set_start_targets(stage, root_path):
     from pxr import Usd
 
@@ -247,9 +301,9 @@ def main():
         dome = UsdLux.DomeLight.Define(stage, "/World/Lighting")
         dome.CreateIntensityAttr(1500.0)
         camera = UsdGeom.Camera.Define(stage, "/World/Camera")
-        camera.AddTransformOp().Set(Gf.Matrix4d().SetLookAt(Gf.Vec3d(1.65, -1.7, 2.05), Gf.Vec3d(0, 0.4, 0.8), Gf.Vec3d(0, 0, 1)).GetInverse())
+        camera.AddTransformOp().Set(Gf.Matrix4d().SetLookAt(Gf.Vec3d(1.65, -1.7, 2.05), Gf.Vec3d(0, 0.6, 1.0), Gf.Vec3d(0, 0, 1)).GetInverse())
         camera.CreateClippingRangeAttr(Gf.Vec2f(0.01, 100.0))
-        camera.CreateFocalLengthAttr(22.0)
+        camera.CreateFocalLengthAttr(14.0)
         vision_cfg = CONFIG["vision"]
         d455_url = f"{assets_root.rstrip('/')}/{vision_cfg['camera_asset']}"
         d455_status, _ = omni.client.stat(d455_url)
@@ -261,6 +315,9 @@ def main():
             rsd_xf = UsdGeom.Xformable(rsd_root)
             rsd_xf.ClearXformOpOrder()
             rsd_xf.AddTransformOp().Set(Gf.Matrix4d(1.0))
+            imported_visual = stage.GetPrimAtPath(f"{vision_cfg['camera_root_path']}/RSD455/Visual")
+            if imported_visual.IsValid():
+                UsdGeom.Imageable(imported_visual).CreateVisibilityAttr().Set(UsdGeom.Tokens.invisible)
             vision_runtime_path = "/World/D455/CalibratedColorCamera"
             report["vision"]["camera_mode"] = "d455_calibrated_pinhole_fallback"
             report["vision"]["d455_color_prim"] = vision_cfg["camera_path"]
@@ -272,6 +329,7 @@ def main():
         else:
             vision_runtime_path = "/World/VisionCameraFallback"
             report["vision"]["camera_mode"] = "generic_fallback"
+        _add_camera_mount(stage, vision_cfg)
         vision_camera_prim = UsdGeom.Camera.Define(stage, vision_runtime_path)
         vision_camera_prim.AddTransformOp().Set(
             Gf.Matrix4d().SetLookAt(
@@ -294,7 +352,8 @@ def main():
             name="vision_camera",
             frequency=vision_cfg["frequency_hz"],
             resolution=tuple(vision_cfg["resolution"]),
-            render_product_path=(None if vision_viewport is None else vision_viewport.get_render_product_path()),
+            # Keep the 640x480 sensor product separate from the 1400x900 overview viewport.
+            render_product_path=None,
         ))
         vision_camera.set_projection_type("pinhole")
         if not args.headless:
@@ -326,7 +385,11 @@ def main():
         if vision_camera is not None:
             vision_camera.resume()
         if vision_viewport is not None:
-            vision_viewport.set_active_camera(vision_runtime_path)
+            vision_viewport.set_active_camera("/World/Camera")
+            vision_viewport.resolution = (1400, 900)
+            assert vision_camera.get_render_product_path() != vision_viewport.get_render_product_path()
+            report["vision"]["overview_resolution"] = list(vision_viewport.resolution)
+            report["vision"]["independent_render_product"] = True
         for side, robot in robots.items():
             joints[side] = np.array([robot.get_dof_index(f"fr3_joint{i}") for i in range(1, 8)])
             robot.set_joint_positions(np.array(CONFIG["fr3"]["official_start_q_rad"]), joint_indices=joints[side])
@@ -349,7 +412,7 @@ def main():
         last_render_wall = last_control_wall
         report["simulation_clock"] = {"control_hz": 120, "render_hz": 60,
                                       "render_count": 0, "uncommanded_physics_steps": 0}
-        report["vision"]["sampling_mode"] = "async_viewport" if vision_viewport is not None else "sync_sensor"
+        report["vision"]["sampling_mode"] = "async_sensor" if vision_viewport is not None else "sync_sensor"
         if vision_viewport is not None:
             vision_loop = asyncio.get_event_loop()
 
