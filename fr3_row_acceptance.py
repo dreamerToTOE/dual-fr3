@@ -63,6 +63,8 @@ def sequence_checks(report):
     previous_release = -math.inf
     for cube_id in range(1, 6):
         rows = [row for row in phases if row.get("cube_id") == cube_id]
+        staged = any(item.get("cube_id") == cube_id and "staging_offset_from_rear_m" in item
+                     for item in sequence)
         expected = [
             ("supply_arrival", "READY_FOR_RGB_LOCALIZATION"),
             ("A_attach", "SURFACE_GRIPPERS_CLOSED"),
@@ -70,7 +72,7 @@ def sequence_checks(report):
             ("A_over_front", "REACHED_WITH_SURFACE_GRIPPERS"),
             ("A_landing", "REACHED_WITH_SURFACE_GRIPPERS"),
             ("A_release", "REACHED_AFTER_SUCTION_RELEASE"),
-            ("B1_push", "REACHED_WITH_PHYSX_CONTACT"),
+            ("B1_push", "REACHED_INTERMEDIATE_LANE" if staged else "REACHED_WITH_PHYSX_CONTACT"),
             ("B2_hold", "FORCE_CONFIRMED"),
             ("B2_push_release", "CENTER_CUBE_STRAIGHT_PUSH_COMPLETE" if cube_id == 5
              else "REACHED_WITH_PHYSX_CONTACT"),
@@ -136,6 +138,10 @@ def force_checks(directory, report):
                       and row.get("status") in HOLD_STATUSES), None)
         end = next((row for row in selected if row.get("phase") == "B2_support_unload"
                     and row.get("status") == "RUNNING"), None)
+        if "staging_offset_from_rear_m" in role:
+            # After the lateral arm clears, the support arm becomes the rear pushing arm.
+            end = next((row for row in selected if row.get("phase") == "B2_push_release"
+                        and row.get("status") == "PUSH_ARM_RETRACTED_SUPPORT_HOLDING"), None)
         window = (None if begin is None or end is None else
                   [int(round(row["sim_time_s"] * 120)) for row in (begin, end)])
         if support not in ("left", "right") or window is None or window[1] < window[0]:
@@ -257,6 +263,8 @@ def physical_contact_checks(directory, report, starts):
     rear_wall = "/World/Environment/wall_back"
     targets = ("/World/Environment/wall_left", "/World/Environment/wall_right",
                "/World/Cube_1", "/World/Cube_2", rear_wall)
+    staged_ids = {item["cube_id"] for item in report.get("packing_sequence", [])
+                  if "staging_offset_from_rear_m" in item}
     for cube_id in range(1, 6):
         phases = [row for row in report.get("phases", []) if row.get("cube_id") == cube_id]
 
@@ -287,7 +295,15 @@ def physical_contact_checks(directory, report, starts):
             valid_probe = (isinstance(probe, list) and bool(probe)
                            and all(isinstance(force, (int, float)) and math.isfinite(force) for force in probe))
             if maintained_approach and valid_probe:
-                if neighbor_target:
+                if cube_id in staged_ids:
+                    valid_probe = len(probe) == 30 and min(probe) >= 1.5 and sum(probe) / 30 >= 1.8
+                    baseline = seat.get("sliding_baseline_N")
+                    if baseline is not None:
+                        travel = seat.get("measured_axial_travel_m", math.inf)
+                        valid_probe = (valid_probe and isinstance(baseline, (int, float)) and math.isfinite(baseline)
+                                       and sum(probe) / 30 >= baseline + .4
+                                       and isinstance(travel, (int, float)) and 0. <= travel <= .0005)
+                elif neighbor_target:
                     valid_probe = len(probe) == 30 and min(probe) >= 6.
                 else:
                     valid_probe = len(probe) == 3 and probe[0] >= 6. and sum(probe) / 3 >= 4.
@@ -297,14 +313,29 @@ def physical_contact_checks(directory, report, starts):
                 issues.append(f"Cube_{cube_id} paused B2 seating confirmation window is unavailable")
                 probe_start = seat_end = -1
             target_window = (probe_start, seat_end)
+            if cube_id in staged_ids:
+                side_clear = tick(event("B2_push_release", "PUSH_ARM_RETRACTED_SUPPORT_HOLDING"))
+                rear_start = tick(event("B2_staged_rear_seat", "RUNNING"))
+                rear_seat = event("B2_staged_rear_seat", "FORCE_CONFIRMED")
+                rear_forces = rear_seat.get("probe_normal_samples_N", [])
+                rear_end = tick(rear_seat)
+                rear_window = (rear_end - 29, rear_end)
+                if (not seat_end <= side_clear <= rear_start <= rear_window[0] <= rear_end
+                        or rear_end > tick(event("B2_support_unload", "RUNNING"))
+                        or not isinstance(rear_forces, list) or len(rear_forces) != 30
+                        or not all(isinstance(f, (int, float)) and math.isfinite(f) for f in rear_forces)
+                        or rear_forces[0] < 5. or sum(rear_forces) / 30 < 3.):
+                    issues.append(f"Cube_{cube_id} missing rear seating confirmation after lateral withdrawal")
+                    rear_window = (-1, -1)
         if not 0 <= arrive < attach < detach < touch < hold:
             issues.append(f"Cube_{cube_id} supply, carry or rear-load window is unavailable")
         windows.append(((arrive, attach - 1), (attach + 1, detach), rear_window, target_window))
         evidence.append({"cube_id": cube_id, "reference_frames": 0, "supply_impulse_frames": 0,
                          "paired_attachment_frames": 0, "rear_impulse_frames": 0,
+                         "required_rear_impulse_frames": 30 if cube_id in staged_ids else 1,
                          "target_impulse_frames": 0, "target_partner": targets[cube_id - 1],
                          "required_target_impulse_frames": 30 if maintained_approach and neighbor_target else 1,
-                         "target_window_steps": list(target_window)})
+                         "target_window_steps": list(target_window), "rear_window_steps": list(rear_window)})
 
     reference_path = directory / "contact_states/reference.jsonl.gz"
     if len(starts) == 5 and reference_path.is_file():
@@ -345,9 +376,12 @@ def physical_contact_checks(directory, report, starts):
         except (OSError, EOFError, ValueError, TypeError, KeyError) as error:
             issues.append(f"physical reference recording is invalid ({error})")
         for row in evidence:
-            for key in ("supply_impulse_frames", "paired_attachment_frames", "rear_impulse_frames"):
+            for key in ("supply_impulse_frames", "paired_attachment_frames"):
                 if row[key] == 0:
                     issues.append(f"Cube_{row['cube_id']} missing physical evidence {key}")
+            if row["rear_impulse_frames"] < row["required_rear_impulse_frames"]:
+                issues.append(f"Cube_{row['cube_id']} loaded the rear wall in {row['rear_impulse_frames']} "
+                              f"of {row['required_rear_impulse_frames']} required confirmation frames")
             if row["target_impulse_frames"] < row["required_target_impulse_frames"]:
                 issues.append(f"Cube_{row['cube_id']} loaded the intended target in {row['target_impulse_frames']} "
                               f"of {row['required_target_impulse_frames']} required confirmation frames")

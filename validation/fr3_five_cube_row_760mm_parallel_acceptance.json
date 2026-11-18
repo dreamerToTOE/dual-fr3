@@ -1,0 +1,414 @@
+{
+  "date": "2026-11-18",
+  "simulator": "Isaac Sim 4.5 GUI",
+  "scene_id": "dual_fr3_four_wall_150mm_five_cube_row_760mm",
+  "scene": {
+    "tray_inner_width_mm": 760,
+    "cube_edge_mm": 150,
+    "cube_count": 5,
+    "nominal_center_slot_clearance_mm": 10
+  },
+  "scope": "Cube 4 measured landing to release; Cube 5 supply to insertion and withdrawal restored from the actual Cube 4 release",
+  "method": "One completed serial GUI run and one completed four-process GUI run from the same Cube 4 landing checkpoint, with live sensing and fixed execution speeds",
+  "parallel_workers": 4,
+  "trajectory_replay_segments": 0,
+  "rail_replay_segments": 0,
+  "cube4": {
+    "placement_status": "PASS_W760_CUBE4_CHAIN",
+    "timing": {
+      "task": {
+        "serial_s": 507.839,
+        "parallel_s": 482.553,
+        "delta_s": 25.286,
+        "speedup": 1.052,
+        "reduction_percent": 4.98
+      },
+      "B1_contact_planning": {
+        "serial_s": 28.679,
+        "parallel_s": 22.851,
+        "delta_s": 5.828,
+        "speedup": 1.255,
+        "reduction_percent": 20.32
+      },
+      "B2_push_planning": {
+        "serial_s": 11.925,
+        "parallel_s": 4.136,
+        "delta_s": 7.789,
+        "speedup": 2.883,
+        "reduction_percent": 65.32
+      },
+      "B2_retreat_plan_short_outward": {
+        "serial_s": 2.112,
+        "parallel_s": 0.643,
+        "delta_s": 1.469,
+        "speedup": 3.285,
+        "reduction_percent": 69.55
+      },
+      "B2_retreat_plan_vertical_clearance": {
+        "serial_s": 3.577,
+        "parallel_s": 1.199,
+        "delta_s": 2.378,
+        "speedup": 2.983,
+        "reduction_percent": 66.48
+      },
+      "B2_retreat_plan_full_outward": {
+        "serial_s": 2.174,
+        "parallel_s": 0.698,
+        "delta_s": 1.476,
+        "speedup": 3.115,
+        "reduction_percent": 67.89
+      },
+      "B2_push_seat": {
+        "serial_s": 49.494,
+        "parallel_s": 55.763,
+        "delta_s": -6.269,
+        "speedup": 0.888,
+        "reduction_percent": -12.67
+      },
+      "B2_staged_rear_seat": {
+        "serial_s": 50.473,
+        "parallel_s": 51.032,
+        "delta_s": -0.559,
+        "speedup": 0.989,
+        "reduction_percent": -1.11
+      },
+      "B2_post_unload_observation": {
+        "serial_s": 0.9,
+        "parallel_s": 0.959,
+        "delta_s": -0.059,
+        "speedup": 0.938,
+        "reduction_percent": -6.56
+      }
+    },
+    "intentional_contact_windows": {
+      "B2_push_seat": {
+        "steps": [
+          13989,
+          14018
+        ],
+        "target": "/World/Cube_2",
+        "positive_impulses": 30
+      },
+      "B2_staged_rear_seat": {
+        "steps": [
+          19028,
+          19057
+        ],
+        "target": "/World/Environment/wall_back",
+        "positive_impulses": 30
+      }
+    },
+    "unexpected_robot_contacts": 0,
+    "support_force": {
+      "max_allowed_dropout_s": 0.05,
+      "serial_longest_dropout_s": 0.10833333333333334,
+      "parallel_longest_dropout_s": 0.24166666666666667,
+      "serial_in_band_fraction": 0.9711048158640226,
+      "parallel_in_band_fraction": 0.9455450105961485,
+      "status": "FAIL"
+    },
+    "four_process_validation": [
+      {
+        "phase": "B1_contact_transit",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 1474,
+        "wall_s": 1.7891444520028017,
+        "control_steps": 0,
+        "render_updates": 15,
+        "max_render_gap_s": 0.12320614400232444
+      },
+      {
+        "phase": "B1",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 662,
+        "wall_s": 0.7368566799996188,
+        "control_steps": 0,
+        "render_updates": 6,
+        "max_render_gap_s": 0.11548432999916258
+      },
+      {
+        "phase": "B2_lift_from_measured_state_transit",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 732,
+        "wall_s": 0.8298772310008644,
+        "control_steps": 0,
+        "render_updates": 7,
+        "max_render_gap_s": 0.11404034899896942
+      },
+      {
+        "phase": "B2_rail_transfer_transit",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 615,
+        "wall_s": 0.6831846439999936,
+        "control_steps": 0,
+        "render_updates": 6,
+        "max_render_gap_s": 0.1113715850005974
+      },
+      {
+        "phase": "B2_descent",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 752,
+        "wall_s": 0.8645287700019253,
+        "control_steps": 0,
+        "render_updates": 7,
+        "max_render_gap_s": 0.113519398997596
+      },
+      {
+        "phase": "B2_push",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 1801,
+        "wall_s": 2.1280233500001486,
+        "control_steps": 0,
+        "render_updates": 19,
+        "max_render_gap_s": 0.1125465080003778
+      },
+      {
+        "phase": "B2_push_retreat",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 361,
+        "wall_s": 0.4173796789982589,
+        "control_steps": 0,
+        "render_updates": 3,
+        "max_render_gap_s": 0.11434633200042299
+      },
+      {
+        "phase": "B2_push_retreat",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 601,
+        "wall_s": 0.6917068350012414,
+        "control_steps": 0,
+        "render_updates": 6,
+        "max_render_gap_s": 0.12182747599945287
+      },
+      {
+        "phase": "B2_push_retreat",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 361,
+        "wall_s": 0.4079000050005561,
+        "control_steps": 0,
+        "render_updates": 3,
+        "max_render_gap_s": 0.11184473699904629
+      },
+      {
+        "phase": "B2_staged_rear_insert",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 481,
+        "wall_s": 0.5499645140007487,
+        "control_steps": 0,
+        "render_updates": 4,
+        "max_render_gap_s": 0.11792839400004596
+      }
+    ],
+    "control_clock": {
+      "control_hz": 120,
+      "render_hz": 60,
+      "render_count": 13203,
+      "uncommanded_physics_steps": 0,
+      "control_steps": 20378,
+      "physics_steps": 20378
+    },
+    "initial_gui_attempt": "Stopped at the physics step-count guard after an Isaac Sim timeline reset"
+  },
+  "cube5": {
+    "placement": {
+      "status": "PASS_W760_CUBE5_CHAIN",
+      "cube5_entry": "from_supply",
+      "cube4_checkpoint_sha256": "bda1c407326049cfea4ac12a6bf481690c2a0e6930f136299f5ca667682340e5",
+      "cube3_checkpoint_sha256": "1689031cfb59b805bade8040508844a1306499acfce66238447e2c6f278404de",
+      "B1_forward_progress_mm": 338.9221429824829,
+      "B1_lateral_range_mm": 2.848700387403369,
+      "B1_net_delta_x_mm": -2.8253431664779782,
+      "min_side_gaps_mm": [
+        2.104597887137433,
+        3.529029335394243
+      ],
+      "rear_positive_impulse_frames": 2114,
+      "side_positive_impulse_frames": 0,
+      "unexpected_robot_contacts": 0,
+      "final_RGB_order": [
+        1,
+        3,
+        5,
+        4,
+        2
+      ],
+      "final_RGB_cube5_center_m": [
+        0.00013173927383403755,
+        1.0739519839149965,
+        0.7869999999999999
+      ],
+      "sensor_slot": {
+        "left_edge_m": -0.07779669339190773,
+        "right_edge_m": 0.08115415317109051,
+        "width_m": 0.15895084656299824,
+        "target_x_m": 0.0016787298895913905
+      },
+      "B1_physics_steps": 981,
+      "rear_last_loaded_step": 18534,
+      "after_withdrawal": {
+        "samples": 1536,
+        "attached": 0,
+        "cup_impulse": 0
+      },
+      "final_physics_side_gaps_mm": [
+        2.9075936089316414,
+        5.055398787197129
+      ],
+      "final_RGB_side_gaps_mm": [
+        3.253051449143757,
+        5.5718146997689875
+      ],
+      "parked_tool_to_cube5_lower_bound_mm": {
+        "left": 465.8105400300198,
+        "right": 665.8105248744935
+      }
+    },
+    "four_process_validation": [
+      {
+        "phase": "checkpoint_resume_transit",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 827,
+        "wall_s": 1.0747977339997306,
+        "control_steps": 0,
+        "render_updates": 9,
+        "max_render_gap_s": 0.11941247799768462
+      },
+      {
+        "phase": "A_approach_transit",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 958,
+        "wall_s": 1.084784741000476,
+        "control_steps": 0,
+        "render_updates": 9,
+        "max_render_gap_s": 0.11522178700033692
+      },
+      {
+        "phase": "A_contact_approach",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 241,
+        "wall_s": 0.2631505239987746,
+        "control_steps": 0,
+        "render_updates": 2,
+        "max_render_gap_s": 0.11295168500146247
+      },
+      {
+        "phase": "A_transfer",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 902,
+        "wall_s": 1.064303610000934,
+        "control_steps": 0,
+        "render_updates": 9,
+        "max_render_gap_s": 0.11385817499831319
+      },
+      {
+        "phase": "A_transfer",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 1971,
+        "wall_s": 2.3481256230006693,
+        "control_steps": 0,
+        "render_updates": 21,
+        "max_render_gap_s": 0.11481732600077521
+      },
+      {
+        "phase": "A_transfer",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 1307,
+        "wall_s": 1.5351851070008706,
+        "control_steps": 0,
+        "render_updates": 13,
+        "max_render_gap_s": 0.11399231900213636
+      },
+      {
+        "phase": "A_release_retreat",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 361,
+        "wall_s": 0.3905453990009846,
+        "control_steps": 0,
+        "render_updates": 3,
+        "max_render_gap_s": 0.11142324199681752
+      },
+      {
+        "phase": "B1_contact_transit",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 904,
+        "wall_s": 0.9767349229987303,
+        "control_steps": 0,
+        "render_updates": 8,
+        "max_render_gap_s": 0.11388770499979728
+      },
+      {
+        "phase": "B1",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 957,
+        "wall_s": 1.1249779740028316,
+        "control_steps": 0,
+        "render_updates": 10,
+        "max_render_gap_s": 0.11580751899964525
+      },
+      {
+        "phase": "packing_verification_park_transit",
+        "status": "CLEAR",
+        "workers": 4,
+        "samples_checked": 1365,
+        "wall_s": 1.4711760650025099,
+        "control_steps": 0,
+        "render_updates": 13,
+        "max_render_gap_s": 0.11399619599978905
+      }
+    ],
+    "control_clock": {
+      "control_hz": 120,
+      "render_hz": 60,
+      "render_count": 13647,
+      "uncommanded_physics_steps": 0,
+      "control_steps": 20842,
+      "physics_steps": 20842
+    }
+  },
+  "runtime_source_sha256": {
+    "fr3_ab_dynamic_smoke.py": "b6c61576772304507b42739ff899baa97f779d110314aa70c65499a675f34852",
+    "fr3_ab_ik_preflight.py": "8b88411d1268384ca2e80b4958e143cc7a80c2385b9ee6cd54f6ee790702862e",
+    "fr3_ab_preflight.py": "2d480d216df8c2d97e4d58eb55dec71a017d4b3b0ad88fbc79211e60ae69116b",
+    "fr3_ab_visual_runner.py": "620da82d14ecad05775ccea07238e47a17cc08d36c91538bd2c8a60997c0a45f",
+    "fr3_b2_collision_plan.py": "01dd7742daa3092d68bc5c079609ee96f88f802428a265306ee716c791156d2e",
+    "fr3_bilateral_b2.py": "5c80935203369933951868689dc32a5bcc7971c7688d51f8177e860455a94296",
+    "fr3_collision.py": "a311533cc68fab4d54a48a925909a5806a7e33f854aac8ad8662085c4b74d6a0",
+    "fr3_contact_control.py": "8074ed81365a96c0347baee31530dadb159d4ba19cc950f885903c928d176d84",
+    "fr3_contact_monitor.py": "ab692154ea5d61862904d547454d2a0210da146395f6d4ec92bce1b0b0f0e577",
+    "fr3_contact_state.py": "8a1d823675f03a629e4a862f8c6a45929d8811427c7c643664da4b782309b1c8",
+    "fr3_contact_state_validation.py": "dfb8725ae807fbbef9cd672aba6106eca384d02d0b7581f5a565dc8f8ce03ce6",
+    "fr3_cube_supply.py": "4a7da8b53488daeefcec78956d428d871b37059c323297a67253aa784f3dabc7",
+    "fr3_five_cube_row.py": "5d23c9c18e1f34b182d213beedb2a516b57f1b0b8931ef5c4ce2f5fe5c6c0ff7",
+    "fr3_four_wall_preview.py": "87ac55fe3a67404440145d7fb8c298ffab2b638b658f1c0f88103f272049d910",
+    "fr3_parallel_collision.py": "1f2b39c6b6e4af6e8d6b4e2bea08ce1ba07dbd3a4648b1d9dcc1d834cac69f85",
+    "fr3_row_acceptance.py": "aa088c657f20167cf59486e60a91566cb6f66e57ff77ae3389030675cac16e9a",
+    "fr3_surface_gripper.py": "07f80df5005d2182fa37410a6ad63b946d5a8693cf0c00847672caf3c7d1339b",
+    "fr3_trajectory.py": "65457ddae7fe91821e22e5b2fbbb24b62a1890d82cd0612955f56c9ef3a1acf9",
+    "fr3_vision.py": "b961b3f66d96571f98c15b390f6e61330fd5d2cc5065561b7cb9845ac552a5b3",
+    "fr3_vision_comparison.py": "1492bc35fc36ff686de8917f37d6c3206d13911c29b5b756b3f57d523a9b8636",
+    "fr3_wrench.py": "57c69d49a56f404aadb76b0b6e65ab97b9a0ecb2b0066b8adca47e0f56b20758",
+    "fr3_wrist_ft.py": "058cace4d398f0c21fff86c0b945b5018ec32096d1effb2177206afd8a03fc5c",
+    "fr3_wrist_ft_analysis.py": "846415a08a5d5306f466172420e00b6d9a804d5653640fd497375eaf293da702",
+    "fr3_contact_skills.json": "6b84d30df63b92250c68c2bcbded2cb859a581c3c13521861e92104e98d3d655",
+    "fr3_four_wall_scene_config.json": "53bccaba12c78e028e6d0e625cd974f588587cf91e55f064c43a1b5487a61770"
+  }
+}

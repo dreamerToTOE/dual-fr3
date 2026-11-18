@@ -67,6 +67,34 @@ def test_path_checks_between_clear_endpoints():
         collision.assert_clear_path({"right": path})
 
 
+def test_parallel_checks_match_serial_at_an_interpolated_partition_boundary(monkeypatch):
+    from concurrent.futures import ThreadPoolExecutor
+    import fr3_parallel_collision as parallel
+
+    collision = checker([("wall", [10., 0, 0], [.01, 1, 1])])
+    monkeypatch.setattr(parallel, "_checker", collision, raising=False)
+    monkeypatch.setattr(parallel, "ProcessPoolExecutor",
+                        lambda max_workers, **_: ThreadPoolExecutor(max_workers=max_workers))
+    path = np.zeros((4, 7))
+    path[:, 0] = [-.3, -.2, .2, .3]
+    paths = {"right": path}
+    expected = collision.validate_path(paths)
+    validator = parallel.ParallelPathValidator(2, {}, {})
+    try:
+        actual = validator.validate(paths, bases={}, neighbors=[], centers=None, rotations=None,
+                                    contacts=(), progress=lambda done, total: None)
+        for malformed, centers in [({"right": path[:0]}, None),
+                                   ({"right": path, "left": path[:3]}, None),
+                                   (paths, np.zeros((5, 3)))]:
+            with pytest.raises(ValueError):
+                validator.validate(malformed, bases={}, neighbors=[], centers=centers, rotations=None,
+                                   contacts=(), progress=lambda done, total: None)
+    finally:
+        validator.close()
+    assert expected["status"] == "BLOCKED" and expected["sample"] == 2
+    assert actual == expected
+
+
 def test_path_progress_callback_reports_checked_samples():
     collision = checker()
     progress = []
@@ -132,3 +160,42 @@ def test_partial_visual_refresh_retains_occluded_collision_obstacles():
     assert any(issue["b"] == "Cube_1" for issue in issues)
     assert collision.is_clear(q, cube_center=[1., 0., 0.])
     assert not collision.is_clear(q, cube_center=[2., 0., 0.])
+
+
+@pytest.mark.parametrize("phase, age, normal, fresh_x, wrong_cube, passes", [
+    ("B2_push_seat", .10, 4.7, .098, False, True),
+    ("B2_push_seat", .10, 4.7, .0968, False, False),
+    ("B2_push_seat", .10, 4.7, .098, True, False),
+    ("B2_push_seat", .21, 4.7, .098, False, False),
+    ("B2_push_seat", .10, .1, .098, False, False),
+    ("B2_push_seat", .10, 10.1, .098, False, False),
+    ("B2_push_retreat", .10, 4.7, .098, False, False),
+    ("B2_push_unload", .10, .1, .098, False, True),
+])
+def test_runtime_seating_reconciles_only_fresh_rgb_and_loaded_fk(phase, age, normal, fresh_x, wrong_cube, passes):
+    import ast
+    from pathlib import Path
+    from types import SimpleNamespace
+
+    collision = checker()
+    observed = [.0968, 0., 0.]
+    neighbors = [("Cube_1", observed, np.eye(3))]
+    if wrong_cube:
+        neighbors.append(("Cube_2", [-.0968, 0., 0.], np.eye(3)))
+    collision.set_other_cubes(neighbors)
+    tree = ast.parse((Path(__file__).resolve().parents[1] / "fr3_ab_visual_runner.py").read_text())
+    function = next(node for node in ast.walk(tree)
+                    if isinstance(node, ast.FunctionDef) and node.name == "check_current_collision")
+    env = {"np": np, "checker": collision, "joint_state": lambda: {"right": np.zeros(7)},
+           "sensed_cube": lambda: (np.zeros(3), np.eye(3)), "allowed_contacts": {"right"},
+           "current_task": {"cube_id": 3, "contact_target": "Cube_1"}, "world": SimpleNamespace(current_time=5.),
+           "push_sign": -1, "push_side": "right", "last_force_sample": {"right": {"tcp_gravity_corrected_world": [normal, 0., 0.]}},
+           "live_neighbors": {"Cube_1": (np.array([fresh_x, 0., 0.]), np.eye(3), 5.-age)},
+           "report": {"neighbor_observations": [{"neighbors": [{"name": "Cube_1", "position_m": observed, "capture_time_s": 0.}]}]}}
+    exec(compile(ast.Module(body=[function], type_ignores=[]), "<runtime geometry guard>", "exec"), env)
+    if passes:
+        env["check_current_collision"](phase)
+        assert env["report"]["neighbor_geometry_rechecks"]
+    else:
+        with pytest.raises(RuntimeError, match="Measured collision"):
+            env["check_current_collision"](phase)

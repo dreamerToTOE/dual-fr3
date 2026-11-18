@@ -257,7 +257,11 @@ def main():
     parser.add_argument("--close-on-finish", action="store_true", help="Close instead of retaining the result in the GUI")
     parser.add_argument("--output-dir", type=Path, help="Keep this run's artifacts separate from earlier experiments")
     parser.add_argument("--five-cube-row", action="store_true", help="Load and pack five Cubes in alternating order")
+    parser.add_argument("--collision-workers", type=int, help="Processes for final path validation (1 for serial)")
     args = parser.parse_args()
+    workers = args.collision_workers if args.collision_workers is not None else (4 if args.five_cube_row else 1)
+    if workers < 1:
+        parser.error("--collision-workers must be positive")
     if args.five_cube_row:
         from fr3_five_cube_row import row_config
         CONFIG = row_config(CONFIG)
@@ -348,6 +352,7 @@ def main():
     vision_comparison = None
     force_recorder = None
     contact_experiment = None
+    parallel_validator = None
     try:
         import numpy as np
         import omni.client
@@ -355,6 +360,7 @@ def main():
         from isaacsim.core.api import World
         from isaacsim.core.prims import SingleArticulation, SingleRigidPrim, SingleXFormPrim
         from isaacsim.core.utils.rotations import quat_to_rot_matrix
+        from isaacsim.core.utils.numpy.rotations import quats_to_rot_matrices
         from isaacsim.core.utils.types import ArticulationAction
         from isaacsim.robot_motion.motion_generation import LulaKinematicsSolver, interface_config_loader
         from isaacsim.storage.native import get_assets_root_path
@@ -482,9 +488,10 @@ def main():
                     status_label = ui.Label("Loading FR3...", word_wrap=True)
                     force_label = ui.Label("Wrist F/T: waiting for physics", word_wrap=True)
         robots, solvers, joints, flanges = {}, {}, {}, {}
+        kinematics_config = interface_config_loader.load_supported_lula_kinematics_solver_config("FR3")
         for side, base in CONFIG["fr3"]["bases"].items():
             robots[side] = world.scene.add(SingleArticulation(f"/World/{side}_fr3", name=f"{side}_robot"))
-            solver = LulaKinematicsSolver(**interface_config_loader.load_supported_lula_kinematics_solver_config("FR3"))
+            solver = LulaKinematicsSolver(**kinematics_config)
             solver.set_robot_base_pose(np.array(base[:3]), np.array([math.cos(base[3] / 2), 0, 0, math.sin(base[3] / 2)]))
             assert solver.get_joint_names() == [f"fr3_joint{i}" for i in range(1, 8)]
             solvers[side] = solver
@@ -632,6 +639,10 @@ def main():
             force_recorder.metadata["tcp_calibration_report"] = str(tcp_calibration_path.relative_to(ROOT))
         print("FR3_AB_PHYSICS_READY", flush=True)
         checker = FR3CollisionChecker(CONFIG, solvers)
+        if workers > 1:
+            from fr3_parallel_collision import ParallelPathValidator
+            parallel_validator = ParallelPathValidator(workers, CONFIG, kinematics_config)
+        report["path_validation_timing"] = []
         allowed_contacts = {"left", "right"}
         contact_monitor.allowed_cube_contacts = allowed_contacts
         # The previous plans encode Cartesian endpoints from a different pose source.
@@ -729,6 +740,8 @@ def main():
         contact_plan_rotation = None
         supported_pose_time = None
         supported_pose_filter = PlanarPoseMedian()
+        neighbor_filters = {}
+        live_neighbors = {}
         report["vision"]["supported_pose_filter"] = {
             "type": "causal_planar_median", "distinct_frames": 3,
             "timestamp": "middle optical exposure",
@@ -761,6 +774,26 @@ def main():
                     seen_vision_frames.add(frame_id)
                     report["vision"]["unique_frames"] += 1
                     observation = vision_estimator.estimate(rgba.astype(np.uint8, copy=False))
+                    if (contact_monitor.phase in ("B2_push", "B2_push_seat", "B2_push_unload")
+                            and current_task.get("contact_target") in ("Cube_1", "Cube_2")
+                            and control_center is not None
+                            and abs(control_center[0] - current_task["goal_center_m"][0]) < .025
+                            and 0 <= receive_time - capture_time <= .20):
+                        neighbor_name = current_task["contact_target"]
+                        neighbor_index = int(neighbor_name.removeprefix("Cube_")) - 1
+                        active_id = vision_estimator.marker_id
+                        try:
+                            vision_estimator.marker_id = CONFIG["cube_sequence"][neighbor_index]["marker_id"]
+                            neighbor = vision_estimator.estimate(rgba.astype(np.uint8, copy=False))
+                        finally:
+                            vision_estimator.marker_id = active_id
+                        pose = vision_estimator.resting_pose(neighbor, CONFIG["floor_top_m"])
+                        if pose is not None:
+                            if neighbor_name not in neighbor_filters:
+                                neighbor_filters[neighbor_name] = PlanarPoseMedian()
+                            filtered = neighbor_filters[neighbor_name].update(frame_id, capture_time, *pose)
+                            if filtered is not None:
+                                live_neighbors[neighbor_name] = filtered
             latest_camera_observation = {
                 "status": observation["status"], "position_m": observation["cube_position_m"],
                 "cube_rotation_world": observation.get("cube_rotation_world"),
@@ -919,7 +952,8 @@ def main():
                     robot.get_articulation_controller().apply_action(
                         ArticulationAction(joint_efforts=gravity, joint_indices=joints[side]))
                 # One command advances one physics tick in both execution modes.
-                contact_monitor.physics_step_index = world.current_time_step_index + 1
+                physics_before = world.current_time_step_index
+                contact_monitor.physics_step_index = physics_before + 1
                 world.step(render=False)
                 grippers.update()
                 if seals_required and not all(grippers.is_closed(side) for side in robots):
@@ -927,7 +961,11 @@ def main():
                     raise RuntimeError("Surface Gripper seal lost while carrying the Cube")
                 tick += 1
                 if world.current_time_step_index - initial_physics_step != tick:
-                    raise RuntimeError("Physics and command step counts diverged")
+                    raise RuntimeError(
+                        f"Physics and command step counts diverged at {tick}: "
+                        f"physics {physics_before} -> {world.current_time_step_index}, "
+                        f"expected {initial_physics_step + tick}, timeline playing={world.is_playing()}"
+                    )
                 report["simulation_clock"]["control_steps"] = tick
                 report["simulation_clock"]["physics_steps"] = world.current_time_step_index - initial_physics_step
                 force_recorder.command_context = {
@@ -1197,10 +1235,36 @@ def main():
 
         def check_current_collision(phase, contact_uncertainty_m=0.):
             center, rotation = sensed_cube()
-            issues = checker.check(joint_state(), cube_center=center,
-                                   cube_rotation=rotation,
-                                   cup_contacts=allowed_contacts, margin_m=0.0,
-                                   contact_tolerance_m=.003 + contact_uncertainty_m, first_only=True)
+            joints_now = joint_state()
+            options = dict(cube_center=center, cube_rotation=rotation, cup_contacts=allowed_contacts,
+                           margin_m=0., contact_tolerance_m=.003 + contact_uncertainty_m, first_only=True)
+            issues = checker.check(joints_now, **options)
+            target = current_task.get("contact_target")
+            if (issues and phase in ("B2_push_seat", "B2_push_unload")
+                    and target in live_neighbors and issues[0]["kind"] == "cube_obstacle"
+                    and issues[0]["b"] == target):
+                neighbor_center, neighbor_rotation, capture = live_neighbors[target]
+                age = float(world.current_time) - capture
+                force = np.asarray(last_force_sample[push_side]["tcp_gravity_corrected_world"][:3])
+                normal = float(-push_sign * force[0])
+                unloaded = phase == "B2_push_unload"
+                if 0 <= age <= .20 and np.linalg.norm(force) <= 10. and (normal >= .5 or unloaded):
+                    previous = issues[0]
+                    checker.set_other_cubes([(target, neighbor_center, neighbor_rotation)], preserve_unobserved=True)
+                    issues = checker.check(joints_now, **options)
+                    checks = report.setdefault("neighbor_geometry_rechecks", {})
+                    key = f"{current_task['cube_id']}_{phase}"
+                    if key not in checks:
+                        stored = next(row for packet in reversed(report["neighbor_observations"])
+                                      for row in packet["neighbors"] if row["name"] == target)
+                        checks[key] = {"time_s": float(world.current_time), "target": target,
+                                       "old_clearance_m": previous["clearance_m"],
+                                       "previous_rgb_center_m": stored["position_m"],
+                                       "previous_rgb_age_s": float(world.current_time) - stored["capture_time_s"],
+                                       "fresh_rgb_center_m": neighbor_center.tolist(), "fresh_rgb_age_s": age,
+                                       "fused_active_center_m": center.tolist(), "axial_force_N": normal,
+                                       "target_pair_tolerance_m": options["contact_tolerance_m"],
+                                       "fresh_rgb_rotation": neighbor_rotation.tolist(), "fused_active_rotation": rotation.tolist()}
             if issues:
                 raise RuntimeError(f"Measured collision in {phase}: {issues[0]}")
 
@@ -1254,28 +1318,30 @@ def main():
                 raise RuntimeError(f"{phase}: paired Cartesian speed {peak_speed:.3f} rad/s exceeds 0.4")
             execute_joint_path(samples, phase, sampled_trajectory=(times, samples))
 
-        def seat_against_wall(side, axis, sign, center_target, phase, *, contact_target, follow_side=None):
+        def seat_against_wall(side, axis, sign, center_target, phase, *, contact_target, follow_side=None, probe_override=None):
             neighbor = contact_target in ("Cube_1", "Cube_2")
             if follow_side is not None and not (neighbor or contact_target in ("wall_left", "wall_right")):
                 raise ValueError(f"Unknown lateral contact target: {contact_target}")
-            probe = B2_CONTROLLER_PARAMETERS["neighbor_seating_probe" if neighbor else "wall_seating_probe"]
+            probe = probe_override or B2_CONTROLLER_PARAMETERS["neighbor_seating_probe" if neighbor else "wall_seating_probe"]
             record(phase, "RUNNING", contact_target=contact_target)
             position, tool_rotation = tcp_fk(side, applied_targets[side])
             seed = applied_targets[side].copy()
             probe_forces = []
+            probe_positions = []
             probe_paused = False
-            for _ in range(7200 if follow_side is not None else 3600):
+            entry_count = 0
+            for _ in range(7200 if follow_side is not None or probe_override is not None else 3600):
                 actual, cube_rotation = sensed_cube()
                 gap = oriented_wall_gap(actual[axis], cube_rotation[axis],
                                          half, center_target, sign)
                 measured_force = np.asarray(last_force_sample[side]["tcp_gravity_corrected_world"][:3])
                 force = -sign * measured_force[axis]
                 force_norm = float(np.linalg.norm(measured_force))
-                if abs(force) > 10 or (follow_side is not None and force_norm > 10):
+                if abs(force) > 10 or ((follow_side is not None or probe_override is not None) and force_norm > 10):
                     raise RuntimeError(f"{side} wall acquisition overload: "
                                        f"normal {force:.3f} N, resultant {force_norm:.3f} N")
                 previous_axis = position[axis]
-                if follow_side is None:
+                if follow_side is None and probe_override is None:
                     if gap <= B2_CONTROLLER_PARAMETERS["seating_gap_tolerance_m"] and force > .5:
                         return
                     speed = .0001 if gap > .0001 else .00002
@@ -1285,40 +1351,58 @@ def main():
                     if probe_paused:
                         if near_target and (not neighbor or force >= probe["minimum_force_N"]):
                             probe_forces.append(float(force))
+                            probe_positions.append(float(actual[axis]))
                         else:
+                            probe_positions.clear()
                             probe_forces.clear()
                             probe_paused = False
-                    elif near_target and force >= probe["entry_force_N"]:
-                        probe_paused = True
-                        if not neighbor:
-                            probe_forces.append(float(force))
+                    else:
+                        loaded = near_target and force >= probe["entry_force_N"]
+                        entry_count = entry_count + 1 if loaded else 0
+                        if entry_count >= probe.get("entry_samples", 1):
+                            probe_paused = True
+                            entry_count = 0
+                            if not neighbor:
+                                probe_forces.append(float(force))
                     if len(probe_forces) >= probe["samples"]:
                         mean_force = float(np.mean(probe_forces))
-                        if neighbor or mean_force >= probe["mean_force_N"]:
+                        travel = max(probe_positions) - min(probe_positions) if probe_positions else 0.
+                        if (mean_force >= probe.get("mean_force_N", -np.inf)
+                                and travel <= probe.get("max_axial_travel_m", np.inf)):
                             force_criterion = ("minimum_force_N" if neighbor else "mean_force_N")
                             record(phase, "FORCE_CONFIRMED", normal_force_N=force, mean_normal_force_N=mean_force,
                                    probe_normal_samples_N=probe_forces.copy(), probe_entry_force_N=probe["entry_force_N"],
+                                   required_mean_force_N=probe.get("mean_force_N"),
+                                   entry_samples=probe.get("entry_samples", 1),
+                                   sliding_baseline_N=probe.get("sliding_baseline_N"),
+                                   allowed_axial_travel_m=probe.get("max_axial_travel_m"),
+                                   measured_axial_travel_m=travel,
                                    estimated_gap_m=float(gap), target_uncertainty_m=probe["target_uncertainty_m"],
                                    follow_arm=follow_side, contact_target=contact_target,
                                    **{f"probe_{force_criterion}": probe[force_criterion]})
                             return
+                        probe_positions.clear()
                         probe_forces.clear()
                         probe_paused = False
                     if not probe_paused:
                         speed = .0005 if gap > .001 and force_norm < 4. else .0001
+                        if neighbor and probe_override is not None and gap <= probe["target_uncertainty_m"]:
+                            # Slow down before a corner-to-face load can develop at the staging lane.
+                            speed = .00010 if force < 1.6 else .000020
                         position[axis] += sign * speed / 120
-                    follow_position, follow_rotation = tcp_fk(follow_side, applied_targets[follow_side])
-                    follow_position[axis] += sign * max(0., sign * (position[axis] - previous_axis))
-                    follow_q = cartesian_joint_target(
-                        follow_side, applied_targets[follow_side], follow_position, follow_rotation)
-                    command_positions(follow_side, follow_q)
+                    if follow_side is not None:
+                        follow_position, follow_rotation = tcp_fk(follow_side, applied_targets[follow_side])
+                        follow_position[axis] += sign * max(0., sign * (position[axis] - previous_axis))
+                        follow_q = cartesian_joint_target(
+                            follow_side, applied_targets[follow_side], follow_position, follow_rotation)
+                        command_positions(follow_side, follow_q)
                 seed = cartesian_joint_target(side, seed, position, tool_rotation)
                 command_positions(side, seed)
                 step()
                 check_current_collision(phase)
             raise RuntimeError(f"{side} could not acquire wall contact")
 
-        def settle_b2_contacts(active_side, direction, phase):
+        def settle_b2_contacts(active_side, direction, phase, support_target=None):
             record(phase, "STABILIZING_DUAL_CONTACT")
             seed = applied_targets[active_side].copy()
             position, rotation = tcp_fk(active_side, seed)
@@ -1331,6 +1415,9 @@ def main():
                 support: -last_force_sample[support]["tcp_gravity_corrected_world"][1],
                 active_side: -direction * last_force_sample[active_side]["tcp_gravity_corrected_world"][0],
             }
+            if support_target is None:
+                support_target = B2_CONTROLLER_PARAMETERS["left_target_force_N"]
+            support_low, support_high = ((.3, 1.2) if support_target < 1. else (1., 3.))
             stable = 0
             for _ in range(2400):
                 force = -direction * last_force_sample[active_side]["tcp_gravity_corrected_world"][0]
@@ -1347,13 +1434,13 @@ def main():
                     raise RuntimeError(f"{phase}: dual-contact force exceeds 10 N")
                 for side, force in current.items():
                     filtered[side] += .05 * (force - filtered[side])
-                if (left_hold.target_force_N > B2_CONTROLLER_PARAMETERS["left_target_force_N"]
+                if (left_hold.target_force_N > support_target
                         and filtered[active_side] >= B2_CONTROLLER_PARAMETERS["active_sync_loaded_force_N"]):
-                    left_hold.target_force_N = B2_CONTROLLER_PARAMETERS["left_target_force_N"]
+                    left_hold.target_force_N = support_target
                     record(phase, "REAR_PRELOAD_REDUCED_AFTER_ACTIVE_LOAD",
                            filtered_normal_force_N=filtered.copy())
-                ready = (left_hold.target_force_N == B2_CONTROLLER_PARAMETERS["left_target_force_N"]
-                         and 1. <= filtered[support] <= 3. and .5 <= filtered[active_side] <= 1.5)
+                ready = (left_hold.target_force_N == support_target
+                         and support_low <= filtered[support] <= support_high and .5 <= filtered[active_side] <= 1.5)
                 stable = stable + 1 if ready else 0
                 if stable >= 60:
                     record(phase, "FORCE_CONFIRMED", filtered_normal_force_N=filtered)
@@ -1581,16 +1668,11 @@ def main():
                     flange, rotation = solvers[side].compute_forward_kinematics("fr3_link8", q)
                     cube_centers.append(np.asarray(flange).reshape(3) + rotation @ tool_offset + offset)
                 cube_centers = np.asarray(cube_centers)
-            def planning_progress(checked):
-                planning_update(f"{phase}: collision checking {checked} samples")
             if cached_entry is not None:
                 validation = {"status": "CLEAR", "samples_checked": len(times),
                               "issues": [], "source": "cached_trajectory"}
             else:
-                validation = checker.validate_path(samples, cube_centers=cube_centers,
-                                                   cube_rotations=cube_rotation,
-                                                   cup_contacts=allowed_contacts,
-                                                   progress_callback=planning_progress)
+                validation = validate_planned_path(phase, samples, cube_centers, cube_rotation)
             if (validation["status"] != "CLEAR" and moving_cube_offset is None
                     and sampled_trajectory is None):
                 # Retain the checked straight RRT edges if corner blending cuts into an obstacle.
@@ -1603,9 +1685,7 @@ def main():
                     cube_centers = np.asarray(cube_center_path(samples, times), dtype=float)
                     if cube_centers.shape != (len(times), 3):
                         raise ValueError(f"{phase} cube_center_path must return one 3D center per sample")
-                validation = checker.validate_path(samples, cube_centers=cube_centers,
-                    cube_rotations=cube_rotation, cup_contacts=allowed_contacts,
-                    progress_callback=planning_progress)
+                validation = validate_planned_path(phase, samples, cube_centers, cube_rotation)
             if validation["status"] != "CLEAR":
                 report["blocked_motion"] = {"phase": phase, **validation}
                 raise RuntimeError(f"Planned collision in {phase}: {validation}")
@@ -1651,6 +1731,43 @@ def main():
                 error = float(np.max(np.abs(joint_state()[side] - all_paths[side][-1])))
                 if error > 0.08:
                     raise RuntimeError(f"{side} {phase} joint tracking error {error:.3f} rad")
+
+        def validate_planned_path(phase, samples, cube_centers, cube_rotation):
+            start = previous_refresh = time.monotonic()
+            start_tick = tick
+            render_count = report["simulation_clock"]["render_count"]
+            max_gap = 0.
+
+            def progress(label):
+                nonlocal previous_refresh, max_gap
+                planning_update(f"{phase}: collision checking {label}")
+                if last_render_wall > previous_refresh:
+                    max_gap = max(max_gap, last_render_wall - previous_refresh)
+                    previous_refresh = last_render_wall
+
+            parallel = parallel_validator is not None and len(next(iter(samples.values()))) >= 240
+            if parallel:
+                bases = {side: (base[:3].copy(), quats_to_rot_matrices(
+                    np.array([math.cos(base[3] / 2), 0, 0, math.sin(base[3] / 2)])))
+                         for side, base in rail_states.items()}
+                result = parallel_validator.validate(
+                    samples, bases=bases, neighbors=checker.other_cubes,
+                    centers=cube_centers, rotations=cube_rotation, contacts=tuple(allowed_contacts),
+                    progress=lambda done, total: progress(f"{done}/{total} intervals"),
+                )
+            else:
+                result = checker.validate_path(
+                    samples, cube_centers=cube_centers, cube_rotations=cube_rotation,
+                    cup_contacts=allowed_contacts, progress_callback=lambda checked: progress(f"{checked} samples"),
+                )
+            end = time.monotonic()
+            timing = {"phase": phase, "status": result["status"], "workers": workers if parallel else 1,
+                      "samples_checked": result["samples_checked"], "wall_s": end - start, "control_steps": tick - start_tick,
+                      "render_updates": report["simulation_clock"]["render_count"] - render_count,
+                      "max_render_gap_s": None if args.headless else max(max_gap, end - previous_refresh)}
+            report["path_validation_timing"].append(timing)
+            print("FR3_PATH_VALIDATION " + json.dumps(timing), flush=True)
+            return result
 
         def dual_path(start, end):
             start, end = np.asarray(start, dtype=float), np.asarray(end, dtype=float)
@@ -1992,7 +2109,9 @@ def main():
             cube_start, b1_rotation = observe_resting_cube("B1_contact_pose", vision_camera, vision_estimator,
                                                           CONFIG["floor_top_m"])
             record("B1_contact", "RUNNING", support_arm=support_side)
-            front_offset = b1_rotation @ [0, -half, 0]
+            staged = "staging_offset_from_rear_m" in current_task
+            front_height = .004 if staged else 0.
+            front_offset = b1_rotation @ [0, -half, front_height]
             front_normal = b1_rotation[:, 1]
             front_rotation = np.asarray(FRONT_ROTATION) if support_side == "left" else np.diag([-1., 1., -1.])
             front_tool_rotation = b1_rotation @ front_rotation
@@ -2011,12 +2130,14 @@ def main():
             move({support_side: q}, duration=1.0)
             allowed_contacts.add(support_side)
             contact_plan_rotation = b1_rotation.copy()
-            push_faces[support_side] = (1, -front_normal, np.array([0., -half, 0.]))
+            push_faces[support_side] = (1, -front_normal, np.array([0., -half, front_height]))
             touch_face(support_side, front_normal, .02, "B1_touch")
             b1_push_start, _ = sensed_cube()
             if push_side is not None:
                 b1_target[0] = b1_push_start[0]
             b1_end = b1_target.copy()
+            if staged:
+                b1_end[1] -= current_task["staging_offset_from_rear_m"]
             b1_end[1] -= half * (np.abs(b1_rotation[1]).sum() - 1) + .0002
             contact_path(support_side, b1_push_start, b1_end, "B1")
             b1_actual, rear_rotation = observe_resting_cube("B2_rear_pose", vision_camera, vision_estimator,
@@ -2024,41 +2145,50 @@ def main():
             b1_progress = float(b1_actual[1] - cube_start[1])
             if b1_progress < 0.20:
                 raise RuntimeError(f"B1 cube did not advance enough: {b1_progress:.3f} m")
-            record("B1_push", "REACHED_WITH_PHYSX_CONTACT", progress_m=b1_progress,
-                   back_wall_hold_armed=True, support_arm=support_side)
-
-            align_contact_plane(support_side, front_rotation, "B2_wall_alignment")
-            position, _ = tcp_fk(support_side, applied_targets[support_side])
-            cartesian_move(support_side, position + [0, 0, .004], 1.0, "B2_acquire")
-            contact_plan_rotation = rear_rotation.copy()
-            push_faces[support_side] = (1, np.array([0., -1., 0.]), np.array([0., -half, 0.]))
-            seat_against_wall(support_side, 1, 1, b1_target[1], "B2_acquire", contact_target="wall_back")
-            position, left_hold_rotation = tcp_fk(support_side, applied_targets[support_side])
-            left_hold_z = float(position[2])
-            left_hold = NormalForceController(
-                position[1], target_force_N=B2_CONTROLLER_PARAMETERS["support_approach_preload_N"],
-                gain_m_per_Ns=1e-4,
-                max_speed_m_s=B2_CONTROLLER_PARAMETERS["normal_position_speed_limit_m_s"],
-                max_offset_m=B2_CONTROLLER_PARAMETERS["normal_position_max_offset_m"])
-            record("B2_alignment_preload", "TACTILE_PLANE_CONFIRMATION",
-                   target_force_N=left_hold.target_force_N)
-            aligned = 0
-            filtered_alignment_force = 0.
-            for _ in range(3600):
-                step()
-                check_current_collision("B2_alignment_preload")
-                wrench = last_force_sample[support_side]["tcp_gravity_corrected_world"]
-                filtered_alignment_force += .05 * (-wrench[1] - filtered_alignment_force)
-                aligned = aligned + 1 if 3.2 <= filtered_alignment_force <= 5.0 else 0
-                if aligned >= 30:
-                    break
+            if staged:
+                record("B1_push", "REACHED_INTERMEDIATE_LANE", progress_m=b1_progress,
+                       support_arm=support_side, observed_center_m=b1_actual.tolist())
+                align_contact_plane(support_side, front_rotation, "B2_stage_front_alignment")
+                position, left_hold_rotation = tcp_fk(support_side, applied_targets[support_side])
+                left_hold_z = float(position[2])
+                left_hold = NormalForceController(position[1], target_force_N=.65, gain_m_per_Ns=4e-5,
+                                                   max_speed_m_s=.0002, max_offset_m=.002)
             else:
-                raise RuntimeError("Rear contact preload did not stabilize")
-            report["target_observations"].append({
-                "phase": "B2_preload", "source": "filtered_wrist_normal_force",
-                "force_N": filtered_alignment_force, "yaw_source": "fresh rear RGB",
-            })
-            left_hold.gain_m_per_Ns = force_gain
+                record("B1_push", "REACHED_WITH_PHYSX_CONTACT", progress_m=b1_progress,
+                       back_wall_hold_armed=True, support_arm=support_side)
+
+                align_contact_plane(support_side, front_rotation, "B2_wall_alignment")
+                position, _ = tcp_fk(support_side, applied_targets[support_side])
+                cartesian_move(support_side, position + [0, 0, .004], 1.0, "B2_acquire")
+                contact_plan_rotation = rear_rotation.copy()
+                push_faces[support_side] = (1, np.array([0., -1., 0.]), np.array([0., -half, 0.]))
+                seat_against_wall(support_side, 1, 1, b1_target[1], "B2_acquire", contact_target="wall_back")
+                position, left_hold_rotation = tcp_fk(support_side, applied_targets[support_side])
+                left_hold_z = float(position[2])
+                left_hold = NormalForceController(
+                    position[1], target_force_N=B2_CONTROLLER_PARAMETERS["support_approach_preload_N"],
+                    gain_m_per_Ns=1e-4,
+                    max_speed_m_s=B2_CONTROLLER_PARAMETERS["normal_position_speed_limit_m_s"],
+                    max_offset_m=B2_CONTROLLER_PARAMETERS["normal_position_max_offset_m"])
+                record("B2_alignment_preload", "TACTILE_PLANE_CONFIRMATION",
+                       target_force_N=left_hold.target_force_N)
+                aligned = 0
+                filtered_alignment_force = 0.
+                for _ in range(3600):
+                    step()
+                    check_current_collision("B2_alignment_preload")
+                    wrench = last_force_sample[support_side]["tcp_gravity_corrected_world"]
+                    filtered_alignment_force += .05 * (-wrench[1] - filtered_alignment_force)
+                    aligned = aligned + 1 if 3.2 <= filtered_alignment_force <= 5.0 else 0
+                    if aligned >= 30:
+                        break
+                else:
+                    raise RuntimeError("Rear contact preload did not stabilize")
+                report["target_observations"].append({
+                    "phase": "B2_preload", "source": "filtered_wrist_normal_force",
+                    "force_N": filtered_alignment_force, "yaw_source": "fresh rear RGB",
+                })
+                left_hold.gain_m_per_Ns = force_gain
             if push_side is None:
                 left_hold.target_force_N = B2_CONTROLLER_PARAMETERS["left_target_force_N"]
                 stable = 0
@@ -2099,7 +2229,7 @@ def main():
             active_height = current_task.get("active_contact_height_m", 0.)
             approach_standoff = current_task.get("approach_standoff_m", .06)
             push_face_offset = np.array([-push_sign * half, 0., active_height])
-            b2_transit_z = float(role_seeds["transit_z_m"])
+            b2_transit_z = float(current_task.get("staged_transit_z_m", role_seeds["transit_z_m"]))
             record("B2_high_approach", "RUNNING", push_arm=push_side, direction=push_sign)
             position, _ = tcp_fk(push_side, applied_targets[push_side])
             cartesian_move(push_side, position + [0, 0, max(0., b2_transit_z - position[2])],
@@ -2120,7 +2250,8 @@ def main():
                         or not np.isclose(case["rail_y_m"], rail_states[push_side][1])):
                     raise RuntimeError("The B2 posture guide differs from the active arm or rail station")
                 outside_q = cartesian_joint_target(
-                    push_side, case["precontact_q"][push_side], outside, b2_rotation, retarget_guide=True)
+                    push_side, current_task.get("staged_precontact_q", case["precontact_q"][push_side]),
+                    outside, b2_rotation, retarget_guide=True)
                 descent_times = np.arange(601) / 120
                 lifted = []
                 q = outside_q.copy()
@@ -2155,7 +2286,7 @@ def main():
                            2.0, "B2_suction_plane_approach")
             push_faces[push_side] = (0, outward, push_face_offset)
             touch_face(push_side, -outward, .02, "B2_touch")
-            settle_b2_contacts(push_side, push_sign, "B2_contact_sync")
+            settle_b2_contacts(push_side, push_sign, "B2_contact_sync", support_target=.65 if staged else None)
             b2_start, _ = sensed_cube()
             support_start_q = joint_state()[support_side]
             push_sample_count = int(round(B2_CONTROLLER_PARAMETERS["push_duration_s"] * 120)) + 1
@@ -2182,6 +2313,7 @@ def main():
             if push_peak_speed > .4:
                 raise RuntimeError(f"B2 Cartesian joint speed {push_peak_speed:.3f} rad/s exceeds 0.4")
             hold_errors, push_errors = [], []
+            sliding_forces = []
 
             def b2_cube_center_path(samples, _times):
                 centers = []
@@ -2195,6 +2327,8 @@ def main():
             def check_b2_hold(index, count):
                 active_force = -push_sign * float(
                     last_force_sample[push_side]["tcp_gravity_corrected_world"][0])
+                if staged and .2 * count <= index <= .7 * count:
+                    sliding_forces.append(active_force)
                 if abs(active_force) > 10.:
                     raise RuntimeError(f"{push_side} B2 push overload: {active_force:.3f} N")
                 center, rotation = sensed_cube()
@@ -2227,8 +2361,17 @@ def main():
             required = max(.005, abs(b2_target[0] - b2_start[0]) - .010)
             if progress < required:
                 raise RuntimeError(f"B2 Cube advanced {progress:.3f} m, required {required:.3f} m")
+            side_probe = None
+            if staged:
+                # Measure sliding friction before entering the final 5 mm of the side approach.
+                baseline = float(np.percentile(sliding_forces, 90))
+                side_probe = {"sliding_baseline_N": baseline, "entry_force_N": max(2., baseline + .5),
+                              "entry_samples": 3, "samples": 30, "minimum_force_N": 1.5,
+                              "mean_force_N": max(1.8, baseline + .4), "max_axial_travel_m": .0005,
+                              "target_uncertainty_m": .003}
             seat_against_wall(push_side, 0, push_sign, b2_target[0], "B2_push_seat",
-                              follow_side=support_side, contact_target=current_task["contact_target"])
+                              follow_side=support_side, contact_target=current_task["contact_target"],
+                              probe_override=side_probe)
             unload_normal(push_side, 0, push_sign, "B2_push_unload")
             if args.five_cube_row and current_task.get("contact_target") in ("Cube_1", "Cube_2"):
                 record("B2_post_unload_observation", "ACQUIRING_FRESH_ACTIVE_AND_NEIGHBOR_RGB")
@@ -2272,6 +2415,21 @@ def main():
             allowed_contacts.discard(push_side)
             record("B2_push_release", "PUSH_ARM_RETRACTED_SUPPORT_HOLDING", push_arm=push_side)
             settle_cube("B2_push_arm_release")
+            if staged:
+                left_hold = None
+                observed, rotation = observe_resting_cube("B2_staged_rear_pose", vision_camera,
+                                                           vision_estimator, CONFIG["floor_top_m"])
+                if abs(observed[0] - b2_target[0]) > .004:
+                    raise RuntimeError("Staged side seating leaves over 4 mm lateral error")
+                align_contact_plane(support_side, front_rotation, "B2_staged_rear_alignment")
+                push_faces[support_side] = (1, np.array([0., -1., 0.]), np.array([0., -half, front_height]))
+                rear = observed.copy()
+                rear[1] = b2_target[1] - half * (np.abs(rotation[1]).sum() - 1.) - .005
+                contact_path(support_side, observed, rear, "B2_staged_rear_insert")
+                seat_against_wall(support_side, 1, 1, b2_target[1], "B2_staged_rear_seat",
+                                  contact_target="wall_back",
+                                  probe_override={"entry_force_N": 5., "mean_force_N": 3.,
+                                                  "target_uncertainty_m": .003, "samples": 30})
             unload_normal(support_side, 1, 1, "B2_support_unload")
             left_hold = None
             push_faces.clear()
@@ -2429,7 +2587,14 @@ def main():
                 CONFIG["task"]["phase_B2"]["target_center_m"] = goal.tolist()
                 landing_x = goal[0] if push_side is None else current_task["landing_x_m"]
                 opposite_id = {2: "Cube_1", 3: "Cube_2", 4: "Cube_3"}.get(current_task["cube_id"])
-                if opposite_id:
+                if "staging_offset_from_rear_m" in current_task:
+                    landing_x = goal[0] - push_sign * current_task["staged_side_travel_m"]
+                    report.setdefault("landing_observations", []).append({
+                        "cube_id": current_task["cube_id"], "source": "target_neighbor_RGB_and_staged_side_travel",
+                        "landing_x_m": float(landing_x),
+                        "stage_y_m": float(goal[1] - current_task["staging_offset_from_rear_m"]),
+                    })
+                elif opposite_id:
                     opposite = next(row for row in placed_observations if row[0] == opposite_id)
                     extent = half * np.abs(opposite[2][0]).sum()
                     stem_space = (half + current_task["approach_standoff_m"]
@@ -2493,6 +2658,8 @@ def main():
         if status_label is not None:
             status_label.text = "STOPPED: " + str(exc)
     finally:
+        if parallel_validator is not None:
+            parallel_validator.close()
         if "applied_velocities" in locals() and app.is_running():
             for side, robot in robots.items():
                 robot.get_articulation_controller().apply_action(ArticulationAction(

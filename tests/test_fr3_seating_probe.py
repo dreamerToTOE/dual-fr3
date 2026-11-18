@@ -8,7 +8,7 @@ import pytest
 from fr3_contact_control import NormalForceController, oriented_wall_gap
 
 
-def run_probe(forces, gaps, contact_target="Cube_1"):
+def run_probe(forces, gaps, contact_target="Cube_1", *, follow_side="left", probe_override=None):
     tree = ast.parse((Path(__file__).resolve().parents[1] / "fr3_ab_visual_runner.py").read_text())
     function = next(node for node in ast.walk(tree)
                     if isinstance(node, ast.FunctionDef) and node.name == "seat_against_wall")
@@ -41,7 +41,7 @@ def run_probe(forces, gaps, contact_target="Cube_1"):
     sample()
     exec(compile(ast.Module(body=[function], type_ignores=[]), "<production seat controller>", "exec"), env)
     env["seat_against_wall"]("right", 0, -1, 0., "B2_push_seat",
-                             contact_target=contact_target, follow_side="left")
+                             contact_target=contact_target, follow_side=follow_side, probe_override=probe_override)
     return events, [q[0] for side, q in commands if side == "right"]
 
 
@@ -142,3 +142,40 @@ def test_reused_support_hold_switches_to_release_gain_before_unloading():
     assert parameters["gain_m_per_Ns"] == 2e-5
     assert len(samples) < 1800
     assert max(samples[-30:]) < .1
+
+
+def test_cube4_final_wall_probe_rejects_sliding_force_and_holds_for_confirmation():
+    # ~0.8 N of sliding resistance previously ended the push 1.26 mm short.
+    probe = {"entry_force_N": 5., "mean_force_N": 3., "samples": 30,
+             "target_uncertainty_m": .003}
+    forces = [[f, 0., 0.] for f in [.8] * 10 + [5.] + [3.5] * 29]
+    events, commands = run_probe(forces, [.0001] * len(forces), "wall_back",
+                                 follow_side=None, probe_override=probe)
+    assert commands[1] < commands[0]
+    assert commands[-29:] == [commands[-1]] * 29
+    status, confirmation = events[-1]
+    assert status == "FORCE_CONFIRMED"
+    assert confirmation["contact_target"] == "wall_back"
+    assert confirmation["probe_normal_samples_N"] == [5.] + [3.5] * 29
+
+
+def test_staged_side_requires_sustained_entry_frozen_load_and_small_measured_travel():
+    # The sliding P90 is 1.15 N on the measured W760 route. Reject brief spikes
+    # and verify the full paused window, including samples between 1.5 and 2 N.
+    probe = {"entry_force_N": 2., "entry_samples": 3, "minimum_force_N": 1.5,
+             "mean_force_N": 1.8, "max_axial_travel_m": .0005,
+             "target_uncertainty_m": .003, "samples": 30}
+    ripple = [1.6, 2.2] * 15
+    normals = [2.1, 1., 2., 2., 2., *ripple]
+    forces = [[f, 0., 0.] for f in normals]
+    events, commands = run_probe(forces, [.0002] * len(forces), "Cube_2", probe_override=probe)
+    assert commands[-30:] == [commands[-1]] * 30
+    assert commands[1] < commands[0]
+    assert events[-1][1]["probe_normal_samples_N"] == ripple
+    assert events[-1][1]["measured_axial_travel_m"] == 0.
+    for rejected, gaps in (
+            ([2., 1.] * 20, [.0002] * 40),
+            ([2.] * 3 + [1.6] * 30, [.0002] * 33),
+            (normals, [.0002] * 6 + [.0009] * (len(forces) - 6))):
+        with pytest.raises(RuntimeError, match="fixture exhausted"):
+            run_probe([[f, 0., 0.] for f in rejected], gaps, "Cube_2", probe_override=probe)

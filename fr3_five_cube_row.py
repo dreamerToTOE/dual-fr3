@@ -24,7 +24,7 @@ def row_config(base):
     config["task"]["phase_B2"]["rail_assist"]["base_y_m"] = .80
     config["cube_sequence"] = [
         {"cube_id": index + 1, "marker_id": 23 + index,
-         "landing_x_m": (0., .005, -.005, .145, 0.)[index],
+         "landing_x_m": (0., .005, -.005, .105, 0.)[index],
          "active_contact_height_m": .020,
          "approach_standoff_m": .030 if index == 0 else .007,
          "goal_center_m": goal, "support_side": "left" if index in (0, 2, 4) else "right",
@@ -34,6 +34,13 @@ def row_config(base):
                            "Cube_1" if index == 2 else "Cube_2" if index == 3 else None}
         for index, goal in enumerate(config["goal_cube_centers_m"])
     ]
+    # Cube 4 seats against Cube 2 while their side faces overlap at the front of the row.
+    config["cube_sequence"][3].update({
+        "staging_offset_from_rear_m": .106, "staged_side_travel_m": .050,
+        "approach_standoff_m": .012, "staged_transit_z_m": 1.05,
+        "staged_precontact_q": [-.506065403, .623183439, .751382602, -2.310637090,
+                                 -.906093171, 2.610848972, 2.546909565],
+    })
     config["row_colors_rgb"] = [(0.95, 0.36, 0.08), (0.22, 0.63, 0.93), (0.93, 0.74, 0.13),
                                 (0.39, 0.74, 0.29), (0.67, 0.40, 0.88)]
     floor[2][0] = inner_width + 2 * rear[2][1]

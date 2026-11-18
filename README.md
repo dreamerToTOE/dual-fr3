@@ -4,14 +4,15 @@
 
 | Version | Inner tray width | Nominal clearance around Cube 5 | Validation |
 | --- | ---: | ---: | --- |
-| **76 cm** (current) | 5 × 150 mm + 10 mm | 5 mm per side | Scoped Cube 3–5 checks. Full run pending. |
+| **76 cm, four-process collision validation** (current) | 5 × 150 mm + 10 mm | 5 mm per side | Cube 4 landing-to-release and Cube 5 supply-to-insertion verified in the GUI. See the support-force result below. |
+| [**76 cm, serial diagnostic snapshot**](https://github.com/dreamerToTOE/dual-fr3/commit/f757da5e3182cfa950bc6244b105c36f4d0a6ec3) | 5 × 150 mm + 10 mm | 5 mm per side | Earlier Cube 3–5 diagnostics. |
 | [**84 cm**](https://github.com/dreamerToTOE/dual-fr3/commit/4a2c258499a2637e84159c13c75120eca49ec336) | 5 × 150 mm + 90 mm | 45 mm per side | Completed in three PhysX segments with two checkpoint restores. |
 
 Check out the linked 84 cm commit to run that scene. Its
 [checkpoint report](validation/fr3_five_cube_row_840mm_checkpoint_acceptance.json)
 records the final order 1, 3, 5, 4, 2 and the 2.33 mm maximum RGB position error.
 
-## Current five-cube scene · 76 cm
+## Current five-cube scene · 76 cm with four collision workers
 
 Each 150 mm, 1.25 kg cube arrives individually at the supply station and is
 carried by both arms through A to an observed landing pose. Native breakable
@@ -29,6 +30,8 @@ contacts are 20 mm above cube center.
 After Cube 4 lands, both tools withdraw 5 mm, rise to TCP Z = 1.05 m,
 then withdraw the remaining 20 mm so the right wrist clears the side wall.
 The B1 support arm lifts only to an absolute safe height if it is already raised.
+Cube 4 is side-seated against Cube 2 at a staging position 106 mm in front of
+the rear row. The left arm then withdraws and the right arm pushes to the rear wall.
 
 The rear D455 view and an additional supply view provide independent RGB
 observations. Supported poses use measured marker corners and calibrated
@@ -51,16 +54,20 @@ capacities have not been calibrated against hardware.
 B2 uses different force checks for surveyed side walls and visually located
 neighbors. At a side wall, a 6 N normal sample near the target pauses lateral
 advance. That entry sample and the next two samples must average at least
-4 N. At a neighbor, an 8 N normal sample starts the pause, and all 30 subsequent
-physics samples must reach at least 6 N. The separate 10 N raw resultant-force
-abort remains active throughout acquisition.
+4 N. For Cube 3, an 8 N normal sample starts the pause, and all 30 subsequent
+physics samples must reach at least 6 N. A fresh observation of the intended
+neighbor resolves stale RGB pose estimates during seating or unloading.
+For Cube 4, the controller compares the paused contact force to the sliding-force
+baseline. PhysX audit separately verifies 30 frames of load against Cube 2 and
+30 frames of rear-wall load after lateral withdrawal. The 10 N raw
+resultant-force abort remains active throughout acquisition.
 Loaded transitions retain the previous commanded joint reference. Contact seeking
 advances 5 um per physics step, freezes above 0.2 N, and requires six consecutive
 contact samples before synchronization.
-The support arm maintains its 4 N target through the pushing arm's approach.
-Once the pushing arm reaches 0.5 N filtered lateral force during synchronization,
-the support target drops to 2 N. The approach and synchronized hold use
-2e-5 m/(N s) admittance. Initial alignment and unloading use 1e-4 m/(N s).
+At the rear border, the support arm holds a 4 N target through the pushing
+arm's approach and drops to 2 N during lateral contact synchronization.
+For Cube 4, the support arm targets 0.65 N during staged side-seating.
+Initial alignment and unloading use 1e-4 m/(N s) admittance.
 The supported-pose model
 assumes an upright box on a calibrated plane; sensor noise and rail dynamics
 are not included.
@@ -68,8 +75,17 @@ are not included.
 Run the automatic visual experiment from this worktree.
 
 ```bash
-/home/ubuntu2004/isaacsim-4.5.0/python.sh fr3_ab_visual_runner.py --five-cube-row
+"$ISAAC_SIM_DIR/python.sh" fr3_ab_visual_runner.py --five-cube-row
 ```
+
+Set `ISAAC_SIM_DIR` to the Isaac Sim 4.5 installation. The five-cube runner
+uses four CPU workers by default for trajectory validation. Pass
+`--collision-workers 1` for serial validation. Workers share the same measured
+scene and check both arms and interpolated intervals at partition boundaries.
+IK and RRT stay serial, and the viewer refreshes during collision validation
+while the physics clock stays at the current step. The GUI runs replayed
+zero trajectory or rail-transfer segments. Execution speeds were held fixed
+for the timing comparison.
 
 The full-run checker requires all five A transports and the prescribed physical
 wall or neighbor contact evidence.
@@ -78,23 +94,36 @@ wall or neighbor contact evidence.
 python3 fr3_row_acceptance.py validation/five_cube_row
 ```
 
-### 76 cm diagnostics
+### 76 cm timing and checkpoint validation
 
-- **Cube 3.** The right arm reached the side face and pushed Cube 3 against
-  Cube 1. PhysX recorded 34 consecutive positive impulse samples at a
-  0.145 mm solver gap. The RGB-based geometry estimate reported a 3.008 mm
-  overlap, so the guard stopped before force confirmation and tool withdrawal.
-- **Cube 4.** The original rear-row side approach overlaps Cube 3 by 26 mm in
-  the nominal tool-envelope model. With the required tool clearance the
-  landing plane would need X = 179 mm for a +X push to a 155 mm target.
-  A separate staged trial seated Cube 4 against Cube 2 (30/30 positive
-  impulse samples) and withdrew the left tool. The follow-up rear-wall
-  checkpoint ended about 1.26 mm short, with zero rear-wall impulses.
-  The staged trial remains a diagnostic outside the automatic sequence.
-- **Cube 5.** The nominal prepared scene passed straight insertion and
-  withdrawal. The minimum physical side clearances during the push were
-  4.46 and 4.08 mm, with zero loaded side contact. A geometric check with
-  3° yaw and 2 mm lateral offset found a 0.82 mm overlap.
+Both timed GUI runs started from the same measured Cube 4 landing state,
+with one completed run per configuration. Live sensing caused small
+differences in planned samples. Times below cover full phase preparation
+unless the row states otherwise.
+
+| Cube 4 interval | Serial | Four processes | Time reduction |
+| --- | ---: | ---: | ---: |
+| B1 approach planning | 28.68 s | 22.85 s | 20% |
+| B2 side-push planning | 11.93 s | 4.14 s | 65% |
+| Landing through release and position verification | 507.84 s | 482.55 s | 5% |
+
+The maximum observed viewer refresh gap during four-process collision
+validation was 123 ms for Cube 4 and 119 ms for Cube 5. Both Cube 4 target
+contacts were confirmed by 30/30 PhysX impulse samples. The longest
+support-force dropout measured 242 ms with four processes and 108 ms
+in the serial GUI run. Both exceeded the 50 ms acceptance limit.
+The first four-process GUI attempt stopped after an Isaac Sim timeline
+reset. The retry completed with 20,378 commands and physics steps.
+
+Cube 5 ran from supply using the measured final states of Cubes 1–4 from
+that retry. It advanced 338.92 mm along +Y with 2.85 mm lateral span.
+Its minimum clearances to the adjacent cubes were 2.10 mm and 3.53 mm,
+with zero loaded neighbor contacts and zero unexpected robot contacts.
+The final RGB order was 1, 3, 5, 4, 2.
+This validation covers the Cube 4 landing checkpoint through Cube 5,
+with a checkpoint restore between the two GUI runs.
+
+[Machine-readable checkpoint results](validation/fr3_five_cube_row_760mm_parallel_acceptance.json)
 
 This repository contains the **FR3-only** four-wall scene package for the
 150 mm cube study. It is intentionally separate from the earlier episode

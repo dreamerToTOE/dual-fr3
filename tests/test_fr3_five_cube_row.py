@@ -25,7 +25,10 @@ def test_five_row_fits_and_contact_permission_tracks_active_body():
     for first, second in zip(ordered, ordered[1:]):
         assert second[0] - first[0] >= size - 1e-10
     assert [item["push_direction"] for item in config["cube_sequence"]] == [-1, 1, -1, 1, 0]
-    assert [item["landing_x_m"] for item in config["cube_sequence"]] == [0., .005, -.005, .145, 0.]
+    assert [item["landing_x_m"] for item in config["cube_sequence"]] == [0., .005, -.005, .105, 0.]
+    fourth = config["cube_sequence"][3]
+    assert math.isclose(fourth["goal_center_m"][0] - fourth["landing_x_m"], fourth["staged_side_travel_m"])
+    assert 0 < fourth["staging_offset_from_rear_m"] < size  # Positive side-face overlap with Cube 2.
     assert config["task"]["phase_B2"]["rail_assist"]["base_y_m"] == .8
     assert config["cube_sequence"][0]["approach_standoff_m"] == .03
     assert config["cube_sequence"][-1]["push_side"] is None
@@ -212,3 +215,55 @@ def test_only_current_active_target_impulse_during_paused_seat_counts(tmp_path):
                       "Cube_3 loaded the intended target in 28 of 30 required confirmation frames"]
     assert evidence[0]["target_impulse_frames"] == 0
     assert evidence[2]["target_impulse_frames"] == 28
+
+
+def test_staged_cube4_requires_rear_impulse_after_side_tool_withdraws(tmp_path):
+    import gzip
+    from fr3_row_acceptance import physical_contact_checks
+
+    stages = [(4, "supply_arrival", "READY_FOR_RGB_LOCALIZATION"),
+              (6, "A_attach", "SURFACE_GRIPPERS_CLOSED"),
+              (8, "A_release", "RELEASING_SURFACE_GRIPPERS"),
+              (9, "B1_touch", "TACTILE_APPROACH"),
+              (11, "B2_hold", "MAINTAINED_DURING_APPROACH"),
+              (12, "B2_contact_sync", "FORCE_CONFIRMED"),
+              (13, "B2_push_seat", "RUNNING"),
+              (43, "B2_push_seat", "FORCE_CONFIRMED"),
+              (44, "B2_push_unload", "RUNNING"),
+              (45, "B2_push_release", "PUSH_ARM_RETRACTED_SUPPORT_HOLDING"),
+              (46, "B2_staged_rear_seat", "RUNNING"),
+              (80, "B2_staged_rear_seat", "FORCE_CONFIRMED"),
+              (81, "B2_support_unload", "RUNNING")]
+    report = {"simulation_clock": {"control_steps": 99},
+              "packing_sequence": [{"cube_id": 4, "staging_offset_from_rear_m": .106}],
+              "phases": [{"cube_id": 4, "phase": phase, "status": status, "sim_time_s": step / 120,
+                          "probe_normal_samples_N": [2.1 if phase == "B2_push_seat" else 5.] * 30}
+                         for step, phase, status in stages]}
+    directory = tmp_path / "contact_states"
+    directory.mkdir()
+    seat = next(row for row in report["phases"] if row["phase"] == "B2_push_seat" and row["status"] == "FORCE_CONFIRMED")
+    seat.update(sliding_baseline_N=1.2, measured_axial_travel_m=.0002)
+    for rear_steps, expected in [([10], 0), ([76], 1), (range(51, 81), 30)]:
+        with gzip.open(directory / "reference.jsonl.gz", "wt") as stream:
+            for step in range(1, 100):
+                partner = None
+                if step == 5:
+                    partner = "/World/Environment/supply"
+                elif 14 <= step <= 43:
+                    partner = "/World/Cube_2"
+                elif step in rear_steps:
+                    partner = "/World/Environment/wall_back"
+                pairs = [{"collider0": "/World/Cube_4", "collider1": partner,
+                          "current_step_observed": True, "normal_impulse_Ns": .01}] if partner else []
+                frame = {"physics_step": step, "attachments": {"left": True, "right": True},
+                         "cube_contacts": {"valid": True, "pairs": pairs}}
+                stream.write(json.dumps(frame) + "\n")
+        issues, evidence = physical_contact_checks(tmp_path, report, [1, 2, 3, 4, 100])
+        assert evidence[3]["rear_impulse_frames"] == expected
+        assert evidence[3]["target_impulse_frames"] == 30
+        assert [i for i in issues if "Cube_4" in i] == (
+            [] if expected == 30 else [f"Cube_4 loaded the rear wall in {expected} of 30 required confirmation frames"])
+    for baseline, travel in [(1.9, .0002), (1.2, .0006)]:
+        seat.update(sliding_baseline_N=baseline, measured_axial_travel_m=travel)
+        issues, _ = physical_contact_checks(tmp_path, report, [1, 2, 3, 4, 100])
+        assert "Cube_4 paused B2 seating confirmation window is unavailable" in issues

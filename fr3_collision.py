@@ -44,6 +44,24 @@ def _sphere_box_clearances(centers, radii, center, half, rotation):
             + np.minimum(np.max(delta, axis=1), 0) - radii)
 
 
+def path_arrays(samples_by_side, cube_centers, cube_rotations):
+    paths = {side: np.asarray(path, dtype=float) for side, path in samples_by_side.items()}
+    if not paths or any(path.ndim != 2 or path.shape[1] != 7 or not np.all(np.isfinite(path))
+                        for path in paths.values()):
+        raise ValueError("FR3 paths must have shape (samples, 7) and finite joints")
+    counts = {len(path) for path in paths.values()}
+    if len(counts) != 1 or not next(iter(counts)):
+        raise ValueError("Paths need the same positive sample count")
+    count = next(iter(counts))
+    centers = None if cube_centers is None else np.asarray(cube_centers, dtype=float)
+    rotations = None if cube_rotations is None else np.asarray(cube_rotations, dtype=float)
+    if centers is not None and centers.shape not in ((3,), (count, 3)):
+        raise ValueError("cube_centers must be a center or one center per path sample")
+    if rotations is not None and rotations.shape not in ((3, 3), (count, 3, 3)):
+        raise ValueError("cube_rotations must be a matrix or one matrix per path sample")
+    return paths, count, centers, rotations
+
+
 class FR3CollisionChecker:
     """Shared configuration/path validator for the planner and runtime.
 
@@ -219,31 +237,21 @@ class FR3CollisionChecker:
 
     def validate_path(self, samples_by_side, *, cube_centers=None, cube_rotations=None,
                       max_joint_step_rad=0.025, max_cube_step_m=0.005,
-                      progress_callback=None, **kwargs):
+                      progress_callback=None, start_sample=0, **kwargs):
         """Check actual sampled motion, densifying long joint-space intervals.
 
         The caller passes the final time-parameterized samples, including held
         arms. This checks interpolation between those samples as well. Cube
         centers/rotations can be constant or one pose per input sample.
         """
-        paths = {side: np.asarray(path, dtype=float) for side, path in samples_by_side.items()}
-        counts = {len(path) for path in paths.values()}
-        if (not paths or len(counts) != 1 or next(iter(counts)) == 0
-                or not np.isfinite(max_joint_step_rad) or max_joint_step_rad <= 0
+        paths, count, centers, rotations = path_arrays(samples_by_side, cube_centers, cube_rotations)
+        if (not np.isfinite(max_joint_step_rad) or max_joint_step_rad <= 0
                 or not np.isfinite(max_cube_step_m) or max_cube_step_m <= 0):
-            raise ValueError("Paths need the same positive sample count and joint step")
-        count = next(iter(counts))
-        for path in paths.values():
-            if path.shape != (count, 7) or not np.all(np.isfinite(path)):
-                raise ValueError("FR3 paths must have shape (samples, 7) and finite joints")
-        centers = None if cube_centers is None else np.asarray(cube_centers, dtype=float)
-        rotations = None if cube_rotations is None else np.asarray(cube_rotations, dtype=float)
-        if centers is not None and centers.shape not in ((3,), (count, 3)):
-            raise ValueError("cube_centers must be a center or one center per path sample")
-        if rotations is not None and rotations.shape not in ((3, 3), (count, 3, 3)):
-            raise ValueError("cube_rotations must be a matrix or one matrix per path sample")
+            raise ValueError("Path interpolation steps must be positive and finite")
+        if not 0 <= start_sample < count:
+            raise ValueError("Path start sample is out of range")
         checked = 0
-        for sample in range(count):
+        for sample in range(start_sample, count):
             previous = max(0, sample - 1)
             steps = max(1, int(np.ceil(max(np.max(np.abs(path[sample] - path[previous]))
                                              for path in paths.values()) / max_joint_step_rad)))
