@@ -71,6 +71,7 @@ class FR3CollisionChecker:
         self.radii = np.array([radius for _, _, radius in self.spheres])
         self.static_boxes = [(name, np.asarray(center, dtype=float), np.asarray(size, dtype=float) / 2, np.eye(3))
                              for name, center, size in config["static_boxes"]]
+        self.other_cubes = []
         if any(center.shape != (3,) or half.shape != (3,) or not np.all(np.isfinite(center))
                or not np.all(np.isfinite(half)) or np.any(half <= 0)
                for _, center, half, _ in self.static_boxes):
@@ -81,6 +82,25 @@ class FR3CollisionChecker:
         a, b = np.triu_indices(n, 1)
         mask = np.abs(self.link_indices[a] - self.link_indices[b]) > 1
         self.self_pairs = (a[mask], b[mask])
+
+    def set_other_cubes(self, poses, *, preserve_unobserved=False):
+        """Refresh observed obstacles, retaining occluded bodies when requested."""
+        boxes = []
+        for name, center, rotation in poses:
+            center, rotation = np.asarray(center, dtype=float), np.asarray(rotation, dtype=float)
+            if (not isinstance(name, str) or not name or name == "Cube"
+                    or center.shape != (3,) or rotation.shape != (3, 3)
+                    or not np.all(np.isfinite(center)) or not np.all(np.isfinite(rotation))
+                    or not np.allclose(rotation.T @ rotation, np.eye(3), atol=1e-5)
+                    or not np.isclose(np.linalg.det(rotation), 1., atol=1e-5)):
+                raise ValueError("Other Cube obstacles need a name, finite center and proper rotation")
+            boxes.append((name, center.copy(), np.full(3, self.config["cube_size_m"] / 2), rotation.copy()))
+        if len({name for name, *_ in boxes}) != len(boxes):
+            raise ValueError("Other Cube obstacle names must be unique")
+        if preserve_unobserved:
+            refreshed_names = {name for name, *_ in boxes}
+            boxes = [box for box in self.other_cubes if box[0] not in refreshed_names] + boxes
+        self.other_cubes = boxes
 
     def geometry(self, side, q):
         q = np.asarray(q, dtype=float)
@@ -95,7 +115,7 @@ class FR3CollisionChecker:
         flange, rotation = self.solvers[side].compute_forward_kinematics("fr3_link8", q)
         flange, rotation = np.asarray(flange).reshape(3), np.asarray(rotation).reshape(3, 3)
         sign = -1 if side == "left" else 1
-        # Match ABSideTool geometry authored by the visual runner exactly.
+        # The vertical envelope contains the sensor housing plus shortened stem.
         specs = [("vertical", [0, 0, .04], [.028, .028, .08]),
                  ("lateral", [0, sign * .065, .08], [.018, .13, .018]),
                  ("manifold", [0, sign * .138, .08], [.07, .014, .07])]
@@ -121,7 +141,7 @@ class FR3CollisionChecker:
             raise ValueError("Collision margins must be nonnegative")
         if set(cup_contacts) - set(q_by_side):
             raise ValueError("Contact arms must have configurations to check")
-        obstacles = list(self.static_boxes)
+        obstacles = [*self.static_boxes, *self.other_cubes]
         if cube_center is not None:
             center = np.asarray(cube_center, dtype=float)
             rotation = np.eye(3) if cube_rotation is None else np.asarray(cube_rotation, dtype=float)
@@ -141,7 +161,7 @@ class FR3CollisionChecker:
 
         if cube_center is not None:
             _, center, half, rotation = obstacles[-1]
-            for name, other_center, other_half, other_rotation in self.static_boxes:
+            for name, other_center, other_half, other_rotation in (*self.static_boxes, *self.other_cubes):
                 clearance = obb_signed_clearance(center, half, rotation, other_center, other_half, other_rotation)
                 if add("Cube", name, clearance, "cube_obstacle", -contact_tolerance_m):
                     return issues

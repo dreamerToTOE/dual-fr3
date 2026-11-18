@@ -1,5 +1,85 @@
 # dual-fr3
 
+## Five-cube row · 84 cm
+
+This 840 mm tray version passed the five-cube checkpoint audit.
+Each 150 mm, 1.25 kg cube arrives individually at the supply station and is
+carried by both arms through A to an observed landing pose. Native breakable
+Surface Grippers attach after wrist-force contact confirmation.
+
+Packing order is rear then left wall, rear then right wall, beside Cube 1,
+beside Cube 2, then a straight insertion into the measured center slot.
+The inner tray width is 840 mm, giving 90 mm total nominal center-slot clearance.
+Nominal final X coordinates in packing order are −345, +345, −195, +195 and
+0 mm, with 45 mm clearance on each side of Cube 5. Earlier cubes remain dynamic collision obstacles. Cubes 2–4
+use the observed neighboring faces to choose a landing lane with tool clearance.
+
+Rail centers are X = ±600 mm. A starts at rail Y = 200 mm, the support arm
+moves to 400 mm, and the lateral pushing arm moves to 800 mm. Lateral pushing
+contacts are 20 mm above cube center.
+After Cube 4 lands, both tools withdraw 5 mm, rise to TCP Z = 1.05 m,
+then withdraw the remaining 20 mm so the right wrist clears the side wall.
+The B1 support arm lifts only to an absolute safe height if it is already raised.
+
+The rear D455 view and an additional supply view provide independent RGB
+observations. Supported poses use measured marker corners and calibrated
+support planes. The controller combines those observations with encoder FK
+and wrist F/T. Cube truth is confined to independent evaluation and logs.
+The optical identities are ArUco IDs 23 through 27.
+The retained single-cube contact recognizer logs reference outputs; its
+neighbor-contact vocabulary has not been validated for this five-cube task.
+
+After the final insertion, fresh RGB observations check all five positions,
+yaw angles and left-to-right order, including boxes that later contact may move.
+Both articulations use 44 position and 4 velocity solver iterations, with SDK
+readback recorded. Cube solver defaults remain 16/1. Contact-stage observations
+refresh the active box and intended neighbor; occluded untouched boxes remain
+collision obstacles. Initial and final parked scans still require all relevant markers.
+
+Contact stages use 0.003 times the official USD joint drive gains; unloaded
+transfers use the original gains. This simulated compliance and the vacuum
+capacities have not been calibrated against hardware.
+B2 uses different force checks for surveyed side walls and visually located
+neighbors. At a side wall, a 6 N normal sample near the target pauses lateral
+advance. That entry sample and the next two samples must average at least
+4 N. At a neighbor, an 8 N normal sample starts the pause, and all 30 subsequent
+physics samples must reach at least 6 N. The separate 10 N raw resultant-force
+abort remains active throughout acquisition.
+Loaded transitions retain the previous commanded joint reference. Contact seeking
+advances 5 um per physics step, freezes above 0.2 N, and requires six consecutive
+contact samples before synchronization.
+The support arm maintains its 4 N target through the pushing arm's approach.
+Once the pushing arm reaches 0.5 N filtered lateral force during synchronization,
+the support target drops to 2 N. The approach and synchronized hold use
+2e-5 m/(N s) admittance. Initial alignment and unloading use 1e-4 m/(N s).
+The supported-pose model
+assumes an upright box on a calibrated plane; sensor noise and rail dynamics
+are not included.
+
+Run the automatic visual experiment from this worktree.
+
+```bash
+/home/ubuntu2004/isaacsim-4.5.0/python.sh fr3_ab_visual_runner.py --five-cube-row
+```
+
+The full-run checker requires all five A transports and the prescribed physical
+wall or neighbor contact evidence.
+
+```bash
+python3 fr3_row_acceptance.py validation/five_cube_row
+```
+
+The 840 mm version completed on November 18, 2026 across three PhysX segments
+with two checkpoint restores. The initial visual run completed Cubes 1–3 and
+carried Cube 4 to landing. The resumed segments completed Cube 4 and ran
+Cube 5 from supply through straight insertion. The final RGB scan found
+1, 3, 5, 4, 2 from left to right, with a maximum position error of 2.33 mm
+and maximum absolute yaw error of 0.35°. B2 peak resultant force was 9.28 N.
+Both intended neighbor pairs had positive PhysX impulses on all 30 confirmation
+samples, with zero unexpected robot contacts recorded across the segments.
+Continuous execution from supply through the final scan remains unverified.
+[84 cm checkpoint report](validation/fr3_five_cube_row_840mm_checkpoint_acceptance.json)
+
 This repository contains the **FR3-only** four-wall scene package for the
 150 mm cube study. It is intentionally separate from the earlier episode
 robot project and does not reuse its six-axis robot, runner, or validation
@@ -22,9 +102,9 @@ The script writes `preview/fr3_four_wall_preview.usda` and two PNG captures.
 The FR3 USD is resolved from the Isaac Sim asset root at runtime, so the
 machine must have the official FR3 asset available.
 
-## Base snapshots
+## Historical single-cube base snapshots
 
-The `base` history keeps two experiment states for the same 150 mm FR3 scene.
+The `base` history retains both single-cube experiment states.
 Commit `9a5dd79` is the no-cache environment snapshot. It contains the scene,
 validation code, preview assets, and reports while the runtime planner creates
 the A/B1/B2 paths online. It is the baseline for studying planning-time
@@ -32,8 +112,9 @@ behavior and online anomalies.
 
 Commit `d2cf2d4` is the stored-trajectory environment. It adds the complete
 120 Hz A/B1/B2 runtime cache, cache-first replay, state checks, and fallback to
-the online RRT/IK planner. The current `base` branch points to this version,
-while `9a5dd79` remains an ancestor in the same branch history.
+the online RRT/IK planner. Check out the corresponding commit to run either
+single-cube snapshot. The five-cube version uses live sensing and ships without
+a full five-cube trajectory cache.
 
 `validation/fr3_b2_collision_plan.json` is the collision-constrained B2
 preflight plan used by both states. The complete runtime cache generated by an
@@ -63,7 +144,7 @@ silently continuing.
 This is a geometry preview only. It does not claim PhysX contact, suction,
 ROS, IK, trajectory, or full B2 validation.
 
-## Local A/B validation gates
+## Historical single-cube A/B validation gates
 
 The current A/B semantics are kept in `fr3_four_wall_scene_config.json`:
 
@@ -127,11 +208,13 @@ The final 120 Hz trajectories are checked again after timing and blending.
 Checks include official FR3 Lula collision spheres, every custom tool support
 and cup, the Cube, walls, floor/table, interarm and nonadjacent self collisions.
 Both arms share one 14-joint timeline during coordinated transfers and B2.
-All FR3 body and custom tool colliders remain enabled. Only the removed stock
-hand/fingers have their geometry hidden and colliders disabled.
+All retained FR3 arm and custom tool colliders remain enabled. The local runtime
+deactivates the stock hand/finger bodies and their joints, removing the hidden
+0.73 kg hand inertia per arm while retaining the seven arm DoFs and flange.
 
 PhysX contact events stop execution on unintended robot/tool contact. Only
 phase-authorized cup/Cube contact up to 3 mm penetration is allowed. The
 planning geometry is conservative spheres/boxes, not a swept-mesh certificate.
-A still uses labelled temporary PhysX fixed joints; Surface Gripper validation
-is separate. A successful Cube endpoint alone is insufficient to pass the task.
+The historical base snapshots use temporary PhysX fixed joints during A.
+The five-cube experiment above replaces them with native Surface Grippers.
+A successful Cube endpoint alone is insufficient to pass the task.

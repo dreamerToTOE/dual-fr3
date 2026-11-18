@@ -22,6 +22,7 @@
   ],
   "fr3": {
     "asset": "Robots/Franka/FR3/fr3.usd",
+    "contact_drive_gain_scale": 0.003,
     "bases": {
       "left": [-0.44, 0.2, 0.745, 0.0],
       "right": [0.44, 0.2, 0.745, 3.141592653589793]
@@ -39,12 +40,48 @@
     "cup_radius_m": 0.01,
     "cup_length_m": 0.01
   },
+  "wrist_force_sensors": {
+    "left": {
+      "mass_kg": 0.3,
+      "center_of_mass_m": [0.0, -0.06, 0.055],
+      "diagonal_inertia_kg_m2": [0.0015, 0.0007, 0.0012]
+    },
+    "right": {
+      "mass_kg": 0.3,
+      "center_of_mass_m": [0.0, 0.06, 0.055],
+      "diagonal_inertia_kg_m2": [0.0015, 0.0007, 0.0012]
+    }
+  },
   "rails": {
     "axis": "Y",
     "travel_limits_m": [-0.22, 1.5],
     "beam_size_m": [0.15, 2.35, 0.025],
     "beam_local_center_m": [0.0, 0.425, 0.0],
     "carriage_size_m": [0.20, 0.18, 0.02]
+  },
+  "vision": {
+    "camera_model": "Intel RealSense D455",
+    "camera_asset": "Isaac/Sensors/Intel/RealSense/rsd455.usd",
+    "camera_root_path": "/World/D455",
+    "camera_path": "/World/D455/RSD455/Camera_OmniVision_OV9782_Color",
+    "depth_camera_path": "/World/D455/RSD455/Camera_Pseudo_Depth",
+    "camera_position_m": [0.0, 1.35, 1.80],
+    "camera_look_at_m": [0.0, 1.00, 0.82],
+    "supply_camera_position_m": [0.0, -0.55, 1.53],
+    "supply_camera_look_at_m": [0.0, -0.30, 0.85],
+    "resolution": [640, 480],
+    "frequency_hz": 15,
+    "aruco_dictionary": "DICT_4X4_50",
+    "aruco_marker_id": 23,
+    "aruco_marker_size_m": 0.105,
+    "aruco_marker_face": "top",
+    "mount": {
+      "enabled": true,
+      "base_center_m": [0.0, 1.42, 0.715],
+      "base_size_m": [0.34, 0.28, 0.03],
+      "pole_size_m": [0.05, 0.05, 1.07],
+      "housing_size_m": [0.18, 0.10, 0.10]
+    }
   },
   "task": {
     "scope": "single_cube_A_B1_B2",
@@ -78,6 +115,8 @@
     }
   },
   "physics": {
+    "articulation_solver_position_iterations": 44,
+    "articulation_solver_velocity_iterations": 4,
     "cube_mass_kg": 1.25,
     "gravity_m_s2": [0.0, 0.0, -9.81],
     "settle_speed_threshold_m_s": 0.01,

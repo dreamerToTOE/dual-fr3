@@ -1,0 +1,555 @@
+{
+  "status": "PASS_CHECKPOINT_FIVE_CUBE_COMPLETION",
+  "scope": "three recorded execution segments in separate PhysX worlds; support coverage is per segment",
+  "segments": {
+    "initial": {
+      "status": "STOPPED",
+      "error": "Measured collision in B1: {'a': 'right/cup_r1_c2', 'b': 'Cube', 'clearance_m': -0.0036537820347068983, 'kind': 'tool_obstacle'}",
+      "control_steps": 108920,
+      "physics_steps": 108920,
+      "unexpected_contact_count": 0
+    },
+    "seating": {
+      "status": "STOPPED",
+      "error": "RGB observed more than 3 degrees of Cube rotation; contact replan required",
+      "control_steps": 17145,
+      "physics_steps": 17145,
+      "unexpected_contact_count": 0
+    },
+    "retreat": {
+      "status": "PASS_FIVE_CUBE_CHECKPOINT_COMPLETION",
+      "error": null,
+      "control_steps": 22435,
+      "physics_steps": 22435,
+      "unexpected_contact_count": 0
+    }
+  },
+  "checkpoints": [
+    {
+      "cube_id": 4,
+      "phase": "B1_contact",
+      "physics_step": 105721,
+      "recorded_sim_time_s": 881.0083333333333
+    },
+    {
+      "cube_id": 4,
+      "phase": "B2_push_retreat_full_outward",
+      "physics_step": 17122,
+      "recorded_sim_time_s": 142.68333333333334
+    }
+  ],
+  "seating_terminal_tick_missing_reference": true,
+  "cube4_lateral_progress_m": 0.04871034622192383,
+  "issues": [],
+  "physical_by_cube": {
+    "1": {
+      "A": {
+        "segment": "initial",
+        "supply_impulse_frames": 3959,
+        "paired_attachment_frames": 4600,
+        "expected_attachment_frames": 4600
+      },
+      "B": {
+        "cube_id": 1,
+        "reference_frames": 32194,
+        "supply_impulse_frames": 3959,
+        "paired_attachment_frames": 4600,
+        "rear_impulse_frames": 178,
+        "target_impulse_frames": 2,
+        "target_partner": "/World/Environment/wall_left",
+        "required_target_impulse_frames": 1,
+        "target_window_steps": [
+          26928,
+          26930
+        ],
+        "segment": "initial"
+      }
+    },
+    "2": {
+      "A": {
+        "segment": "initial",
+        "supply_impulse_frames": 4000,
+        "paired_attachment_frames": 4600,
+        "expected_attachment_frames": 4600
+      },
+      "B": {
+        "cube_id": 2,
+        "reference_frames": 29854,
+        "supply_impulse_frames": 4000,
+        "paired_attachment_frames": 4600,
+        "rear_impulse_frames": 173,
+        "target_impulse_frames": 3,
+        "target_partner": "/World/Environment/wall_right",
+        "required_target_impulse_frames": 1,
+        "target_window_steps": [
+          57502,
+          57504
+        ],
+        "segment": "initial"
+      }
+    },
+    "3": {
+      "A": {
+        "segment": "initial",
+        "supply_impulse_frames": 3587,
+        "paired_attachment_frames": 4600,
+        "expected_attachment_frames": 4600
+      },
+      "B": {
+        "cube_id": 3,
+        "reference_frames": 32827,
+        "supply_impulse_frames": 3587,
+        "paired_attachment_frames": 4600,
+        "rear_impulse_frames": 327,
+        "target_impulse_frames": 30,
+        "target_partner": "/World/Cube_1",
+        "required_target_impulse_frames": 30,
+        "target_window_steps": [
+          89156,
+          89185
+        ],
+        "segment": "initial"
+      }
+    },
+    "4": {
+      "A": {
+        "segment": "initial",
+        "supply_impulse_frames": 3928,
+        "paired_attachment_frames": 4662,
+        "expected_attachment_frames": 4662
+      },
+      "B": {
+        "cube_id": 4,
+        "reference_frames": 17034,
+        "supply_impulse_frames": 0,
+        "paired_attachment_frames": 0,
+        "rear_impulse_frames": 1645,
+        "target_impulse_frames": 30,
+        "target_partner": "/World/Cube_2",
+        "required_target_impulse_frames": 30,
+        "target_window_steps": [
+          15400,
+          15429
+        ],
+        "segment": "seating"
+      }
+    },
+    "5": {
+      "A": {
+        "segment": "retreat",
+        "supply_impulse_frames": 3899,
+        "paired_attachment_frames": 4600,
+        "expected_attachment_frames": 4600
+      },
+      "B": {
+        "cube_id": 5,
+        "reference_frames": 18139,
+        "supply_impulse_frames": 3899,
+        "paired_attachment_frames": 4600,
+        "rear_impulse_frames": 1592,
+        "target_impulse_frames": 1592,
+        "target_partner": "/World/Environment/wall_back",
+        "required_target_impulse_frames": 1,
+        "target_window_steps": [
+          15543,
+          19865
+        ],
+        "segment": "retreat"
+      }
+    }
+  },
+  "force_by_cube": {
+    "1": {
+      "A": {
+        "samples": 9065,
+        "force_norm_max_N": {
+          "left": 8.411168180434315,
+          "right": 9.380027949585983
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 1.1285864130026493,
+          "right": 1.1087334403291285
+        },
+        "internal_force_norm_max_N": 6.457176253217653,
+        "status": "PASS",
+        "segment": "initial"
+      },
+      "B1": {
+        "samples": 5491,
+        "force_norm_max_N": {
+          "left": 1.3193686503760766,
+          "right": 0.004241581388709046
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 0.06391105903814542,
+          "right": 0.0001958037563715747
+        },
+        "status": "PASS",
+        "segment": "initial"
+      },
+      "B2": {
+        "samples": 17519,
+        "force_norm_max_N": {
+          "left": 9.278868517339184,
+          "right": 6.729901112992995
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 0.35834225067804487,
+          "right": 0.26354603855463576
+        },
+        "status": "PASS",
+        "segment": "initial"
+      },
+      "support_held": {
+        "samples": 12845,
+        "contact_frames": 12845,
+        "in_band_frames": 12831,
+        "longest_dropout_frames": 0,
+        "normal_force_min_observed_N": 0.9450167226524296,
+        "normal_force_max_observed_N": 8.27044379079514,
+        "contact_coverage": 1.0,
+        "normal_force_in_band_proportion": 0.9989100817438692,
+        "longest_contact_dropout_s": 0.0,
+        "status": "PASS",
+        "segment": "initial",
+        "arm": "left",
+        "window_steps": [
+          15443,
+          28287
+        ]
+      }
+    },
+    "2": {
+      "A": {
+        "samples": 9105,
+        "force_norm_max_N": {
+          "left": 8.134252526032089,
+          "right": 9.025595691468169
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 1.2747259757377531,
+          "right": 1.283995697838388
+        },
+        "internal_force_norm_max_N": 5.970760140137531,
+        "status": "PASS",
+        "segment": "initial"
+      },
+      "B1": {
+        "samples": 5233,
+        "force_norm_max_N": {
+          "left": 0.004193090633815214,
+          "right": 1.3988245662095904
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 0.0001935467057127334,
+          "right": 0.048193396683429784
+        },
+        "status": "PASS",
+        "segment": "initial"
+      },
+      "B2": {
+        "samples": 15397,
+        "force_norm_max_N": {
+          "left": 8.755339255796844,
+          "right": 7.30269052538096
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 0.3481705397461356,
+          "right": 0.2808325816866912
+        },
+        "status": "PASS",
+        "segment": "initial"
+      },
+      "support_held": {
+        "samples": 11139,
+        "contact_frames": 11139,
+        "in_band_frames": 11135,
+        "longest_dropout_frames": 0,
+        "normal_force_min_observed_N": 0.8209049388680955,
+        "normal_force_max_observed_N": 6.493099520694482,
+        "contact_coverage": 1.0,
+        "normal_force_in_band_proportion": 0.9996409013376425,
+        "longest_contact_dropout_s": 0.0,
+        "status": "PASS",
+        "segment": "initial",
+        "arm": "right",
+        "window_steps": [
+          47373,
+          58511
+        ]
+      }
+    },
+    "3": {
+      "A": {
+        "samples": 8692,
+        "force_norm_max_N": {
+          "left": 8.74891630019295,
+          "right": 7.9709539752501595
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 1.25300511713911,
+          "right": 1.351697228516479
+        },
+        "internal_force_norm_max_N": 4.678197253693742,
+        "status": "PASS",
+        "segment": "initial"
+      },
+      "B1": {
+        "samples": 5296,
+        "force_norm_max_N": {
+          "left": 1.356209572794725,
+          "right": 0.0054654295706107825
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 0.05074242656612161,
+          "right": 0.00029106816788999814
+        },
+        "status": "PASS",
+        "segment": "initial"
+      },
+      "B2": {
+        "samples": 18720,
+        "force_norm_max_N": {
+          "left": 4.890461541995564,
+          "right": 9.194673857012887
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 0.18620411474342913,
+          "right": 0.4022019080691516
+        },
+        "status": "PASS",
+        "segment": "initial"
+      },
+      "support_held": {
+        "samples": 13934,
+        "contact_frames": 13934,
+        "in_band_frames": 13934,
+        "longest_dropout_frames": 0,
+        "normal_force_min_observed_N": 0.4186981824154623,
+        "normal_force_max_observed_N": 4.314857939336551,
+        "contact_coverage": 1.0,
+        "normal_force_in_band_proportion": 1.0,
+        "longest_contact_dropout_s": 0.0,
+        "status": "PASS",
+        "segment": "initial",
+        "arm": "left",
+        "window_steps": [
+          77024,
+          90957
+        ]
+      }
+    },
+    "4": {
+      "A": {
+        "samples": 10057,
+        "force_norm_max_N": {
+          "left": 8.391828543072776,
+          "right": 9.479187044311924
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 1.2487404204269323,
+          "right": 1.256262385320601
+        },
+        "internal_force_norm_max_N": 6.499758799092271,
+        "status": "PASS",
+        "segment": "initial"
+      },
+      "B1": {
+        "samples": 4288,
+        "force_norm_max_N": {
+          "left": 3.9515397833040825e-06,
+          "right": 1.3492436145836868
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 2.952515413344813e-07,
+          "right": 0.04303994952881055
+        },
+        "status": "PASS",
+        "segment": "seating"
+      },
+      "B2": {
+        "samples": 12662,
+        "force_norm_max_N": {
+          "left": 9.281984930649845,
+          "right": 6.926916966455798
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 0.3765645220025283,
+          "right": 0.2671961929166255
+        },
+        "status": "PASS",
+        "segment": "seating"
+      },
+      "support_held": {
+        "samples": 10857,
+        "contact_frames": 10857,
+        "in_band_frames": 10856,
+        "longest_dropout_frames": 0,
+        "normal_force_min_observed_N": 0.8404513827867901,
+        "normal_force_max_observed_N": 6.160576279773746,
+        "contact_coverage": 1.0,
+        "normal_force_in_band_proportion": 0.9999078935249148,
+        "longest_contact_dropout_s": 0.0,
+        "status": "PASS",
+        "segment": "seating",
+        "arm": "right",
+        "window_steps": [
+          6289,
+          17145
+        ]
+      },
+      "B2_withdrawal": {
+        "samples": 4125,
+        "force_norm_max_N": {
+          "left": 0.10813550218650993,
+          "right": 2.337206757007408
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 0.011328519962722211,
+          "right": 0.09335391294283894
+        },
+        "status": "PASS",
+        "segment": "retreat"
+      },
+      "support_held_after_reset": {
+        "samples": 500,
+        "contact_frames": 500,
+        "in_band_frames": 500,
+        "longest_dropout_frames": 0,
+        "normal_force_min_observed_N": 1.17265029204655,
+        "normal_force_max_observed_N": 2.16764963841516,
+        "contact_coverage": 1.0,
+        "normal_force_in_band_proportion": 1.0,
+        "longest_contact_dropout_s": 0.0,
+        "status": "PASS",
+        "segment": "retreat",
+        "arm": "right",
+        "window_steps": [
+          446,
+          945
+        ]
+      },
+      "reacquired_preload_N": {
+        "samples": 60,
+        "minimum": 1.0225917405130314,
+        "maximum": 1.6038423789033165
+      }
+    },
+    "5": {
+      "A": {
+        "samples": 9004,
+        "force_norm_max_N": {
+          "left": 7.954820670317069,
+          "right": 8.50297403677911
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 1.527831481237972,
+          "right": 1.521117048414903
+        },
+        "internal_force_norm_max_N": 5.295522493608917,
+        "status": "PASS",
+        "segment": "retreat"
+      },
+      "B1": {
+        "samples": 4720,
+        "force_norm_max_N": {
+          "left": 1.7821660624080473,
+          "right": 0.004196042993985175
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 0.0602763851116638,
+          "right": 0.00018939440411922087
+        },
+        "status": "PASS",
+        "segment": "retreat"
+      },
+      "B2": {
+        "samples": 2786,
+        "force_norm_max_N": {
+          "left": 4.016821654010509,
+          "right": 3.676179284625769e-06
+        },
+        "tcp_torque_norm_max_Nm": {
+          "left": 0.15277041065201233,
+          "right": 1.0450582388764405e-07
+        },
+        "status": "PASS",
+        "segment": "retreat"
+      },
+      "support_held": {
+        "samples": 61,
+        "contact_frames": 61,
+        "in_band_frames": 61,
+        "longest_dropout_frames": 0,
+        "normal_force_min_observed_N": 2.753133722130837,
+        "normal_force_max_observed_N": 2.8640813094758863,
+        "contact_coverage": 1.0,
+        "normal_force_in_band_proportion": 1.0,
+        "longest_contact_dropout_s": 0.0,
+        "status": "PASS",
+        "segment": "retreat",
+        "arm": "left",
+        "window_steps": [
+          19865,
+          19925
+        ]
+      }
+    }
+  },
+  "final_rgb": {
+    "time_s": 186.97500975150615,
+    "source": "rear_RGB_marker_support_plane",
+    "cubes": [
+      {
+        "cube_id": 1,
+        "position_m": [
+          -0.3433364289350661,
+          1.0747357784943818,
+          0.7869999999999999
+        ],
+        "position_error_mm": 2.0894316699410886,
+        "yaw_deg": -0.255728623803058
+      },
+      {
+        "cube_id": 2,
+        "position_m": [
+          0.34653272380051514,
+          1.0748200702392354,
+          0.7869999999999999
+        ],
+        "position_error_mm": 1.934289660057088,
+        "yaw_deg": -0.2527195905004648
+      },
+      {
+        "cube_id": 3,
+        "position_m": [
+          -0.1931672982234924,
+          1.0747145320945841,
+          0.7869999999999999
+        ],
+        "position_error_mm": 1.2898602792452953,
+        "yaw_deg": -0.14063888629777857
+      },
+      {
+        "cube_id": 4,
+        "position_m": [
+          0.19689635465670696,
+          1.0750353114259985,
+          0.7869999999999999
+        ],
+        "position_error_mm": 1.4427438546978941,
+        "yaw_deg": -0.3113428793855073
+      },
+      {
+        "cube_id": 5,
+        "position_m": [
+          0.0005575516268041536,
+          1.0739987885165867,
+          0.7869999999999999
+        ],
+        "position_error_mm": 2.3256345958750737,
+        "yaw_deg": 0.3453917942867996
+      }
+    ]
+  }
+}

@@ -104,3 +104,31 @@ def test_invalid_inputs_fail_closed():
         collision.check({"right": np.zeros(7)}, margin_m=float("nan"))
     with pytest.raises(ValueError):
         collision.check({"right": np.zeros(7)}, cube_center=[0, 0, 0], cube_rotation=np.zeros((3, 3)))
+
+
+def test_placed_cubes_block_tools_and_carried_cube_paths():
+    collision = checker(solvers={"right": FakeFK(flange=(0., 0., 0.))})
+    collision.set_other_cubes([("Cube_1", [0., .204, .08], np.eye(3))])
+    assert not collision.is_clear({"right": np.zeros(7)}, cup_contacts=("right",))
+    collision = checker()
+    collision.set_other_cubes([("Cube_1", [0., 0., 0.], np.eye(3))])
+    result = collision.validate_path({"right": np.zeros((2, 7))},
+                                     cube_centers=[[-.2, 0., 0.], [.2, 0., 0.]])
+    assert result["status"] == "BLOCKED"
+    assert result["issues"][0]["kind"] == "cube_obstacle"
+    assert result["issues"][0]["b"] == "Cube_1"
+    with pytest.raises(ValueError):
+        collision.set_other_cubes([("Cube_1", [0., 0., 0.], np.zeros((3, 3)))])
+    assert len(collision.other_cubes) == 1
+
+
+def test_partial_visual_refresh_retains_occluded_collision_obstacles():
+    collision = checker()
+    collision.set_other_cubes([("Cube_1", [0., 0., 0.], np.eye(3)),
+                               ("Cube_2", [1., 0., 0.], np.eye(3))])
+    collision.set_other_cubes([("Cube_2", [2., 0., 0.], np.eye(3))], preserve_unobserved=True)
+    q = {"right": np.zeros(7)}
+    issues = collision.check(q, cube_center=[0., 0., 0.])
+    assert any(issue["b"] == "Cube_1" for issue in issues)
+    assert collision.is_clear(q, cube_center=[1., 0., 0.])
+    assert not collision.is_clear(q, cube_center=[2., 0., 0.])
