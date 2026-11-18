@@ -1,17 +1,26 @@
 # dual-fr3
 
-## Five-cube row · 84 cm
+## Five-cube row versions on `base`
 
-This 840 mm tray version passed the five-cube checkpoint audit.
+| Version | Inner tray width | Nominal clearance around Cube 5 | Validation |
+| --- | ---: | ---: | --- |
+| **76 cm** (current) | 5 × 150 mm + 10 mm | 5 mm per side | Scoped Cube 3–5 checks. Full run pending. |
+| [**84 cm**](https://github.com/dreamerToTOE/dual-fr3/commit/4a2c258499a2637e84159c13c75120eca49ec336) | 5 × 150 mm + 90 mm | 45 mm per side | Completed in three PhysX segments with two checkpoint restores. |
+
+Check out the linked 84 cm commit to run that scene. Its
+[checkpoint report](validation/fr3_five_cube_row_840mm_checkpoint_acceptance.json)
+records the final order 1, 3, 5, 4, 2 and the 2.33 mm maximum RGB position error.
+
+## Current five-cube scene · 76 cm
+
 Each 150 mm, 1.25 kg cube arrives individually at the supply station and is
 carried by both arms through A to an observed landing pose. Native breakable
 Surface Grippers attach after wrist-force contact confirmation.
 
 Packing order is rear then left wall, rear then right wall, beside Cube 1,
 beside Cube 2, then a straight insertion into the measured center slot.
-The inner tray width is 840 mm, giving 90 mm total nominal center-slot clearance.
-Nominal final X coordinates in packing order are −345, +345, −195, +195 and
-0 mm, with 45 mm clearance on each side of Cube 5. Earlier cubes remain dynamic collision obstacles. Cubes 2–4
+The inner tray width is 760 mm. Nominal final X coordinates in packing order
+are −305, +305, −155, +155 and 0 mm. Earlier cubes remain dynamic collision obstacles. Cubes 2–4
 use the observed neighboring faces to choose a landing lane with tool clearance.
 
 Rail centers are X = ±600 mm. A starts at rail Y = 200 mm, the support arm
@@ -69,16 +78,23 @@ wall or neighbor contact evidence.
 python3 fr3_row_acceptance.py validation/five_cube_row
 ```
 
-The 840 mm version completed on November 18, 2026 across three PhysX segments
-with two checkpoint restores. The initial visual run completed Cubes 1–3 and
-carried Cube 4 to landing. The resumed segments completed Cube 4 and ran
-Cube 5 from supply through straight insertion. The final RGB scan found
-1, 3, 5, 4, 2 from left to right, with a maximum position error of 2.33 mm
-and maximum absolute yaw error of 0.35°. B2 peak resultant force was 9.28 N.
-Both intended neighbor pairs had positive PhysX impulses on all 30 confirmation
-samples, with zero unexpected robot contacts recorded across the segments.
-Continuous execution from supply through the final scan remains unverified.
-[84 cm checkpoint report](validation/fr3_five_cube_row_840mm_checkpoint_acceptance.json)
+### 76 cm diagnostics
+
+- **Cube 3.** The right arm reached the side face and pushed Cube 3 against
+  Cube 1. PhysX recorded 34 consecutive positive impulse samples at a
+  0.145 mm solver gap. The RGB-based geometry estimate reported a 3.008 mm
+  overlap, so the guard stopped before force confirmation and tool withdrawal.
+- **Cube 4.** The original rear-row side approach overlaps Cube 3 by 26 mm in
+  the nominal tool-envelope model. With the required tool clearance the
+  landing plane would need X = 179 mm for a +X push to a 155 mm target.
+  A separate staged trial seated Cube 4 against Cube 2 (30/30 positive
+  impulse samples) and withdrew the left tool. The follow-up rear-wall
+  checkpoint ended about 1.26 mm short, with zero rear-wall impulses.
+  The staged trial remains a diagnostic outside the automatic sequence.
+- **Cube 5.** The nominal prepared scene passed straight insertion and
+  withdrawal. The minimum physical side clearances during the push were
+  4.46 and 4.08 mm, with zero loaded side contact. A geometric check with
+  3° yaw and 2 mm lateral offset found a 0.82 mm overlap.
 
 This repository contains the **FR3-only** four-wall scene package for the
 150 mm cube study. It is intentionally separate from the earlier episode

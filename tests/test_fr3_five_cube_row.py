@@ -15,13 +15,13 @@ def test_five_row_fits_and_contact_permission_tracks_active_body():
     size = config["cube_size_m"]
     ordered = sorted(config["goal_cube_centers_m"])
     assert all(math.isclose(actual[0], expected, abs_tol=1e-12)
-               for actual, expected in zip(config["goal_cube_centers_m"], [-.345, .345, -.195, .195, 0.]))
+               for actual, expected in zip(config["goal_cube_centers_m"], [-.305, .305, -.155, .155, 0.]))
     walls = {name: (center, extent) for name, center, extent in config["static_boxes"]}
     left_face = walls["wall_left"][0][0] + walls["wall_left"][1][0] / 2
     right_face = walls["wall_right"][0][0] - walls["wall_right"][1][0] / 2
-    assert math.isclose(right_face - left_face, 5 * size + .090)
-    assert math.isclose(ordered[2][0] - ordered[1][0] - size, .045)
-    assert math.isclose(ordered[3][0] - ordered[2][0] - size, .045)
+    assert math.isclose(right_face - left_face, 5 * size + .010)
+    assert math.isclose(ordered[2][0] - ordered[1][0] - size, .005)
+    assert math.isclose(ordered[3][0] - ordered[2][0] - size, .005)
     for first, second in zip(ordered, ordered[1:]):
         assert second[0] - first[0] >= size - 1e-10
     assert [item["push_direction"] for item in config["cube_sequence"]] == [-1, 1, -1, 1, 0]

@@ -2438,12 +2438,17 @@ def main():
                         landing_x = max(landing_x, opposite[1][0] + extent + stem_space)
                     else:
                         landing_x = min(landing_x, opposite[1][0] - extent - stem_space)
-                    if push_sign * (goal[0] - landing_x) < .008:
-                        raise RuntimeError("Observed neighbor corridor leaves less than 8 mm lateral seating travel")
+                    seating_travel = push_sign * (goal[0] - landing_x)
                     report.setdefault("landing_observations", []).append({
                         "cube_id": current_task["cube_id"], "source": "rear_RGB_neighbor_boundary_and_tool_geometry",
                         "landing_x_m": float(landing_x), "planned_stem_clearance_m": .008,
+                        "opposite_cube": opposite_id, "lateral_seating_travel_m": float(seating_travel),
                     })
+                    if seating_travel < .008:
+                        raise RuntimeError(
+                            f"Cube_{current_task['cube_id']} side approach is blocked by {opposite_id}: "
+                            f"clearance requires landing X={landing_x * 1000:.1f} mm, "
+                            f"target X={goal[0] * 1000:.1f} mm, remaining push {seating_travel * 1000:.1f} mm (need 8 mm)")
                 CONFIG["task"]["phase_B1"]["target_center_m"][0] = landing_x
                 CONFIG["task"]["phase_A"]["landing_center_m"][0] = landing_x
             record("supply_arrival", "READY_FOR_RGB_LOCALIZATION",

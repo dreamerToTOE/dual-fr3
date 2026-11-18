@@ -6,13 +6,14 @@ from math import isclose
 def row_config(base):
     config = deepcopy(base)
     size = config["cube_size_m"]
-    inner_width = 5 * size + 0.090
+    total_slot_clearance = .010
+    inner_width = 5 * size + total_slot_clearance
     half_width = inner_width / 2
     z = config["floor_top_m"] + size / 2
     floor = next(box for box in config["static_boxes"] if box[0] == "floor")
     rear = next(box for box in config["static_boxes"] if box[0] == "wall_back")
     goal_y = rear[1][1] - rear[2][1] / 2 - size / 2
-    config["scene_id"] = "dual_fr3_four_wall_150mm_five_cube_row"
+    config["scene_id"] = "dual_fr3_four_wall_150mm_five_cube_row_760mm"
     outer = half_width - size / 2
     inner = outer - size
     config["goal_cube_centers_m"] = [[x, goal_y, z] for x in (-outer, outer, -inner, inner, 0.)]
@@ -48,6 +49,6 @@ def row_config(base):
     goals = config["goal_cube_centers_m"]
     ordered = sorted(goals)
     assert isclose(half_width - ordered[-1][0] - size / 2, 0., abs_tol=1e-10)
-    assert isclose(ordered[2][0] - ordered[1][0] - size, 0.045)
-    assert isclose(ordered[3][0] - ordered[2][0] - size, 0.045)
+    assert isclose(ordered[2][0] - ordered[1][0] - size, total_slot_clearance / 2)
+    assert isclose(ordered[3][0] - ordered[2][0] - size, total_slot_clearance / 2)
     return config
