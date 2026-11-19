@@ -2,17 +2,26 @@
 
 ## Five-cube row versions on `base`
 
-| Version | Inner tray width | Nominal clearance around Cube 5 | Validation |
-| --- | ---: | ---: | --- |
-| **76 cm, four-process collision validation** (current) | 5 × 150 mm + 10 mm | 5 mm per side | Cube 4 landing-to-release and Cube 5 supply-to-insertion verified in the GUI. See the support-force result below. |
-| [**76 cm, serial diagnostic snapshot**](https://github.com/dreamerToTOE/dual-fr3/commit/f757da5e3182cfa950bc6244b105c36f4d0a6ec3) | 5 × 150 mm + 10 mm | 5 mm per side | Earlier Cube 3–5 diagnostics. |
-| [**84 cm**](https://github.com/dreamerToTOE/dual-fr3/commit/4a2c258499a2637e84159c13c75120eca49ec336) | 5 × 150 mm + 90 mm | 45 mm per side | Completed in three PhysX segments with two checkpoint restores. |
+| Version | Inner tray width | Wall height | Nominal clearance around Cube 5 | Validation |
+| --- | ---: | ---: | ---: | --- |
+| [**76 cm, 30 cm high walls**](scenes/w760_300mm/README.md) **(current research baseline)** | 5 × 150 mm + 10 mm | 300 mm | 5 mm per side | All five placed through GUI checkpoint runs. Cubes 4 and 5 ran from supply to placement in the last segment. |
+| [**76 cm, four-process collision validation**](https://github.com/dreamerToTOE/dual-fr3/commit/8ced1a4dd6b43f34793d302f3253bb1a54b26080) | 5 × 150 mm + 10 mm | 150 mm | 5 mm per side | Cube 4 landing-to-release and Cube 5 supply-to-insertion verified in the GUI. See the support-force result below. |
+| [**76 cm, serial diagnostic snapshot**](https://github.com/dreamerToTOE/dual-fr3/commit/f757da5e3182cfa950bc6244b105c36f4d0a6ec3) | 5 × 150 mm + 10 mm | 150 mm | 5 mm per side | Earlier Cube 3–5 diagnostics. |
+| [**84 cm**](https://github.com/dreamerToTOE/dual-fr3/commit/4a2c258499a2637e84159c13c75120eca49ec336) | 5 × 150 mm + 90 mm | 150 mm | 45 mm per side | Completed in three PhysX segments with two checkpoint restores. |
+
+Run the high-wall baseline using its separate entry point. Its
+[scene instructions and acceptance scope](scenes/w760_300mm/README.md)
+also describe the saved Cube 3 checkpoint.
+
+```bash
+"$ISAAC_SIM_DIR/python.sh" scenes/w760_300mm/continuous_side_row.py /tmp/fr3-w760-h300
+```
 
 Check out the linked 84 cm commit to run that scene. Its
 [checkpoint report](validation/fr3_five_cube_row_840mm_checkpoint_acceptance.json)
 records the final order 1, 3, 5, 4, 2 and the 2.33 mm maximum RGB position error.
 
-## Current five-cube scene · 76 cm with four collision workers
+## 150 mm-wall scene · 76 cm with four collision workers
 
 Each 150 mm, 1.25 kg cube arrives individually at the supply station and is
 carried by both arms through A to an observed landing pose. Native breakable

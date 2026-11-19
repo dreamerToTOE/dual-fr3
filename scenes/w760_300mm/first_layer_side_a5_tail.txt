@@ -1,0 +1,120 @@
+        def follow_side_guide(phase):
+            name = "A_" + phase["phase"]
+            carrying = phase["carrying"]
+            record(name, "RUNNING")
+            rails = {side: np.asarray(phase["rail_paths_m"][side], dtype=float) for side in robots}
+            guide_q = {side: np.asarray(phase["q_rad"][side], dtype=float) for side in robots}
+            centers = np.asarray(phase["cube_centers_m"], dtype=float)
+            count = len(centers)
+            grid = np.linspace(0., 1., count)
+            assert centers.shape == (count, 3) and count >= 2
+            original = {side: base.copy() for side, base in rail_states.items()}
+            for side in robots:
+                assert guide_q[side].shape == (count, 7) and rails[side].shape == (count,)
+                assert np.all(np.isfinite(guide_q[side])) and np.all(np.isfinite(rails[side]))
+                low, high = CONFIG["rails"]["travel_limits_m"]
+                assert np.all((rails[side] >= low) & (rails[side] <= high))
+                if abs(rails[side][0] - original[side][1]) > 1e-6:
+                    raise RuntimeError(f"{name} does not begin at the measured {side} rail station")
+            if not np.all(np.isfinite(centers)):
+                raise RuntimeError(f"{name} has nonfinite payload guides")
+            start_center, payload_rotation = sensed_cube()
+            correction = np.asarray(start_center) - centers[0]
+            if carrying and np.linalg.norm(correction) > .015:
+                raise RuntimeError(f"{name} payload guide start error exceeds 15 mm: {correction.tolist()}")
+            initial = {side: applied_targets[side].copy() for side in robots}
+            actual_tool = {side: tcp_fk(side, initial[side]) for side in robots}
+            guides_start = {side: tcp_fk(side, guide_q[side][0])[0] for side in robots}
+
+            def dry_rail(side, y):
+                base = original[side].copy()
+                base[1] = y
+                solvers[side].set_robot_base_pose(
+                    base[:3], np.array([math.cos(base[3] / 2), 0., 0., math.sin(base[3] / 2)]))
+
+            rail_span = max(np.abs(np.diff(rails[side])).sum() for side in robots)
+            joint_travel = max(np.max(np.abs(np.diff(guide_q[side], axis=0)).sum(axis=0)) for side in robots)
+            path_length = np.linalg.norm(np.diff(centers, axis=0), axis=1).sum()
+            duration = 1.875 * max(1.5, rail_span / (.025 if carrying else .05), joint_travel / .30,
+                                   path_length / .06)
+            for _ in range(3):
+                frames = max(120, math.ceil(duration * 120))
+                t = np.linspace(0., 1., frames + 1)
+                u = (10 - 15 * t + 6 * t * t) * t ** 3
+                bases = {side: np.interp(u, grid, values) for side, values in rails.items()}
+                payload_path = np.column_stack([np.interp(u, grid, axis) for axis in centers.T])
+                if carrying:
+                    payload_path += (1 - u[:, None]) * correction
+                else:
+                    payload_path[:] = start_center
+                guide_samples = {side: np.column_stack([np.interp(u, grid, col) for col in q.T])
+                                 for side, q in guide_q.items()}
+                samples = {side: [initial[side]] for side in robots}
+                try:
+                    for index in range(1, frames + 1):
+                        planning_update(f"{name}: guided collision planning")
+                        for side in robots:
+                            if bases[side][index] != bases[side][index - 1]:
+                                dry_rail(side, bases[side][index])
+                            prior = samples[side][-1]
+                            guide_step = guide_samples[side][index] - guide_samples[side][index - 1]
+                            seed = prior + guide_step
+                            measured_tcp, rotation = actual_tool[side]
+                            if carrying:
+                                target = measured_tcp + payload_path[index] - start_center
+                            else:
+                                guided_tcp, rotation = tcp_fk(side, guide_samples[side][index])
+                                target = guided_tcp + (1. - u[index]) * (measured_tcp - guides_start[side])
+                            q = cartesian_joint_target(side, seed, target, rotation, retarget_guide=True)
+                            samples[side].append(q)
+                        issues = checker.check({side: q[-1] for side, q in samples.items()},
+                                               cube_center=payload_path[index], cube_rotation=payload_rotation,
+                                               cup_contacts=allowed_contacts, margin_m=.001, first_only=True)
+                        if issues:
+                            raise RuntimeError(f"{name} guided collision: {issues[0]}")
+                finally:
+                    for side in robots:
+                        dry_rail(side, original[side][1])
+                speed = max(float(np.max(np.abs(np.diff(q, axis=0)))) * 120. for q in samples.values())
+                rail_speed = max(float(np.max(np.abs(np.diff(y)))) * 120. for y in bases.values())
+                speed_factor = max(speed / .4, rail_speed / (.025 if carrying else .05))
+                if speed_factor <= 1.0001:
+                    break
+                duration *= 1.03 * speed_factor
+            else:
+                raise RuntimeError(f"{name} could not satisfy the joint or rail speed bounds")
+            for side, q in samples.items():
+                props = robots[side].dof_properties
+                if not np.all((np.asarray(q) >= props["lower"][joints[side]])
+                              & (np.asarray(q) <= props["upper"][joints[side]])):
+                    raise RuntimeError(f"{name} violates the {side} joint limits")
+            report.setdefault("side_transfer_motion", []).append({
+                "phase": name, "samples": frames + 1, "joint_peak_rad_s": speed,
+                "rail_peak_m_s": rail_speed, "rail_y_m": {side: [float(y[0]), float(y[-1])] for side, y in bases.items()},
+                "carrying": carrying,
+            })
+            velocities = {side: np.gradient(q, 1 / 120, axis=0) for side, q in samples.items()}
+            for index in range(1, frames + 1):
+                for side in robots:
+                    base = rail_states[side].copy()
+                    if base[1] != bases[side][index]:
+                        base[1] = bases[side][index]
+                        set_robot_base_pose(side, base)
+                    command_positions(side, samples[side][index],
+                                      velocity=velocities[side][index] if index < frames else None)
+                step()
+                check_current_collision(name)
+                if carrying and np.linalg.norm(sensed_cube()[0] - payload_path[index]) > .015:
+                    raise RuntimeError(f"{name} carried Cube deviated by over 15 mm")
+            record(name, "CLEAR_PHYSX_EXECUTION")
+
+        def park_after_side_transfer():
+            park = next(p["q_rad"] for p in GUIDE["unloaded_transits"]
+                        if p["phase"] == "return_home_after_withdrawal")
+            record("A_empty_repark", "RUNNING")
+            execute_joint_path({side: np.vstack((q, park[side])) for side, q in joint_state().items()},
+                               "A_empty_repark")
+            for side, base in rail_states.items():
+                target = base.copy()
+                target[1] = .20
+                move_robot_base(side, target)

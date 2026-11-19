@@ -1,0 +1,160 @@
+{
+  "scope": "Measured Isaac Sim GUI and PhysX checkpoint-chain results.",
+  "scene_id": "dual_fr3_four_wall_150mm_five_cube_row_760mm_300mm_first_layer_continuous_side",
+  "width_mm": 760.0,
+  "wall_heights_mm": {
+    "wall_front": 300.0,
+    "wall_back": 300.0,
+    "wall_left": 300.0,
+    "wall_right": 300.0
+  },
+  "cube_size_mm": 150,
+  "supply_center_m": [
+    0.0,
+    -0.3,
+    0.787
+  ],
+  "rear_camera_position_m": [
+    0.0,
+    1.35,
+    2.45
+  ],
+  "rear_camera_resolution": [
+    1280,
+    960
+  ],
+  "runtime_trajectory_cache_used": false,
+  "completed_cubes": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "runner_status": "PASS_FIVE_CUBE_SENSOR_SEQUENCE",
+  "latest_segment_restored_cube_ids": [
+    1,
+    2,
+    3
+  ],
+  "uninterrupted_five_cube_run_verified": false,
+  "unexpected_robot_contacts_in_latest_segment": 0,
+  "simulation_clock_latest_segment": {
+    "control_hz": 120,
+    "render_hz": 30,
+    "render_count": 44736,
+    "uncommanded_physics_steps": 0,
+    "control_steps": 108808,
+    "physics_steps": 108808
+  },
+  "side_suction_verified": [
+    {
+      "cube_id": 2,
+      "faces_by_arm": {
+        "left": "+Y",
+        "right": "-Y"
+      },
+      "carried_steps": 12258,
+      "both_seals_closed_steps": 12258,
+      "front_wall_clearance_mm_min": 37.97556463729371,
+      "vision_verified_landing_step": 45727,
+      "status": "PASS"
+    },
+    {
+      "cube_id": 4,
+      "faces_by_arm": {
+        "left": "+Y",
+        "right": "-Y"
+      },
+      "carried_steps": 12324,
+      "both_seals_closed_steps": 12324,
+      "front_wall_clearance_mm_min": 37.94339196036536,
+      "vision_verified_landing_step": 54537,
+      "status": "PASS"
+    },
+    {
+      "cube_id": 5,
+      "faces_by_arm": {
+        "left": "-X",
+        "right": "+X"
+      },
+      "carried_steps": 11912,
+      "both_seals_closed_steps": 11912,
+      "front_wall_clearance_mm_min": 38.013314172008066,
+      "vision_verified_landing_step": 100378,
+      "status": "PASS"
+    }
+  ],
+  "cube4_b2": {
+    "support": {
+      "arm": "right",
+      "held_window_steps": [
+        58412,
+        71050
+      ],
+      "normal_force_band_N": [
+        0.1,
+        6.0
+      ],
+      "in_band_fraction": 0.9979428752274705,
+      "samples": 12639,
+      "dropout_count": 26,
+      "longest_dropout_ms": 8.333333333333334,
+      "longest_dropout": {
+        "first_step": 64951,
+        "last_step": 64951,
+        "start_phase": "B2_push",
+        "end_phase": "B2_push",
+        "duration_ms": 8.333333333333334
+      },
+      "limits": {
+        "minimum_in_band_fraction": 0.98,
+        "maximum_dropout_ms": 50.0
+      },
+      "status": "PASS"
+    },
+    "cube2_positive_impulse_frames": 30,
+    "rear_wall_positive_impulse_frames": 30
+  },
+  "cube5_straight_insertion": {
+    "travel_along_y_mm": 341.2556052207947,
+    "total_x_span_mm": 2.4410378537140787,
+    "positive_neighbor_impulse_frames": 0
+  },
+  "final_row_rgb": {
+    "order_left_to_right": [
+      1,
+      3,
+      5,
+      4,
+      2
+    ],
+    "oriented_x_projected_gap_mm": {
+      "1-3": -0.695647914312203,
+      "3-5": 4.538127700027969,
+      "5-4": 3.9173008330364856,
+      "4-2": 1.1645864111781423
+    }
+  },
+  "final_row_physx": {
+    "order_left_to_right": [
+      1,
+      3,
+      5,
+      4,
+      2
+    ],
+    "oriented_x_projected_gap_mm": {
+      "1-3": -0.013031604012614384,
+      "3-5": 4.5142127590624135,
+      "5-4": 3.960491376316849,
+      "4-2": 1.3003606982902594
+    }
+  },
+  "archive_sha256": {
+    "continuous_visible_resume_a1/runner_report.json": "85fa0556237fc89aa81d5e6c0542a296a9db59b4fd19131c3da4e73f7ee0b2d6",
+    "continuous_visible_resume_a3_retry/runner_report.json": "2cd9f65df80c11e623eef924f5e2d6931008fec4c529b9b0c46689ec4db1c205",
+    "continuous_visible_resume_a3_retry/continuous_side_acceptance.json": "80e95804ecab42bb325a5a219bf9c5314843e166e48d6bdaf1e6e3cbc2f11ebf",
+    "continuous_visible_resume_a3_retry/runner_snapshot.py": "6037d86d2dbace6bc810a621c51ad50f46efa4dcd7353839f59378f59cb16219"
+  }
+}
