@@ -51,7 +51,11 @@ def realign_upper5(neighbors):
     clear, entry = fixed_x_entry_clearance(neighbors, position, rotation)
     record("upper_B_straight_entry_gate", "CLEAR" if clear else "BLOCKED",
            after_realign=True, **entry)
-    if not clear:
+    event = "ENTRY_CLEAR" if clear else "ENTRY_BLOCKED_GEOMETRY"
+    selected = select_skill(Skill.REALIGN, event)
+    record("upper_B_skill_selection", "SELECTED", current_skill=int(Skill.REALIGN),
+           next_skill=int(selected), observation=event)
+    if selected != Skill.APPROACH:
         raise RuntimeError("Upper slot 5 still has insufficient clearance after yaw correction")
     set_contact_drive_mode(False)
     return approach_front(settle_after_transit=True)
@@ -95,5 +99,14 @@ def inject(source):
                 checker.set_other_cubes(neighbors, preserve_unobserved=True)
             execute_upper_push(GUIDE, slot, target)''',
         '''                checker.set_other_cubes(neighbors, preserve_unobserved=True)
-            execute_upper_push(GUIDE, slot, target, realign_neighbors=neighbors if slot == 5 and not clear else None)''',
+                from experiments.skill_selection import Skill, entry_event, select_skill
+                event = entry_event(entry["left_gap_m"], entry["right_gap_m"],
+                                    entry["projected_cube_width_m"], 2 * half, entry["minimum_gap_per_side_m"])
+                selected = select_skill(Skill.APPROACH, event)
+                record("upper_B_skill_selection", "SELECTED", current_skill=int(Skill.APPROACH),
+                       next_skill=int(selected), observation=event)
+                if not clear and selected != Skill.REALIGN:
+                    raise RuntimeError("Upper slot 5 does not have sufficient side clearance after yaw compensation")
+            execute_upper_push(GUIDE, slot, target,
+                               realign_neighbors=neighbors if slot == 5 and selected == Skill.REALIGN else None)''',
     )
