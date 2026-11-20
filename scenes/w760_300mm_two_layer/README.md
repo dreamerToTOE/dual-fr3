@@ -34,3 +34,22 @@
 [最终截图](validation/upper_cube_final.png) · [15 箱最终位姿](validation/final_15_box_poses.json)
 
 最终位姿文件用于查看和分析。验收材料中的运行路径使用本地实验编号表示。整排一次无中断运行和实体 FR3 验证仍待进行。
+
+## 第 5 箱接触识别实验
+
+以下命令从上层第 5 箱的实测落地断点开始，在仿真创建时给箱体绕世界 Z 轴叠加偏航角。用 `0` 跑对照，再逐次换成其他角度。每次使用新的输出目录。
+
+```bash
+scene=scenes/w760_300mm_two_layer
+run=$(mktemp -d)/upper5
+"$ISAAC_SIM_DIR/python.sh" "$scene/two_row_physx.py" "$run" \
+  --resume "$scene/validation/upper5_landing_checkpoint.json" \
+  --upper5-yaw-deg 0 --close-on-finish
+python3 "$scene/experiments/score_upper5.py" "$run" \
+  --labels "$run/upper5_truth.jsonl" > "$run/upper5_score.json"
+python3 "$scene/experiments/fusion_upper5.py" \
+  --case "$run" "$run/upper5_truth.jsonl" --delay-ms 0 --delay-ms 100 --delay-ms 200 \
+  --out "$run/fusion_replay.json"
+```
+
+评分使用 PhysX 的当前步接触冲量和箱体位姿。入槽检查拒绝、运动中腕力超限、邻箱持续受阻分别计数。回放使用相机时间戳、ArUco、腕部力觉和 TCP 运动学，真值只用于事后对照。延迟是回放中额外加入的图像传输时间。回放结果列出各运行缺失的状态。
