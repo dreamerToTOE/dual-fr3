@@ -45,3 +45,7 @@ scene=scenes/w760_300mm_two_layer
   --resume "$scene/validation/upper5_landing_checkpoint.json" \
   --upper5-yaw-deg 0 --upper5-z-unload --close-on-finish
 ```
+
+将偏航设为 `1.5` 做入槽拒绝对照。另一次运行加上 `--upper5-realign`，入槽检查拒绝后由左臂吸附前立面，在下层承托下做一次原位纠偏，松开后重新测量两侧间隙。通过原入槽要求则接回直推。报告中的两条 `upper_B_straight_entry_gate` 分别记录纠偏前、后的相机测量。
+
+本轮 `+1.5°` 复测通过了纠偏后的间隙复检和二次接触确认，随后推进 73.79 mm，在距后墙约 11.89 mm 时触发腕力上限。PhysX 在停机时记录到左吸盘和下层支撑箱承载。
