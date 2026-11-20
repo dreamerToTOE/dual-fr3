@@ -1,0 +1,82 @@
+        def finish_upper_placement(hover_load):
+            from collections import deque
+            nonlocal seals_required, carry_offsets
+
+            weight = CONFIG["physics"]["cube_mass_kg"] * abs(CONFIG["physics"]["gravity_m_s2"][2])
+            if not .65 * weight <= hover_load <= 1.35 * weight:
+                raise RuntimeError(f"Suspended payload vertical load {hover_load:.2f} N differs from box weight")
+            load_limit = min(.25 * hover_load, 2.5)
+            target_wrist_load = .8 * load_limit
+            record("A_support_transfer", "VERTICAL_WRIST_LOAD_CONFIRMATION", hover_load_N=hover_load,
+                   pre_approach_clearance_m=.00045, maximum_compression_N=load_limit)
+            samples = deque(maxlen=30)
+            nominal = {side: tcp_fk(side, applied_targets[side]) for side in robots}
+            descent = 0.
+
+            def bearing(wrist, support):
+                return (-.4 <= wrist <= load_limit and support >= .55 * weight
+                        and .8 * weight <= wrist + support <= 1.2 * weight)
+
+            wrist_load = -signed_vertical_load()
+            support_load = 120 * support_impulse()
+            for _ in range(2700):
+                if wrist_load < -load_limit:
+                    raise RuntimeError(f"Upper seating downward compression {-wrist_load:.3f} N exceeds "
+                                       f"{load_limit:.3f} N at {descent*1000:.3f} mm approach")
+                hold = bearing(wrist_load, support_load)
+                if not hold:
+                    samples.clear()
+                    # Keep the two tips on the same commanded vertical translation.
+                    speed = float(np.clip(.00007 * (wrist_load - target_wrist_load), -.0002, .00012))
+                    descent += speed / 120
+                    if not -.00045 <= descent <= .00225:
+                        break
+                    commands = {}
+                    for side, (point, rotation) in nominal.items():
+                        q = cartesian_joint_target(side, applied_targets[side], point - [0., 0., descent], rotation)
+                        command_rate = float(np.max(np.abs(q - applied_targets[side]))) * 120
+                        if not np.isfinite(command_rate) or command_rate > .4:
+                            raise RuntimeError(f"Upper seating {side} command {command_rate:.6f} rad/s exceeds 0.400")
+                        commands[side] = q
+                    center, rotation = sensed_cube()
+                    issues = checker.check(commands, cube_center=center, cube_rotation=rotation,
+                                           cup_contacts=allowed_contacts, margin_m=0., first_only=True)
+                    if issues:
+                        raise RuntimeError(f"Upper seating command collision: {issues[0]}")
+                    for side, q in commands.items():
+                        command_positions(side, q)
+                step()
+                check_current_collision("A_support_transfer")
+                wrist_load = -signed_vertical_load()
+                support_load = 120 * support_impulse()
+                if hold and bearing(wrist_load, support_load):
+                    samples.append((wrist_load, support_load))
+                    if len(samples) == samples.maxlen:
+                        break
+                else:
+                    samples.clear()
+            if len(samples) != samples.maxlen:
+                report["upper_load_transfer_failed"] = {"hover_load_N": hover_load, "lowering_m": descent,
+                                                        "last_wrist_load_N": wrist_load, "lower_support_N": support_load}
+                raise RuntimeError(f"Upper seating did not transfer load at {descent*1000:.3f} mm "
+                                   f"(wrist {wrist_load:.3f} N, lower support {support_load:.3f} N)")
+            wrist, support = np.mean(samples, axis=0)
+            record("upper_support_confirmed", "FORCE_TRANSFERRED", hover_load_N=hover_load,
+                   seated_wrist_load_N=float(wrist), lower_support_load_N=float(support),
+                   stable_wrist_frames=len(samples), seating_descent_m=descent)
+            sensed_cube()
+            record("upper_release", "OPENING_BOTH_SIDE_GRIPPERS")
+            seals_required = False
+            for side in robots:
+                grippers.open(side)
+            carry_offsets = None
+            report["surface_gripper_validated"] = True
+            for _ in range(4):
+                after_release = support_window()
+                support_load = 120 * after_release["median_contact_impulse_Ns"]
+                if after_release["positive_steps"] >= 48 and .65 * weight <= support_load <= 1.35 * weight:
+                    break
+            else:
+                raise RuntimeError(f"Lower row did not carry the released box: {after_release['positive_steps']}/60 "
+                                   f"bearing ticks, median support {support_load:.3f} N")
+            finish_upper_retreat(after_release)

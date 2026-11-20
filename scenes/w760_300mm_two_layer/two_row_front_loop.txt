@@ -1,0 +1,138 @@
+        from fr3_cube_supply import spawn_supply_cube
+        from scipy.spatial.transform import Rotation
+
+        SUPPORT_TOP = CONFIG["floor_top_m"]
+        LOWER_PATHS = {"/World/Environment/floor"}
+        current_task = {"cube_id": FIRST_ID, "marker_id": FIRST_ID + 22}
+        vision_estimator.marker_id = supply_estimator.marker_id = FIRST_ID + 22
+        rear_initial = CHECKPOINT.get("rear_initial", [b for b in INITIAL_BOXES if b["cube_id"] <= 5])
+        rear_reference = {str(b["cube_id"]): np.array(b["position_m"]) for b in rear_initial}
+        report["front_row"] = {"completed": list(CHECKPOINT.get("front_completed", [])),
+                               "rear_initial": rear_initial}
+
+        def observe_known_lower(required_names=None):
+            ids = [int(n) for n in lower_bodies]
+            names = {f"Cube_{i}" for i in ids}
+            return [row for row in observe_placed_cubes(max(ids), names if required_names is None else required_names)
+                    if row[0] in names]
+
+        def save_front_checkpoint(next_front, landed=None):
+            data = {"scene": SCENE, "next_front": next_front, "next_slot": 1,
+                    "initial_boxes": upper_pose_records(lower_bodies),
+                    "rear_initial": rear_initial, "front_completed": report["front_row"]["completed"], "front_landed": landed,
+                    "source_run": str(output_directory)}
+            if landed:
+                data["parked_q"] = {side: q.tolist() for side, q in joint_state().items()}
+                data["parked_base_y_m"] = {s: float(p[1]) for s, p in rail_states.items()}
+            name = "front_landing_checkpoint.json" if landed else "front_row_checkpoint.json"
+            path = output_directory / name
+            tmp = path.with_suffix(".tmp")
+            tmp.write_text(json.dumps(data, indent=2, allow_nan=False) + "\n")
+            tmp.replace(path)
+
+        report["front_row"]["input_checkpoint"] = CHECKPOINT.get("input_provenance")
+        for front_slot in range(START_FRONT, 6):
+            task_id = FRONT_IDS[front_slot-1]
+            active_cube_path = f"/World/Cube_{task_id}"
+            current_task = {"cube_id": task_id, "marker_id": task_id + 22, "front_slot": front_slot}
+            if front_slot != START_FRONT:
+                next_cube = spawn_supply_cube(stage, world, CONFIG, task_id - 1, contact_monitor)
+                supply_transition = True
+                step()
+                next_cube.initialize()
+                cube = next_cube
+                supply_transition = False
+            truth_history.clear()
+            control_center = control_rotation = carry_offsets = contact_plan_rotation = None
+            supported_pose_time = None
+            supported_pose_filter = PlanarPoseMedian()
+            push_faces.clear()
+            allowed_contacts.clear()
+            vision_estimator.marker_id = supply_estimator.marker_id = task_id + 22
+            step(120)
+            observed_neighbors = observe_known_lower()
+            checker.set_other_cubes(observed_neighbors)
+            if front_slot == START_FRONT and CHECKPOINT.get("front_landed"):
+                for side, saved in CHECKPOINT["parked_q"].items():
+                    base = rail_states[side].copy()
+                    base[1] = CHECKPOINT["parked_base_y_m"][side]
+                    set_robot_base_pose(side, base)
+                    q = np.asarray(saved)
+                    robots[side].set_joint_positions(q, joint_indices=joints[side])
+                    robots[side].set_joint_velocities(np.zeros(7), joint_indices=joints[side])
+                    command_positions(side, q)
+                step(30)
+                if CHECKPOINT.get("front_repark_pending"):
+                    from front_row_a import floor_guide
+                    receipt = CHECKPOINT["front_repark_pending"]
+                    if receipt["cube_id"] != task_id or receipt["slot"] != front_slot:
+                        raise RuntimeError("Mismatched front A repark checkpoint")
+                    control_center = np.asarray(receipt["estimated_center_m"], dtype=float)
+                    control_rotation = np.asarray(receipt["estimated_rotation_world"], dtype=float)
+                    if control_center.shape != (3,) or control_rotation.shape != (3, 3) or not (
+                            np.all(np.isfinite(control_center)) and np.all(np.isfinite(control_rotation))):
+                        raise RuntimeError("Invalid measured pose for repark planning")
+                    GUIDE = floor_guide(front_slot)
+                    record("front_A_repark_resume", "RESTORED_OPEN_AND_FLOOR_SUPPORTED", source_step=receipt["source_step"])
+                    park_after_side_transfer()
+                control_center, control_rotation = observe_resting_cube(
+                    "front_floor_landing_resume", vision_camera, vision_estimator, SUPPORT_TOP)
+                record("front_A", "RESTORED_MEASURED_LANDING", slot=front_slot)
+                if CHECKPOINT.get("front_repark_pending"):
+                    save_front_checkpoint(front_slot, upper_pose_records({str(task_id): cube})[0])
+            else:
+                record("front_supply", "READY_FOR_RGB_LOCALIZATION", slot=front_slot)
+                control_center, control_rotation = run_front_a(front_slot, observed_neighbors)
+                save_front_checkpoint(front_slot, upper_pose_records({str(task_id): cube})[0])
+            if not (front_slot == START_FRONT and CHECKPOINT.get("front_b1")):
+                if front_slot == 2:
+                    # Cube 12 remains an obstacle; slot 2 only seats against the right wall and rear row.
+                    latest = observe_known_lower(required_names={f"Cube_{i}" for i in range(1, 6)})
+                    observed_neighbors = list({row[0]: row for row in observed_neighbors + latest}.values())
+                else:
+                    observed_neighbors = observe_known_lower()
+            # At a B1 restore the same rear boxes were just imaged before the support wrist was put back.
+            checker.set_other_cubes(observed_neighbors)
+            result = run_front_b(front_slot, observed_neighbors)
+            step(60)
+            final_rgb, _ = observe_resting_cube("front_final_pose", vision_camera, vision_estimator, SUPPORT_TOP)
+            final, rotation = cube.get_world_pose()
+            target = np.asarray(result["target_m"])
+            angles = Rotation.from_quat(np.roll(rotation, -1)).as_euler("zyx", degrees=True)
+            stable = support_window()
+            rear_shift = max(np.linalg.norm(lower_bodies[key].get_world_pose()[0] - p)
+                             for key, p in rear_reference.items())
+            if (np.linalg.norm(final_rgb - target) > .010 or np.linalg.norm(final - target) > .010
+                    or max(abs(angles)) > 3 or stable["positive_steps"] < 48 or rear_shift > .004
+                    or np.linalg.norm(cube.get_linear_velocity()) > .005 or any(grippers.is_closed(s) for s in robots)):
+                raise RuntimeError(f"Front slot {front_slot} failed stability: measured={final}, "
+                                   f"RGB={final_rgb}, goal={target}, angles={angles}, rear_shift={rear_shift}")
+            lower_bodies[str(task_id)] = cube
+            report["front_row"]["completed"].append({**result, "slot": front_slot, "cube_id": task_id,
+                "physical_final_m": final.tolist(), "rgb_final_m": final_rgb.tolist(),
+                "yaw_pitch_roll_deg": angles.tolist(), "floor_support": stable, "max_rear_shift_m": float(rear_shift)})
+            record("front_slot_complete", "SEATED_STABLE", slot=front_slot)
+            if front_slot < 5:
+                save_front_checkpoint(front_slot + 1)
+            if front_slot == STOP_AFTER_FRONT and front_slot < 5:
+                report["status"] = "PASS_FRONT_SLOT"
+                report["ab_status"] = "PASS_TARGET_FRONT_SLOT"
+                return 0
+        final_front = upper_pose_records({str(i): lower_bodies[str(i)] for i in FRONT_IDS})
+        expected_x_order = (FRONT_IDS[0], FRONT_IDS[2], FRONT_IDS[4], FRONT_IDS[3], FRONT_IDS[1])
+        if tuple(b["cube_id"] for b in sorted(final_front, key=lambda b: b["position_m"][0])) != expected_x_order:
+            raise RuntimeError("Lower front row order changed after packing")
+        for box, completed in zip(sorted(final_front, key=lambda b: FRONT_IDS.index(b["cube_id"])),
+                                  report["front_row"]["completed"], strict=True):
+            if np.linalg.norm(np.asarray(box["position_m"]) - completed["target_m"]) > .010:
+                raise RuntimeError(f"Front Cube_{box['cube_id']} shifted during a later placement")
+        if {int(key) for key in lower_bodies} != set(LOWER_IDS):
+            raise RuntimeError("Upper supply requires both complete, measured lower rows")
+        if START_FRONT <= 5:
+            save_front_checkpoint(6)
+        if STOP_AFTER_FRONT == 5:
+            report["front_row"]["final_poses"] = final_front
+            report["status"] = "PASS_FRONT_ROW"
+            report["ab_status"] = "PASS_FRONT_ROW_SIDE_SUCTION_AND_PHYSX"
+            record("front_row_complete", "PASS_FRONT_ROW")
+            return 0

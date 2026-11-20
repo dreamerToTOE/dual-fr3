@@ -1,0 +1,298 @@
+        def close_upper_side_seal(side, phase="upper_B_seal"):
+            """Remove residual pusher preload before enabling the native side suction joint."""
+            from fr3_surface_gripper import ATTACHMENT_PARAMETERS
+            from omni.isaac.dynamic_control import _dynamic_control
+            from omni.physx import get_physx_scene_query_interface
+
+            q = joint_state()[side]
+            position, rotation = tcp_fk(side, q)
+            sign = -1 if side == "left" else 1
+            inward = sign * rotation[:, 1]
+            if abs(inward[2]) > .05:
+                raise RuntimeError(f"{side} seal axis differs from the horizontal side face")
+            retreat = 0.
+            stable = 0
+            for _ in range(360):
+                q = cartesian_joint_target(side, q, position - retreat * inward, rotation)
+                command_positions(side, q)
+                step()
+                check_current_collision(phase + "_unload")
+                wrench = np.asarray(last_force_sample[side]["tcp_gravity_corrected_world"])
+                compression = -float(wrench[:3] @ inward)
+                if np.linalg.norm(wrench[:3]) > 9. or np.linalg.norm(wrench[3:]) > 1.:
+                    raise RuntimeError(f"{side} side seal unloading overload: {wrench.tolist()}")
+                if compression > .12 or retreat < .00040:
+                    retreat += .000005
+                    if retreat > .00075:
+                        raise RuntimeError(f"{side} side seal could not unload within 0.75 mm")
+                quiet = np.max(np.abs(last_force_sample[side]["qdot_rad_s"])) < .006
+                stable = stable + 1 if retreat >= .00040 and abs(compression) <= .12 and quiet else 0
+                if stable == 16:
+                    break
+            else:
+                raise RuntimeError(f"{side} side seal did not reach stationary low preload")
+
+            # Replicate the native ray so the recorded attachment can be audited before stepping.
+            dc = _dynamic_control.acquire_dynamic_control_interface()
+            parent = f"/World/{side}_fr3/ABSideTool"
+            pose = dc.get_rigid_body_pose(dc.get_rigid_body(parent))
+            physical_rotation = Rotation.from_quat(list(pose.r)).as_matrix()
+            offset = force_recorder.tcp_offsets[side].copy()
+            offset[1] -= sign * ATTACHMENT_PARAMETERS["ray_standoff_m"]
+            origin = np.asarray(list(pose.p)) + physical_rotation @ offset
+            direction = sign * physical_rotation[:, 1]
+            ray = get_physx_scene_query_interface().raycast_closest(
+                tuple(origin), tuple(direction), ATTACHMENT_PARAMETERS["ray_range_m"])
+            if not ray["hit"] or str(ray["rigidBody"]) != active_cube_path:
+                raise RuntimeError(f"{side} stationary side-suction ray missed {active_cube_path}: {ray}")
+            if not grippers.close(side):
+                raise RuntimeError(f"{side} native side seal did not close")
+            record(phase, "CLOSED_AT_LOW_PRELOAD", arm=side, body=str(ray["rigidBody"]),
+                   ray_mm=1000 * ray["distance"], retraction_mm=retreat*1000,
+                   normal_preload_N=compression)
+            for _ in range(12):
+                step()
+                for arm in robots:
+                    wrench = np.asarray(last_force_sample[arm]["tcp_gravity_corrected_world"])
+                    if np.linalg.norm(wrench[:3]) > 9. or np.linalg.norm(wrench[3:]) > 1.:
+                        raise RuntimeError(f"{arm} stationary side seal overload: {wrench.tolist()}")
+                if not grippers.is_closed(side):
+                    raise RuntimeError(f"{side} seal broke while holding the docking pose")
+                check_current_collision(phase + "_hold")
+
+        def finish_upper_retreat(after_release):
+            weight = CONFIG["physics"]["cube_mass_kg"] * abs(CONFIG["physics"]["gravity_m_s2"][2])
+            supported_load = after_release["median_contact_impulse_Ns"] * 120
+            load_fraction = supported_load / weight
+            report["upper_row"]["latest_release_support"] = {
+                **after_release, "median_support_load_N": supported_load, "support_load_fraction": load_fraction,
+            }
+            if after_release["positive_steps"] < 48 or not .65 <= load_fraction <= 1.35:
+                raise RuntimeError("Upper A release did not settle on the lower row "
+                                   f"({after_release['positive_steps']}/60 support ticks, "
+                                   f"median support {supported_load:.3f} N of {weight:.3f} N)")
+            for phase in GUIDE["phases"][FIRST_LOADED:]:
+                if not phase["carrying"]:
+                    follow_side_guide(phase)
+            allowed_contacts.clear()
+            park_after_side_transfer()
+
+        def upper_pose_records(bodies):
+            return [{"cube_id": int(index), "position_m": position.tolist(), "orientation_wxyz": attitude.tolist()}
+                    for index, body in sorted(bodies.items(), key=lambda item: int(item[0]))
+                    for position, attitude in [body.get_world_pose()]]
+
+        def save_upper_checkpoint(next_slot, placement=None):
+            record_data = {
+                "next_slot": next_slot,
+                "completed_slots": report["upper_row"]["completed_slots"],
+                "fixture_upper_slots": CHECKPOINT.get("fixture_upper_slots", []),
+                "initial_lower_poses": report["upper_row"]["initial_lower_poses"],
+                "observed_lower_obstacles": [[name, position.tolist(), rotation.tolist()]
+                                             for name, position, rotation in lower_obstacles],
+                "initial_boxes": upper_pose_records(lower_bodies) + [
+                    box for box in upper_pose_records(upper_bodies) if box["cube_id"] < 6 + next_slot],
+                "landed": placement,
+            }
+            name = "upper_landing_checkpoint.json" if placement else "upper_row_checkpoint.json"
+            path = output_directory / name
+            temp = path.with_suffix(".tmp")
+            temp.write_text(json.dumps(record_data, indent=2, allow_nan=False) + "\n")
+            temp.replace(path)
+
+        def slot3_cup_edge_margin(tcp, tool_rotation, center, box_rotation):
+            # All four circular lips lie in the tool X-Z plane at the side-face TCP.
+            span = ATTACHMENT_PARAMETERS["cup_center_half_span_m"]
+            radius = ATTACHMENT_PARAMETERS["cup_radius_m"]
+            basis = np.asarray(box_rotation).T @ np.asarray(tool_rotation)[:, [0, 2]]
+            face_tcp = np.asarray(box_rotation).T @ (np.asarray(tcp) - np.asarray(center))
+            face_extent = span * np.abs(basis).sum(axis=1) + radius * np.linalg.norm(basis, axis=1)
+            return float(np.min(half - np.abs(face_tcp[1:]) - face_extent[1:]))
+
+        def center_slot_edges(upper_seen):
+            tracked = {name: (position, rotation) for name, position, rotation in upper_seen}
+            left, left_rotation = tracked["Cube_9"]
+            right, right_rotation = tracked["Cube_10"]
+            return (float(left[0] + half * np.abs(left_rotation[0]).sum()),
+                    float(right[0] - half * np.abs(right_rotation[0]).sum()))
+
+        def fixed_x_entry_clearance(upper_seen, center, rotation):
+            left_edge, right_edge = center_slot_edges(upper_seen)
+            half_width = half * float(np.abs(rotation[0]).sum())
+            x = float(center[0])
+            left_gap = x - half_width - left_edge
+            right_gap = right_edge - x - half_width
+            # The existing 2 mm total allowance is shared by the two sides of the straight path.
+            enough = bool(np.all(np.isfinite([left_gap, right_gap])) and min(left_gap, right_gap) >= .001 - 1e-12)
+            return enough, {"left_gap_m": left_gap, "right_gap_m": right_gap,
+                            "projected_cube_width_m": 2 * half_width, "slot_width_m": right_edge - left_edge,
+                            "left_inner_edge_x_m": left_edge, "right_inner_edge_x_m": right_edge,
+                            "observed_cube_x_m": x, "minimum_gap_per_side_m": .001,
+                            "observed_yaw_deg": math.degrees(math.atan2(rotation[1, 0], rotation[0, 0]))}
+
+        def find_upper_target(slot, upper_seen):
+            x = (-.305, .305, -.155, .155, 0.)[slot - 1]
+            if slot in (3, 4):
+                tracked = {name: (position, rotation) for name, position, rotation in upper_seen}
+                pos, rotation = tracked["Cube_7" if slot == 3 else "Cube_8"]
+                extent = half * np.abs(rotation[0]).sum()
+                x = pos[0] + (1 if slot == 3 else -1) * (extent + half)
+            elif slot == 5:
+                left_edge, right_edge = center_slot_edges(upper_seen)
+                if right_edge - left_edge < 2 * half + .002 - 1e-12:
+                    raise RuntimeError("Upper slot 5 camera measurement has less than 2 mm insertion clearance")
+                x = (left_edge + right_edge) / 2
+            return np.array([x, 1.076, SUPPORT_TOP + half])
+
+        SUPPORT_TOP = CONFIG["floor_top_m"] + CONFIG["cube_size_m"]
+        LOWER_PATHS = {f"/World/Cube_{index}" for index in range(1, 7)}
+        from fr3_cube_supply import spawn_supply_cube
+        from scipy.spatial.transform import Rotation
+
+        current_task = {"cube_id": 6 + START_SLOT, "marker_id": 28 + START_SLOT}
+        vision_estimator.marker_id = supply_estimator.marker_id = current_task["marker_id"]
+        step(120)
+        initial_lower = CHECKPOINT.get("initial_lower_poses", upper_pose_records(lower_bodies))
+        report["upper_row"] = {"initial_lower_poses": initial_lower,
+                               "restored_lower_poses_at_start": upper_pose_records(lower_bodies),
+                               "input_checkpoint": CHECKPOINT.get("input_provenance"),
+                               "initial_upper_poses": upper_pose_records({
+                                   i: body for i, body in upper_bodies.items() if int(i) < current_task["cube_id"]}),
+                               "completed_slots": list(CHECKPOINT.get("completed_slots", []))}
+        slot3_guide = None
+        if 3 in RUNTIME_GUIDES and START_SLOT <= 3 <= CHECKPOINT.get("fixture_last_slot", 5):
+            guide_path = RUNTIME_GUIDES[3].resolve()
+            guide_bytes = guide_path.read_bytes()
+            slot3_guide = json.loads(guide_bytes)
+            report["upper_row"]["slot3_guide"] = {
+                "source": str(guide_path), "sha256": hashlib.sha256(guide_bytes).hexdigest(),
+                "landing_m": slot3_guide["landing_m"], "grip_front_offset_m": slot3_guide["grip_front_offset_m"],
+                "planned_grasp_edge_margins_m": {
+                    side: slot3_cup_edge_margin(offset, slot3_guide["tool_rotation_world"], np.zeros(3), np.eye(3))
+                    for side, offset in slot3_guide["grasp_tcp_offsets_world"].items()},
+                "edge_margin_definition": "Minimum signed clearance of the four projected circular cup lips to the Y/Z edges of the side face."}
+        saved_lower = CHECKPOINT.get("observed_lower_obstacles")
+        lower_obstacles = ([(name, np.asarray(position), np.asarray(rotation))
+                            for name, position, rotation in saved_lower]
+                           if saved_lower is not None else observe_placed_cubes(count=6))
+        for slot in range(START_SLOT, CHECKPOINT.get("fixture_last_slot", 5) + 1):
+            task_id = slot + 6
+            current_task = {"cube_id": task_id, "marker_id": task_id + 22, "slot": slot}
+            active_cube_path = f"/World/Cube_{task_id}"
+            if slot > START_SLOT:
+                next_cube = spawn_supply_cube(stage, world, CONFIG, task_id - 1, contact_monitor)
+                if CUBE_CONTACT_OFFSET_M is not None:
+                    prim = stage.GetPrimAtPath(active_cube_path)
+                    PhysxSchema.PhysxCollisionAPI(prim).CreateContactOffsetAttr(CUBE_CONTACT_OFFSET_M)
+                if UPPER_REST_OFFSET_M is not None:
+                    prim = stage.GetPrimAtPath(active_cube_path)
+                    PhysxSchema.PhysxCollisionAPI(prim).GetRestOffsetAttr().Set(UPPER_REST_OFFSET_M)
+                supply_transition = True
+                step()
+                next_cube.initialize()
+                cube = next_cube
+                upper_bodies[str(task_id)] = cube
+                supply_transition = False
+                truth_history.clear()
+            vision_estimator.marker_id = supply_estimator.marker_id = current_task["marker_id"]
+            control_center = control_rotation = carry_offsets = contact_plan_rotation = None
+            supported_pose_time = None
+            push_faces.clear()
+            allowed_contacts.clear()
+            GUIDE = slot3_guide if slot == 3 else json.loads(RUNTIME_GUIDES[slot].read_text())
+            FIRST_LOADED = next(i for i, row in enumerate(GUIDE["phases"]) if row["carrying"])
+            upper_names = {f"Cube_{i}" for i in range(7, task_id)}
+            upper_seen = [row for row in observe_placed_cubes(count=task_id - 1, required_names=upper_names)
+                          if row[0] in upper_names] if upper_names else []
+            checker.set_other_cubes(lower_obstacles + upper_seen)
+            target = find_upper_target(slot, upper_seen)
+            nominal = np.asarray(GUIDE["landing_m"], dtype=float)
+            if slot == 5:
+                correction_x = float(target[0] - nominal[0])
+                if abs(correction_x) > .005:
+                    raise RuntimeError("Upper slot 5 deviates from the checked landing corridor by over 5 mm")
+                for row in GUIDE["phases"][FIRST_LOADED:]:
+                    centers = np.asarray(row["cube_centers_m"], dtype=float)
+                    if row["phase"] == "loaded_rail_transfer":
+                        centers[:, 0] += np.linspace(0., correction_x, len(centers))
+                    elif row["phase"] != "lift_and_align":
+                        centers[:, 0] += correction_x
+                    row["cube_centers_m"] = centers.tolist()
+                GUIDE["landing_m"] = (nominal + [correction_x, 0., 0.]).tolist()
+            current_task["goal_center_m"] = target.tolist()
+            if slot == START_SLOT and RELEASE_CHECKPOINT is not None:
+                if "released_arm_state" in RELEASE_CHECKPOINT:
+                    state = RELEASE_CHECKPOINT["released_arm_state"]
+                    estimate = state["control_pose"]
+                    control_center = np.asarray(estimate["position_m"])
+                    control_rotation = np.asarray(estimate["rotation_world"])
+                    for side, saved in state["q_rad"].items():
+                        base = rail_states[side].copy()
+                        base[1] = GUIDE["rail_landing_y_m"][side]
+                        set_robot_base_pose(side, base)
+                        q = np.asarray(saved)
+                        robots[side].set_joint_positions(q, joint_indices=joints[side])
+                        robots[side].set_joint_velocities(np.zeros(7), joint_indices=joints[side])
+                        command_positions(side, q)
+                    allowed_contacts.update(robots)
+                    record("upper_release_checkpoint", "RESTORED_WITH_GRIPPERS_OPEN", slot=slot,
+                           source=state["source"])
+                    finish_upper_retreat(support_window())
+                record("upper_landing_checkpoint", "RESTORED_AFTER_RELEASE_AND_RETRACTION", slot=slot,
+                       source="defined_landing_fixture" if RELEASE_CHECKPOINT.get("fixture_landing")
+                       else "archived_physx_pose")
+            else:
+                record("upper_supply", "READY_FOR_RGB_LOCALIZATION", slot=slot, target_m=target.tolist(),
+                       landing_m=GUIDE["landing_m"], contact_order=GUIDE["B"]["contact_order"])
+                run_cube()
+            observed, _ = observe_resting_cube("upper_landing_pose", vision_camera, vision_estimator, SUPPORT_TOP)
+            if np.linalg.norm(observed - GUIDE["landing_m"]) > .008:
+                raise RuntimeError(f"Upper slot {slot} landing differs from the checked pose by over 8 mm")
+            settled = support_window()
+            if settled["positive_steps"] < 48:
+                raise RuntimeError(f"Upper slot {slot} not supported after A withdrawal")
+            save_upper_checkpoint(slot, upper_pose_records({str(task_id): cube})[0])
+            if slot == 5:
+                # The box has landed. Evaluate the straight push at its measured X and yaw.
+                names = {"Cube_9", "Cube_10"}
+                neighbors = [item for item in observe_placed_cubes(count=task_id - 1, required_names=names)
+                             if item[0] in names]
+                center, rotation = observe_resting_cube("upper_B_straight_entry_pose", vision_camera,
+                                                        vision_estimator, SUPPORT_TOP)
+                clear, entry = fixed_x_entry_clearance(neighbors, center, rotation)
+                record("upper_B_straight_entry_gate", "CLEAR" if clear else "BLOCKED", **entry)
+                if not clear:
+                    raise RuntimeError("Upper slot 5 straight push has insufficient measured lateral clearance "
+                                       f"(left {entry['left_gap_m']*1000:.2f} mm, right {entry['right_gap_m']*1000:.2f} mm)")
+                checker.set_other_cubes(neighbors, preserve_unobserved=True)
+            execute_upper_push(GUIDE, slot, target)
+            final_rgb, _ = observe_resting_cube("upper_final_pose", vision_camera, vision_estimator, SUPPORT_TOP)
+            settled = support_window()
+            final, attitude = cube.get_world_pose()
+            angles = Rotation.from_matrix(quat_to_rot_matrix(attitude)).as_euler("zyx", degrees=True)
+            lower_final = upper_pose_records(lower_bodies)
+            lower_shift = max(np.linalg.norm(np.asarray(before["position_m"]) - after["position_m"])
+                              for before, after in zip(initial_lower, lower_final, strict=True))
+            if (np.linalg.norm(final_rgb - target) > .010 or np.linalg.norm(final - target) > .010
+                    or np.max(np.abs(angles)) > 3. or settled["positive_steps"] < 48
+                    or lower_shift > .004 or np.linalg.norm(cube.get_linear_velocity()) > .005
+                    or any(grippers.is_closed(side) for side in robots)):
+                raise RuntimeError(f"Upper slot {slot} failed the stability or placement checks")
+            report["upper_row"]["completed_slots"].append({
+                "slot": slot, "cube_id": task_id, "target_m": target.tolist(), "rgb_final_m": final_rgb.tolist(),
+                "physical_final_m": final.tolist(), "yaw_pitch_roll_deg": angles.tolist(), "support": settled,
+                "max_lower_shift_m": float(lower_shift),
+            })
+            record("upper_slot_complete", "SEATED_STABLE", slot=slot)
+            save_upper_checkpoint(slot + 1)
+        report["upper_row"]["final_lower_poses"] = upper_pose_records(lower_bodies)
+        report["upper_row"]["final_upper_poses"] = upper_pose_records(upper_bodies)
+        if len(upper_bodies) == 5 and [b["cube_id"] for b in sorted(report["upper_row"]["final_upper_poses"],
+                                        key=lambda box: box["position_m"][0])] != [7, 9, 11, 10, 8]:
+            raise RuntimeError("Upper row final left-to-right order is incorrect")
+        all_verified = [box["slot"] for box in report["upper_row"]["completed_slots"]] == list(range(1, 6))
+        fixture = CHECKPOINT.get("fixture_upper_slots", [])
+        report["status"] = "PASS_W760_UPPER_ROW" if all_verified and not fixture else "PARTIAL_W760_UPPER_ROW"
+        report["ab_status"] = ("PASS_SECOND_ROW_SIDE_SUCTION_AND_PHYSX" if report["status"] == "PASS_W760_UPPER_ROW"
+                               else "ONLY_RECORDED_SLOTS_SIMULATED")
+        record("upper_row_complete", report["status"])

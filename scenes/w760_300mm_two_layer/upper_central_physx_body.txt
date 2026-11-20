@@ -1,0 +1,171 @@
+        def lower_poses():
+            return {index: {"position_m": position.tolist(), "orientation_wxyz": orientation.tolist()}
+                    for index, body in lower_bodies.items() for position, orientation in [body.get_world_pose()]}
+
+        def support_impulse():
+            snapshot = contact_monitor.cube_contact_snapshot()
+            return sum((row.get("normal_impulse_Ns") or 0.) for row in snapshot["pairs"]
+                       if row["current_step_observed"]
+                       and {row["collider0"], row["collider1"]} == {active_cube_path, "/World/Cube_5"})
+
+        def signed_vertical_load():
+            return sum(last_force_sample[side]["tcp_gravity_corrected_world"][2] for side in robots)
+
+        def held_vertical_load():
+            loads = []
+            for _ in range(24):
+                step()
+                check_current_collision("A_hover_load")
+                loads.append(abs(signed_vertical_load()))
+            return float(np.median(loads))
+
+        def finish_upper_placement(hover_load):
+            from collections import deque
+            from scipy.spatial.transform import Rotation
+
+            nonlocal seals_required, carry_offsets
+            weight = CONFIG["physics"]["cube_mass_kg"] * abs(CONFIG["physics"]["gravity_m_s2"][2])
+            if not .65 * weight <= hover_load <= 1.35 * weight:
+                raise RuntimeError(f"Suspended payload vertical load {hover_load:.2f} N differs from box weight")
+            record("A_support_transfer", "VERTICAL_WRIST_LOAD_CONFIRMATION", hover_load_N=hover_load)
+            samples = deque(maxlen=30)
+            nominal = {side: tcp_fk(side, applied_targets[side]) for side in robots}
+            load_limit = min(.25 * hover_load, 2.5)
+            descent = 0.
+            for frame in range(540):
+                # Advance only while the arms are still carrying weight.
+                signed_load = signed_vertical_load()
+                if signed_load > load_limit:
+                    raise RuntimeError("Wrist force indicates downward compression at upper seating")
+                if frame >= 60 and signed_load < -load_limit:
+                    descent += .0005 / 120
+                    if descent > .0018:
+                        break
+                    for side, (point, rotation) in nominal.items():
+                        target = point - [0., 0., descent]
+                        q = cartesian_joint_target(side, applied_targets[side], target, rotation, retarget_guide=True)
+                        command_positions(side, q)
+                step()
+                check_current_collision("A_support_transfer")
+                load = abs(signed_vertical_load())
+                if load <= load_limit:
+                    samples.append(load)
+                else:
+                    samples.clear()
+                if len(samples) == samples.maxlen:
+                    break
+            if len(samples) < samples.maxlen:
+                report["upper_load_transfer_failed"] = {"hover_load_N": hover_load, "lowering_m": descent,
+                                                        "last_wrist_load_N": signed_vertical_load()}
+                raise RuntimeError("Controlled seating did not transfer load to lower Cube_5")
+            record("upper_support_confirmed", "FORCE_TRANSFERRED", hover_load_N=hover_load,
+                   seated_wrist_load_N=float(np.median(samples)), stable_wrist_frames=len(samples))
+            sensed_cube()
+            record("upper_release", "OPENING_BOTH_SIDE_GRIPPERS")
+            seals_required = False
+            for side in robots:
+                grippers.open(side)
+            carry_offsets = None
+            report["surface_gripper_validated"] = True
+            after_release = support_window()
+            if after_release["positive_steps"] < 48:
+                raise RuntimeError("Lower Cube_5 did not carry the upper box after both grippers opened")
+            finish_upper_retreat(after_release)
+
+        def support_window():
+            impulses = []
+            for _ in range(60):
+                step()
+                impulses.append(support_impulse())
+            return {"positive_steps": sum(impulse > 1e-5 for impulse in impulses),
+                    "median_contact_impulse_Ns": float(np.median(impulses)), "samples": len(impulses)}
+
+        def finish_upper_retreat(after_release):
+            from scipy.spatial.transform import Rotation
+
+            for phase in GUIDE["phases"][FIRST_LOADED:]:
+                if not phase["carrying"]:
+                    follow_side_guide(phase)
+            allowed_contacts.clear()
+            park_after_side_transfer()
+            support_top = CONFIG["floor_top_m"] + CONFIG["cube_size_m"]
+            upper_rgb, _ = observe_resting_cube("upper_final_pose", vision_camera, vision_estimator, support_top)
+            step(60)
+            settled_support = support_window()
+            final, orientation = cube.get_world_pose()
+            yaw, pitch, roll = Rotation.from_matrix(quat_to_rot_matrix(orientation)).as_euler("zyx", degrees=True)
+            lower_final = lower_poses()
+            drift = {index: float(np.linalg.norm(np.asarray(pose["position_m"])
+                                                - lower_before[index]["position_m"]))
+                     for index, pose in lower_final.items()}
+            report["second_layer_result"] = {
+                "active_cube_path": active_cube_path, "support_path": "/World/Cube_5",
+                "target_m": GUIDE["landing_m"], "physx_final_m": final.tolist(), "rgb_final_m": upper_rgb.tolist(),
+                "yaw_pitch_roll_deg": [yaw, pitch, roll], "bottom_support_plane_m": support_top,
+                "upper_speed_m_s": float(np.linalg.norm(cube.get_linear_velocity())),
+                "lower_poses_before": lower_before, "lower_poses_after": lower_final,
+                "lower_cube_drift_m": drift,
+                "post_release_support": after_release, "settled_support": settled_support,
+                "grippers_closed": {side: grippers.is_closed(side) for side in robots},
+            }
+            if (np.linalg.norm(final - GUIDE["landing_m"]) > .010
+                    or np.linalg.norm(upper_rgb - GUIDE["landing_m"]) > .010
+                    or abs(final[2] - support_top - half) > .003
+                    or max(abs(pitch), abs(roll)) > 2.
+                    or max(drift.values()) > .004
+                    or settled_support["positive_steps"] < 48
+                    or report["second_layer_result"]["upper_speed_m_s"] > .005
+                    or any(grippers.is_closed(side) for side in robots)):
+                raise RuntimeError("Upper cube pose, release or lower-row stability check failed")
+
+        current_task = {"cube_id": 6, "marker_id": 28, "contact_target": "Cube_5"}
+        vision_estimator.marker_id = supply_estimator.marker_id = 28
+        if RELEASE_CHECKPOINT is None:
+            step(120)
+            placed_observations = observe_placed_cubes(count=5)
+            checker.set_other_cubes(placed_observations)
+            lower_before = lower_poses()
+            _, support_center, _ = next(row for row in placed_observations if row[0] == "Cube_5")
+            target = support_center + [0., -.010, CONFIG["cube_size_m"]]
+            correction = target - np.asarray(GUIDE["target_center_m"])
+            if np.linalg.norm(correction) > .006:
+                raise RuntimeError("Measured lower Cube_5 is outside the checked upper-placement corridor")
+            for phase in GUIDE["phases"]:
+                centers = np.asarray(phase["cube_centers_m"], dtype=float)
+                if phase["phase"] == "high_transfer_to_rear":
+                    centers += np.linspace(0., 1., len(centers))[:, None] * correction
+                elif phase["phase"] in ("lower_onto_cube_5", "release_and_withdraw", "raise_clear"):
+                    centers += correction
+                phase["cube_centers_m"] = centers.tolist()
+            GUIDE["landing_m"] = target.tolist()
+            record("upper_supply", "READY_FOR_RGB_LOCALIZATION", target_m=GUIDE["landing_m"],
+                   target_source="rear_RGB_lower_Cube_5")
+            run_cube()
+            report["status"] = "PASS_W760_UPPER_DUAL_SIDE"
+            report["ab_status"] = "PASS_SCOPED_UPPER_SINGLE_CUBE"
+        else:
+            GUIDE["landing_m"] = RELEASE_CHECKPOINT["target_m"]
+            checker.set_other_cubes([(row["name"], row["position_m"], row["rotation_world"])
+                                    for row in RELEASE_CHECKPOINT["neighbors"]])
+            estimate = RELEASE_CHECKPOINT["control_pose"]
+            control_center = np.asarray(estimate["position_m"])
+            control_rotation = np.asarray(estimate["rotation_world"])
+            for side, saved in RELEASE_CHECKPOINT["q_rad"].items():
+                base = rail_states[side].copy()
+                base[1] = GUIDE["rail_landing_y_m"][side]
+                set_robot_base_pose(side, base)
+                q = np.asarray(saved)
+                robots[side].set_joint_positions(q, joint_indices=joints[side])
+                robots[side].set_joint_velocities(np.zeros(7), joint_indices=joints[side])
+                command_positions(side, q)
+            allowed_contacts.update(robots)
+            lower_before = lower_poses()
+            report["checkpoint"]["restored_upper_after_release"] = True
+            record("upper_release_checkpoint", "RESTORED_WITH_GRIPPERS_OPEN", source=RELEASE_CHECKPOINT["source"])
+            after_release = support_window()
+            if after_release["positive_steps"] < 48:
+                raise RuntimeError("Released checkpoint did not settle onto Cube_5")
+            finish_upper_retreat(after_release)
+            report["status"] = "PASS_W760_UPPER_RELEASE_RETREAT"
+            report["ab_status"] = "PASS_SCOPED_UPPER_RELEASE_RETREAT"
+        record("upper_stacking_complete", report["status"])

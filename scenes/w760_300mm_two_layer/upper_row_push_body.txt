@@ -1,0 +1,1150 @@
+        def execute_upper_push(plan, slot, target_center, *, use_extra_u2=True):
+            """Seat an upper Cube using wrist force, encoder travel and calibrated boundaries."""
+            from collections import deque
+            nonlocal support_side, push_side, push_sign, left_hold, left_hold_z, left_hold_rotation
+            nonlocal latched_contact_axis, contact_plan_rotation, carry_offsets
+
+            b = plan["B"]
+            support_side, push_side = b["aux_side"], b["main_side"]
+            push_sign = -1 if push_side == "right" else 1
+            phase_map = {item["phase"]: item for item in b["phases"]}
+            final = np.asarray(target_center, dtype=float)
+            stack_plane = CONFIG["floor_top_m"] + CONFIG["cube_size_m"]
+            side_first = b["contact_order"] == "side_then_rear"
+            record("upper_B_strategy", "SELECTED", contact_order=b["contact_order"])
+            rear_target = "/World/Environment/wall_back"
+            side_target = {1: "/World/Environment/wall_left", 2: "/World/Environment/wall_right",
+                           3: "/World/Cube_7", 4: "/World/Cube_8"}.get(slot)
+            front_offset = np.array([0., -half, .004])
+            phase_prefix = f"upper_b{slot}"
+            force_ceiling = 9.
+            settle_frame_count = 30
+
+            def force(side, axis, sign):
+                wrench = np.asarray(last_force_sample[side]["tcp_gravity_corrected_world"])
+                if (not np.all(np.isfinite(wrench)) or np.linalg.norm(wrench[:3]) > force_ceiling
+                        or np.linalg.norm(wrench[3:]) > 1.0):
+                    raise RuntimeError(f"Upper {slot} {side} contact overload: {wrench.tolist()}")
+                return float(-sign * wrench[axis])
+
+            def gap(center, rotation, axis, sign):
+                return oriented_wall_gap(center[axis], rotation[axis], half, final[axis], sign)
+
+            def front_contact_center_y(side, center, cube_rotation):
+                """Estimate the contacted front plane from the calibrated cup array."""
+                from fr3_surface_gripper import ATTACHMENT_PARAMETERS
+
+                tcp, tool_rotation = tcp_fk(side, joint_state()[side])
+                front_normal = cube_rotation[:, 1]
+                along = tool_rotation.T @ front_normal
+                cup_direction = -1. if side == "left" else 1.
+                tool = CONFIG["side_suction_tool"]
+                half_depth = tool["cup_length_m"] / 2
+                cup_span = ATTACHMENT_PARAMETERS["cup_center_half_span_m"]
+                # Maximum plane projection of the four cylinders along the measured face normal.
+                radius_projection = tool["cup_radius_m"] * math.sqrt(max(0., 1. - along[1] ** 2))
+                cup_front_projection = (tcp @ front_normal - cup_direction * half_depth * along[1]
+                                        + half_depth * abs(along[1]) + radius_projection
+                                        + cup_span * (abs(along[0]) + abs(along[2])))
+                return (cup_front_projection + half - front_normal[0] * center[0]
+                        - front_normal[2] * center[2]) / front_normal[1]
+
+            def hold_front(target):
+                nonlocal left_hold, left_hold_z, left_hold_rotation
+                position, left_hold_rotation = tcp_fk(support_side, applied_targets[support_side])
+                left_hold_z = float(position[2])
+                left_hold = NormalForceController(
+                    float(position[1]), target_force_N=target, gain_m_per_Ns=.001 if slot in (1, 2) else 8e-5,
+                    max_offset_m=.003, max_speed_m_s=.001 if slot in (1, 2) else .0005, max_force_N=force_ceiling)
+
+            def prepare_rear_to_side_hold(target=1.25):
+                phase = "upper_B_front_pressure_handoff"
+                starting_force = max(target, force(support_side, 1, 1))
+                current_task["rear_to_side_hold_x_m"] = float(tcp_fk(support_side, applied_targets[support_side])[0][0])
+                hold_front(starting_force)
+                tracking_gain = left_hold.gain_m_per_Ns
+                if slot == 3:
+                    left_hold.gain_m_per_Ns = .00035
+                record(phase, "CONTROLLED_PRELOAD_RELEASE", initial_normal_force_N=starting_force)
+                settled = deque(maxlen=30)
+                for index in range(660):
+                    left_hold.target_force_N = max(target, starting_force - .025 * index)
+                    step()
+                    check_current_collision(phase)
+                    load = force(support_side, 1, 1)
+                    if left_hold.target_force_N == target and target - .85 <= load <= target + 1.05:
+                        settled.append(load)
+                        if len(settled) == settled.maxlen:
+                            break
+                    else:
+                        settled.clear()
+                else:
+                    raise RuntimeError(f"{phase}: front wrist failed to settle from {starting_force:.2f} N")
+                left_hold.initial_position_m = left_hold.position_m
+                left_hold.gain_m_per_Ns = tracking_gain
+                record(phase, "SUPPORTED_LOW_PRELOAD", held_samples=len(settled),
+                       mean_normal_force_N=float(np.mean(settled)), target_force_N=target)
+
+            def supported_travel(start, axis, sign, distance):
+                duration = max(3., 1.875 * distance / .024)
+                raw_time = np.linspace(0., duration, math.ceil(duration * 120) + 1)
+                u = raw_time / raw_time[-1]
+                progress = distance * (10 - 15*u + 6*u*u) * u**3
+                midpoint = (progress[1:] + progress[:-1]) / 2
+                transverse_axis = 1 - axis
+                edge_crossings = []
+                for _, position, rotation in lower_obstacles:
+                    extent = half * np.abs(rotation[:2]).sum(axis=1)
+                    if abs(position[transverse_axis] - start[transverse_axis]) > extent[transverse_axis] + half:
+                        continue
+                    for bottom_edge in (-extent[axis], extent[axis]):
+                        for upper_edge in (-half, half):
+                            crossed = sign * (position[axis] + bottom_edge - upper_edge - start[axis])
+                            if -.016 <= crossed <= distance + .016:
+                                edge_crossings.append(crossed)
+                dt = np.diff(raw_time)
+                if edge_crossings:
+                    near = np.min(np.abs(midpoint[:, None] - edge_crossings), axis=1)
+                    ramp = np.clip((near - .008) / .008, 0., 1.)
+                    speed_limit = .0015 + .0225 * ramp**2 * (3. - 2. * ramp)
+                    dt = np.maximum(dt, np.diff(progress) / speed_limit)
+                stretched = np.r_[0., np.cumsum(dt)]
+                times = np.arange(math.ceil(stretched[-1] * 120) + 1) / 120
+                translation = sign * np.interp(times, stretched, progress)
+                assert np.max(np.abs(np.diff(translation))) * 120 <= .0241
+                return times, translation
+
+            def probe_rear_after_seam(side, phase):
+                """Discriminate a rear stop from lower-support friction while creeping in +Y."""
+                q = applied_targets[side].copy()
+                position, tool_rotation = tcp_fk(side, q)
+                origin_y = float(position[1])
+                window = deque(maxlen=61)
+                sliding_load = deque(maxlen=120)
+                settled = deque(maxlen=settle_frame_count)
+                witness = deque(maxlen=settle_frame_count)
+                stiffness = None
+                soft_hold = retries = weak_ticks = 0
+                unloading = 0.
+
+                def command_normal(delta):
+                    nonlocal q
+                    position[1] += delta
+                    command = cartesian_joint_target(side, q, position, tool_rotation, retarget_guide=True)
+                    velocity = float(np.max(np.abs(command - q))) * 120
+                    if not np.isfinite(velocity) or velocity > .4:
+                        raise RuntimeError(f"{phase}: tactile probe needs {velocity:.4f} rad/s (limit 0.4)")
+                    q = command
+                    command_positions(side, q)
+
+                for _ in range(6000):
+                    normal = force(side, 1, 1)
+                    resultant = np.linalg.norm(last_force_sample[side]["tcp_gravity_corrected_world"][:3])
+                    center, rotation = sensed_cube()
+                    if normal > .10:
+                        center[1] = front_contact_center_y(side, center, rotation)
+                    near = gap(center, rotation, 1, 1)
+                    if near < -.003:
+                        raise RuntimeError(f"{phase}: encoder rear-face estimate exceeded the calibrated wall by "
+                                           f"{-near*1000:.2f} mm")
+
+                    if stiffness is None and (soft_hold or normal > 7.6 or resultant > 7.9):
+                        soft_hold += 1
+                    if stiffness is None:
+                        window.append((position[1], center[1], normal))
+                        if len(window) == window.maxlen:
+                            samples = np.asarray(window)
+                            # Average the ends of the window to reject one-frame contact-force spikes.
+                            recent = samples[-8:].mean(axis=0)
+                            commanded, measured, rise = recent - samples[:8].mean(axis=0)
+                            if not soft_hold and commanded >= .00004 and measured >= .50 * commanded:
+                                sliding_load.append(float(recent[2]))
+                            resistance = max(5.55, float(np.percentile(sliding_load, 80)) if sliding_load else 0.)
+                            if (near <= .00045 and commanded >= (.000025 if soft_hold else .00004)
+                                    and abs(measured) <= .35 * commanded
+                                    and rise >= .30 and recent[2] >= resistance + .65):
+                                stiffness = {
+                                    "commanded_advance_mm": float(commanded * 1000),
+                                    "encoder_face_advance_mm": float(measured * 1000),
+                                    "force_rise_N": float(rise),
+                                    "moving_resistance_reference_N": resistance,
+                                    "held_at_soft_load_envelope": bool(soft_hold),
+                                }
+                        if stiffness is None:
+                            if soft_hold >= 60 and not retries and near <= .00045:
+                                # Re-identify the wall stiffness after a brief load spike froze the ramp.
+                                retries += 1
+                                for _ in range(80):
+                                    command_normal(-.000001)
+                                    step()
+                                    check_current_collision(phase)
+                                window.clear()
+                                soft_hold = 0
+                                continue
+                            if position[1] - origin_y > .009 or soft_hold >= 60:
+                                raise RuntimeError(f"{phase}: tactile probe did not find a rear stop within its motion "
+                                                   f"and force limits (gap {near*1000:.2f} mm, force {normal:.2f} N)")
+                            if not soft_hold:
+                                # Retain the regular terminal approach rates, including during the active probe.
+                                command_normal((.00035 if normal < 4. else .00012) / 120)
+                    if (soft_hold or stiffness is not None) and resultant > 8.15 and unloading < .00006:
+                        # Relieve spring preload by micrometres while keeping a safety margin below the 9 N trip.
+                        relief = min(.00012 / 120, .00006 - unloading)
+                        command_normal(-relief)
+                        unloading += relief
+                    if stiffness is not None:
+                        hold_floor = stiffness["moving_resistance_reference_N"] + .35
+                        weak_ticks = weak_ticks + 1 if normal < hold_floor else 0
+                        if near > .00045 or weak_ticks >= 3:
+                            stiffness = None
+                            weak_ticks = 0
+                            settled.clear()
+                            witness.clear()
+                            window.clear()
+                        else:
+                            settled.append((float(center[1]), normal))
+                            # Simulator pair impulses are recorded only for an independent validation of the decision.
+                            witness.append(any(
+                                pair["current_step_observed"] and (pair["normal_impulse_Ns"] or 0.) > 1e-5
+                                and {pair["collider0"], pair["collider1"]} == {active_cube_path, rear_target}
+                                for pair in contact_monitor.cube_contact_snapshot()["pairs"]))
+                            if len(settled) == settled.maxlen:
+                                positions, forces = np.asarray(settled).T
+                                if np.ptp(positions) > .00010 or np.count_nonzero(forces >= hold_floor) < 27:
+                                    stiffness = None
+                                    settled.clear()
+                                    witness.clear()
+                                    window.clear()
+                                else:
+                                    if sum(witness) < 24:
+                                        raise RuntimeError(f"{phase}: tactile stop lacks independent wall contact "
+                                                           f"({sum(witness)}/30, gap {near*1000:.2f} mm, "
+                                                           f"probe {stiffness})")
+                                    record(phase, "FORCE_CONFIRMED", arm=side, contact_target=rear_target,
+                                           held_samples=len(settled), normal_force_N=float(np.mean(forces)),
+                                           normal_force_samples_N=forces.tolist(), estimated_gap_m=float(near),
+                                           tactile_probe={**stiffness, "soft_hold_unloading_mm": unloading * 1000},
+                                           witnessed_target_contact_ticks=sum(witness))
+                                    return
+                    step()
+                    check_current_collision(phase)
+                raise RuntimeError(f"{phase}: tactile rear probe did not settle "
+                                   f"(gap {near*1000:.2f} mm, force {normal:.2f} N)")
+
+            def push_to_boundary(side, axis, sign, phase, target, follow=None, travel_limit=None):
+                nonlocal latched_contact_axis
+                start, rotation = sensed_cube()
+                remaining = gap(start, rotation, axis, sign)
+                if remaining < -.003:
+                    raise RuntimeError(f"{phase}: estimated Cube already beyond target by {-remaining:.4f} m")
+                record(phase, "RUNNING", arm=side, contact_target=target,
+                       estimated_start_gap_m=float(remaining))
+                arms = [side] if follow is None else [side, follow]
+                distance = max(0., remaining - .0025)
+                if travel_limit is not None:
+                    distance = min(distance, max(0., sign * (travel_limit - start[axis])))
+                if distance > .00025:
+                    times, translation = supported_travel(start, axis, sign, distance)
+                    centers = np.repeat(start[None, :], len(times), axis=0)
+                    centers[:, axis] += translation
+                    outer_side_push = axis == 0 and slot in (1, 2)
+                    inner_side_push = slot == 3 and axis == 0 and phase == "upper_B_side"
+                    force_paced_lateral = outer_side_push or inner_side_push
+                    recenter_vertical = slot == 2 and phase in ("upper_B_side_to_extra_seam", "upper_B_side")
+                    if recenter_vertical:
+                        # The short final stroke on the outer support needs only light wall pressure.
+                        left_hold.target_force_N = .65 if remaining < half else 3.25
+                    recenter_vertical = recenter_vertical or inner_side_push
+                    samples = {arm: np.repeat(q[None, :], len(times), axis=0)
+                               for arm, q in joint_state().items()}
+                    pusher_origin, _ = tcp_fk(side, applied_targets[side])
+                    paced_x = float(pusher_origin[0])
+                    last_measured_x = float(tcp_fk(side, joint_state()[side])[0][0])
+                    measured_x_rate = paced_x_rate = 0.
+                    missing_support = missing_rear_contact = 0
+                    for arm in arms:
+                        seed = applied_targets[arm].copy()
+                        position, rot = tcp_fk(arm, seed)
+                        for index, delta in enumerate(translation):
+                            planning_update(f"{phase}: continuous force-limited push")
+                            point = position.copy()
+                            point[axis] += delta
+                            seed = cartesian_joint_target(arm, seed, point, rot, retarget_guide=True)
+                            samples[arm][index] = seed
+                    if max(float(np.abs(np.diff(samples[arm], axis=0)).max()) * 120 for arm in arms) > .4:
+                        raise RuntimeError(f"{phase}: sampled push exceeds the 0.4 rad/s joint speed limit")
+
+                    max_axial_lead = max_vertical_load = max_vertical_offset = 0.
+                    minimum_pad_margin = math.inf
+
+                    def monitor(index, _count):
+                        nonlocal max_vertical_load, missing_support, missing_rear_contact
+                        force(side, axis, sign)
+                        max_vertical_load = max(max_vertical_load, float(last_force_sample[side][
+                            "tcp_gravity_corrected_world"][2]))
+                        if follow is not None:
+                            force(follow, 1, 1)
+                        if force_paced_lateral:
+                            missing_support = 0 if support_impulse() > 1e-5 else missing_support + 1
+                            if missing_support >= 4:
+                                raise RuntimeError(f"{phase}: upper {slot} lower bearing lost during lateral sliding")
+                            rear_bearing = any(
+                                pair["label"] == "wall_back" and pair["current_step_observed"]
+                                and (pair["normal_impulse_Ns"] or 0.) > 1e-5
+                                for pair in contact_monitor.cube_contact_snapshot()["pairs"])
+                            missing_rear_contact = 0 if rear_bearing else missing_rear_contact + 1
+                            if missing_rear_contact >= 240:
+                                raise RuntimeError(f"{phase}: upper {slot} rear-wall contact did not recover within 2 s")
+                        actual, _ = sensed_cube()
+                        if np.linalg.norm(actual - centers[index]) > .012:
+                            raise RuntimeError(f"{phase}: upper Cube left planned path by more than 12 mm")
+
+                    def force_paced_samples(count):
+                        nonlocal max_axial_lead
+                        index = best = delayed = 0
+                        waiting = entry_stable = 0
+                        while index < count:
+                            yield index
+                            pending = sign * (pusher_origin[0] + translation[index] - paced_x) if force_paced_lateral else 0.
+                            if phase == "upper_B_side_to_extra_seam":
+                                near_entry = abs(sensed_cube()[0][axis] - travel_limit) <= .0015
+                                settled = near_entry and abs(measured_x_rate) < .0006 and missing_rear_contact == 0
+                                entry_stable = entry_stable + 1 if settled else 0
+                                if entry_stable >= 24:
+                                    break
+                            if index == count - 1 and pending <= .00020:
+                                break
+                            next_index = min(index + 1, count - 1)
+                            actual_tcp, _ = tcp_fk(side, joint_state()[side])
+                            lead_target = paced_x if force_paced_lateral else pusher_origin[axis] + translation[next_index]
+                            lead = sign * (lead_target - actual_tcp[axis])
+                            max_axial_lead = max(max_axial_lead, lead)
+                            measured = force(side, axis, sign)
+                            resultant = np.linalg.norm(last_force_sample[side]["tcp_gravity_corrected_world"][:3])
+                            if measured > 7.35 or resultant > 7.8:
+                                # Hold the commanded pose: backtracking full samples excites a two-tick force oscillation.
+                                next_index = index
+                            elif lead > .0016 or pending > .00020 or missing_rear_contact >= 12:
+                                next_index = index
+                            if next_index > best:
+                                waiting = 0
+                                best = next_index
+                            else:
+                                delayed += 1
+                                waiting += 1
+                                if waiting >= 1440:
+                                    raise RuntimeError(f"{phase}: supported push stalled after force-limited unloading "
+                                                       f"(axial {measured:.2f} N, resultant {resultant:.2f} N, "
+                                                       f"TCP lead {lead*1000:.2f} mm)")
+                            index = next_index
+                        record("upper_B_seam_pacing", "COMPLETED", held_or_unloaded_ticks=delayed,
+                               motion_phase=phase, peak_axial_lead_m=max_axial_lead,
+                               peak_downward_load_N=max_vertical_load,
+                               **({"peak_vertical_command_offset_m": max_vertical_offset,
+                                   "minimum_side_cup_face_margin_m": minimum_pad_margin}
+                                  if recenter_vertical else {}))
+
+                    push_height = NormalForceController(0., target_force_N=0., gain_m_per_Ns=.00055,
+                                                       max_offset_m=.0022 if force_paced_lateral else .0014, max_speed_m_s=.001,
+                                                       max_force_N=force_ceiling)
+                    push_y = NormalForceController(0., target_force_N=0., gain_m_per_Ns=.00075,
+                                                   max_offset_m=.002, max_speed_m_s=.0014,
+                                                   max_force_N=force_ceiling)
+                    front_rgb_start = None
+                    if recenter_vertical:
+                        from fr3_surface_gripper import ATTACHMENT_PARAMETERS
+
+                        tool = CONFIG["side_suction_tool"]
+                        cup_half_depth = tool["cup_length_m"] / 2
+                        cup_radius = tool["cup_radius_m"]
+                        cup_half_span = ATTACHMENT_PARAMETERS["cup_center_half_span_m"]
+
+                    # Rotations are relative to the nominal cup orientation, both about the contact TCP.
+                    balance_angles = np.zeros(2)
+                    filtered_load_arm = np.zeros(2)
+                    if inner_side_push:
+                        balance_record = report["upper_B_u3_cup_balance"] = {
+                            "source": "measured_TCP_wrench_in_sensed_cube_frame",
+                            "max_tilt_deg": .4, "deadband_mm": 6., "loaded_ticks": 0,
+                            "peak_tilt_deg": 0.}
+
+                    def balance_inner_cups(tool_rotation, cube_rotation, wrench):
+                        local_force = cube_rotation.T @ wrench[:3]
+                        if local_force[0] >= 1.5:
+                            # For the right wrist the box reacts along +X. Positive My means a high patch;
+                            # positive Mz means a patch on -Y. Both positive rotations back off that patch.
+                            effective_arms = (cube_rotation.T @ wrench[3:])[1:] / local_force[0]
+                            filtered_load_arm[:] += .12 * (np.clip(effective_arms, -.045, .045) - filtered_load_arm)
+                            error = np.sign(filtered_load_arm) * np.maximum(0., np.abs(filtered_load_arm) - .006)
+                            max_rates = np.radians([.14, .10])
+                            balance_angles[:] += max_rates * np.clip(error / .024, -1., 1.) / 120.
+                            magnitude = np.linalg.norm(balance_angles)
+                            if magnitude > math.radians(.4):
+                                balance_angles[:] *= math.radians(.4) / magnitude
+                            tilt = np.degrees(balance_angles)
+                            balance_record.update(loaded_ticks=balance_record["loaded_ticks"] + 1,
+                                                  pitch_deg=float(tilt[0]), yaw_deg=float(tilt[1]),
+                                                  peak_tilt_deg=max(balance_record["peak_tilt_deg"],
+                                                                    float(np.linalg.norm(tilt))))
+                        else:
+                            filtered_load_arm[:] = 0.
+                        world_tilt = cube_rotation[:, 1:] @ balance_angles
+                        return Rotation.from_rotvec(world_tilt).as_matrix() @ tool_rotation
+
+                    terminal_reference_x = None
+                    terminal_rate = 0.
+                    probe_axial_limit = None
+                    recent_probe_resultants = deque(maxlen=8)
+
+                    def smooth_supported_x(index, commands, z_offset, y_offset):
+                        nonlocal paced_x, last_measured_x, measured_x_rate, paced_x_rate
+                        nonlocal minimum_pad_margin
+                        physical_x = float(tcp_fk(side, joint_state()[side])[0][0])
+                        measured_x_rate += .25 * (sign * (physical_x - last_measured_x) * 120 - measured_x_rate)
+                        last_measured_x = physical_x
+                        wrench = np.asarray(last_force_sample[side]["tcp_gravity_corrected_world"])
+                        resultant = np.linalg.norm(wrench[:3])
+                        headroom = min(7.1 + sign * wrench[0], 7.65 - resultant)
+                        if probe_axial_limit is not None:
+                            # Permit a small bounded increase above sliding friction during the static probe.
+                            # A recent near-limit transient stops loading even if this sample falls back.
+                            recent_probe_resultants.append(float(resultant))
+                            headroom = min(probe_axial_limit + sign * wrench[0], 8.28 - resultant,
+                                           8.50 - max(recent_probe_resultants))
+                        sample = min(index, len(translation) - 2)
+                        reference_rate = abs(translation[sample + 1] - translation[sample]) * 120
+                        if terminal_reference_x is not None:
+                            reference_rate = terminal_rate
+                        wanted_rate = min(reference_rate, max(0., measured_x_rate + .0015 * headroom))
+                        if missing_rear_contact >= 12:
+                            wanted_rate = 0.
+                        paced_x_rate += float(np.clip(wanted_rate - paced_x_rate, -.0016, .0016))
+                        position, rotation = tcp_fk(side, commands[side])
+                        lead_allowance = float(np.clip(.0014 + .00018 * headroom, .00055, .0016))
+                        requested_x = position[0] if terminal_reference_x is None else terminal_reference_x
+                        reachable = min(sign * requested_x, sign * physical_x + lead_allowance,
+                                        sign * paced_x + min(paced_x_rate, reference_rate) / 120)
+                        if terminal_reference_x is not None and headroom < -.15:
+                            # High load may persist even with less than the geometrical spring-lead limit.
+                            reachable = min(reachable, sign * paced_x - min(.0006, -.0004 * headroom) / 120)
+                        # Unload only the spring lead, without rewinding to a previous trajectory sample.
+                        next_x = sign * max(sign * paced_x - .0006 / 120, reachable)
+                        x_correction = next_x - position[0]
+                        paced_x = next_x
+                        position += [x_correction, y_offset, z_offset]
+                        center, cube_rotation = sensed_cube()
+                        if inner_side_push:
+                            rotation = balance_inner_cups(rotation, cube_rotation, wrench)
+                        adjusted = {side: (position, rotation)}
+                        if follow is not None:
+                            front, front_rotation = tcp_fk(follow, commands[follow])
+                            front[0] += x_correction
+                            if left_hold is not None:
+                                front[1], front[2] = left_hold.position_m, left_hold_z
+                            adjusted[follow] = (front, front_rotation)
+                        for arm, (point, tool_rotation) in adjusted.items():
+                            q = cartesian_joint_target(arm, applied_targets[arm], point, tool_rotation)
+                            velocity = float(np.max(np.abs(q - applied_targets[arm]))) * 120
+                            if not np.isfinite(velocity) or velocity > .4:
+                                raise RuntimeError(f"{phase}: {arm} supported command velocity {velocity:.6f} rad/s "
+                                                   "exceeds 0.400 rad/s")
+                            commands[arm] = q
+                        if recenter_vertical:
+                            # Bound the complete cup array in the Cube face's two calibrated tangent directions.
+                            tangents = cube_rotation[:, 1:]
+                            projection = rotation.T @ tangents
+                            # Cylinder midplanes are half a cup depth behind each arm's contact TCP.
+                            axial_offset = cup_half_depth if side == "left" else -cup_half_depth
+                            pad_centers = (position - center) @ tangents + axial_offset * projection[1]
+                            pad_extents = (cup_half_span * (np.abs(projection[0]) + np.abs(projection[2]))
+                                           + cup_half_depth * np.abs(projection[1])
+                                           + cup_radius * np.sqrt(np.maximum(0., 1. - projection[1] ** 2)))
+                            margin = half - float(np.max(np.abs(pad_centers) + pad_extents))
+                            minimum_pad_margin = min(minimum_pad_margin, margin)
+                            if margin < .003:
+                                raise RuntimeError(f"{phase}: compliant cup footprint nears the Cube edge "
+                                                   f"(remaining tangent margin {margin*1000:.2f} mm)")
+                        issues = checker.check(commands, cube_center=center, cube_rotation=cube_rotation,
+                                               cup_contacts=allowed_contacts, margin_m=0., first_only=True)
+                        if issues:
+                            raise RuntimeError(f"{phase}: supported correction in collision: {issues[0]}")
+                        return commands
+
+                    def relieve_downward_load(_index, commands):
+                        nonlocal front_rgb_start, max_vertical_offset
+                        if follow is not None and left_hold is not None:
+                            observation = latest_camera_observation or {}
+                            stamp = observation.get("supported_capture_time_s")
+                            if stamp is not None and 0. <= world.current_time - stamp <= .20:
+                                y = float(observation["supported_position_m"][1]
+                                          + np.asarray(observation["supported_rotation_world"])[1] @ front_offset)
+                                if front_rgb_start is None:
+                                    front_rgb_start = y
+                                if force(follow, 1, 1) < .20:
+                                    initial = left_hold.initial_position_m
+                                    desired = min(initial + left_hold.max_offset_m, initial + y - front_rgb_start)
+                                    left_hold.position_m += max(0., min(.0015 / 120, desired - left_hold.position_m))
+                        force(side, axis, sign)
+                        vertical_force = float(last_force_sample[side]["tcp_gravity_corrected_world"][2])
+                        # Positive reaction on the TCP means the cups are loading the box downward.
+                        # A light upward shear keeps most of the payload weight on the supports while sliding.
+                        vertical_help = 1.5
+                        if force_paced_lateral and support_impulse() * 120 < .55 * CONFIG["physics"]["cube_mass_kg"] * abs(
+                                CONFIG["physics"]["gravity_m_s2"][2]):
+                            vertical_help = 0.
+                        vertical_error = vertical_force + vertical_help
+                        excess = math.copysign(max(0., abs(vertical_error) - .20), vertical_error)
+                        if recenter_vertical:
+                            # Limit spring lead about the actual encoder TCP, not the first waypoint's height.
+                            # Sliding friction may migrate the loaded patch without moving the supported Cube in Z.
+                            observed_z = last_force_sample[side]["tcp_position_m"][2]
+                            push_height.initial_position_m = observed_z - pusher_origin[2]
+                            previous = push_height.position_m
+                        offset = push_height.update(-excess)
+                        if recenter_vertical:
+                            delta = push_height.max_speed_m_s / 120
+                            offset = previous + float(np.clip(offset - previous, -delta, delta))
+                            push_height.position_m = offset
+                            max_vertical_offset = max(max_vertical_offset, abs(offset))
+                        tangential = float(last_force_sample[side]["tcp_gravity_corrected_world"][1])
+                        # The front wrist supplies wall pressure. Let the main slide along its own cup face.
+                        y_error = math.copysign(max(0., abs(tangential) - .20), tangential)
+                        y_offset = push_y.update(-y_error) if force_paced_lateral else 0.
+                        if force_paced_lateral:
+                            return smooth_supported_x(_index, commands, offset, y_offset)
+                        if max(abs(offset), abs(y_offset)) <= 1e-6:
+                            return commands
+                        position, rotation = tcp_fk(side, commands[side])
+                        position[1] += y_offset
+                        position[2] += offset
+                        commands[side] = cartesian_joint_target(side, commands[side], position, rotation)
+                        center, cube_rotation = sensed_cube()
+                        issues = checker.check(commands, cube_center=center, cube_rotation=cube_rotation,
+                                               cup_contacts=allowed_contacts, margin_m=0., first_only=True)
+                        if issues:
+                            raise RuntimeError(f"{phase}: compliant push correction collision: {issues[0]}")
+                        if np.max(np.abs(commands[side] - applied_targets[side])) * 120 > .401:
+                            raise RuntimeError(f"{phase}: compliant push correction exceeds joint speed limit")
+                        return commands
+
+                    def seat_inner_neighbor():
+                        nonlocal terminal_reference_x, terminal_rate, paced_x_rate, probe_axial_limit
+                        terminal = "upper_B_side_terminal"
+                        record(terminal, "PROBING_NEIGHBOR", arm=side, contact_target=target,
+                               max_seek_m=.009, sensed_sources=["RGB_neighbor", "TCP_encoder", "wrist_wrench"])
+                        contact_monitor.phase = terminal
+                        other_center, other_rotation = next((np.asarray(p), np.asarray(r)) for name, p, r
+                                                            in upper_seen if name == target.rsplit("/", 1)[-1])
+                        idx = len(times) - 1
+                        end_commands = {arm: path[idx].copy() for arm, path in samples.items()}
+                        terminal_start = paced_x
+                        paced_x_rate = 0.
+                        settled = deque(maxlen=settle_frame_count)
+                        observed = deque(maxlen=settle_frame_count)
+                        moving = deque(maxlen=120)
+                        sustained_stop = 0
+                        probe_start = None
+                        probe_distance = .000095
+                        probe_baseline = probe_wrist_x = probe_center_x = 0.
+                        probe_ticks = 0
+                        held = deque(maxlen=settle_frame_count)
+                        for _ in range(14400):
+                            center, attitude = sensed_cube()
+                            # Separating-axis gap between both observed footprints (the boxes have independent yaw).
+                            axes = np.vstack((attitude[:, :2].T, other_rotation[:, :2].T))
+                            gap2d = float(np.max(np.abs(axes @ (center - other_center)) - half * (
+                                np.sum(np.abs(axes @ attitude), axis=1) +
+                                np.sum(np.abs(axes @ other_rotation), axis=1))))
+                            if gap2d < -.003 or abs(paced_x - terminal_start) > .009:
+                                raise RuntimeError(f"{terminal}: search exceeded geometry / travel "
+                                                   f"({gap2d*1000:.3f} mm, travel {abs(paced_x-terminal_start)*1000:.3f} mm)")
+                            normal = force(side, axis, sign)
+                            if gap2d > .0007:
+                                moving.append(normal)
+                            background = float(np.median(moving)) if moving else 4.5
+                            threshold = min(7., max(5.55, background + 1.0))
+                            wrist_x = float(last_force_sample[side]["tcp_position_m"][0])
+                            settled.append((wrist_x, normal, gap2d))
+                            observed.append(any(pair["current_step_observed"] and
+                                (pair["normal_impulse_Ns"] or 0.) > 1e-5 and
+                                {pair["collider0"], pair["collider1"]} == {active_cube_path, target}
+                                for pair in contact_monitor.cube_contact_snapshot()["pairs"]))
+                            if probe_start is None and len(settled) == settle_frame_count:
+                                x, loads, gaps = np.asarray(settled).T
+                                steady = (np.max(gaps) <= .00045 and np.min(loads) >= threshold and
+                                          np.ptp(x) <= .000012 and abs(np.mean(x[-5:])-np.mean(x[:5])) <= .000003)
+                                sustained_stop = sustained_stop + 1 if steady else 0
+                                if sustained_stop >= 8:
+                                    probe_start = paced_x
+                                    probe_baseline = float(np.mean(loads))
+                                    probe_wrist_x = float(np.mean(x[-5:]))
+                                    probe_center_x = float(center[0])
+                                    probe_axial_limit = min(8.12, max(7.45, probe_baseline + .90))
+                                    record(terminal, "ACTIVE_PRELOAD", commanded_probe_m=probe_distance,
+                                           initial_normal_force_N=probe_baseline, soft_axial_limit_N=probe_axial_limit)
+                            if probe_start is None:
+                                terminal_rate = .00035 if normal < 4. else .00012
+                                terminal_reference_x = paced_x + sign * terminal_rate / 120.
+                            else:
+                                # Every candidate receives this forward displacement regardless of native pair data.
+                                terminal_rate = .00012
+                                terminal_reference_x = probe_start + sign * probe_distance
+                                advance = sign * (paced_x - probe_start)
+                                probe_ticks += 1
+                                if advance >= probe_distance - .000004:
+                                    held.append((wrist_x, center[0], normal, gap2d))
+                                else:
+                                    held.clear()
+                                if len(held) == settle_frame_count:
+                                    wrists, centers, loads, gaps = np.asarray(held).T
+                                    increase = float(np.mean(loads)) - probe_baseline
+                                    wrist_advance = sign * (float(np.mean(wrists)) - probe_wrist_x)
+                                    box_advance = sign * (float(np.mean(centers)) - probe_center_x)
+                                    if (increase >= .15 and np.min(loads) >= threshold and np.max(gaps) <= .00045
+                                            and np.ptp(wrists) <= .000025 and np.ptp(centers) <= .000045
+                                            and -.00005 <= wrist_advance <= .00020 and abs(box_advance) <= .00025):
+                                        if sum(observed) < 24:
+                                            raise RuntimeError(f"{terminal}: active probe lacks native U1 bearing "
+                                                               f"({sum(observed)}/30, measured rise {increase:.3f} N, "
+                                                               f"command {advance*1000:.3f} mm)")
+                                        record(phase, "FORCE_CONFIRMED", arm=side, contact_target=target,
+                                               held_samples=settle_frame_count, normal_force_N=float(np.mean(loads)),
+                                               normal_force_samples_N=loads.tolist(), estimated_gap_m=gap2d,
+                                               witnessed_target_contact_ticks=sum(observed), sliding_baseline_N=background,
+                                               force_threshold_N=threshold, terminal_travel_m=abs(paced_x-terminal_start),
+                                               active_probe={"command_advance_m":advance,"wrist_advance_m":wrist_advance,
+                                                             "cube_advance_m":box_advance,"normal_force_rise_N":increase,
+                                                             "initial_normal_force_N":probe_baseline})
+                                        return
+                                if probe_ticks >= 1200:
+                                    raise RuntimeError(f"{terminal}: active differential probe did not settle "
+                                                       f"(advance {advance*1000:.3f} mm, wrist {normal:.3f} N, "
+                                                       f"baseline {probe_baseline:.3f} N, native {sum(observed)}/30)")
+                            commands = relieve_downward_load(idx, {arm: q.copy() for arm, q in end_commands.items()})
+                            for arm, command in commands.items():
+                                command_positions(arm, command)
+                            step()
+                            check_current_collision(terminal)
+                            monitor(idx, len(times))
+                        raise RuntimeError(f"{terminal}: target did not settle within the bounded force-guided seek")
+
+                    latched_contact_axis = axis
+                    try:
+                        execute_joint_path(samples, phase + "_travel", check_step=monitor,
+                                           cube_center_path=lambda _samples, _times: centers,
+                                           sampled_trajectory=(times, samples),
+                                           sample_order=force_paced_samples if force_paced_lateral else None,
+                                           adjust_targets=relieve_downward_load if force_paced_lateral else None)
+                        if inner_side_push:
+                            seat_inner_neighbor()
+                            return
+                    finally:
+                        latched_contact_axis = None
+                if travel_limit is not None:
+                    return
+                if slot in (1, 2) and phase in ("upper_B_seam_rear_reseat", "upper_B_extra_seam_rear_reseat"):
+                    probe_rear_after_seam(side, phase)
+                    return
+
+                pusher = applied_targets[side].copy()
+                position, tool_rotation = tcp_fk(side, pusher)
+                origin = position.copy()
+                follower = applied_targets[follow].copy() if follow is not None else None
+                follow_origin, follow_rot = tcp_fk(follow, follower) if follow is not None else (None, None)
+                forces, positions = [], []
+                outer_wall_probe = target in (rear_target, side_target)
+                rear_probe = slot in (1, 2) and axis == 1 and target == rear_target
+                sliding_load = deque(maxlen=120)
+                wall_impulses = deque(maxlen=settle_frame_count)
+                for _ in range(6000):
+                    measured_force = force(side, axis, sign)
+                    center, current_rotation = sensed_cube()
+                    if rear_probe and measured_force > .10:
+                        center[1] = front_contact_center_y(side, center, current_rotation)
+                    near = gap(center, current_rotation, axis, sign)
+                    if outer_wall_probe:
+                        if near > .0007:
+                            sliding_load.append(measured_force)
+                        resistance = float(np.median(sliding_load)) if sliding_load else 4.5
+                        contact_threshold = min(7.6, max(3., resistance + 1.0))
+                        near_limit = .00045
+                        if rear_probe:
+                            # Static floor resistance can look like a stop while the FK gap is already small.
+                            contact_threshold = max(5.55, contact_threshold)
+                        wall_impulses.append(any(
+                            pair["current_step_observed"] and (pair["normal_impulse_Ns"] or 0.) > 1e-5
+                            and {pair["collider0"], pair["collider1"]} == {active_cube_path, target}
+                            for pair in contact_monitor.cube_contact_snapshot()["pairs"]))
+                    else:
+                        contact_threshold, near_limit = 1.7, .0018
+                    if measured_force >= contact_threshold and -.003 <= near <= near_limit:
+                        forces.append(measured_force)
+                        positions.append(float(center[axis]))
+                    else:
+                        forces.clear()
+                        positions.clear()
+                        increment = (.00035 if measured_force < 4. else .00012) / 120
+                        position[axis] += sign * increment
+                    if len(forces) == settle_frame_count:
+                        if max(positions) - min(positions) <= .00045:
+                            if outer_wall_probe and sum(wall_impulses) < 24:
+                                raise RuntimeError(f"{phase}: wrist contact candidate lacks wall contact in the independent "
+                                                   f"PhysX audit ({sum(wall_impulses)}/30, estimated gap {near*1000:.2f} mm)")
+                            record(phase, "FORCE_CONFIRMED", arm=side, contact_target=target,
+                                   held_samples=settle_frame_count, normal_force_N=float(np.mean(forces)),
+                                   normal_force_samples_N=forces, estimated_gap_m=float(near))
+                            return
+                        forces.clear()
+                        positions.clear()
+                    if abs(position[axis] - origin[axis]) > .009:
+                        break
+                    pusher = cartesian_joint_target(side, pusher, position, tool_rotation, retarget_guide=True)
+                    command_positions(side, pusher)
+                    if follow is not None:
+                        force(follow, 1, 1)
+                        following = follow_origin.copy()
+                        following[axis] += position[axis] - origin[axis]
+                        follower = cartesian_joint_target(follow, follower, following, follow_rot,
+                                                         retarget_guide=True)
+                        command_positions(follow, follower)
+                    step()
+                    check_current_collision(phase)
+                raise RuntimeError(f"{phase}: upper {slot} contact did not settle, "
+                                   f"gap {near:.4f} m, load {measured_force:.3f} N")
+
+            def retouch_after_support_seam(center, rotation, local_side_offset, *,
+                                           final_u2=False, motion_prefix="upper_B_seam"):
+                nonlocal contact_plan_rotation
+                contact_plan_rotation = rotation
+                if final_u2:
+                    # Lower the grounded pusher and align its cup plane before recontact.
+                    local_side_offset = local_side_offset.copy()
+                    local_side_offset[2] = -.018
+                    current, _ = tcp_fk(push_side, applied_targets[push_side])
+                    clearance = current - .004 * push_sign * rotation[:, 0]
+                    cartesian_move(push_side, clearance, .8, "upper_B_final_side_clearance")
+                    clearance[2] = (center + rotation @ local_side_offset)[2]
+                    cartesian_move(push_side, clearance, 1.5, "upper_B_final_side_height")
+                    _, measured_rotation = tcp_fk(push_side, joint_state()[push_side])
+                    _, commanded_rotation = tcp_fk(push_side, applied_targets[push_side])
+                    face_axes = rotation.T @ (-measured_rotation[:, 1])
+                    pitch_error = math.atan2(face_axes[2], face_axes[0])
+                    if abs(pitch_error) > math.radians(1.):
+                        raise RuntimeError("U2 final side approach outside calibrated face orientation")
+                    aligned = Rotation.from_rotvec(pitch_error * rotation[:, 1]).as_matrix() @ commanded_rotation
+                    align_contact_plane(push_side, aligned, "upper_B_final_side_pitch")
+                    record("upper_B_final_side_height", "ALIGNED_BEFORE_CONTACT",
+                           measured_pitch_deg=math.degrees(pitch_error),
+                           arm=push_side, height_from_cube_center_m=float(local_side_offset[2]))
+                push_faces[support_side] = (1, -rotation[:, 1], front_offset)
+                push_faces[push_side] = (0, -push_sign * rotation[:, 0], local_side_offset)
+                touch_face(support_side, rotation[:, 1], .006, motion_prefix + "_front_retouch")
+                if not side_first:
+                    push_to_boundary(support_side, 1, 1, motion_prefix + "_rear_reseat", rear_target)
+                try:
+                    preload = (1.0 if final_u2 else 3.25) if slot == 2 else 1.25
+                    prepare_rear_to_side_hold(preload)
+                    touch_face(push_side, push_sign * rotation[:, 0], .006, motion_prefix + "_side_retouch")
+                finally:
+                    current_task.pop("rear_to_side_hold_x_m", None)
+                left_hold.target_force_N = .65
+
+            def carry_across_support_seam(extra=False):
+                nonlocal carry_offsets, left_hold
+                center, rotation = sensed_cube()
+                motion_prefix = "upper_B_extra_seam" if extra else "upper_B_seam"
+                approach_phase = "upper_B_side_pre_seam"
+                span = .012
+                if extra:
+                    if (slot, push_side, support_side, push_sign) != (2, "left", "right", 1):
+                        raise RuntimeError("Second seam requires U2's checked perpendicular side grips")
+                    lower = {name.rsplit("/", 1)[-1]: (position, attitude)
+                             for name, position, attitude in lower_obstacles}
+                    inner_pos, inner_rot = lower["Cube_4"]
+                    outer_pos, outer_rot = lower["Cube_2"]
+                    inner_edge = float(inner_pos[0] + half * np.abs(inner_rot[0]).sum())
+                    outer_edge = float(outer_pos[0] - half * np.abs(outer_rot[0]).sum())
+                    seam_x = (inner_edge + outer_edge) / 2
+                    if abs(outer_edge - inner_edge) > .008 or not .222 <= seam_x <= .237:
+                        raise RuntimeError(f"U2 observed lower seam is outside the checked corridor: "
+                                           f"{inner_edge:.5f}/{outer_edge:.5f} m")
+                    span = .0255
+                    approach_phase = "upper_B_side_to_extra_seam"
+                else:
+                    outer_support = f"Cube_{slot}"
+                    support, support_rotation = next((position, attitude) for name, position, attitude in lower_obstacles
+                                                     if name.rsplit("/", 1)[-1] == outer_support)
+                    union_half_extent = half * (np.abs(rotation[0]).sum() + np.abs(support_rotation[0]).sum())
+                    seam_x = float(support[0] - push_sign * union_half_extent)
+                entry_x, exit_x = seam_x - push_sign * span, seam_x + push_sign * span
+                if not push_sign * entry_x < push_sign * exit_x < push_sign * final[0]:
+                    raise RuntimeError(f"Upper {slot}: last support seam is outside the side push corridor")
+                if push_sign * (entry_x - center[0]) > .00025:
+                    push_to_boundary(push_side, 0, push_sign, approach_phase, side_target,
+                                     follow=support_side, travel_limit=entry_x)
+                if abs(sensed_cube()[0][0] - entry_x) > .004:
+                    raise RuntimeError(f"Upper {slot}: side push did not reach the seam approach")
+
+                phase = motion_prefix + "_transport"
+                lift_height = .002
+                rear_clearance = .0006
+                arms = (push_side, support_side)
+                details = {"arms": arms, "seam_center_x_m": seam_x, "lift_height_m": lift_height,
+                           "rear_clearance_m": rear_clearance, "end_center_x_m": exit_x}
+                if extra:
+                    details.update(transport_index=2, entry_center_x_m=entry_x,
+                                   support_edge_cube_ids=[4, 2], observed_support_edges_m=[inner_edge, outer_edge])
+                weight = CONFIG["physics"]["cube_mass_kg"] * abs(CONFIG["physics"]["gravity_m_s2"][2])
+                limits = {name: A_FORCE_LIMITS[name]
+                          for name in ("max_force_N", "max_tcp_torque_Nm", "max_internal_force_N")}
+                limits.update(max_force_N=force_ceiling, max_tcp_torque_Nm=1.0, max_horizontal_force_N=force_ceiling, max_vertical_load_fraction=1.35,
+                              min_lift_vertical_load_fraction=.65)
+                balance_offset_m = balance_filtered_N = balance_peak_m = 0.
+                balance_max_m = .00045
+                if slot == 2:
+                    details["max_vertical_balance_offset_per_arm_m"] = balance_max_m
+
+                def vertical_wrist_loads():
+                    return [-float(last_force_sample[arm]["tcp_gravity_corrected_world"][2]) for arm in arms]
+
+                def balanced_targets(nominal, motion_phase, freeze=False):
+                    nonlocal balance_offset_m, balance_filtered_N, balance_peak_m
+                    main_load, front_load = vertical_wrist_loads()
+                    if not freeze and main_load + front_load >= .20 * weight:
+                        balance_filtered_N += .25 * (front_load - main_load - balance_filtered_N)
+                        error = math.copysign(max(0., abs(balance_filtered_N) - .35), balance_filtered_N)
+                        delta = float(np.clip(.00022 * error, -.0012, .0012)) / 120
+                        balance_offset_m = float(np.clip(balance_offset_m + delta, -balance_max_m, balance_max_m))
+                        balance_peak_m = max(balance_peak_m, abs(balance_offset_m))
+                    commands = {}
+                    # Transfer load between wrists while keeping the mean commanded Z fixed.
+                    for arm, sign in zip(arms, (1., -1.), strict=True):
+                        point, tool_rotation = nominal[arm]
+                        target = point + [0., 0., sign * balance_offset_m]
+                        q = cartesian_joint_target(arm, applied_targets[arm], target, tool_rotation)
+                        velocity = float(np.max(np.abs(q - applied_targets[arm]))) * 120
+                        if not np.isfinite(velocity) or velocity > .4:
+                            raise RuntimeError(f"{motion_phase}: {arm} balanced command joint velocity "
+                                               f"{velocity:.6f} rad/s exceeds 0.400 rad/s")
+                        commands[arm] = q
+                    center, rotation = sensed_cube()
+                    issues = checker.check(commands, cube_center=center, cube_rotation=rotation,
+                                           cup_contacts=allowed_contacts, margin_m=0., first_only=True)
+                    if issues:
+                        raise RuntimeError(f"{motion_phase}: U2 balanced command in collision: {issues[0]}")
+                    return commands
+
+                def check_carry():
+                    if not all(grippers.is_closed(arm) for arm in arms):
+                        raise RuntimeError(f"Upper {slot}: lost a seal during the support seam transfer")
+                    wrenches = np.asarray([last_force_sample[arm]["tcp_gravity_corrected_world"] for arm in arms])
+                    forces = wrenches[:, :3]
+                    vertical_load = -float(forces[:, 2].sum())
+                    if (not np.all(np.isfinite(wrenches))
+                            or np.max(np.linalg.norm(forces, axis=1)) > limits["max_force_N"]
+                            or np.max(np.linalg.norm(wrenches[:, 3:], axis=1)) > limits["max_tcp_torque_Nm"]
+                            or np.max(np.linalg.norm(forces[:, :2], axis=1)) > limits["max_horizontal_force_N"]
+                            or np.linalg.norm(forces[0] - forces[1]) / 2 > limits["max_internal_force_N"]
+                            or abs(vertical_load) > weight * limits["max_vertical_load_fraction"]):
+                        raise RuntimeError(f"Upper {slot}: seam transport exceeded its wrench limits: {wrenches.tolist()}")
+                    return vertical_load
+
+                def translate_attached(destination, duration, motion_phase, airborne=False):
+                    nonlocal commanded_center
+                    times = np.arange(math.ceil(duration * 120) + 1) / 120
+                    u = times / times[-1]
+                    blend = (10 - 15 * u + 6 * u**2) * u**3
+                    centers = commanded_center + blend[:, None] * (destination - commanded_center)
+                    samples = {}
+                    for arm in arms:
+                        q = applied_targets[arm].copy()
+                        position, tool_rotation = grasp_targets[arm]
+                        rows = []
+                        for target in centers:
+                            planning_update(f"{motion_phase}: dual-arm seam trajectory")
+                            q = cartesian_joint_target(arm, q, position + target - origin, tool_rotation,
+                                                       retarget_guide=True)
+                            rows.append(q)
+                        samples[arm] = np.asarray(rows)
+                    if max(float(np.abs(np.diff(q, axis=0)).max()) for q in samples.values()) * 120 > .4:
+                        raise RuntimeError(f"{motion_phase}: dual-arm seam trajectory exceeds 0.4 rad/s")
+
+                    def monitor(index, _count):
+                        check_carry()
+                        center, _ = sensed_cube()
+                        if np.linalg.norm(center - centers[index]) > .0025:
+                            raise RuntimeError(f"{motion_phase}: carried cube deviated over 2.5 mm")
+                        if airborne and support_impulse() > 1e-5:
+                            raise RuntimeError(f"{motion_phase}: cube touched the lower support during seam crossing")
+
+                    def apply_balance(_index, commands):
+                        return balanced_targets({arm: tcp_fk(arm, commands[arm]) for arm in arms}, motion_phase)
+
+                    execute_joint_path(samples, motion_phase, check_step=monitor,
+                                       cube_center_path=lambda _samples, _times: centers,
+                                       sampled_trajectory=(times, samples),
+                                       adjust_targets=apply_balance if slot == 2 else None)
+                    commanded_center = destination.copy()
+
+                left_hold = None
+                _, _, local_side_offset = push_faces[push_side]
+                controller = robots[push_side].get_articulation_controller()
+                push_gains = [np.asarray(values).copy() for values in controller.get_gains()]
+                set_contact_drive_mode(True)
+                try:
+                    for arm in arms:
+                        close_upper_side_seal(arm, motion_prefix + "_seal" if extra else "upper_B_seal")
+                    origin, orientation = sensed_cube()
+                    commanded_center = origin.copy()
+                    grasp_targets = {arm: tcp_fk(arm, applied_targets[arm]) for arm in arms}
+                    carry_offsets = {}
+                    for arm, q in joint_state().items():
+                        tcp, tool_rotation = tcp_fk(arm, q)
+                        carry_offsets[arm] = (tool_rotation.T @ (origin - tcp), tool_rotation.T @ orientation)
+                    push_faces.clear()
+                    record(phase, "DUAL_SEALS_CLOSED", **details, transport_limits=limits, joint_hold_ticks=12)
+                    for _ in range(12):
+                        step()
+                        check_carry()
+                        check_current_collision(phase)
+                    cleared_rear = origin - [0., rear_clearance, 0.]
+                    translate_attached(cleared_rear, .375, motion_prefix + "_rear_clearance")
+                    lifted = cleared_rear + [0., 0., lift_height]
+                    translate_attached(cleared_rear + [0., 0., .0005], .4, motion_prefix + "_lift")
+                    translate_attached(lifted, .75, motion_prefix + "_lift")
+                    loads = []
+                    for _ in range(12):
+                        step()
+                        loads.append(check_carry())
+                        check_current_collision(phase)
+                        if support_impulse() > 1e-5:
+                            raise RuntimeError(f"Upper {slot}: lower support contact persisted after lift")
+                    load_fraction = float(np.mean(loads)) / weight
+                    if not limits["min_lift_vertical_load_fraction"] <= load_fraction <= limits["max_vertical_load_fraction"]:
+                        raise RuntimeError(f"Upper {slot}: dual-arm lift carried {np.mean(loads):.3f} N "
+                                           f"of {weight:.3f} N expected weight")
+                    record(phase, "LIFT_CONFIRMED", **details, load_fraction=load_fraction,
+                           **({"wrist_vertical_loads_N": dict(zip(arms, vertical_wrist_loads(), strict=True)),
+                               "vertical_balance_offset_m": balance_offset_m} if slot == 2 else {}))
+                    across = lifted.copy()
+                    across[0] = exit_x
+                    duration = 2.75 * max(1., abs(exit_x - origin[0]) / .024) if extra else 2.75
+                    translate_attached(across, duration, motion_prefix + "_cross", airborne=True)
+                    landed = across - [0., 0., lift_height]
+                    translate_attached(landed + [0., 0., .00045], .875, motion_prefix + "_land")
+                    deck = {arm: tcp_fk(arm, applied_targets[arm]) for arm in arms}
+                    if slot == 2:
+                        for arm, sign in zip(arms, (1., -1.), strict=True):
+                            point, tool_rotation = deck[arm]
+                            deck[arm] = (point - [0., 0., sign * balance_offset_m], tool_rotation)
+                    descent = 0.
+                    handoff = deque(maxlen=12)
+                    for _ in range(720):
+                        # Settle the wrists onto the supports without feeding forward a downward impact.
+                        wrist_load = -signed_vertical_load()
+                        dz = float(np.clip((wrist_load - .18 * weight) * .00010, -.0004, .00065)) / 120
+                        if not handoff:
+                            descent += dz
+                        if not -.0004 <= descent <= .00225:
+                            raise RuntimeError(f"Upper {slot}: no lower support within the 1.8 mm seating allowance")
+                        nominal = {arm: (point - [0., 0., descent], tool_rotation)
+                                   for arm, (point, tool_rotation) in deck.items()}
+                        commands = (balanced_targets(nominal, motion_prefix + "_land", freeze=bool(handoff))
+                                    if slot == 2 else {arm: cartesian_joint_target(
+                                        arm, applied_targets[arm], point, tool_rotation, retarget_guide=True)
+                                        for arm, (point, tool_rotation) in nominal.items()})
+                        for arm, q in commands.items():
+                            command_positions(arm, q)
+                        step()
+                        wrist_load = check_carry()
+                        check_current_collision(motion_prefix + "_land")
+                        lower_load = support_impulse() * 120
+                        if abs(wrist_load) <= .25 * weight and lower_load >= .55 * weight:
+                            handoff.append((wrist_load, lower_load))
+                            if len(handoff) == handoff.maxlen:
+                                break
+                        else:
+                            handoff.clear()
+                    else:
+                        raise RuntimeError(f"Upper {slot}: seam handoff did not settle "
+                                           f"(wrist {wrist_load:.2f} N, lower support {lower_load:.2f} N)")
+                    wrist_load, lower_load = np.mean(handoff, axis=0)
+                    record(phase, "DUAL_SEALS_OPENING", **details, joint_hold_ticks=len(handoff),
+                           wrist_load_N=float(wrist_load), lower_load_N=float(lower_load),
+                           extra_descent_m=max(0., descent - .00045),
+                           **({"peak_vertical_balance_pair_offset_m": 2 * balance_peak_m,
+                               "vertical_balance_offset_m": balance_offset_m} if slot == 2 else {}))
+                finally:
+                    for arm in arms:
+                        if grippers.is_closed(arm):
+                            grippers.open(arm)
+                    carry_offsets = None
+                    controller.set_gains(kps=push_gains[0], kds=push_gains[1])
+                impulses = deque(maxlen=60)
+                for settle_steps in range(1, 241):
+                    step()
+                    for arm in arms:
+                        force(arm, 0, push_sign)
+                    check_current_collision(phase)
+                    impulses.append(support_impulse())
+                    if len(impulses) != impulses.maxlen:
+                        continue
+                    positive = sum(impulse > 1e-5 for impulse in impulses)
+                    load_fraction = float(np.mean(impulses)) * 120 / weight
+                    if positive >= 48 and .65 <= load_fraction <= 1.35 and np.linalg.norm(cube.get_linear_velocity()) <= .005:
+                        break
+                else:
+                    raise RuntimeError(f"Upper {slot}: seam release did not settle in 240 ticks "
+                                       f"({positive}/60 support ticks, load fraction {load_fraction:.3f})")
+                pose_stage = "extra_seam" if extra else "seam"
+                center, rotation = observe_resting_cube(f"{phase_prefix}_{pose_stage}_settled_pose", vision_camera,
+                                                        vision_estimator, stack_plane)
+                if abs(center[0] - exit_x) > .004:
+                    raise RuntimeError(f"Upper {slot}: settled X differs from the seam exit by {abs(center[0] - exit_x)*1000:.2f} mm")
+                record(phase, "SETTLED_ON_LOWER_SUPPORT", **details, support_positive_frames=positive,
+                       support_load_fraction=load_fraction, support_samples=len(impulses), settle_ticks=settle_steps)
+                retouch_after_support_seam(center, rotation, local_side_offset,
+                                           final_u2=extra, motion_prefix=motion_prefix)
+
+            def approach_front():
+                center, rotation = observe_resting_cube(
+                    f"{phase_prefix}_front_pose", vision_camera, vision_estimator, stack_plane)
+                nominal_rotation = np.asarray(b["tool_rotation_world"][support_side])
+                front_normal = rotation[:, 1]
+                destination = center + rotation @ front_offset - .008 * front_normal
+                seed = phase_map["approach_front"]["q_rad"][support_side][0]
+                q = cartesian_joint_target(support_side, seed, destination, rotation @ nominal_rotation,
+                                           retarget_guide=True)
+                record("upper_B_front_approach", "RUNNING", arm=support_side)
+                move({support_side: q})
+                set_contact_drive_mode(True)
+                allowed_contacts.add(support_side)
+                push_faces[support_side] = (1, -front_normal, front_offset)
+                touch_face(support_side, front_normal, .018, "upper_B_front_touch")
+                return rotation
+
+            def approach_side():
+                center, rotation = sensed_cube()
+                normal = -push_sign * rotation[:, 0]
+                side_offset = np.array([-push_sign * half,
+                                        -plan["staging"]["grip_front_offset_mm"] / 1000 if side_first else 0.,
+                                        plan["staging"].get("side_contact_height_m", .020)])
+                if slot == 3:
+                    # The measured U2 fixture clears the U3 right wrist on the 10 mm face-height route.
+                    side_offset[2] = .010
+                side_rotation = rotation @ np.asarray(b["tool_rotation_world"][push_side])
+                face = center + rotation @ side_offset
+                reference = phase_map["descend_side"]
+                high_seed, low_seed = reference["q_rad"][push_side][0], reference["q_rad"][push_side][-1]
+                high_point = np.asarray(reference["tcp_m"][push_side][0], dtype=float)
+                stand = abs(float(reference["tcp_m"][push_side][-1][0]
+                                  - reference["cube_centers_m"][-1][0])) - half
+                if slot == 3:
+                    stand = .005
+                destination = face + stand * normal
+                high_point[:2] = destination[:2]
+                q = cartesian_joint_target(push_side, high_seed, high_point, side_rotation, retarget_guide=True)
+                record("upper_B_side_high", "RUNNING", arm=push_side)
+                move({push_side: q})
+                low_q = cartesian_joint_target(push_side, low_seed, destination, side_rotation,
+                                               retarget_guide=True)
+                # Cartesian descent retains the side standoff and the guard checks every pose.
+                cartesian_move(push_side, destination, 4., "upper_B_side_descent")
+                if np.max(np.abs(joint_state()[push_side] - low_q)) > .25:
+                    raise RuntimeError(f"Upper {slot} changed side approach IK branch")
+                if slot == 3:
+                    # Both side-facing wrists have local -Y along the box's +X axis.
+                    _, actual_rotation = tcp_fk(push_side, joint_state()[push_side])
+                    _, commanded_rotation = tcp_fk(push_side, applied_targets[push_side])
+                    axes = rotation.T @ (-actual_rotation[:, 1])
+                    pitch_error = math.atan2(axes[2], axes[0])
+                    if abs(pitch_error) > math.radians(1.):
+                        raise RuntimeError("U3 side approach outside calibrated face orientation")
+                    aligned = Rotation.from_rotvec(pitch_error * rotation[:, 1]).as_matrix() @ commanded_rotation
+                    align_contact_plane(push_side, aligned, "upper_B_u3_side_pitch")
+                    record("upper_B_u3_side_pitch", "ALIGNED_BEFORE_CONTACT", arm=push_side,
+                           height_from_cube_center_m=float(side_offset[2]), side_standoff_m=stand,
+                           measured_pitch_deg=math.degrees(pitch_error))
+                if stand > .007:
+                    cartesian_move(push_side, face + .007 * normal, 2., "upper_B_side_standoff")
+                # Reduce stored drive energy before the lateral cups touch the box.
+                controller = robots[push_side].get_articulation_controller()
+                stiffness, damping = (np.asarray(values).copy() for values in controller.get_gains())
+                arm_joints = joints[push_side]
+                stiffness[arm_joints] *= .35
+                damping[arm_joints] *= math.sqrt(.35)
+                controller.set_gains(kps=stiffness, kds=damping)
+                record("upper_B_side_drive", "COMPLIANT", arm=push_side, relative_stiffness=.35)
+                allowed_contacts.add(push_side)
+                push_faces[push_side] = (0, normal, side_offset)
+                touch_face(push_side, -normal, .018, "upper_B_side_touch")
+
+            def withdraw(side, axis, sign):
+                nonlocal left_hold
+                phase = "upper_B_front" if axis == 1 else "upper_B_side"
+                # The scalar hold must be disabled before the tool recedes along its normal.
+                if side == support_side:
+                    left_hold = None
+                position, _ = tcp_fk(side, applied_targets[side])
+                outward = np.eye(3)[axis] * -sign
+                cartesian_move(side, position + .003 * outward, 1.5, phase + "_unload")
+                push_faces.pop(side, None)
+                position, _ = tcp_fk(side, applied_targets[side])
+                if axis == 1:
+                    distance = .022
+                else:
+                    checked_withdrawal = np.asarray(phase_map["withdraw_side"]["tcp_m"][side])
+                    distance = abs(float(checked_withdrawal[-1, axis] - checked_withdrawal[0, axis])) - .003
+                    if distance <= 0.:
+                        raise RuntimeError(f"Upper {slot} has insufficient checked side withdrawal")
+                cartesian_move(side, position + distance * outward, 2.5, phase + "_withdraw")
+                allowed_contacts.discard(side)
+                if axis == 0:
+                    position, _ = tcp_fk(side, applied_targets[side])
+                    height = max(position[2], 1.11)
+                    cartesian_move(side, [position[0], position[1], height], 4., phase + "_raise")
+
+            allowed_contacts.clear()
+            push_faces.clear()
+            left_hold = None
+            home = np.asarray(CONFIG["fr3"]["official_start_q_rad"])
+            for side, y in b["rails_y_m"].items():
+                base = rail_states[side].copy()
+                if abs(base[1] - y) > 1e-6:
+                    base[1] = y
+                    record("upper_B_rail", "RUNNING", arm=side, rail_y_m=float(y))
+                    move_robot_base(side, base)
+            contact_plan_rotation = approach_front()
+            if not side_first:
+                push_to_boundary(support_side, 1, 1, "upper_B_rear", rear_target)
+            if push_side is not None:
+                if not side_first:
+                    try:
+                        prepare_rear_to_side_hold()
+                        approach_side()
+                    finally:
+                        current_task.pop("rear_to_side_hold_x_m", None)
+                    left_hold.target_force_N = .65
+                else:
+                    hold_front(.55 if side_first else .65)
+                    approach_side()
+                if slot in (1, 2):
+                    carry_across_support_seam()
+                completed_transport = CHECKPOINT.get("postseam", {}).get("transport_index")
+                if slot == 2 and use_extra_u2 and completed_transport != 2:
+                    record("upper_B_extra_seam_transport", "SELECTED", transport_index=2)
+                    carry_across_support_seam(extra=True)
+                push_to_boundary(push_side, 0, push_sign, "upper_B_side", side_target, follow=support_side)
+                withdraw(push_side, 0, push_sign)
+                record("upper_B_park", "RUNNING", arm=push_side)
+                move({push_side: home})
+            if side_first:
+                left_hold = None
+                push_to_boundary(support_side, 1, 1, "upper_B_rear", rear_target)
+            withdraw(support_side, 1, 1)
+            allowed_contacts.clear()
+            push_faces.clear()
+            set_contact_drive_mode(False)
+            record("upper_B_park", "RUNNING", arm=support_side)
+            move({support_side: home})
+            record("upper_B_release", "TOOLS_PARKED")

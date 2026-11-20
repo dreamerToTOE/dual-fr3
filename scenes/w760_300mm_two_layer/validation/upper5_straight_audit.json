@@ -1,0 +1,32 @@
+{
+  "status": "PASS_U5_STRAIGHT_PHYSX",
+  "checks": {
+    "fresh_camera_entry_gate": true,
+    "push_starts_at_measured_landing": true,
+    "covers_measured_landing_to_wall": true,
+    "fixed_x_and_monotone_y": true,
+    "open_dual_seals_and_no_unintended_contact": true,
+    "sustained_lower_bearing": true,
+    "forward_distance_with_left_cup_and_lower_bearing": true,
+    "native_rear_and_left_cup_bear_together": true,
+    "wrist_limits_throughout_push": true
+  },
+  "row_audit_status": "PASS_W760_UPPER_ROW",
+  "production_eligible": true,
+  "push_from_tick": 42726,
+  "confirmed_at_tick": 46805,
+  "push_ticks": 4079,
+  "required_y_mm": 85.98300358497669,
+  "actual_y_mm": 85.98262071609497,
+  "max_x_drift_mm": 0.7551616872660816,
+  "max_reverse_y_mm": 0.002384185791015625,
+  "min_left_and_right_clearance_mm": [
+    4.449180572548547,
+    0.9349208347770727
+  ],
+  "lower_bearing_median_N": 12.997547686926787,
+  "left_driven_supported_fraction": 1.0,
+  "rear_left_lower_ticks_out_of_30": 30,
+  "peak_wrist_force_N": 8.966537261508535,
+  "peak_wrist_torque_Nm": 0.32592657530670976
+}
