@@ -1,0 +1,417 @@
+{
+  "physical_results": [
+    {
+      "run": "plus125_fixed",
+      "physical_policy": "fixed",
+      "scene": "W760_H300_rear5_front5_upper5_side_v1",
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "runner_snapshot_sha256": "dab019d9bf4d7af151538efd85c047f9305efd8565a2e0b3e84ed89a6557e076",
+      "source_visual_runner_sha256": "620da82d14ecad05775ccea07238e47a17cc08d36c91538bd2c8a60997c0a45f",
+      "yaw_perturbation_deg": 1.25,
+      "initial_true_x_mm": 0.5443420959636569,
+      "vertical_force_feedback": true,
+      "required_entry_gap_mm": 1.0,
+      "required_wrist_limit_N": 9.0,
+      "first_observation": "ENTRY_BLOCKED_YAW",
+      "min_observed_gap_mm": 0.6909060877339501,
+      "predicted_gap_after_yaw_only_mm": 2.1956755337184246,
+      "independent_initial_x_envelope_gap_mm": 0.5130458316892628,
+      "replayed_entry_decisions": {
+        "fixed": "REFUSE_ENTRY",
+        "gap_fsm": "REALIGN",
+        "task_aware": "REALIGN"
+      },
+      "actual_gate_statuses": [
+        "BLOCKED"
+      ],
+      "actual_realign_requested": false,
+      "actual_realign_started": false,
+      "centering_path": null,
+      "actual_push_started": false,
+      "actual_outcome": "REFUSED_BEFORE_REALIGN_OR_PUSH",
+      "actual_seated": false,
+      "physical_peak_wrist_N": null,
+      "physical_rear_hold_steps": null,
+      "physical_seated_support_steps": null,
+      "physical_seated_support_total_steps": null,
+      "physical_recheck_min_gap_mm": null,
+      "planned_center_shift_x_mm": 0.0,
+      "physical_recheck_x_change_mm": null,
+      "physical_recheck_elapsed_sim_s": null,
+      "final_status": "STOPPED"
+    },
+    {
+      "run": "plus_125_live_selection",
+      "physical_policy": "task_aware",
+      "scene": "W760_H300_rear5_front5_upper5_side_v1",
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "runner_snapshot_sha256": "d8dbced3ac0cd9449f2eb42f8cefd7027318b1ba796ff69a07e4bb7ba8ec7fea",
+      "source_visual_runner_sha256": "620da82d14ecad05775ccea07238e47a17cc08d36c91538bd2c8a60997c0a45f",
+      "yaw_perturbation_deg": 1.25,
+      "initial_true_x_mm": 0.5443420959636569,
+      "vertical_force_feedback": true,
+      "required_entry_gap_mm": 1.0,
+      "required_wrist_limit_N": 9.0,
+      "first_observation": "ENTRY_BLOCKED_YAW",
+      "min_observed_gap_mm": 0.7188332958513871,
+      "predicted_gap_after_yaw_only_mm": 2.2195633786411677,
+      "independent_initial_x_envelope_gap_mm": 0.5130458316892628,
+      "replayed_entry_decisions": {
+        "fixed": "REFUSE_ENTRY",
+        "gap_fsm": "REALIGN",
+        "task_aware": "REALIGN"
+      },
+      "actual_gate_statuses": [
+        "BLOCKED",
+        "CLEAR"
+      ],
+      "actual_realign_requested": true,
+      "actual_realign_started": true,
+      "centering_path": null,
+      "actual_push_started": true,
+      "actual_outcome": "SEATED_AFTER_REALIGN",
+      "actual_seated": true,
+      "physical_peak_wrist_N": 8.472452928042728,
+      "physical_rear_hold_steps": 30,
+      "physical_seated_support_steps": 60,
+      "physical_seated_support_total_steps": 60,
+      "physical_recheck_min_gap_mm": 2.56823931159518,
+      "planned_center_shift_x_mm": 0.0,
+      "physical_recheck_x_change_mm": -0.8963719883468002,
+      "physical_recheck_elapsed_sim_s": 35.333333333333336,
+      "final_status": "PASS_W760_UPPER_ROW"
+    },
+    {
+      "run": "plus125_adaptive_repeat",
+      "physical_policy": "task_aware",
+      "scene": "W760_H300_rear5_front5_upper5_side_v1",
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "runner_snapshot_sha256": "d8dbced3ac0cd9449f2eb42f8cefd7027318b1ba796ff69a07e4bb7ba8ec7fea",
+      "source_visual_runner_sha256": "620da82d14ecad05775ccea07238e47a17cc08d36c91538bd2c8a60997c0a45f",
+      "yaw_perturbation_deg": 1.25,
+      "initial_true_x_mm": 0.5443420959636569,
+      "vertical_force_feedback": true,
+      "required_entry_gap_mm": 1.0,
+      "required_wrist_limit_N": 9.0,
+      "first_observation": "ENTRY_BLOCKED_YAW",
+      "min_observed_gap_mm": 0.5210322954944391,
+      "predicted_gap_after_yaw_only_mm": 2.15136757629672,
+      "independent_initial_x_envelope_gap_mm": 0.5130458316892628,
+      "replayed_entry_decisions": {
+        "fixed": "REFUSE_ENTRY",
+        "gap_fsm": "REALIGN",
+        "task_aware": "REALIGN"
+      },
+      "actual_gate_statuses": [
+        "BLOCKED",
+        "CLEAR"
+      ],
+      "actual_realign_requested": true,
+      "actual_realign_started": true,
+      "centering_path": null,
+      "actual_push_started": true,
+      "actual_outcome": "SEATED_AFTER_REALIGN",
+      "actual_seated": true,
+      "physical_peak_wrist_N": 8.977481207079325,
+      "physical_rear_hold_steps": 30,
+      "physical_seated_support_steps": 60,
+      "physical_seated_support_total_steps": 60,
+      "physical_recheck_min_gap_mm": 2.6222372794964115,
+      "planned_center_shift_x_mm": 0.0,
+      "physical_recheck_x_change_mm": -0.8883276605047286,
+      "physical_recheck_elapsed_sim_s": 35.35,
+      "final_status": "PASS_W760_UPPER_ROW"
+    },
+    {
+      "run": "minus065_fixed",
+      "physical_policy": "fixed",
+      "scene": "W760_H300_rear5_front5_upper5_side_v1",
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "runner_snapshot_sha256": "dab019d9bf4d7af151538efd85c047f9305efd8565a2e0b3e84ed89a6557e076",
+      "source_visual_runner_sha256": "620da82d14ecad05775ccea07238e47a17cc08d36c91538bd2c8a60997c0a45f",
+      "yaw_perturbation_deg": -0.65,
+      "initial_true_x_mm": 0.5440581007860601,
+      "vertical_force_feedback": true,
+      "required_entry_gap_mm": 1.0,
+      "required_wrist_limit_N": 9.0,
+      "first_observation": "ENTRY_BLOCKED_YAW",
+      "min_observed_gap_mm": 0.9643718074840157,
+      "predicted_gap_after_yaw_only_mm": 2.1986894790414766,
+      "independent_initial_x_envelope_gap_mm": 1.2546620828336463,
+      "replayed_entry_decisions": {
+        "fixed": "REFUSE_ENTRY",
+        "gap_fsm": "REALIGN",
+        "task_aware": "REALIGN"
+      },
+      "actual_gate_statuses": [
+        "BLOCKED"
+      ],
+      "actual_realign_requested": false,
+      "actual_realign_started": false,
+      "centering_path": null,
+      "actual_push_started": false,
+      "actual_outcome": "REFUSED_BEFORE_REALIGN_OR_PUSH",
+      "actual_seated": false,
+      "physical_peak_wrist_N": null,
+      "physical_rear_hold_steps": null,
+      "physical_seated_support_steps": null,
+      "physical_seated_support_total_steps": null,
+      "physical_recheck_min_gap_mm": null,
+      "planned_center_shift_x_mm": 0.0,
+      "physical_recheck_x_change_mm": null,
+      "physical_recheck_elapsed_sim_s": null,
+      "final_status": "STOPPED"
+    },
+    {
+      "run": "minus065_adaptive",
+      "physical_policy": "task_aware",
+      "scene": "W760_H300_rear5_front5_upper5_side_v1",
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "runner_snapshot_sha256": "d8dbced3ac0cd9449f2eb42f8cefd7027318b1ba796ff69a07e4bb7ba8ec7fea",
+      "source_visual_runner_sha256": "620da82d14ecad05775ccea07238e47a17cc08d36c91538bd2c8a60997c0a45f",
+      "yaw_perturbation_deg": -0.65,
+      "initial_true_x_mm": 0.5440581007860601,
+      "vertical_force_feedback": true,
+      "required_entry_gap_mm": 1.0,
+      "required_wrist_limit_N": 9.0,
+      "first_observation": "ENTRY_BLOCKED_YAW",
+      "min_observed_gap_mm": 0.7336012700786543,
+      "predicted_gap_after_yaw_only_mm": 2.047748144584416,
+      "independent_initial_x_envelope_gap_mm": 1.2546620828336463,
+      "replayed_entry_decisions": {
+        "fixed": "REFUSE_ENTRY",
+        "gap_fsm": "REALIGN",
+        "task_aware": "REALIGN"
+      },
+      "actual_gate_statuses": [
+        "BLOCKED",
+        "BLOCKED"
+      ],
+      "actual_realign_requested": true,
+      "actual_realign_started": true,
+      "centering_path": null,
+      "actual_push_started": false,
+      "actual_outcome": "STOPPED_AFTER_REALIGN_BEFORE_PUSH",
+      "actual_seated": false,
+      "physical_peak_wrist_N": 4.845923399532048,
+      "physical_rear_hold_steps": null,
+      "physical_seated_support_steps": null,
+      "physical_seated_support_total_steps": null,
+      "physical_recheck_min_gap_mm": 0.7410669615088294,
+      "planned_center_shift_x_mm": 0.0,
+      "physical_recheck_x_change_mm": 0.5613230750896037,
+      "physical_recheck_elapsed_sim_s": 35.300000000000004,
+      "final_status": "STOPPED"
+    },
+    {
+      "run": "minus065_centered",
+      "physical_policy": "task_aware_centered",
+      "scene": "W760_H300_rear5_front5_upper5_side_v1",
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "runner_snapshot_sha256": "7efefd5890e7aefe86999ce9fb6099127a1b2f47f60afb822f08819c91402df8",
+      "source_visual_runner_sha256": "620da82d14ecad05775ccea07238e47a17cc08d36c91538bd2c8a60997c0a45f",
+      "yaw_perturbation_deg": -0.65,
+      "initial_true_x_mm": 0.5440581007860601,
+      "vertical_force_feedback": true,
+      "required_entry_gap_mm": 1.0,
+      "required_wrist_limit_N": 9.0,
+      "first_observation": "ENTRY_BLOCKED_YAW",
+      "min_observed_gap_mm": 0.9534440596748323,
+      "predicted_gap_after_yaw_only_mm": 2.1940175397390376,
+      "independent_initial_x_envelope_gap_mm": 1.2546620828336463,
+      "replayed_entry_decisions": {
+        "fixed": "REFUSE_ENTRY",
+        "gap_fsm": "REALIGN",
+        "task_aware": "REALIGN"
+      },
+      "actual_gate_statuses": [
+        "BLOCKED",
+        "BLOCKED"
+      ],
+      "actual_realign_requested": true,
+      "actual_realign_started": true,
+      "centering_path": "simultaneous",
+      "actual_push_started": false,
+      "actual_outcome": "STOPPED_AFTER_REALIGN_BEFORE_PUSH",
+      "actual_seated": false,
+      "physical_peak_wrist_N": 2.0630708679895253,
+      "physical_rear_hold_steps": null,
+      "physical_seated_support_steps": null,
+      "physical_seated_support_total_steps": null,
+      "physical_recheck_min_gap_mm": 0.7213977745583189,
+      "planned_center_shift_x_mm": -1.1188708644997731,
+      "physical_recheck_x_change_mm": 0.036798068322241306,
+      "physical_recheck_elapsed_sim_s": 35.325,
+      "final_status": "STOPPED"
+    },
+    {
+      "run": "minus065_sequential",
+      "physical_policy": "task_aware_sequential",
+      "scene": "W760_H300_rear5_front5_upper5_side_v1",
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "runner_snapshot_sha256": "910549e519c9df6d75a5444d821b8be91d235fbecfab15805dd30faa5e470b1e",
+      "source_visual_runner_sha256": "620da82d14ecad05775ccea07238e47a17cc08d36c91538bd2c8a60997c0a45f",
+      "yaw_perturbation_deg": -0.65,
+      "initial_true_x_mm": 0.5440581007860601,
+      "vertical_force_feedback": true,
+      "required_entry_gap_mm": 1.0,
+      "required_wrist_limit_N": 9.0,
+      "first_observation": "ENTRY_BLOCKED_YAW",
+      "min_observed_gap_mm": 0.7942378837748343,
+      "predicted_gap_after_yaw_only_mm": 2.05749522194254,
+      "independent_initial_x_envelope_gap_mm": 1.2546620828336463,
+      "replayed_entry_decisions": {
+        "fixed": "REFUSE_ENTRY",
+        "gap_fsm": "REALIGN",
+        "task_aware": "REALIGN"
+      },
+      "actual_gate_statuses": [
+        "BLOCKED",
+        "CLEAR"
+      ],
+      "actual_realign_requested": true,
+      "actual_realign_started": true,
+      "centering_path": "sequential",
+      "actual_push_started": true,
+      "actual_outcome": "WRIST_CUTOFF_AFTER_REALIGN",
+      "actual_seated": false,
+      "physical_peak_wrist_N": 9.271858063105626,
+      "physical_rear_hold_steps": null,
+      "physical_seated_support_steps": null,
+      "physical_seated_support_total_steps": null,
+      "physical_recheck_min_gap_mm": 1.1110395204232542,
+      "planned_center_shift_x_mm": -1.1508858536439637,
+      "physical_recheck_x_change_mm": -0.08185161277651787,
+      "physical_recheck_elapsed_sim_s": 38.28333333333334,
+      "final_status": "STOPPED"
+    },
+    {
+      "run": "plus_15_realign_settled",
+      "physical_policy": "historical_realign",
+      "scene": "W760_H300_rear5_front5_upper5_side_v1",
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "runner_snapshot_sha256": "c20968f5c2cb246e26fdcea41bb9015fa0379213cee2ab748682a91c50b77c23",
+      "source_visual_runner_sha256": "620da82d14ecad05775ccea07238e47a17cc08d36c91538bd2c8a60997c0a45f",
+      "yaw_perturbation_deg": 1.5,
+      "initial_true_x_mm": 0.544146925676614,
+      "vertical_force_feedback": true,
+      "required_entry_gap_mm": 1.0,
+      "required_wrist_limit_N": 9.0,
+      "first_observation": "ENTRY_BLOCKED_YAW",
+      "min_observed_gap_mm": 0.42870516150787796,
+      "predicted_gap_after_yaw_only_mm": 2.237979758705086,
+      "independent_initial_x_envelope_gap_mm": 0.19376288040122425,
+      "replayed_entry_decisions": {
+        "fixed": "REFUSE_ENTRY",
+        "gap_fsm": "REALIGN",
+        "task_aware": "REALIGN"
+      },
+      "actual_gate_statuses": [
+        "BLOCKED",
+        "CLEAR"
+      ],
+      "actual_realign_requested": true,
+      "actual_realign_started": true,
+      "centering_path": null,
+      "actual_push_started": true,
+      "actual_outcome": "WRIST_CUTOFF_AFTER_REALIGN",
+      "actual_seated": false,
+      "physical_peak_wrist_N": 9.271230074731152,
+      "physical_rear_hold_steps": null,
+      "physical_seated_support_steps": null,
+      "physical_seated_support_total_steps": null,
+      "physical_recheck_min_gap_mm": 2.443690121093911,
+      "planned_center_shift_x_mm": 0.0,
+      "physical_recheck_x_change_mm": -0.943083199672401,
+      "physical_recheck_elapsed_sim_s": 35.18333333333334,
+      "final_status": "STOPPED"
+    }
+  ],
+  "matched_physical_conditions": [
+    {
+      "scene": "W760_H300_rear5_front5_upper5_side_v1",
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "yaw_perturbation_deg": 1.25,
+      "initial_true_x_mm_rounded_to_0_1": 0.5,
+      "vertical_force_feedback": true,
+      "required_entry_gap_mm": 1.0,
+      "required_wrist_limit_N": 9.0,
+      "physical_counts_by_policy": {
+        "fixed": {
+          "physical_trials": 1,
+          "seated": 0,
+          "realign_started": 0,
+          "push_started": 0
+        },
+        "task_aware": {
+          "physical_trials": 2,
+          "seated": 2,
+          "realign_started": 2,
+          "push_started": 2
+        }
+      },
+      "runs": [
+        "plus125_fixed",
+        "plus_125_live_selection",
+        "plus125_adaptive_repeat"
+      ]
+    },
+    {
+      "scene": "W760_H300_rear5_front5_upper5_side_v1",
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "yaw_perturbation_deg": -0.65,
+      "initial_true_x_mm_rounded_to_0_1": 0.5,
+      "vertical_force_feedback": true,
+      "required_entry_gap_mm": 1.0,
+      "required_wrist_limit_N": 9.0,
+      "physical_counts_by_policy": {
+        "fixed": {
+          "physical_trials": 1,
+          "seated": 0,
+          "realign_started": 0,
+          "push_started": 0
+        },
+        "task_aware": {
+          "physical_trials": 1,
+          "seated": 0,
+          "realign_started": 1,
+          "push_started": 0
+        },
+        "task_aware_centered": {
+          "physical_trials": 1,
+          "seated": 0,
+          "realign_started": 1,
+          "push_started": 0
+        },
+        "task_aware_sequential": {
+          "physical_trials": 1,
+          "seated": 0,
+          "realign_started": 1,
+          "push_started": 1
+        }
+      },
+      "runs": [
+        "minus065_fixed",
+        "minus065_adaptive",
+        "minus065_centered",
+        "minus065_sequential"
+      ]
+    },
+    {
+      "scene": "W760_H300_rear5_front5_upper5_side_v1",
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "yaw_perturbation_deg": 1.5,
+      "initial_true_x_mm_rounded_to_0_1": 0.5,
+      "vertical_force_feedback": true,
+      "required_entry_gap_mm": 1.0,
+      "required_wrist_limit_N": 9.0,
+      "physical_counts_by_policy": {},
+      "runs": [
+        "plus_15_realign_settled"
+      ]
+    }
+  ],
+  "replayed_decisions_are_decision_only": true,
+  "scope": "One measured gate per trial for decision replay. Physical counts use only executed policies.",
+  "true_gap_scope": "Measured active and neighbor poses projected on X. This is a side clearance envelope, not a full collision check."
+}

@@ -17,6 +17,11 @@ def realign_upper5(neighbors):
     offset = tool_rotation.T @ (center - anchor)
     relative = tool_rotation.T @ box_rotation
     yaw = math.atan2(box_rotation[1, 0], box_rotation[0, 0])
+    centering = UPPER5_EXPERIMENT["center_correction"]
+    correction_x = 0.
+    if centering:
+        inner_left, inner_right = center_slot_edges(neighbors)
+        correction_x = (inner_left + inner_right) / 2 - center[0]
 
     def sealed_pose():
         position, rotation = tcp_fk(arm, joint_state()[arm])
@@ -25,12 +30,19 @@ def realign_upper5(neighbors):
     slot4_sealed_pose = sealed_pose
     push_faces.clear()
     contact_monitor.phase = phase
-    record(phase, "ROTATING_ON_LOWER_ROW", arm=arm, observed_yaw_deg=math.degrees(yaw))
+    record(phase, "ROTATING_ON_LOWER_ROW", arm=arm, observed_yaw_deg=math.degrees(yaw),
+           planned_center_shift_x_m=float(correction_x), centering=centering)
+
+    def blend(t):
+        t = min(1., max(0., t))
+        return (10. - 15.*t + 6.*t*t)*t**3
+
+    segments = 2 if centering == "sequential" else 1
     try:
-        for t in np.linspace(0., 1., 361):
-            u = (10. - 15.*t + 6.*t*t)*t**3
-            turn = Rotation.from_rotvec([0., 0., -yaw*u]).as_matrix()
+        for t in np.linspace(0., float(segments), 360*segments + 1):
+            turn = Rotation.from_rotvec([0., 0., -yaw*blend(t)]).as_matrix()
             target = center + turn @ (anchor - center)
+            target[0] += blend(t - (segments - 1)) * correction_x
             command = cartesian_joint_target(arm, q, target, turn @ tool_rotation, retarget_guide=True)
             if np.max(np.abs(command - q))*120 > .4:
                 raise RuntimeError(f"{phase}: yaw correction exceeds 0.4 rad/s")

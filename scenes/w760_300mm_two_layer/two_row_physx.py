@@ -255,6 +255,8 @@ def main():
     parser.add_argument("--upper5-yaw-deg", type=float, help="Add world-Z yaw to the measured upper-5 landing pose")
     parser.add_argument("--upper5-z-unload", action="store_true", help="Test vertical force feedback during the upper-5 straight push")
     parser.add_argument("--upper5-realign", action="store_true", help="Try one supported side-suction yaw correction after an entry refusal")
+    parser.add_argument("--upper5-realign-center", nargs="?", const="simultaneous",
+                        choices=("simultaneous", "sequential"), help="Correct X toward the measured slot midpoint")
     parser.add_argument("--stop-after-front", type=int, choices=range(1, 6))
     args = parser.parse_args()
     checkpoint = {}
@@ -270,6 +272,8 @@ def main():
     experiment = None
     if (args.upper5_z_unload or args.upper5_realign) and args.upper5_yaw_deg is None:
         parser.error("Upper-5 control experiments require an explicit --upper5-yaw-deg trial")
+    if args.upper5_realign_center and not args.upper5_realign:
+        parser.error("--upper5-realign-center requires --upper5-realign")
     if args.upper5_yaw_deg is not None:
         if front != 6 or upper != 5 or release is None or release["cube_id"] != 11:
             parser.error("--upper5-yaw-deg requires the upper-5 landing checkpoint")
@@ -284,7 +288,8 @@ def main():
         experiment = {"requested_delta_yaw_deg": args.upper5_yaw_deg,
                       "initial_orientation_wxyz": orientation,
                       "vertical_force_feedback": args.upper5_z_unload,
-                      "entry_realign": args.upper5_realign}
+                      "entry_realign": args.upper5_realign,
+                      "center_correction": args.upper5_realign_center}
     output = args.output.resolve()
     snapshot = output / "runner_snapshot.py"
     source = build()
