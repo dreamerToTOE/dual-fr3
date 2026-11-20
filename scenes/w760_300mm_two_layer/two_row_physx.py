@@ -3,6 +3,7 @@ import argparse
 import fcntl
 import hashlib
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -251,6 +252,7 @@ def main():
     parser.add_argument("--resume", type=Path)
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--close-on-finish", action="store_true")
+    parser.add_argument("--upper5-yaw-deg", type=float, help="Add world-Z yaw to the measured upper-5 landing pose")
     parser.add_argument("--stop-after-front", type=int, choices=range(1, 6))
     args = parser.parse_args()
     checkpoint = {}
@@ -262,9 +264,28 @@ def main():
     if args.stop_after_front is not None and args.stop_after_front < front:
         parser.error("The requested stopping slot is already complete in the checkpoint")
     first_id = FRONT_IDS[front-1] if front < 6 else 6 + upper
+    release = checkpoint.get("front_landed") or checkpoint.get("landed")
+    experiment = None
+    if args.upper5_yaw_deg is not None:
+        if front != 6 or upper != 5 or release is None or release["cube_id"] != 11:
+            parser.error("--upper5-yaw-deg requires the upper-5 landing checkpoint")
+        if not math.isfinite(args.upper5_yaw_deg):
+            parser.error("--upper5-yaw-deg must be finite")
+        w, x, y, z = release["orientation_wxyz"]
+        half_yaw = math.radians(args.upper5_yaw_deg) / 2
+        c, s = math.cos(half_yaw), math.sin(half_yaw)
+        # Left-multiply the measured quaternion by a world-Z rotation before PhysX starts.
+        orientation = [c*w - s*z, c*x - s*y, c*y + s*x, c*z + s*w]
+        release = {**release, "orientation_wxyz": orientation}
+        experiment = {"requested_delta_yaw_deg": args.upper5_yaw_deg,
+                      "initial_orientation_wxyz": orientation}
     output = args.output.resolve()
     snapshot = output / "runner_snapshot.py"
     source = build()
+    if experiment is not None:
+        source = replace_once(source, '        report["upper_row"] = {',
+                              '        report["upper5_experiment"] = UPPER5_EXPERIMENT\n'
+                              '        report["upper_row"] = {')
     runner = compile(source, str(snapshot), "exec")
     if args.check_only:
         print(f"Compiled. Measured starting boxes {len(saved)}, next supply Cube_{first_id}")
@@ -285,7 +306,7 @@ def main():
                       "FRONT_IDS": FRONT_IDS, "START_FRONT": front, "START_SLOT": upper, "FIRST_ID": first_id,
                       "STOP_AFTER_FRONT": args.stop_after_front,
                       "INITIAL_BOXES": saved, "RUNTIME_GUIDES": row_guide_paths(), "CHECKPOINT": checkpoint,
-                      "RELEASE_CHECKPOINT": checkpoint.get("front_landed") or checkpoint.get("landed"),
+                      "RELEASE_CHECKPOINT": release, "UPPER5_EXPERIMENT": experiment,
                       "SUPPORT_TOP_BEVEL_M": None, "UPPER_REST_OFFSET_M": None, "CUBE_CONTACT_OFFSET_M": None})
 
 
