@@ -223,7 +223,7 @@ def evaluate(labels, estimated):
             "by_state": scores, "confusion": confusion, "pose": pose, "events": events}
 
 
-def replay(directory, labels, delay_s):
+def replay(directory, labels, delay_s, blurred_camera=False):
     report = json.loads((directory / "runner_report.json").read_text())
     cfg = report["scene_parameters"]
     half = cfg["cube_size_m"] / 2.
@@ -231,6 +231,7 @@ def replay(directory, labels, delay_s):
     models = {mode: Estimator(mode, half, center[1] - size[1] / 2., delay_s) for mode in MODES}
     replay_labels = {row["physics_step"]: row for row in labels}
     samples = records(directory / "contact_states" / "sensor_inputs.jsonl.gz")
+    blurred = {row["frame_id"]: row for row in records(directory / "vision" / "blurred_camera.jsonl")} if blurred_camera else None
     observations = deque(camera_neighbors(report))
     neighbors, ordered_labels = {}, []
     predictions = {mode: [] for mode in MODES}
@@ -238,6 +239,9 @@ def replay(directory, labels, delay_s):
         while observations and observations[0][0] + delay_s <= row["time_s"]:
             _, name, geometry = observations.popleft()
             neighbors[name] = geometry
+        if blurred is not None:
+            native_camera = row.get("camera")
+            row = {**row, "camera": blurred.get(native_camera["frame_id"]) if native_camera else None}
         outputs = {mode: model.update(row, {} if mode == "wrench_fk" else neighbors)
                    for mode, model in models.items()}
         label = replay_labels.get(row["physics_step"])
@@ -255,6 +259,7 @@ def main():
     parser.add_argument("--case", action="append", nargs=2, required=True, metavar=("RUN_DIR", "LABELS"))
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--delay-ms", type=float, action="append", help="Extra RGB delivery delay, repeatable")
+    parser.add_argument("--blurred-camera", action="store_true", help="Use the recorded blurred ArUco stream")
     args = parser.parse_args()
     delays = args.delay_ms or [0.]
     if not all(math.isfinite(delay) and delay >= 0 for delay in delays):
@@ -262,9 +267,10 @@ def main():
     results = {}
     for run, label_path in args.case:
         labels = records(Path(label_path))
-        results[run] = {str(delay): replay(Path(run), labels, delay / 1000.) for delay in delays}
+        results[run] = {str(delay): replay(Path(run), labels, delay / 1000., args.blurred_camera) for delay in delays}
     args.out.write_text(json.dumps({"method": "fixed causal rules applied independently per run",
-                                   "camera_model": "native support-plane ArUco with optional receive delay",
+                                   "camera_model": "blurred support-plane ArUco with optional receive delay"
+                                   if args.blurred_camera else "native support-plane ArUco with optional receive delay",
                                    "threshold_provenance": "Motion and rear proximity were calibrated on the archived normal stroke. Confirmed anomaly classes have not been calibrated.",
                                    "thresholds": {
                                        "camera_max_age_s": CAMERA_MAX_AGE_S, "loaded_camera_hold_s": CAMERA_HOLD_S,
