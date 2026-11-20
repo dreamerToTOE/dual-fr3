@@ -56,4 +56,19 @@ python3 "$scene/experiments/fusion_upper5.py" \
 
 在仿真命令上加 `--upper5-z-unload --upper5-blur-ms 200`，可启用竖向卸载并同时记录原始相机和模糊相机的观测。模糊观测由 15 Hz 连续实渲染帧按曝光窗口加权合成，再重新检测 ArUco。它近似了 200 ms 的长曝光，用于压力测试。将回放命令的输出换成新文件并加 `--blurred-camera`，可在同一条 PhysX 记录上比较原始与模糊观测。
 
+## 技能 3 → 4 的接触判定
+
+用 `experiments/fusion_skill_boundary.py` 比较视觉＋运动学、腕力＋运动学和三者融合。针对第 4 箱贴邻箱与换臂贴后墙、第 5 箱直推，以及第 2 箱跨缝后尝试贴后墙，任务预先指定执行臂、方向和预期目标。第 4 箱前推时与已贴邻箱的接触可以保留。每个工况由原始运行报告限定回放窗口，并按实际接触对象、接触冲量和箱体推进量逐步评分。
+
+```bash
+python3 scenes/w760_300mm_two_layer/experiments/fusion_skill_boundary.py \
+  --case "$upper4_run" u4_side --case "$upper4_run" u4_rear \
+  --case "$upper5_run" u5_rear --case "$upper2_reseat_run" u2_reseat \
+  --out comparison.json --trace comparison_trace.jsonl
+```
+
+每条回放记录的 `predictions` 是可用于技能选择的观测判定，`reference` 是独立物理标签。`TARGET_CANDIDATE` 表示接近指定边界且推进很慢，可进入技能 4 的确认流程。`TARGET_CONTACT` 表示 PhysX 记录到箱体和预期目标实际承载。力增量辅助判据也作为候选记录，评估其命中、漏判和触发时间。
+
+本组使用已有模拟日志进行离线对照。缺少可用于评分的真实同层邻箱卡滞样本，因此卡滞标签不会进入本组的识别率。腕力超限标签由原运行器事件和独立箱体推进量共同确定。
+
 在仿真命令中加 `--upper5-z-unload --upper5-blur-ms 200`，可沿用第 5 箱竖向卸载并同期记录清晰与模糊的 ArUco 结果。模糊观测按真实采样时间对连续 D455 图像积分，以曝光中点为时间戳，重新检测 ArUco 后写入 `vision/blurred_camera.jsonl`。200 ms 是 15 Hz 多帧合成的压力测试。机械臂控制继续使用原始 D455 观测。对同一运行加 `--blurred-camera` 再做一次融合回放，使用独立的输出 JSON。
