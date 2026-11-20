@@ -1,0 +1,759 @@
+{
+  "modes": {
+    "vision_fk": "Supported-plane ArUco and TCP geometry",
+    "wrench_fk": "Wrist wrench, TCP motion and nominal boundary",
+    "fusion": "Wrist wrench, TCP motion and observed boundary / lateral geometry"
+  },
+  "contact_band_m": 0.002,
+  "motion_window_s": 0.25,
+  "advance_min_m": 5e-05,
+  "sustained_target_s": 0.1,
+  "candidate_interpretation": "Near and slow can enter skill 4. It never confirms the intended object.",
+  "force_confirmation_candidate": "Exploratory 250 ms load-rise criterion using existing terminal thresholds; baseline requires 250 ms of advancing samples outside the candidate band.",
+  "threshold_provenance": "Fixed engineering criteria, including existing terminal thresholds for the exploratory force-rise comparison; no parameter fitting",
+  "wrist_cutoff_reference": "Runner wrist event plus independently measured true cube advance",
+  "context": "Predeclared arm, direction, and intended or retained object; phase records only delimit scoring",
+  "cases": {
+    "two_row_visible_20261120_195917:u4_side": {
+      "task": {
+        "cube_id": 10,
+        "arm": "left",
+        "axis": 0,
+        "sign": 1,
+        "target_path": "/World/Cube_8",
+        "retained": []
+      },
+      "reference_counts": {
+        "NO_TARGET_CONTACT": 1783,
+        "ADVANCING": 1394,
+        "TARGET_CONTACT": 446
+      },
+      "scored_ticks": 3623,
+      "absent_states": [
+        "UNEXPECTED_CONTACT_MOVING",
+        "UNEXPECTED_CONTACT",
+        "BLOCKED_EARLY",
+        "OVERLOAD_WHILE_ADVANCING"
+      ],
+      "first_sustained_physical_target_step": 10064,
+      "retained_contact_ticks": 0,
+      "causal_rgb_neighbor_paths": [
+        "/World/Cube_7",
+        "/World/Cube_8",
+        "/World/Cube_9"
+      ],
+      "runner_error": null,
+      "metrics": {
+        "vision_fk": {
+          "candidate_vs_contact_accuracy": 0.5078664090532707,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.16376892877173305,
+            "ADVANCING": 0.8816355810616929,
+            "TARGET_CONTACT": 0.7152466367713004
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "NO_TARGET_CONTACT": 292,
+              "ADVANCING": 656,
+              "TARGET_CANDIDATE": 835
+            },
+            "ADVANCING": {
+              "NO_TARGET_CONTACT": 126,
+              "ADVANCING": 1229,
+              "TARGET_CANDIDATE": 39
+            },
+            "TARGET_CONTACT": {
+              "ADVANCING": 127,
+              "TARGET_CANDIDATE": 319
+            }
+          },
+          "first_sustained_candidate_step": 8621,
+          "sustained_candidate_timing_s": -12.025,
+          "candidate_without_native_contact_ticks": 874,
+          "first_force_confirmation_candidate_step": null,
+          "force_confirmation_candidate_timing_s": null,
+          "force_confirmation_candidate_ticks": 0,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        },
+        "wrench_fk": {
+          "candidate_vs_contact_accuracy": 0.7333701352470329,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.786315199102636,
+            "ADVANCING": 0.900286944045911,
+            "TARGET_CONTACT": 0.0
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "NO_TARGET_CONTACT": 1402,
+              "UNEXPECTED_CONTACT": 43,
+              "ADVANCING": 332,
+              "UNEXPECTED_CONTACT_MOVING": 6
+            },
+            "ADVANCING": {
+              "UNEXPECTED_CONTACT": 2,
+              "UNEXPECTED_CONTACT_MOVING": 46,
+              "ADVANCING": 1255,
+              "NO_TARGET_CONTACT": 91
+            },
+            "TARGET_CONTACT": {
+              "NO_TARGET_CONTACT": 408,
+              "UNEXPECTED_CONTACT": 38
+            }
+          },
+          "first_sustained_candidate_step": null,
+          "sustained_candidate_timing_s": null,
+          "candidate_without_native_contact_ticks": 0,
+          "first_force_confirmation_candidate_step": null,
+          "force_confirmation_candidate_timing_s": null,
+          "force_confirmation_candidate_ticks": 0,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        },
+        "fusion": {
+          "candidate_vs_contact_accuracy": 0.7159812310240132,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.4750420639371845,
+            "ADVANCING": 0.9332855093256814,
+            "TARGET_CONTACT": 1.0
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "NO_TARGET_CONTACT": 847,
+              "ADVANCING": 338,
+              "TARGET_CANDIDATE": 598
+            },
+            "ADVANCING": {
+              "NO_TARGET_CONTACT": 75,
+              "ADVANCING": 1301,
+              "TARGET_CANDIDATE": 18
+            },
+            "TARGET_CONTACT": {
+              "TARGET_CANDIDATE": 446
+            }
+          },
+          "first_sustained_candidate_step": 9391,
+          "sustained_candidate_timing_s": -5.608333333333333,
+          "candidate_without_native_contact_ticks": 616,
+          "first_force_confirmation_candidate_step": 10085,
+          "force_confirmation_candidate_timing_s": 0.175,
+          "force_confirmation_candidate_ticks": 414,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        }
+      }
+    },
+    "two_row_visible_20261120_195917:u4_rear": {
+      "task": {
+        "cube_id": 10,
+        "arm": "right",
+        "axis": 1,
+        "sign": 1,
+        "target_path": "/World/Environment/wall_back",
+        "retained": [
+          "/World/Cube_8"
+        ]
+      },
+      "reference_counts": {
+        "NO_TARGET_CONTACT": 2519,
+        "ADVANCING": 1406,
+        "TARGET_CONTACT": 118
+      },
+      "scored_ticks": 4043,
+      "absent_states": [
+        "UNEXPECTED_CONTACT_MOVING",
+        "UNEXPECTED_CONTACT",
+        "BLOCKED_EARLY",
+        "OVERLOAD_WHILE_ADVANCING"
+      ],
+      "first_sustained_physical_target_step": 16112,
+      "retained_contact_ticks": 2934,
+      "causal_rgb_neighbor_paths": [
+        "/World/Cube_7",
+        "/World/Cube_8",
+        "/World/Cube_9"
+      ],
+      "runner_error": null,
+      "metrics": {
+        "vision_fk": {
+          "candidate_vs_contact_accuracy": 0.6631214444719268,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.4890829694323144,
+            "ADVANCING": 0.9751066856330014,
+            "TARGET_CONTACT": 0.6610169491525424
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "NO_TARGET_CONTACT": 1232,
+              "ADVANCING": 865,
+              "TARGET_CANDIDATE": 422
+            },
+            "ADVANCING": {
+              "NO_TARGET_CONTACT": 35,
+              "ADVANCING": 1371
+            },
+            "TARGET_CONTACT": {
+              "ADVANCING": 40,
+              "TARGET_CANDIDATE": 78
+            }
+          },
+          "first_sustained_candidate_step": 15341,
+          "sustained_candidate_timing_s": -6.425,
+          "candidate_without_native_contact_ticks": 422,
+          "first_force_confirmation_candidate_step": null,
+          "force_confirmation_candidate_timing_s": null,
+          "force_confirmation_candidate_ticks": 0,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        },
+        "wrench_fk": {
+          "candidate_vs_contact_accuracy": 0.5646796932970567,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.30131004366812225,
+            "ADVANCING": 1.0,
+            "TARGET_CONTACT": 1.0
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "NO_TARGET_CONTACT": 759,
+              "ADVANCING": 11,
+              "TARGET_CANDIDATE": 1749
+            },
+            "ADVANCING": {
+              "ADVANCING": 1406
+            },
+            "TARGET_CONTACT": {
+              "TARGET_CANDIDATE": 118
+            }
+          },
+          "first_sustained_candidate_step": 14363,
+          "sustained_candidate_timing_s": -14.575,
+          "candidate_without_native_contact_ticks": 1749,
+          "first_force_confirmation_candidate_step": null,
+          "force_confirmation_candidate_timing_s": null,
+          "force_confirmation_candidate_ticks": 0,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        },
+        "fusion": {
+          "candidate_vs_contact_accuracy": 0.4390304229532525,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.09964271536323938,
+            "ADVANCING": 1.0,
+            "TARGET_CONTACT": 1.0
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "NO_TARGET_CONTACT": 251,
+              "ADVANCING": 11,
+              "TARGET_CANDIDATE": 2257
+            },
+            "ADVANCING": {
+              "ADVANCING": 1406
+            },
+            "TARGET_CONTACT": {
+              "TARGET_CANDIDATE": 118
+            }
+          },
+          "first_sustained_candidate_step": 13855,
+          "sustained_candidate_timing_s": -18.808333333333334,
+          "candidate_without_native_contact_ticks": 2257,
+          "first_force_confirmation_candidate_step": null,
+          "force_confirmation_candidate_timing_s": null,
+          "force_confirmation_candidate_ticks": 0,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        }
+      }
+    },
+    "plus_half_z_blur:u5_rear": {
+      "task": {
+        "cube_id": 11,
+        "arm": "left",
+        "axis": 1,
+        "sign": 1,
+        "target_path": "/World/Environment/wall_back",
+        "retained": []
+      },
+      "reference_counts": {
+        "NO_TARGET_CONTACT": 3077,
+        "ADVANCING": 1340,
+        "TARGET_CONTACT": 86
+      },
+      "scored_ticks": 4503,
+      "absent_states": [
+        "UNEXPECTED_CONTACT_MOVING",
+        "UNEXPECTED_CONTACT",
+        "BLOCKED_EARLY",
+        "OVERLOAD_WHILE_ADVANCING"
+      ],
+      "first_sustained_physical_target_step": 8017,
+      "retained_contact_ticks": 0,
+      "causal_rgb_neighbor_paths": [
+        "/World/Cube_10",
+        "/World/Cube_7",
+        "/World/Cube_8",
+        "/World/Cube_9"
+      ],
+      "runner_error": null,
+      "metrics": {
+        "vision_fk": {
+          "candidate_vs_contact_accuracy": 0.03930712858094604,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.015924601884952875,
+            "ADVANCING": 0.041791044776119404,
+            "TARGET_CONTACT": 0.8372093023255814
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "NO_TARGET_CONTACT": 49,
+              "UNEXPECTED_CONTACT": 1106,
+              "UNEXPECTED_CONTACT_MOVING": 594,
+              "BLOCKED_EARLY": 798,
+              "ADVANCING": 244,
+              "TARGET_CANDIDATE": 286
+            },
+            "ADVANCING": {
+              "NO_TARGET_CONTACT": 22,
+              "ADVANCING": 56,
+              "UNEXPECTED_CONTACT_MOVING": 1132,
+              "UNEXPECTED_CONTACT": 108,
+              "BLOCKED_EARLY": 22
+            },
+            "TARGET_CONTACT": {
+              "TARGET_CANDIDATE": 72,
+              "ADVANCING": 14
+            }
+          },
+          "first_sustained_candidate_step": 7533,
+          "sustained_candidate_timing_s": -4.033333333333333,
+          "candidate_without_native_contact_ticks": 286,
+          "first_force_confirmation_candidate_step": null,
+          "force_confirmation_candidate_timing_s": null,
+          "force_confirmation_candidate_ticks": 0,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        },
+        "wrench_fk": {
+          "candidate_vs_contact_accuracy": 0.6093715300910504,
+          "coverage": 0.9971130357539418,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.46083847903802405,
+            "ADVANCING": 0.9253731343283582,
+            "TARGET_CONTACT": 1.0
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "UNKNOWN": 13,
+              "UNEXPECTED_CONTACT": 84,
+              "NO_TARGET_CONTACT": 1418,
+              "ADVANCING": 33,
+              "TARGET_CANDIDATE": 1529
+            },
+            "ADVANCING": {
+              "UNEXPECTED_CONTACT": 5,
+              "UNEXPECTED_CONTACT_MOVING": 95,
+              "ADVANCING": 1240
+            },
+            "TARGET_CONTACT": {
+              "TARGET_CANDIDATE": 86
+            }
+          },
+          "first_sustained_candidate_step": 6472,
+          "sustained_candidate_timing_s": -12.875,
+          "candidate_without_native_contact_ticks": 1529,
+          "first_force_confirmation_candidate_step": 8060,
+          "force_confirmation_candidate_timing_s": 0.35833333333333334,
+          "force_confirmation_candidate_ticks": 32,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        },
+        "fusion": {
+          "candidate_vs_contact_accuracy": 0.5676215856095936,
+          "coverage": 0.9971130357539418,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.3818654533636659,
+            "ADVANCING": 0.9664179104477612,
+            "TARGET_CONTACT": 1.0
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "UNKNOWN": 13,
+              "NO_TARGET_CONTACT": 1175,
+              "UNEXPECTED_CONTACT": 48,
+              "ADVANCING": 33,
+              "TARGET_CANDIDATE": 1808
+            },
+            "ADVANCING": {
+              "NO_TARGET_CONTACT": 4,
+              "ADVANCING": 1295,
+              "UNEXPECTED_CONTACT_MOVING": 40,
+              "UNEXPECTED_CONTACT": 1
+            },
+            "TARGET_CONTACT": {
+              "TARGET_CANDIDATE": 86
+            }
+          },
+          "first_sustained_candidate_step": 6167,
+          "sustained_candidate_timing_s": -15.416666666666666,
+          "candidate_without_native_contact_ticks": 1808,
+          "first_force_confirmation_candidate_step": 8055,
+          "force_confirmation_candidate_timing_s": 0.31666666666666665,
+          "force_confirmation_candidate_ticks": 37,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        }
+      }
+    },
+    "plus_15_realign_settled:u5_rear": {
+      "task": {
+        "cube_id": 11,
+        "arm": "left",
+        "axis": 1,
+        "sign": 1,
+        "target_path": "/World/Environment/wall_back",
+        "retained": []
+      },
+      "reference_counts": {
+        "NO_TARGET_CONTACT": 47,
+        "ADVANCING": 529,
+        "OVERLOAD_WHILE_ADVANCING": 1
+      },
+      "scored_ticks": 577,
+      "absent_states": [
+        "TARGET_CONTACT",
+        "UNEXPECTED_CONTACT_MOVING",
+        "UNEXPECTED_CONTACT",
+        "BLOCKED_EARLY"
+      ],
+      "first_sustained_physical_target_step": null,
+      "retained_contact_ticks": 0,
+      "causal_rgb_neighbor_paths": [
+        "/World/Cube_10",
+        "/World/Cube_7",
+        "/World/Cube_8",
+        "/World/Cube_9"
+      ],
+      "runner_error": "upper_B_rear_travel: B wrist envelope exceeded at tick 7247: [{'arm': 'left', 'force_N': 9.271230074731152, 'torque_Nm': 0.3079206288535516, 'wrench_world': [0.08919963996130563, -8.417176919385986, 3.885728146768123, 0.3070767495899099, 0.013371187247104227, 0.018444372758793195]}]",
+      "metrics": {
+        "vision_fk": {
+          "candidate_vs_contact_accuracy": 0.9046793760831889,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.6595744680851063,
+            "ADVANCING": 0.9281663516068053,
+            "OVERLOAD_WHILE_ADVANCING": 0.0
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "NO_TARGET_CONTACT": 31,
+              "ADVANCING": 16
+            },
+            "ADVANCING": {
+              "NO_TARGET_CONTACT": 14,
+              "ADVANCING": 491,
+              "UNEXPECTED_CONTACT_MOVING": 24
+            },
+            "OVERLOAD_WHILE_ADVANCING": {
+              "ADVANCING": 1
+            }
+          },
+          "first_sustained_candidate_step": null,
+          "sustained_candidate_timing_s": null,
+          "candidate_without_native_contact_ticks": 0,
+          "first_force_confirmation_candidate_step": null,
+          "force_confirmation_candidate_timing_s": null,
+          "force_confirmation_candidate_ticks": 0,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        },
+        "wrench_fk": {
+          "candidate_vs_contact_accuracy": 0.8128249566724437,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.1702127659574468,
+            "ADVANCING": 0.8695652173913043,
+            "OVERLOAD_WHILE_ADVANCING": 1.0
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "NO_TARGET_CONTACT": 8,
+              "UNEXPECTED_CONTACT": 39
+            },
+            "ADVANCING": {
+              "UNEXPECTED_CONTACT": 2,
+              "UNEXPECTED_CONTACT_MOVING": 67,
+              "ADVANCING": 460
+            },
+            "OVERLOAD_WHILE_ADVANCING": {
+              "OVERLOAD_WHILE_ADVANCING": 1
+            }
+          },
+          "first_sustained_candidate_step": null,
+          "sustained_candidate_timing_s": null,
+          "candidate_without_native_contact_ticks": 0,
+          "first_force_confirmation_candidate_step": null,
+          "force_confirmation_candidate_timing_s": null,
+          "force_confirmation_candidate_ticks": 0,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        },
+        "fusion": {
+          "candidate_vs_contact_accuracy": 0.9965337954939342,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 1.0,
+            "ADVANCING": 0.996219281663516,
+            "OVERLOAD_WHILE_ADVANCING": 1.0
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "NO_TARGET_CONTACT": 47
+            },
+            "ADVANCING": {
+              "NO_TARGET_CONTACT": 2,
+              "ADVANCING": 527
+            },
+            "OVERLOAD_WHILE_ADVANCING": {
+              "OVERLOAD_WHILE_ADVANCING": 1
+            }
+          },
+          "first_sustained_candidate_step": null,
+          "sustained_candidate_timing_s": null,
+          "candidate_without_native_contact_ticks": 0,
+          "first_force_confirmation_candidate_step": null,
+          "force_confirmation_candidate_timing_s": null,
+          "force_confirmation_candidate_ticks": 0,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        }
+      }
+    },
+    "upper_row_final_physical_line5:u2_reseat": {
+      "task": {
+        "cube_id": 8,
+        "arm": "right",
+        "axis": 1,
+        "sign": 1,
+        "target_path": "/World/Environment/wall_back",
+        "retained": []
+      },
+      "reference_counts": {
+        "NO_TARGET_CONTACT": 520
+      },
+      "scored_ticks": 520,
+      "absent_states": [
+        "ADVANCING",
+        "TARGET_CONTACT",
+        "UNEXPECTED_CONTACT_MOVING",
+        "UNEXPECTED_CONTACT",
+        "BLOCKED_EARLY",
+        "OVERLOAD_WHILE_ADVANCING"
+      ],
+      "first_sustained_physical_target_step": null,
+      "retained_contact_ticks": 0,
+      "causal_rgb_neighbor_paths": [
+        "/World/Cube_7"
+      ],
+      "runner_error": "upper_B_seam_rear_reseat: wrist contact candidate lacks target contact in the independent PhysX audit (0/30, estimated gap 0.44 mm)",
+      "metrics": {
+        "vision_fk": {
+          "candidate_vs_contact_accuracy": 0.5884615384615385,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.5884615384615385
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "NO_TARGET_CONTACT": 306,
+              "ADVANCING": 190,
+              "TARGET_CANDIDATE": 24
+            }
+          },
+          "first_sustained_candidate_step": 16825,
+          "sustained_candidate_timing_s": null,
+          "candidate_without_native_contact_ticks": 24,
+          "first_force_confirmation_candidate_step": null,
+          "force_confirmation_candidate_timing_s": null,
+          "force_confirmation_candidate_ticks": 0,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        },
+        "wrench_fk": {
+          "candidate_vs_contact_accuracy": 0.0,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.0
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "TARGET_CANDIDATE": 489,
+              "ADVANCING": 31
+            }
+          },
+          "first_sustained_candidate_step": 16317,
+          "sustained_candidate_timing_s": null,
+          "candidate_without_native_contact_ticks": 489,
+          "first_force_confirmation_candidate_step": null,
+          "force_confirmation_candidate_timing_s": null,
+          "force_confirmation_candidate_ticks": 0,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        },
+        "fusion": {
+          "candidate_vs_contact_accuracy": 0.0,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.0
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "TARGET_CANDIDATE": 489,
+              "ADVANCING": 31
+            }
+          },
+          "first_sustained_candidate_step": 16317,
+          "sustained_candidate_timing_s": null,
+          "candidate_without_native_contact_ticks": 489,
+          "first_force_confirmation_candidate_step": null,
+          "force_confirmation_candidate_timing_s": null,
+          "force_confirmation_candidate_ticks": 0,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        }
+      }
+    },
+    "plus_125_live_selection:u5_rear": {
+      "task": {
+        "cube_id": 11,
+        "arm": "left",
+        "axis": 1,
+        "sign": 1,
+        "target_path": "/World/Environment/wall_back",
+        "retained": []
+      },
+      "reference_counts": {
+        "NO_TARGET_CONTACT": 2606,
+        "ADVANCING": 1470,
+        "TARGET_CONTACT": 177
+      },
+      "scored_ticks": 4253,
+      "absent_states": [
+        "UNEXPECTED_CONTACT_MOVING",
+        "UNEXPECTED_CONTACT",
+        "BLOCKED_EARLY",
+        "OVERLOAD_WHILE_ADVANCING"
+      ],
+      "first_sustained_physical_target_step": 10783,
+      "retained_contact_ticks": 0,
+      "causal_rgb_neighbor_paths": [
+        "/World/Cube_10",
+        "/World/Cube_7",
+        "/World/Cube_8",
+        "/World/Cube_9"
+      ],
+      "runner_error": null,
+      "metrics": {
+        "vision_fk": {
+          "candidate_vs_contact_accuracy": 0.4947096167411239,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.30775134305448965,
+            "ADVANCING": 0.8074829931972789,
+            "TARGET_CONTACT": 0.6497175141242938
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "NO_TARGET_CONTACT": 802,
+              "ADVANCING": 483,
+              "UNEXPECTED_CONTACT_MOVING": 420,
+              "UNEXPECTED_CONTACT": 535,
+              "BLOCKED_EARLY": 98,
+              "TARGET_CANDIDATE": 268
+            },
+            "ADVANCING": {
+              "ADVANCING": 1187,
+              "NO_TARGET_CONTACT": 112,
+              "UNEXPECTED_CONTACT_MOVING": 122,
+              "UNEXPECTED_CONTACT": 27,
+              "BLOCKED_EARLY": 2,
+              "TARGET_CANDIDATE": 20
+            },
+            "TARGET_CONTACT": {
+              "ADVANCING": 62,
+              "TARGET_CANDIDATE": 115
+            }
+          },
+          "first_sustained_candidate_step": 10205,
+          "sustained_candidate_timing_s": -4.816666666666666,
+          "candidate_without_native_contact_ticks": 288,
+          "first_force_confirmation_candidate_step": null,
+          "force_confirmation_candidate_timing_s": null,
+          "force_confirmation_candidate_ticks": 0,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        },
+        "wrench_fk": {
+          "candidate_vs_contact_accuracy": 0.6249706089818952,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.4508825786646201,
+            "ADVANCING": 0.8884353741496599,
+            "TARGET_CONTACT": 1.0
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "NO_TARGET_CONTACT": 1175,
+              "UNEXPECTED_CONTACT": 77,
+              "ADVANCING": 8,
+              "UNEXPECTED_CONTACT_MOVING": 2,
+              "TARGET_CANDIDATE": 1344
+            },
+            "ADVANCING": {
+              "UNEXPECTED_CONTACT": 2,
+              "UNEXPECTED_CONTACT_MOVING": 158,
+              "ADVANCING": 1306,
+              "NO_TARGET_CONTACT": 2,
+              "TARGET_CANDIDATE": 2
+            },
+            "TARGET_CONTACT": {
+              "TARGET_CANDIDATE": 177
+            }
+          },
+          "first_sustained_candidate_step": 9355,
+          "sustained_candidate_timing_s": -11.9,
+          "candidate_without_native_contact_ticks": 1346,
+          "first_force_confirmation_candidate_step": 10842,
+          "force_confirmation_candidate_timing_s": 0.49166666666666664,
+          "force_confirmation_candidate_ticks": 107,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        },
+        "fusion": {
+          "candidate_vs_contact_accuracy": 0.5946390782976723,
+          "coverage": 1.0,
+          "candidate_recall": {
+            "NO_TARGET_CONTACT": 0.3465080583269378,
+            "ADVANCING": 0.9857142857142858,
+            "TARGET_CONTACT": 1.0
+          },
+          "confusion": {
+            "NO_TARGET_CONTACT": {
+              "NO_TARGET_CONTACT": 903,
+              "ADVANCING": 9,
+              "UNEXPECTED_CONTACT": 16,
+              "UNEXPECTED_CONTACT_MOVING": 1,
+              "TARGET_CANDIDATE": 1677
+            },
+            "ADVANCING": {
+              "NO_TARGET_CONTACT": 4,
+              "ADVANCING": 1449,
+              "UNEXPECTED_CONTACT_MOVING": 15,
+              "TARGET_CANDIDATE": 2
+            },
+            "TARGET_CONTACT": {
+              "TARGET_CANDIDATE": 177
+            }
+          },
+          "first_sustained_candidate_step": 8920,
+          "sustained_candidate_timing_s": -15.525,
+          "candidate_without_native_contact_ticks": 1679,
+          "first_force_confirmation_candidate_step": 10840,
+          "force_confirmation_candidate_timing_s": 0.475,
+          "force_confirmation_candidate_ticks": 109,
+          "force_confirmation_candidate_without_native_contact_ticks": 0
+        }
+      }
+    }
+  }
+}

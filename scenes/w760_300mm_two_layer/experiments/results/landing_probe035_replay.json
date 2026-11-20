@@ -1,0 +1,115 @@
+{
+  "mode": "Causal replay on recorded excitation, no simulated command was changed",
+  "filters": {
+    "window_s": 0.5,
+    "average_end_s": 0.06666666666666667,
+    "command_range_m": [
+      4e-05,
+      0.00013
+    ],
+    "max_encoder_follow_fraction": 0.35,
+    "min_axial_force_rise_N": 0.3,
+    "camera_geometry_band_m": 0.002,
+    "exploratory_terminal_gap_m": {
+      "min": -0.002,
+      "wall_max": 0.00045,
+      "neighbor_max": 0.0018
+    }
+  },
+  "threshold_origin": "FR3 re-seat controller window, displacement and force-rise thresholds; fixed maximum from lateral probe travel",
+  "exploratory_neighbor_geometry": "Reuse separating-axis clearance for the nominated neighbor with the same terminal bounds and response rule",
+  "truth_window_s": 0.25,
+  "truth_reference": "At least 80% of trailing frames have both the expected PhysX target and the active cup pair loaded",
+  "robot_model_sha256": {
+    "fr3.urdf": "3b22a3f5f4707e91eacf9491ce4b273ab380bf3c4a6b06d4c63859b380e6b2f6",
+    "fr3_robot_description.yaml": "573442a5993f698f8e1052f1c2c299653da44495654a806baca6374e105f7201"
+  },
+  "cases": [
+    {
+      "task": {
+        "cube_id": 11,
+        "arm": "left",
+        "axis": 1,
+        "sign": 1,
+        "target_path": "/World/Environment/wall_back",
+        "retained": []
+      },
+      "run": "probe035_passive",
+      "phase": "upper_B_rear",
+      "frames": 4532,
+      "first_sustained_physical_target_step": 8020,
+      "physical_target_frames": 90,
+      "near_target_forward_command_windows": 2019,
+      "bounded_excitation_windows": 1982,
+      "maximum_observed_command_advance_m": 0.01056704440607864,
+      "maximum_base_fk_variation_m": 1.1102230246251565e-16,
+      "probe_candidates": 16,
+      "candidates_with_sustained_target": 16,
+      "passive_candidates": 1969,
+      "passive_candidates_with_sustained_target": 67,
+      "first_probe_candidate": {
+        "physics_step": 8034,
+        "time_s": 66.9666701592505,
+        "command_advance_m": 4.9124999995930896e-05,
+        "encoder_advance_m": 1.6195647894123866e-05,
+        "axial_force_rise_N": 1.0829056799583636,
+        "native_target_steps": 30,
+        "estimated_gap_m": 9.530398083996972e-05
+      },
+      "first_candidate_without_sustained_target": null,
+      "terminal_probe_candidates": 16,
+      "terminal_candidates_with_sustained_target": 16,
+      "first_terminal_probe_candidate": {
+        "physics_step": 8034,
+        "time_s": 66.9666701592505,
+        "command_advance_m": 4.9124999995930896e-05,
+        "encoder_advance_m": 1.6195647894123866e-05,
+        "axial_force_rise_N": 1.0829056799583636,
+        "native_target_steps": 30,
+        "estimated_gap_m": 9.530398083996972e-05
+      },
+      "first_terminal_candidate_without_sustained_target": null,
+      "sat_neighbor_probe_candidates": 0,
+      "sat_neighbor_candidates_with_sustained_target": 0,
+      "first_sat_neighbor_probe_candidate": null,
+      "first_sat_neighbor_candidate_without_sustained_target": null,
+      "logged_active_probe": null,
+      "run_error": null
+    },
+    {
+      "task": {
+        "cube_id": 11,
+        "arm": "left",
+        "axis": 1,
+        "sign": 1,
+        "target_path": "/World/Environment/wall_back",
+        "retained": []
+      },
+      "run": "probe035_active",
+      "phase": "upper_B_rear",
+      "frames": 600,
+      "first_sustained_physical_target_step": null,
+      "physical_target_frames": 0,
+      "near_target_forward_command_windows": 0,
+      "bounded_excitation_windows": 0,
+      "maximum_observed_command_advance_m": 0.010567064394296166,
+      "maximum_base_fk_variation_m": 2.220446049250313e-16,
+      "probe_candidates": 0,
+      "candidates_with_sustained_target": 0,
+      "passive_candidates": 0,
+      "passive_candidates_with_sustained_target": 0,
+      "first_probe_candidate": null,
+      "first_candidate_without_sustained_target": null,
+      "terminal_probe_candidates": 0,
+      "terminal_candidates_with_sustained_target": 0,
+      "first_terminal_probe_candidate": null,
+      "first_terminal_candidate_without_sustained_target": null,
+      "sat_neighbor_probe_candidates": 0,
+      "sat_neighbor_candidates_with_sustained_target": 0,
+      "first_sat_neighbor_probe_candidate": null,
+      "first_sat_neighbor_candidate_without_sustained_target": null,
+      "logged_active_probe": null,
+      "run_error": "upper_B_rear_travel: B wrist envelope exceeded at tick 4154: [{'arm': 'left', 'force_N': 9.316072893637788, 'torque_Nm': 0.3175225220255308, 'wrench_world': [0.4308998930136607, -8.408012171141264, 3.988592580311247, 0.3127133988661538, -0.010365334406197092, -0.054068863550838384]}]"
+    }
+  ]
+}

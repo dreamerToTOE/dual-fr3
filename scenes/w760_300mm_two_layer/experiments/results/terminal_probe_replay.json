@@ -1,0 +1,162 @@
+{
+  "mode": "Causal replay on recorded excitation, no simulated command was changed",
+  "filters": {
+    "window_s": 0.5,
+    "average_end_s": 0.06666666666666667,
+    "command_range_m": [
+      4e-05,
+      0.00013
+    ],
+    "max_encoder_follow_fraction": 0.35,
+    "min_axial_force_rise_N": 0.3,
+    "camera_geometry_band_m": 0.002,
+    "exploratory_terminal_gap_m": {
+      "min": -0.002,
+      "wall_max": 0.00045,
+      "neighbor_max": 0.0018
+    }
+  },
+  "threshold_origin": "FR3 re-seat controller window, displacement and force-rise thresholds; fixed maximum from lateral probe travel",
+  "exploratory_neighbor_geometry": "Reuse separating-axis clearance for the nominated neighbor with the same terminal bounds and response rule",
+  "truth_window_s": 0.25,
+  "truth_reference": "At least 80% of trailing frames have both the expected PhysX target and the active cup pair loaded",
+  "robot_model_sha256": {
+    "fr3.urdf": "3b22a3f5f4707e91eacf9491ce4b273ab380bf3c4a6b06d4c63859b380e6b2f6",
+    "fr3_robot_description.yaml": "573442a5993f698f8e1052f1c2c299653da44495654a806baca6374e105f7201"
+  },
+  "cases": [
+    {
+      "task": {
+        "cube_id": 11,
+        "arm": "left",
+        "axis": 1,
+        "sign": 1,
+        "target_path": "/World/Environment/wall_back",
+        "retained": []
+      },
+      "run": "probe_terminal_passive",
+      "phase": "upper_B_rear",
+      "frames": 1096,
+      "first_sustained_physical_target_step": 2067,
+      "physical_target_frames": 165,
+      "near_target_forward_command_windows": 1036,
+      "bounded_excitation_windows": 932,
+      "maximum_observed_command_advance_m": 6.545833335730444e-05,
+      "maximum_base_fk_variation_m": 2.220446049250313e-16,
+      "probe_candidates": 9,
+      "candidates_with_sustained_target": 9,
+      "passive_candidates": 983,
+      "passive_candidates_with_sustained_target": 142,
+      "first_probe_candidate": {
+        "physics_step": 2096,
+        "time_s": 17.483334245160222,
+        "command_advance_m": 4.780208330218416e-05,
+        "encoder_advance_m": 1.3358341115266015e-05,
+        "axial_force_rise_N": 1.9089597545558794,
+        "native_target_steps": 30,
+        "estimated_gap_m": 8.417270824957745e-05
+      },
+      "first_candidate_without_sustained_target": null,
+      "terminal_probe_candidates": 9,
+      "terminal_candidates_with_sustained_target": 9,
+      "first_terminal_probe_candidate": {
+        "physics_step": 2096,
+        "time_s": 17.483334245160222,
+        "command_advance_m": 4.780208330218416e-05,
+        "encoder_advance_m": 1.3358341115266015e-05,
+        "axial_force_rise_N": 1.9089597545558794,
+        "native_target_steps": 30,
+        "estimated_gap_m": 8.417270824957745e-05
+      },
+      "first_terminal_candidate_without_sustained_target": null,
+      "sat_neighbor_probe_candidates": 0,
+      "sat_neighbor_candidates_with_sustained_target": 0,
+      "first_sat_neighbor_probe_candidate": null,
+      "first_sat_neighbor_candidate_without_sustained_target": null,
+      "logged_active_probe": null,
+      "run_error": null
+    },
+    {
+      "task": {
+        "cube_id": 11,
+        "arm": "left",
+        "axis": 1,
+        "sign": 1,
+        "target_path": "/World/Environment/wall_back",
+        "retained": []
+      },
+      "run": "probe_terminal_active",
+      "phase": "upper_B_rear",
+      "frames": 1029,
+      "first_sustained_physical_target_step": 2067,
+      "physical_target_frames": 98,
+      "near_target_forward_command_windows": 969,
+      "bounded_excitation_windows": 953,
+      "maximum_observed_command_advance_m": 6.545833335730444e-05,
+      "maximum_base_fk_variation_m": 2.220446049250313e-16,
+      "probe_candidates": 31,
+      "candidates_with_sustained_target": 31,
+      "passive_candidates": 916,
+      "passive_candidates_with_sustained_target": 75,
+      "first_probe_candidate": {
+        "physics_step": 2095,
+        "time_s": 17.47500091139227,
+        "command_advance_m": 5.4916666662241376e-05,
+        "encoder_advance_m": 1.701596878334044e-05,
+        "axial_force_rise_N": 2.0003848289077633,
+        "native_target_steps": 30,
+        "estimated_gap_m": 0.0001299517828324548
+      },
+      "first_candidate_without_sustained_target": null,
+      "terminal_probe_candidates": 31,
+      "terminal_candidates_with_sustained_target": 31,
+      "first_terminal_probe_candidate": {
+        "physics_step": 2095,
+        "time_s": 17.47500091139227,
+        "command_advance_m": 5.4916666662241376e-05,
+        "encoder_advance_m": 1.701596878334044e-05,
+        "axial_force_rise_N": 2.0003848289077633,
+        "native_target_steps": 30,
+        "estimated_gap_m": 0.0001299517828324548
+      },
+      "first_terminal_candidate_without_sustained_target": null,
+      "sat_neighbor_probe_candidates": 0,
+      "sat_neighbor_candidates_with_sustained_target": 0,
+      "first_sat_neighbor_probe_candidate": null,
+      "first_sat_neighbor_candidate_without_sustained_target": null,
+      "logged_active_probe": {
+        "first_tick": 1113,
+        "last_tick": 2141,
+        "logged_steps": 1029,
+        "native_target_steps": 98,
+        "native_target_steps_at_end": 30,
+        "final_window_logged_steps": 30,
+        "terminal_probe_candidates": 31,
+        "terminal_candidates_with_sustained_target": 31,
+        "max_command_fk_difference_m": 1.9384494009955233e-13,
+        "runtime_response": {
+          "commanded_advance_mm": 0.052249999995535035,
+          "encoder_face_advance_mm": -0.01496251532273618,
+          "force_rise_N": 1.1028401922884514,
+          "moving_resistance_reference_N": 6.62231921509395,
+          "held_at_soft_load_envelope": true,
+          "soft_hold_unloading_mm": 0.0
+        },
+        "sensor_candidate": {
+          "physics_step": 2141,
+          "estimated_gap_m": 4.962136420438856e-05,
+          "response": {
+            "commanded_advance_mm": 0.052249999995535035,
+            "encoder_face_advance_mm": -0.01496251532273618,
+            "force_rise_N": 1.1028401922884514,
+            "moving_resistance_reference_N": 6.62231921509395,
+            "held_at_soft_load_envelope": true
+          },
+          "reference_frames": 30,
+          "native_target_frames": 30
+        }
+      },
+      "run_error": null
+    }
+  ]
+}

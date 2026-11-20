@@ -1,0 +1,351 @@
+{
+  "scene_status": "PASS_W760_UPPER_ROW",
+  "motion_blur_observer": {
+    "shutter_ms": 200.0,
+    "method": "time-weighted causal integration of sampled intensity",
+    "paired_frames": 1149,
+    "sharp_detections": 1149,
+    "blurred_detections": 1149,
+    "blurred_planar_updates": 826
+  },
+  "runner_snapshot_sha256": "47f91c908a73eceac994665042ca3769ec2ceef3b38dc54b93b0d557b247321e",
+  "inputs": [
+    "vision/blurred_camera.jsonl",
+    "vision/comparison.jsonl",
+    "vision/metadata.json",
+    "contact_states/sensor_inputs.jsonl.gz",
+    "contact_states/reference.jsonl.gz"
+  ],
+  "methods": {
+    "pairing": "Distinct native and shadow frame IDs matched at the same exposure end. Use only frames with a complete exposure composite for paired statistics.",
+    "pose_reference": "World XYZ and planar yaw ground truth linearly interpolated at each stream-specific capture timestamp. Planar yaw uses the middle accepted optical observation.",
+    "moving_subset": "Travel exposures with measured forward +Y displacement of at least 0.4 mm across the 200 ms window (at least 2 mm/s mean).",
+    "pixel_motion": "Project the model marker center onto the reported camera calibration at the beginning/end of the 200 ms integration window.",
+    "pose_value_order": [
+      "sharp",
+      "blurred"
+    ],
+    "planar_pose_axis_order": [
+      "x_mm",
+      "y_mm",
+      "yaw_deg"
+    ]
+  },
+  "windows": {
+    "entire_rear_push": {
+      "eligible_frames": 567,
+      "paired_frames": 567,
+      "detected_frames": {
+        "sharp": 567,
+        "blurred": 567
+      },
+      "supported_planar_poses": {
+        "sharp": 567,
+        "blurred": 567
+      },
+      "window_motion_xyz_mm": {
+        "n": 567,
+        "rmse": [
+          0.0197,
+          1.2388,
+          0.0005
+        ],
+        "median_abs": [
+          0.0015,
+          0.0298,
+          0.0003
+        ],
+        "p95_abs": [
+          0.0135,
+          3.9947,
+          0.0011
+        ]
+      },
+      "projected_motion_px": {
+        "n": 567,
+        "rmse": 0.5282,
+        "median_abs": 0.0129,
+        "p95_abs": 1.7091
+      },
+      "raw_xyz_norm_error_mm": {
+        "n": 567,
+        "rmse": [
+          26.4504,
+          26.095
+        ],
+        "median_abs": [
+          26.3237,
+          26.2485
+        ],
+        "p95_abs": [
+          29.5529,
+          29.1271
+        ]
+      },
+      "planar_xy_mm_yaw_deg": {
+        "n": 567,
+        "rmse": [
+          [
+            0.872,
+            1.3787,
+            0.1461
+          ],
+          [
+            0.8723,
+            1.3743,
+            0.1458
+          ]
+        ],
+        "median_abs": [
+          [
+            0.8556,
+            1.292,
+            0.1209
+          ],
+          [
+            0.8545,
+            1.293,
+            0.1208
+          ]
+        ],
+        "p95_abs": [
+          [
+            1.0542,
+            2.1181,
+            0.2495
+          ],
+          [
+            1.0517,
+            2.1023,
+            0.249
+          ]
+        ]
+      },
+      "optical_pose_age_s_at_delivery": {
+        "n": 567,
+        "rmse": [
+          0.1,
+          0.2
+        ],
+        "median_abs": [
+          0.1,
+          0.2
+        ],
+        "p95_abs": [
+          0.1,
+          0.2
+        ]
+      }
+    },
+    "travel": {
+      "eligible_frames": 567,
+      "paired_frames": 567,
+      "detected_frames": {
+        "sharp": 567,
+        "blurred": 567
+      },
+      "supported_planar_poses": {
+        "sharp": 567,
+        "blurred": 567
+      },
+      "window_motion_xyz_mm": {
+        "n": 567,
+        "rmse": [
+          0.0197,
+          1.2388,
+          0.0005
+        ],
+        "median_abs": [
+          0.0015,
+          0.0298,
+          0.0003
+        ],
+        "p95_abs": [
+          0.0135,
+          3.9947,
+          0.0011
+        ]
+      },
+      "projected_motion_px": {
+        "n": 567,
+        "rmse": 0.5282,
+        "median_abs": 0.0129,
+        "p95_abs": 1.7091
+      },
+      "raw_xyz_norm_error_mm": {
+        "n": 567,
+        "rmse": [
+          26.4504,
+          26.095
+        ],
+        "median_abs": [
+          26.3237,
+          26.2485
+        ],
+        "p95_abs": [
+          29.5529,
+          29.1271
+        ]
+      },
+      "planar_xy_mm_yaw_deg": {
+        "n": 567,
+        "rmse": [
+          [
+            0.872,
+            1.3787,
+            0.1461
+          ],
+          [
+            0.8723,
+            1.3743,
+            0.1458
+          ]
+        ],
+        "median_abs": [
+          [
+            0.8556,
+            1.292,
+            0.1209
+          ],
+          [
+            0.8545,
+            1.293,
+            0.1208
+          ]
+        ],
+        "p95_abs": [
+          [
+            1.0542,
+            2.1181,
+            0.2495
+          ],
+          [
+            1.0517,
+            2.1023,
+            0.249
+          ]
+        ]
+      },
+      "optical_pose_age_s_at_delivery": {
+        "n": 567,
+        "rmse": [
+          0.1,
+          0.2
+        ],
+        "median_abs": [
+          0.1,
+          0.2
+        ],
+        "p95_abs": [
+          0.1,
+          0.2
+        ]
+      }
+    },
+    "travel_gt_2_mm_s": {
+      "eligible_frames": 72,
+      "paired_frames": 72,
+      "detected_frames": {
+        "sharp": 72,
+        "blurred": 72
+      },
+      "supported_planar_poses": {
+        "sharp": 72,
+        "blurred": 72
+      },
+      "window_motion_xyz_mm": {
+        "n": 72,
+        "rmse": [
+          0.0529,
+          3.4629,
+          0.0008
+        ],
+        "median_abs": [
+          0.0062,
+          3.5789,
+          0.0005
+        ],
+        "p95_abs": [
+          0.1534,
+          4.7778,
+          0.0016
+        ]
+      },
+      "projected_motion_px": {
+        "n": 72,
+        "rmse": 1.4762,
+        "median_abs": 1.5266,
+        "p95_abs": 2.0386
+      },
+      "raw_xyz_norm_error_mm": {
+        "n": 72,
+        "rmse": [
+          25.9884,
+          23.2576
+        ],
+        "median_abs": [
+          24.6422,
+          24.1009
+        ],
+        "p95_abs": [
+          33.2323,
+          29.3695
+        ]
+      },
+      "planar_xy_mm_yaw_deg": {
+        "n": 72,
+        "rmse": [
+          [
+            1.0146,
+            2.0742,
+            0.2392
+          ],
+          [
+            1.019,
+            2.0452,
+            0.239
+          ]
+        ],
+        "median_abs": [
+          [
+            0.9618,
+            2.0282,
+            0.1815
+          ],
+          [
+            0.9964,
+            2.0303,
+            0.1659
+          ]
+        ],
+        "p95_abs": [
+          [
+            1.2776,
+            2.5841,
+            0.4447
+          ],
+          [
+            1.2474,
+            2.4889,
+            0.4538
+          ]
+        ]
+      },
+      "optical_pose_age_s_at_delivery": {
+        "n": 72,
+        "rmse": [
+          0.1,
+          0.2
+        ],
+        "median_abs": [
+          0.1,
+          0.2
+        ],
+        "p95_abs": [
+          0.1,
+          0.2
+        ]
+      }
+    }
+  }
+}

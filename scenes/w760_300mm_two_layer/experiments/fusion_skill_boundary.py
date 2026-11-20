@@ -150,6 +150,8 @@ class Observer:
             other, axes = target
             plane = other[axis] - sign * half * np.abs(axes[axis]).sum()
         gap = float(sign * (plane - inferred) - radius)
+        target_sat_gap = (neighbor_clearance(xy, yaw, {task.target_path: target}, half)
+                          if target is not None and xy is not None else None)
         self.positions.append(inferred)
         advance = None if len(self.positions) < self.positions.maxlen else (
             sign * (self.positions[-1] - self.positions[0]))
@@ -193,6 +195,7 @@ class Observer:
                        and force_rise >= (1. if wall else .60))
         self.provisional_force_steps = self.provisional_force_steps + 1 if loaded_stop else 0
         return {"state": state, "target_gap_m": gap, "predicted_advance_m": advance,
+                "target_sat_gap_m": target_sat_gap,
                 "camera_fresh": optical_fresh, "force_rise_N": force_rise,
                 "force_confirmation_candidate": self.provisional_force_steps >= self.load_confirm_steps}
 

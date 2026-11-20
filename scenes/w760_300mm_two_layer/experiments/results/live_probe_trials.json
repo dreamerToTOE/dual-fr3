@@ -1,0 +1,162 @@
+{
+  "cases": {
+    "probe035_passive": {
+      "status": "PASS_W760_UPPER_ROW",
+      "scope": "from_landing",
+      "terminal_source_step": null,
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "runner_snapshot_sha256": "dab019d9bf4d7af151538efd85c047f9305efd8565a2e0b3e84ed89a6557e076",
+      "experiment": {
+        "requested_delta_yaw_deg": 0.35,
+        "initial_orientation_wxyz": [
+          0.999995657811286,
+          -1.5331137826593175e-07,
+          2.5315287740126695e-07,
+          0.002948811788558944
+        ],
+        "vertical_force_feedback": true,
+        "active_rear_probe": false
+      },
+      "probe_executed": false,
+      "peak_wrist_N": 8.919092773880623,
+      "wrist_cutoff_step": null,
+      "native_target_hold_steps": 30,
+      "stable_support": {
+        "positive_steps": 60,
+        "median_contact_impulse_Ns": 0.1021470827895822,
+        "samples": 60
+      },
+      "time_from_rear_start_to_confirmation_sim_s": 37.76666666666667,
+      "sensor_probe_candidate": null,
+      "unexpected_robot_contact_count": 0,
+      "error": null
+    },
+    "probe035_active": {
+      "status": "STOPPED",
+      "scope": "from_landing",
+      "terminal_source_step": null,
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "runner_snapshot_sha256": "44fbc829af4361275dd7ea4dc87985b9091f0e33e98fb45c5351fa3656ffb593",
+      "experiment": {
+        "requested_delta_yaw_deg": 0.35,
+        "initial_orientation_wxyz": [
+          0.999995657811286,
+          -1.5331137826593175e-07,
+          2.5315287740126695e-07,
+          0.002948811788558944
+        ],
+        "vertical_force_feedback": true,
+        "active_rear_probe": true
+      },
+      "probe_executed": false,
+      "peak_wrist_N": 9.316072893637788,
+      "wrist_cutoff_step": 4154,
+      "native_target_hold_steps": null,
+      "stable_support": null,
+      "time_from_rear_start_to_confirmation_sim_s": null,
+      "sensor_probe_candidate": null,
+      "unexpected_robot_contact_count": 0,
+      "error": "upper_B_rear_travel: B wrist envelope exceeded at tick 4154: [{'arm': 'left', 'force_N': 9.316072893637788, 'torque_Nm': 0.3175225220255308, 'wrench_world': [0.4308998930136607, -8.408012171141264, 3.988592580311247, 0.3127133988661538, -0.010365334406197092, -0.054068863550838384]}]"
+    },
+    "probe050_active": {
+      "status": "STOPPED",
+      "scope": "from_landing",
+      "terminal_source_step": null,
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "runner_snapshot_sha256": "44fbc829af4361275dd7ea4dc87985b9091f0e33e98fb45c5351fa3656ffb593",
+      "experiment": {
+        "requested_delta_yaw_deg": 0.5,
+        "initial_orientation_wxyz": [
+          0.9999909410941327,
+          -1.536426231654801e-07,
+          2.5295197644843737e-07,
+          0.004257800143468486
+        ],
+        "vertical_force_feedback": true,
+        "active_rear_probe": true
+      },
+      "probe_executed": false,
+      "peak_wrist_N": 9.138951225092876,
+      "wrist_cutoff_step": 4171,
+      "native_target_hold_steps": null,
+      "stable_support": null,
+      "time_from_rear_start_to_confirmation_sim_s": null,
+      "sensor_probe_candidate": null,
+      "unexpected_robot_contact_count": 0,
+      "error": "upper_B_rear_travel: B wrist envelope exceeded at tick 4171: [{'arm': 'left', 'force_N': 9.138951225092876, 'torque_Nm': 0.3103805297715081, 'wrench_world': [0.47886561550078705, -8.271573945145015, 3.8564467696204203, 0.3087030280647545, 0.0073813407588323166, -0.03136924502590695]}]"
+    },
+    "probe_terminal_passive": {
+      "status": "PASS_W760_UPPER_ROW",
+      "scope": "terminal_resume",
+      "terminal_source_step": 7002,
+      "checkpoint_sha256": "cfcdc5a66d0640bcb62504056f6b5433f003186fa3e925aab63c30411e4ae8e5",
+      "runner_snapshot_sha256": "3fdb1c6145f55a13b690829b666bf80493a35d119449bafcdebea81f72b63b8b",
+      "experiment": {
+        "requested_delta_yaw_deg": 0.0,
+        "initial_orientation_wxyz": [
+          0.999999474875186,
+          -1.623257976642409e-05,
+          4.29437618862325e-06,
+          0.0010246791759984763
+        ],
+        "vertical_force_feedback": false,
+        "active_rear_probe": false
+      },
+      "probe_executed": false,
+      "peak_wrist_N": 7.621321601216119,
+      "wrist_cutoff_step": null,
+      "native_target_hold_steps": 30,
+      "stable_support": {
+        "positive_steps": 60,
+        "median_contact_impulse_Ns": 0.10218849213903121,
+        "samples": 60
+      },
+      "time_from_rear_start_to_confirmation_sim_s": 9.133333333333331,
+      "sensor_probe_candidate": null,
+      "unexpected_robot_contact_count": 0,
+      "error": null
+    },
+    "probe_terminal_active": {
+      "status": "PASS_W760_UPPER_ROW",
+      "scope": "terminal_resume",
+      "terminal_source_step": 7002,
+      "checkpoint_sha256": "ba4b615a16ab12a0afa0fd3b88097c43bffbff9203f2740517087daebccb79a5",
+      "runner_snapshot_sha256": "60dbb4661b1eaae70a4175c4bbaef25731707d7810084cfc2892fef7047a110e",
+      "experiment": {
+        "requested_delta_yaw_deg": 0.0,
+        "initial_orientation_wxyz": [
+          0.999999474875186,
+          -1.623257976642409e-05,
+          4.29437618862325e-06,
+          0.0010246791759984763
+        ],
+        "vertical_force_feedback": false,
+        "active_rear_probe": true
+      },
+      "probe_executed": true,
+      "peak_wrist_N": 8.01923572941475,
+      "wrist_cutoff_step": null,
+      "native_target_hold_steps": 30,
+      "stable_support": {
+        "positive_steps": 60,
+        "median_contact_impulse_Ns": 0.10219264292814607,
+        "samples": 60
+      },
+      "time_from_rear_start_to_confirmation_sim_s": 8.574999999999998,
+      "sensor_probe_candidate": {
+        "time_s": 17.841666666666665,
+        "estimated_gap_m": 4.962136420438856e-05,
+        "commanded_advance_mm": 0.052249999995535035,
+        "encoder_face_advance_mm": -0.01496251532273618,
+        "force_rise_N": 1.1028401922884514,
+        "moving_resistance_reference_N": 6.62231921509395,
+        "held_at_soft_load_envelope": true
+      },
+      "unexpected_robot_contact_count": 0,
+      "error": null
+    }
+  },
+  "active_trace_rows": 1030,
+  "terminal_checkpoint_note": "Only source_run provenance changed from a local path to an experiment name between terminal trials. Physical checkpoint fields are identical.",
+  "truth_definition": "Current PhysX step target reaction impulse > 1e-5 N s. Reference only."
+}

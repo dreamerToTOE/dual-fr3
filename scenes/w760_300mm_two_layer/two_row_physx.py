@@ -255,6 +255,7 @@ def main():
     parser.add_argument("--upper5-yaw-deg", type=float, help="Add world-Z yaw to the measured upper-5 landing pose")
     parser.add_argument("--upper5-z-unload", action="store_true", help="Test vertical force feedback during the upper-5 straight push")
     parser.add_argument("--upper5-blur-ms", type=float, help="Also detect ArUco on a causal D455 exposure composite")
+    parser.add_argument("--upper5-active-probe", action="store_true", help="Record the active rear-wall probing experiment")
     parser.add_argument("--stop-after-front", type=int, choices=range(1, 6))
     args = parser.parse_args()
     checkpoint = {}
@@ -267,9 +268,12 @@ def main():
         parser.error("The requested stopping slot is already complete in the checkpoint")
     first_id = FRONT_IDS[front-1] if front < 6 else 6 + upper
     release = checkpoint.get("front_landed") or checkpoint.get("landed")
+    terminal = (release or {}).get("terminal_probe")
+    if terminal is not None and (front != 6 or upper != 5 or args.upper5_yaw_deg not in (None, 0.)):
+        parser.error("A terminal probe checkpoint requires upper slot 5 with its measured orientation")
     experiment = None
-    if args.upper5_z_unload and args.upper5_yaw_deg is None:
-        parser.error("--upper5-z-unload requires an explicit --upper5-yaw-deg trial")
+    if (args.upper5_z_unload or args.upper5_active_probe) and args.upper5_yaw_deg is None:
+        parser.error("Upper-5 force experiments require an explicit --upper5-yaw-deg trial")
     if args.upper5_blur_ms is not None:
         if args.upper5_yaw_deg is None or not math.isfinite(args.upper5_blur_ms) or args.upper5_blur_ms <= 0:
             parser.error("--upper5-blur-ms requires a positive finite exposure and an explicit --upper5-yaw-deg trial")
@@ -286,7 +290,8 @@ def main():
         release = {**release, "orientation_wxyz": orientation}
         experiment = {"requested_delta_yaw_deg": args.upper5_yaw_deg,
                       "initial_orientation_wxyz": orientation,
-                      "vertical_force_feedback": args.upper5_z_unload}
+                      "vertical_force_feedback": args.upper5_z_unload,
+                      "active_rear_probe": args.upper5_active_probe}
     output = args.output.resolve()
     snapshot = output / "runner_snapshot.py"
     source = build()
@@ -311,6 +316,14 @@ def main():
         from experiments.motion_blur import inject
 
         source = inject(source, args.upper5_blur_ms)
+    if args.upper5_active_probe:
+        from experiments.upper5_active_probe import inject
+
+        source = inject(source)
+    if terminal is not None:
+        from experiments.upper5_active_probe import inject_terminal_resume
+
+        source = inject_terminal_resume(source)
     runner = compile(source, str(snapshot), "exec")
     if args.check_only:
         print(f"Compiled. Measured starting boxes {len(saved)}, next supply Cube_{first_id}")
