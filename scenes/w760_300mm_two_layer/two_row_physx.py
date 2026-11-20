@@ -253,6 +253,7 @@ def main():
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--close-on-finish", action="store_true")
     parser.add_argument("--upper5-yaw-deg", type=float, help="Add world-Z yaw to the measured upper-5 landing pose")
+    parser.add_argument("--upper5-z-unload", action="store_true", help="Test vertical force feedback during the upper-5 straight push")
     parser.add_argument("--stop-after-front", type=int, choices=range(1, 6))
     args = parser.parse_args()
     checkpoint = {}
@@ -266,6 +267,8 @@ def main():
     first_id = FRONT_IDS[front-1] if front < 6 else 6 + upper
     release = checkpoint.get("front_landed") or checkpoint.get("landed")
     experiment = None
+    if args.upper5_z_unload and args.upper5_yaw_deg is None:
+        parser.error("--upper5-z-unload requires an explicit --upper5-yaw-deg trial")
     if args.upper5_yaw_deg is not None:
         if front != 6 or upper != 5 or release is None or release["cube_id"] != 11:
             parser.error("--upper5-yaw-deg requires the upper-5 landing checkpoint")
@@ -278,7 +281,8 @@ def main():
         orientation = [c*w - s*z, c*x - s*y, c*y + s*x, c*z + s*w]
         release = {**release, "orientation_wxyz": orientation}
         experiment = {"requested_delta_yaw_deg": args.upper5_yaw_deg,
-                      "initial_orientation_wxyz": orientation}
+                      "initial_orientation_wxyz": orientation,
+                      "vertical_force_feedback": args.upper5_z_unload}
     output = args.output.resolve()
     snapshot = output / "runner_snapshot.py"
     source = build()
@@ -286,6 +290,19 @@ def main():
         source = replace_once(source, '        report["upper_row"] = {',
                               '        report["upper5_experiment"] = UPPER5_EXPERIMENT\n'
                               '        report["upper_row"] = {')
+    if args.upper5_z_unload:
+        source = replace_once(source, '                        vertical_help = 1.5',
+                              '                        vertical_help = 0. if slot == 5 else 1.5')
+        source = replace_once(source, 'if force_paced_lateral or slot4_boundary else None)',
+                              'if force_paced_lateral or slot4_boundary or slot == 5 else None)')
+        source = replace_once(source, '''                        center, cube_rotation = sensed_cube()
+                        issues = checker.check(commands, cube_center=center, cube_rotation=cube_rotation,''',
+                              '''                        center, cube_rotation = sensed_cube()
+                        if slot == 5:
+                            # Check the forward command at its planned Y. The measured check still runs after step().
+                            center = center.copy()
+                            center[axis] = centers[_index, axis]
+                        issues = checker.check(commands, cube_center=center, cube_rotation=cube_rotation,''')
     runner = compile(source, str(snapshot), "exec")
     if args.check_only:
         print(f"Compiled. Measured starting boxes {len(saved)}, next supply Cube_{first_id}")

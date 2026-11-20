@@ -34,3 +34,14 @@
 [最终截图](validation/upper_cube_final.png) · [15 箱最终位姿](validation/final_15_box_poses.json)
 
 最终位姿文件用于查看和分析。验收材料中的运行路径使用本地实验编号表示。整排一次无中断运行和实体 FR3 验证仍待进行。
+
+## 第 5 箱直推的竖向卸载对照
+
+从同一个 landing 断点加载第 5 箱，先运行原直推，再用相同偏航角和新的输出目录加上 `--upper5-z-unload`。后者在沿 +Y 推进时启用已有的腕力反馈控制器，调整吸盘的 Z 向位置，沿用原推进速度与腕力上限。用 `runner_report.json` 核对推进结果、停机原因和 `upper5_experiment` 记录。
+
+```bash
+scene=scenes/w760_300mm_two_layer
+"$ISAAC_SIM_DIR/python.sh" "$scene/two_row_physx.py" "$(mktemp -d)/upper5" \
+  --resume "$scene/validation/upper5_landing_checkpoint.json" \
+  --upper5-yaw-deg 0 --upper5-z-unload --close-on-finish
+```
