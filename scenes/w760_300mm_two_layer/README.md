@@ -115,4 +115,4 @@ checkpoint="$scene/experiments/results/probe_terminal_checkpoint.json"
   --resume "$checkpoint" --upper5-yaw-deg 0 --upper5-active-probe --close-on-finish
 ```
 
-[多源状态判断实验记录](experiments/results/README.md)
+[全流程的七种接触主状态与标注口径](contact_states.md) · [多源状态判断实验记录](experiments/results/README.md)
