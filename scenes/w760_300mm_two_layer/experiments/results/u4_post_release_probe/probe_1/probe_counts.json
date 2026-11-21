@@ -1,0 +1,560 @@
+{
+  "source": "probe_1",
+  "hz": 120,
+  "last_step": 17582,
+  "incomplete_run": null,
+  "observer_sha256": {
+    "u4_side_probe_observer.py": "71edc302e59bb6769aea353aa09a2b5f39376d03924e37ae1869d18f096d973b",
+    "u4_contact_observer.py": "8f90aaf4b10eefb803390a9b92459d9133f2a7650173111a673053a2a349c7ab"
+  },
+  "paired_sha256": "b85e43203666332adc128e834842eb6111418e2ca869cf5b28725852f891cf92",
+  "commands_sha256": "2c02e6e402fc415a924a72c0d8e25413bc9a0bacc8c6f72dd3b365ef9e108fb0",
+  "probe_telemetry_sha256": "e205fa5a021299216db847f09dd2a5167d3b3e92701e9b9827184ed9a06ee952",
+  "side_load_before_baseline_hold": {
+    "truth": null,
+    "label": "mixed_or_unobserved",
+    "start_step": 10382,
+    "end_step": 10393,
+    "left_cup_clear_steps": 12,
+    "bearing_steps": 2,
+    "clear_steps": 10,
+    "unknown_steps": 0,
+    "median_side_force_N": 0.0
+  },
+  "status": "LATERAL_MOTION_OBSERVED",
+  "first_motion_step": 10406,
+  "first_motion_after_unload_s": 0.9083333333333333,
+  "left_cup_detached_confirm_step": 10376,
+  "last_pulse_sample_step": 10585,
+  "preexisting_side_load": {
+    "truth": null,
+    "label": "mixed_or_unobserved",
+    "start_step": 10394,
+    "end_step": 10405,
+    "left_cup_clear_steps": 12,
+    "bearing_steps": 4,
+    "clear_steps": 8,
+    "unknown_steps": 0,
+    "median_side_force_N": 0.0
+  },
+  "preexisting_state_comparison": {
+    "passive_at_last_premotion_sample": {
+      "call": null,
+      "step": 10405,
+      "outcome": "unscored_reference"
+    },
+    "frozen_pulse_retrospective": {
+      "call": null,
+      "step": 10573,
+      "outcome": "unscored_reference"
+    },
+    "passive_current_at_pulse_decision": false,
+    "frozen_pulse_response": {
+      "force_tolerance_N": 0.08,
+      "unload_N": 0.38398192089741134,
+      "reload_before_positive_command_N": 0.5259921683179981,
+      "compression_N": 0.12817697414458862,
+      "return_residual_N": -0.4131060954398947,
+      "negative_travel_m": 0.00021087600616123692,
+      "positive_travel_m": 0.00020600395436443097,
+      "reason": "ambiguous_directional_response"
+    }
+  },
+  "new_bearing_during_intervention_if_preclear": null,
+  "unloading_before_positive_command_if_prebearing": null,
+  "new_bearing_before_positive_command_if_preclear": null,
+  "first_positive_command_step": 10484,
+  "premotion_events_only": {
+    "handoff_observed": true,
+    "right_push_observed": false,
+    "preload": null,
+    "handoff_start_step": 10297,
+    "last_handoff_step": 10405,
+    "end_reason": "physical_stop_or_capture_end",
+    "handoff_bouts": {
+      "ticks": 108,
+      "seconds": 0.9,
+      "counts": {
+        "bearing": 83,
+        "clear": 25,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 73,
+        "clear": 11,
+        "unknown": 0
+      },
+      "from_start": {
+        "bearing": 73
+      },
+      "bout_counts": {
+        "bearing": {
+          "at_least_12": 1,
+          "1_to_5": 6
+        },
+        "clear": {
+          "1_to_5": 5,
+          "6_to_11": 2
+        },
+        "unknown": {}
+      }
+    },
+    "rear_bouts": {
+      "ticks": 0,
+      "seconds": 0.0,
+      "counts": {
+        "bearing": 0,
+        "clear": 0,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 0,
+        "clear": 0,
+        "unknown": 0
+      },
+      "from_start": {},
+      "bout_counts": {
+        "bearing": {},
+        "clear": {},
+        "unknown": {}
+      }
+    },
+    "last_12_pre_unload_median_left_compression_N": null,
+    "left_cup_clear_confirm_step": 10376,
+    "first_12_from_left_cup_clear": "mixed",
+    "from_left_cup_clear": {
+      "ticks": 30,
+      "seconds": 0.25,
+      "counts": {
+        "bearing": 7,
+        "clear": 23,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 2,
+        "clear": 11,
+        "unknown": 0
+      },
+      "from_start": {
+        "clear": 5
+      },
+      "bout_counts": {
+        "bearing": {
+          "1_to_5": 5
+        },
+        "clear": {
+          "1_to_5": 5,
+          "6_to_11": 1
+        },
+        "unknown": {}
+      }
+    },
+    "first_1p5s_from_left_cup_clear": {
+      "ticks": 30,
+      "seconds": 0.25,
+      "counts": {
+        "bearing": 7,
+        "clear": 23,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 2,
+        "clear": 11,
+        "unknown": 0
+      },
+      "from_start": {
+        "clear": 5
+      },
+      "bout_counts": {
+        "bearing": {
+          "1_to_5": 5
+        },
+        "clear": {
+          "1_to_5": 5,
+          "6_to_11": 1
+        },
+        "unknown": {}
+      }
+    },
+    "handoff_loss_eligible": false,
+    "first_sustained_handoff_loss": null,
+    "first_sustained_reload_within_handoff": null,
+    "first_sustained_reload_including_rear": null,
+    "reload_right_censored_at_stop": false,
+    "sensitivity_24": {
+      "first_sustained_handoff_loss": null,
+      "first_sustained_reload_within_handoff": null,
+      "first_sustained_reload_including_rear": null,
+      "reload_right_censored_at_stop": false
+    },
+    "errors": {
+      "handoff": {
+        "baseline": {
+          "truth_bearing_steps": 83,
+          "truth_clear_steps": 25,
+          "false_clear_steps": 0,
+          "false_bearing_steps": 2,
+          "false_clear_alerts": 0,
+          "false_bearing_alerts": 0,
+          "unverifiable_alerts": 0
+        },
+        "fusion": {
+          "truth_bearing_steps": 83,
+          "truth_clear_steps": 25,
+          "false_clear_steps": 0,
+          "false_bearing_steps": 2,
+          "false_clear_alerts": 0,
+          "false_bearing_alerts": 0,
+          "unverifiable_alerts": 0
+        }
+      },
+      "rear_stroke": null
+    }
+  },
+  "events_over_observed_motion": {
+    "handoff_observed": true,
+    "right_push_observed": true,
+    "preload": null,
+    "handoff_start_step": 10297,
+    "last_handoff_step": 12136,
+    "end_reason": "completed_capture",
+    "handoff_bouts": {
+      "ticks": 1839,
+      "seconds": 15.325,
+      "counts": {
+        "bearing": 695,
+        "clear": 1144,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 73,
+        "clear": 95,
+        "unknown": 0
+      },
+      "from_start": {
+        "bearing": 73
+      },
+      "bout_counts": {
+        "bearing": {
+          "at_least_12": 1,
+          "1_to_5": 233,
+          "6_to_11": 21
+        },
+        "clear": {
+          "1_to_5": 211,
+          "6_to_11": 32,
+          "at_least_12": 12
+        },
+        "unknown": {}
+      }
+    },
+    "rear_bouts": {
+      "ticks": 4263,
+      "seconds": 35.525,
+      "counts": {
+        "bearing": 3161,
+        "clear": 1102,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 575,
+        "clear": 495,
+        "unknown": 0
+      },
+      "from_start": {
+        "clear": 1
+      },
+      "bout_counts": {
+        "bearing": {
+          "1_to_5": 92,
+          "at_least_12": 88,
+          "6_to_11": 50
+        },
+        "clear": {
+          "1_to_5": 205,
+          "6_to_11": 24,
+          "at_least_12": 1
+        },
+        "unknown": {}
+      }
+    },
+    "last_12_pre_unload_median_left_compression_N": null,
+    "left_cup_clear_confirm_step": 10376,
+    "first_12_from_left_cup_clear": "mixed",
+    "from_left_cup_clear": {
+      "ticks": 1761,
+      "seconds": 14.675,
+      "counts": {
+        "bearing": 619,
+        "clear": 1142,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 9,
+        "clear": 95,
+        "unknown": 0
+      },
+      "from_start": {
+        "clear": 5
+      },
+      "bout_counts": {
+        "bearing": {
+          "1_to_5": 232,
+          "6_to_11": 21
+        },
+        "clear": {
+          "1_to_5": 211,
+          "6_to_11": 31,
+          "at_least_12": 12
+        },
+        "unknown": {}
+      }
+    },
+    "first_1p5s_from_left_cup_clear": {
+      "ticks": 180,
+      "seconds": 1.5,
+      "counts": {
+        "bearing": 33,
+        "clear": 147,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 7,
+        "clear": 50,
+        "unknown": 0
+      },
+      "from_start": {
+        "clear": 5
+      },
+      "bout_counts": {
+        "bearing": {
+          "1_to_5": 14,
+          "6_to_11": 1
+        },
+        "clear": {
+          "1_to_5": 9,
+          "6_to_11": 4,
+          "at_least_12": 3
+        },
+        "unknown": {}
+      }
+    },
+    "handoff_loss_eligible": true,
+    "first_sustained_handoff_loss": {
+      "state": false,
+      "start": 10423,
+      "end": 10472,
+      "ticks": 50,
+      "window": "handoff",
+      "baseline": {
+        "confirm_step": 10428,
+        "latency_s": 0.041666666666666664
+      },
+      "fusion": {
+        "confirm_step": 10428,
+        "latency_s": 0.041666666666666664
+      },
+      "sustained_confirm_step": 10434,
+      "onset_s": 1.05,
+      "duration_s": 0.4166666666666667,
+      "continues_to_window_boundary": false,
+      "right_censored_at_stop": false,
+      "onset_observed": true,
+      "onset_period": "during_intervention",
+      "confirmation_period": "during_intervention"
+    },
+    "first_sustained_reload_within_handoff": null,
+    "first_sustained_reload_including_rear": {
+      "state": true,
+      "start": 12656,
+      "end": 12670,
+      "ticks": 15,
+      "window": "rear_stroke",
+      "baseline": {
+        "confirm_step": 12659,
+        "latency_s": 0.025
+      },
+      "fusion": {
+        "confirm_step": 12659,
+        "latency_s": 0.025
+      },
+      "sustained_confirm_step": 12667,
+      "onset_s": 19.658333333333335,
+      "duration_s": 0.125,
+      "continues_to_window_boundary": false,
+      "right_censored_at_stop": false,
+      "onset_period": "after_intervention",
+      "confirmation_period": "after_intervention"
+    },
+    "reload_right_censored_at_stop": false,
+    "sensitivity_24": {
+      "first_sustained_handoff_loss": {
+        "state": false,
+        "start": 10423,
+        "end": 10472,
+        "ticks": 50,
+        "window": "handoff",
+        "baseline": {
+          "confirm_step": 10428,
+          "latency_s": 0.041666666666666664
+        },
+        "fusion": {
+          "confirm_step": 10428,
+          "latency_s": 0.041666666666666664
+        },
+        "sustained_confirm_step": 10446,
+        "onset_s": 1.05,
+        "duration_s": 0.4166666666666667,
+        "continues_to_window_boundary": false,
+        "right_censored_at_stop": false,
+        "onset_observed": true
+      },
+      "first_sustained_reload_within_handoff": null,
+      "first_sustained_reload_including_rear": {
+        "state": true,
+        "start": 12779,
+        "end": 12802,
+        "ticks": 24,
+        "window": "rear_stroke",
+        "baseline": {
+          "confirm_step": 12784,
+          "latency_s": 0.041666666666666664
+        },
+        "fusion": {
+          "confirm_step": 12784,
+          "latency_s": 0.041666666666666664
+        },
+        "sustained_confirm_step": 12802,
+        "onset_s": 20.683333333333334,
+        "duration_s": 0.2,
+        "continues_to_window_boundary": false,
+        "right_censored_at_stop": false
+      },
+      "reload_right_censored_at_stop": false
+    },
+    "errors": {
+      "handoff": {
+        "baseline": {
+          "truth_bearing_steps": 695,
+          "truth_clear_steps": 1144,
+          "false_clear_steps": 6,
+          "false_bearing_steps": 38,
+          "false_clear_alerts": 1,
+          "false_bearing_alerts": 6,
+          "unverifiable_alerts": 0
+        },
+        "fusion": {
+          "truth_bearing_steps": 695,
+          "truth_clear_steps": 1144,
+          "false_clear_steps": 6,
+          "false_bearing_steps": 38,
+          "false_clear_alerts": 1,
+          "false_bearing_alerts": 6,
+          "unverifiable_alerts": 0
+        }
+      },
+      "rear_stroke": {
+        "baseline": {
+          "truth_bearing_steps": 3161,
+          "truth_clear_steps": 1102,
+          "false_clear_steps": 140,
+          "false_bearing_steps": 75,
+          "false_clear_alerts": 54,
+          "false_bearing_alerts": 21,
+          "unverifiable_alerts": 0
+        },
+        "fusion": {
+          "truth_bearing_steps": 3161,
+          "truth_clear_steps": 1102,
+          "false_clear_steps": 140,
+          "false_bearing_steps": 75,
+          "false_clear_alerts": 54,
+          "false_bearing_alerts": 21,
+          "unverifiable_alerts": 0
+        }
+      }
+    }
+  },
+  "false_alarms_by_window": {
+    "premotion_handoff": {
+      "baseline": {
+        "truth_bearing_steps": 83,
+        "truth_clear_steps": 25,
+        "false_clear_steps": 0,
+        "false_bearing_steps": 2,
+        "false_clear_alerts": 0,
+        "false_bearing_alerts": 0,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 83,
+        "truth_clear_steps": 25,
+        "false_clear_steps": 0,
+        "false_bearing_steps": 2,
+        "false_clear_alerts": 0,
+        "false_bearing_alerts": 0,
+        "unverifiable_alerts": 0
+      }
+    },
+    "lateral_motion_and_settling": {
+      "baseline": {
+        "truth_bearing_steps": 27,
+        "truth_clear_steps": 153,
+        "false_clear_steps": 6,
+        "false_bearing_steps": 36,
+        "false_clear_alerts": 1,
+        "false_bearing_alerts": 6,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 27,
+        "truth_clear_steps": 153,
+        "false_clear_steps": 6,
+        "false_bearing_steps": 36,
+        "false_clear_alerts": 1,
+        "false_bearing_alerts": 6,
+        "unverifiable_alerts": 0
+      }
+    },
+    "post_pulse_handoff": {
+      "baseline": {
+        "truth_bearing_steps": 585,
+        "truth_clear_steps": 966,
+        "false_clear_steps": 0,
+        "false_bearing_steps": 0,
+        "false_clear_alerts": 0,
+        "false_bearing_alerts": 0,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 585,
+        "truth_clear_steps": 966,
+        "false_clear_steps": 0,
+        "false_bearing_steps": 0,
+        "false_clear_alerts": 0,
+        "false_bearing_alerts": 0,
+        "unverifiable_alerts": 0
+      }
+    },
+    "rear_stroke": {
+      "baseline": {
+        "truth_bearing_steps": 3161,
+        "truth_clear_steps": 1102,
+        "false_clear_steps": 140,
+        "false_bearing_steps": 75,
+        "false_clear_alerts": 54,
+        "false_bearing_alerts": 21,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 3161,
+        "truth_clear_steps": 1102,
+        "false_clear_steps": 140,
+        "false_bearing_steps": 75,
+        "false_clear_alerts": 54,
+        "false_bearing_alerts": 21,
+        "unverifiable_alerts": 0
+      }
+    }
+  }
+}

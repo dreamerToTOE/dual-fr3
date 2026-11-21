@@ -1,0 +1,83 @@
+{
+  "checkpoint_sha256": "687f9f9d9540a7076c0a28ae6666bd2d7bc9f88b2e39a3f039e08b4d1f09b7e6",
+  "trials": [
+    {
+      "trial": "control_1",
+      "initial_y_offset_m": 0.0004,
+      "input_checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e",
+      "runner_report_sha256": "f909aba11803a54f3485bdb133b4b79862e8e0847055350e0d045dd5a1dffd2a",
+      "started_unload": true,
+      "started_rear_push": true,
+      "stable": true,
+      "last_step": 17529,
+      "status": "PARTIAL_W760_UPPER_ROW",
+      "error": null
+    },
+    {
+      "trial": "control_2",
+      "initial_y_offset_m": 0.0004,
+      "input_checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e",
+      "runner_report_sha256": "74980ef54562276d8e8f028a5c38dd14603d90aa3ec6425557c563d031b2e2e0",
+      "started_unload": false,
+      "started_rear_push": false,
+      "stable": false,
+      "last_step": 10309,
+      "status": "STOPPED",
+      "error": "upper_B_seam_pacing: B wrist envelope exceeded at tick 10309: [{'arm': 'left', 'force_N': 9.17217332209704, 'torque_Nm': 0.3915817869554857, 'wrench_world': [-8.933143449071697, -2.055060641903465, 0.32316764534121817, 0.05554302709620966, -0.296181756567351, 0.2500552640776025]}]"
+    },
+    {
+      "trial": "control_3",
+      "initial_y_offset_m": 0.0004,
+      "input_checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e",
+      "runner_report_sha256": "636650d58f9d86e394568b0621f0f72024e91c15c8876a5599bc73c63051b59e",
+      "started_unload": true,
+      "started_rear_push": true,
+      "stable": true,
+      "last_step": 17544,
+      "status": "PARTIAL_W760_UPPER_ROW",
+      "error": null
+    },
+    {
+      "trial": "control_4",
+      "initial_y_offset_m": 0.0,
+      "input_checkpoint_sha256": "9a553ee2f1977bb844b42f4a8bc44d1e1e7326002b773adf721c166eac17389b",
+      "runner_report_sha256": "c6cc08610c7f9a16f6703dc503ce1e4f0696d8f303d6b0e0bc7f71a0c07d8c6c",
+      "started_unload": true,
+      "started_rear_push": true,
+      "stable": true,
+      "last_step": 17606,
+      "status": "PARTIAL_W760_UPPER_ROW",
+      "error": null
+    },
+    {
+      "trial": "probe_1",
+      "initial_y_offset_m": 0.0004,
+      "input_checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e",
+      "runner_report_sha256": "75e98c6c49e25ae844ff2da5482d09eb18391a62354fd99e037e4c332798ebf3",
+      "started_unload": true,
+      "started_rear_push": true,
+      "stable": true,
+      "last_step": 17582,
+      "status": "PARTIAL_W760_UPPER_ROW",
+      "error": null,
+      "probe": {
+        "timing": "detached",
+        "arm": "right",
+        "anchor_tcp_m": [
+          0.15463431822232568,
+          0.9354910702744275,
+          0.9412554633184895
+        ],
+        "pre_step": 10393,
+        "amplitude_m": 0.00025,
+        "left_detach_gate": {
+          "step": 10393,
+          "left_retreat_m": 0.0002134192174670091,
+          "left_force_x_N": 0.002684351669300249
+        },
+        "first_motion_step": 10406,
+        "end_step": 10585
+      }
+    }
+  ]
+}

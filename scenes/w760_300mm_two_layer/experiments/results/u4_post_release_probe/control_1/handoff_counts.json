@@ -1,0 +1,258 @@
+{
+  "source": "control_1",
+  "hz": 120,
+  "model_sha256": {
+    "u4_sustained_observer.py": "528c0aab3228d7e2980e8d9660d729b755c6aaa3a495bb768ef69671627e62eb",
+    "u4_contact_observer.py": "8f90aaf4b10eefb803390a9b92459d9133f2a7650173111a673053a2a349c7ab",
+    "u4_sustained_calibration.json": "fbef1f84c6c1cb8e23aed4fb3f55a5f5c259615308fbc2d301885916fa522c36"
+  },
+  "paired_sha256": "fedfffef832fb54d7497aa476de268cbc761f7a23328e0425ec3496b4e94e8ca",
+  "last_step": 17529,
+  "incomplete_run": null,
+  "handoff_observed": true,
+  "right_push_observed": true,
+  "preload": null,
+  "handoff_start_step": 10239,
+  "last_handoff_step": 11886,
+  "end_reason": "completed_capture",
+  "handoff_bouts": {
+    "ticks": 1647,
+    "seconds": 13.725,
+    "counts": {
+      "bearing": 64,
+      "clear": 1583,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 57,
+      "clear": 1582,
+      "unknown": 0
+    },
+    "from_start": {
+      "bearing": 57
+    },
+    "bout_counts": {
+      "bearing": {
+        "at_least_12": 1,
+        "6_to_11": 1
+      },
+      "clear": {
+        "1_to_5": 1,
+        "at_least_12": 1
+      },
+      "unknown": {}
+    }
+  },
+  "rear_bouts": {
+    "ticks": 4460,
+    "seconds": 37.166666666666664,
+    "counts": {
+      "bearing": 3262,
+      "clear": 1198,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 319,
+      "clear": 569,
+      "unknown": 0
+    },
+    "from_start": {
+      "clear": 569
+    },
+    "bout_counts": {
+      "bearing": {
+        "1_to_5": 87,
+        "6_to_11": 57,
+        "at_least_12": 90
+      },
+      "clear": {
+        "at_least_12": 4,
+        "1_to_5": 212,
+        "6_to_11": 18
+      },
+      "unknown": {}
+    }
+  },
+  "last_12_pre_unload_median_left_compression_N": 6.764201035340129,
+  "left_cup_clear_confirm_step": 10318,
+  "first_12_from_left_cup_clear": "clear",
+  "from_left_cup_clear": {
+    "ticks": 1569,
+    "seconds": 13.075,
+    "counts": {
+      "bearing": 0,
+      "clear": 1569,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 0,
+      "clear": 1569,
+      "unknown": 0
+    },
+    "from_start": {
+      "clear": 1569
+    },
+    "bout_counts": {
+      "bearing": {},
+      "clear": {
+        "at_least_12": 1
+      },
+      "unknown": {}
+    }
+  },
+  "first_1p5s_from_left_cup_clear": {
+    "ticks": 180,
+    "seconds": 1.5,
+    "counts": {
+      "bearing": 0,
+      "clear": 180,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 0,
+      "clear": 180,
+      "unknown": 0
+    },
+    "from_start": {
+      "clear": 180
+    },
+    "bout_counts": {
+      "bearing": {},
+      "clear": {
+        "at_least_12": 1
+      },
+      "unknown": {}
+    }
+  },
+  "handoff_loss_eligible": true,
+  "first_sustained_handoff_loss": {
+    "state": false,
+    "start": 10305,
+    "end": 11886,
+    "ticks": 1582,
+    "window": "handoff",
+    "baseline": {
+      "confirm_step": 11204,
+      "latency_s": 7.491666666666666
+    },
+    "fusion": {
+      "confirm_step": 11204,
+      "latency_s": 7.491666666666666
+    },
+    "sustained_confirm_step": 10316,
+    "onset_s": 0.55,
+    "duration_s": 13.183333333333334,
+    "continues_to_window_boundary": true,
+    "right_censored_at_stop": false,
+    "onset_observed": true
+  },
+  "first_sustained_reload_within_handoff": null,
+  "first_sustained_reload_including_rear": {
+    "state": true,
+    "start": 12471,
+    "end": 12507,
+    "ticks": 37,
+    "window": "rear_stroke",
+    "baseline": {
+      "confirm_step": 12473,
+      "latency_s": 0.016666666666666666
+    },
+    "fusion": {
+      "confirm_step": 12473,
+      "latency_s": 0.016666666666666666
+    },
+    "sustained_confirm_step": 12482,
+    "onset_s": 18.6,
+    "duration_s": 0.30833333333333335,
+    "continues_to_window_boundary": false,
+    "right_censored_at_stop": false
+  },
+  "reload_right_censored_at_stop": false,
+  "sensitivity_24": {
+    "first_sustained_handoff_loss": {
+      "state": false,
+      "start": 10305,
+      "end": 11886,
+      "ticks": 1582,
+      "window": "handoff",
+      "baseline": {
+        "confirm_step": 11204,
+        "latency_s": 7.491666666666666
+      },
+      "fusion": {
+        "confirm_step": 11204,
+        "latency_s": 7.491666666666666
+      },
+      "sustained_confirm_step": 10328,
+      "onset_s": 0.55,
+      "duration_s": 13.183333333333334,
+      "continues_to_window_boundary": true,
+      "right_censored_at_stop": false,
+      "onset_observed": true
+    },
+    "first_sustained_reload_within_handoff": null,
+    "first_sustained_reload_including_rear": {
+      "state": true,
+      "start": 12471,
+      "end": 12507,
+      "ticks": 37,
+      "window": "rear_stroke",
+      "baseline": {
+        "confirm_step": 12473,
+        "latency_s": 0.016666666666666666
+      },
+      "fusion": {
+        "confirm_step": 12473,
+        "latency_s": 0.016666666666666666
+      },
+      "sustained_confirm_step": 12494,
+      "onset_s": 18.6,
+      "duration_s": 0.30833333333333335,
+      "continues_to_window_boundary": false,
+      "right_censored_at_stop": false
+    },
+    "reload_right_censored_at_stop": false
+  },
+  "errors": {
+    "handoff": {
+      "baseline": {
+        "truth_bearing_steps": 64,
+        "truth_clear_steps": 1583,
+        "false_clear_steps": 0,
+        "false_bearing_steps": 24,
+        "false_clear_alerts": 0,
+        "false_bearing_alerts": 0,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 64,
+        "truth_clear_steps": 1583,
+        "false_clear_steps": 0,
+        "false_bearing_steps": 39,
+        "false_clear_alerts": 0,
+        "false_bearing_alerts": 1,
+        "unverifiable_alerts": 0
+      }
+    },
+    "rear_stroke": {
+      "baseline": {
+        "truth_bearing_steps": 3262,
+        "truth_clear_steps": 1198,
+        "false_clear_steps": 156,
+        "false_bearing_steps": 79,
+        "false_clear_alerts": 42,
+        "false_bearing_alerts": 19,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 3262,
+        "truth_clear_steps": 1198,
+        "false_clear_steps": 158,
+        "false_bearing_steps": 83,
+        "false_clear_alerts": 43,
+        "false_bearing_alerts": 20,
+        "unverifiable_alerts": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,302 @@
+{
+  "source": "control_4",
+  "hz": 120,
+  "model_sha256": {
+    "u4_sustained_observer.py": "528c0aab3228d7e2980e8d9660d729b755c6aaa3a495bb768ef69671627e62eb",
+    "u4_contact_observer.py": "8f90aaf4b10eefb803390a9b92459d9133f2a7650173111a673053a2a349c7ab",
+    "u4_sustained_calibration.json": "fbef1f84c6c1cb8e23aed4fb3f55a5f5c259615308fbc2d301885916fa522c36"
+  },
+  "paired_sha256": "c346fa859b0b7720babafa7c875b7b532627fc9e7386ad837e62b279c20bf2bc",
+  "last_step": 17606,
+  "incomplete_run": null,
+  "handoff_observed": true,
+  "right_push_observed": true,
+  "preload": null,
+  "handoff_start_step": 10637,
+  "last_handoff_step": 12285,
+  "end_reason": "completed_capture",
+  "handoff_bouts": {
+    "ticks": 1648,
+    "seconds": 13.733333333333333,
+    "counts": {
+      "bearing": 652,
+      "clear": 996,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 112,
+      "clear": 921,
+      "unknown": 0
+    },
+    "from_start": {
+      "bearing": 70
+    },
+    "bout_counts": {
+      "bearing": {
+        "at_least_12": 17,
+        "1_to_5": 27,
+        "6_to_11": 7
+      },
+      "clear": {
+        "1_to_5": 48,
+        "at_least_12": 2
+      },
+      "unknown": {}
+    }
+  },
+  "rear_bouts": {
+    "ticks": 4139,
+    "seconds": 34.49166666666667,
+    "counts": {
+      "bearing": 3094,
+      "clear": 1045,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 230,
+      "clear": 437,
+      "unknown": 0
+    },
+    "from_start": {
+      "bearing": 29
+    },
+    "bout_counts": {
+      "bearing": {
+        "at_least_12": 94,
+        "1_to_5": 106,
+        "6_to_11": 49
+      },
+      "clear": {
+        "1_to_5": 222,
+        "6_to_11": 23,
+        "at_least_12": 3
+      },
+      "unknown": {}
+    }
+  },
+  "last_12_pre_unload_median_left_compression_N": 6.68267162144679,
+  "left_cup_clear_confirm_step": 10717,
+  "first_12_from_left_cup_clear": "clear",
+  "from_left_cup_clear": {
+    "ticks": 1569,
+    "seconds": 13.075,
+    "counts": {
+      "bearing": 581,
+      "clear": 988,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 112,
+      "clear": 914,
+      "unknown": 0
+    },
+    "from_start": {
+      "clear": 914
+    },
+    "bout_counts": {
+      "bearing": {
+        "1_to_5": 26,
+        "at_least_12": 16,
+        "6_to_11": 7
+      },
+      "clear": {
+        "at_least_12": 2,
+        "1_to_5": 47
+      },
+      "unknown": {}
+    }
+  },
+  "first_1p5s_from_left_cup_clear": {
+    "ticks": 180,
+    "seconds": 1.5,
+    "counts": {
+      "bearing": 0,
+      "clear": 180,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 0,
+      "clear": 180,
+      "unknown": 0
+    },
+    "from_start": {
+      "clear": 180
+    },
+    "bout_counts": {
+      "bearing": {},
+      "clear": {
+        "at_least_12": 1
+      },
+      "unknown": {}
+    }
+  },
+  "handoff_loss_eligible": true,
+  "first_sustained_handoff_loss": {
+    "state": false,
+    "start": 10710,
+    "end": 11630,
+    "ticks": 921,
+    "window": "handoff",
+    "baseline": {
+      "confirm_step": null,
+      "latency_s": null
+    },
+    "fusion": {
+      "confirm_step": 11621,
+      "latency_s": 7.591666666666667
+    },
+    "sustained_confirm_step": 10721,
+    "onset_s": 0.6083333333333333,
+    "duration_s": 7.675,
+    "continues_to_window_boundary": false,
+    "right_censored_at_stop": false,
+    "onset_observed": true
+  },
+  "first_sustained_reload_within_handoff": {
+    "state": true,
+    "start": 11661,
+    "end": 11686,
+    "ticks": 26,
+    "window": "handoff",
+    "baseline": {
+      "confirm_step": null,
+      "latency_s": null
+    },
+    "fusion": {
+      "confirm_step": null,
+      "latency_s": null
+    },
+    "sustained_confirm_step": 11672,
+    "onset_s": 8.533333333333333,
+    "duration_s": 0.21666666666666667,
+    "continues_to_window_boundary": false,
+    "right_censored_at_stop": false
+  },
+  "first_sustained_reload_including_rear": {
+    "state": true,
+    "start": 11661,
+    "end": 11686,
+    "ticks": 26,
+    "window": "handoff",
+    "baseline": {
+      "confirm_step": null,
+      "latency_s": null
+    },
+    "fusion": {
+      "confirm_step": null,
+      "latency_s": null
+    },
+    "sustained_confirm_step": 11672,
+    "onset_s": 8.533333333333333,
+    "duration_s": 0.21666666666666667,
+    "continues_to_window_boundary": false,
+    "right_censored_at_stop": false
+  },
+  "reload_right_censored_at_stop": false,
+  "sensitivity_24": {
+    "first_sustained_handoff_loss": {
+      "state": false,
+      "start": 10710,
+      "end": 11630,
+      "ticks": 921,
+      "window": "handoff",
+      "baseline": {
+        "confirm_step": null,
+        "latency_s": null
+      },
+      "fusion": {
+        "confirm_step": 11621,
+        "latency_s": 7.591666666666667
+      },
+      "sustained_confirm_step": 10733,
+      "onset_s": 0.6083333333333333,
+      "duration_s": 7.675,
+      "continues_to_window_boundary": false,
+      "right_censored_at_stop": false,
+      "onset_observed": true
+    },
+    "first_sustained_reload_within_handoff": {
+      "state": true,
+      "start": 11661,
+      "end": 11686,
+      "ticks": 26,
+      "window": "handoff",
+      "baseline": {
+        "confirm_step": null,
+        "latency_s": null
+      },
+      "fusion": {
+        "confirm_step": null,
+        "latency_s": null
+      },
+      "sustained_confirm_step": 11684,
+      "onset_s": 8.533333333333333,
+      "duration_s": 0.21666666666666667,
+      "continues_to_window_boundary": false,
+      "right_censored_at_stop": false
+    },
+    "first_sustained_reload_including_rear": {
+      "state": true,
+      "start": 11661,
+      "end": 11686,
+      "ticks": 26,
+      "window": "handoff",
+      "baseline": {
+        "confirm_step": null,
+        "latency_s": null
+      },
+      "fusion": {
+        "confirm_step": null,
+        "latency_s": null
+      },
+      "sustained_confirm_step": 11684,
+      "onset_s": 8.533333333333333,
+      "duration_s": 0.21666666666666667,
+      "continues_to_window_boundary": false,
+      "right_censored_at_stop": false
+    },
+    "reload_right_censored_at_stop": false
+  },
+  "errors": {
+    "handoff": {
+      "baseline": {
+        "truth_bearing_steps": 652,
+        "truth_clear_steps": 996,
+        "false_clear_steps": 0,
+        "false_bearing_steps": 8,
+        "false_clear_alerts": 0,
+        "false_bearing_alerts": 0,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 652,
+        "truth_clear_steps": 996,
+        "false_clear_steps": 0,
+        "false_bearing_steps": 16,
+        "false_clear_alerts": 0,
+        "false_bearing_alerts": 1,
+        "unverifiable_alerts": 0
+      }
+    },
+    "rear_stroke": {
+      "baseline": {
+        "truth_bearing_steps": 3094,
+        "truth_clear_steps": 1045,
+        "false_clear_steps": 155,
+        "false_bearing_steps": 60,
+        "false_clear_alerts": 42,
+        "false_bearing_alerts": 11,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 3094,
+        "truth_clear_steps": 1045,
+        "false_clear_steps": 156,
+        "false_bearing_steps": 60,
+        "false_clear_alerts": 42,
+        "false_bearing_alerts": 11,
+        "unverifiable_alerts": 0
+      }
+    }
+  }
+}

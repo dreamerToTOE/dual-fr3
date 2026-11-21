@@ -1,0 +1,583 @@
+{
+  "source": "control_3",
+  "source_sha256": {
+    "contact_states/sensor_inputs.jsonl.gz": "9570b2a23607b2bd25f8075f824ee8b0d8cf11e5567a6e3b708f4eb633a3492b",
+    "contact_states/reference.jsonl.gz": "582fd79d1019632a7f2046b2d1b2d959381415bb253f4bd4fc464f8c76544d91",
+    "runner_report.json": "636650d58f9d86e394568b0621f0f72024e91c15c8876a5599bc73c63051b59e"
+  },
+  "model_sha256": {
+    "u4_sustained_observer.py": "528c0aab3228d7e2980e8d9660d729b755c6aaa3a495bb768ef69671627e62eb",
+    "u4_contact_observer.py": "8f90aaf4b10eefb803390a9b92459d9133f2a7650173111a673053a2a349c7ab",
+    "u4_sustained_calibration.json": "fbef1f84c6c1cb8e23aed4fb3f55a5f5c259615308fbc2d301885916fa522c36"
+  },
+  "paired_sha256": "5756c78f79a4d23ce70d2479d5d99b1907a21eacbb91e27174e04b243ff079c2",
+  "command_sha256": "0cf02581064186c4c270f202236178770dbf44fe1a26db942cbe9607722c969f",
+  "last_step": 17544,
+  "incomplete_run": null,
+  "events": {
+    "unload_command_start_step": 10250,
+    "true_bouts": {
+      "bearing": {
+        "at_least_12": 105,
+        "6_to_11": 68,
+        "1_to_5": 255
+      },
+      "clear": {
+        "1_to_5": 396,
+        "6_to_11": 25,
+        "at_least_12": 6
+      }
+    },
+    "last_physical_bout": {
+      "state": true,
+      "ticks": 97,
+      "end": 16361
+    },
+    "first": {
+      "12": {
+        "loss": {
+          "state": false,
+          "start": 11209,
+          "end": 11226,
+          "ticks": 18,
+          "window": "handoff",
+          "baseline": {
+            "confirm_step": 11216,
+            "latency_s": 0.058333333333333334
+          },
+          "fusion": {
+            "confirm_step": 11216,
+            "latency_s": 0.058333333333333334
+          },
+          "onset_s": 7.991666666666666
+        },
+        "reload": {
+          "state": true,
+          "start": 11252,
+          "end": 11269,
+          "ticks": 18,
+          "window": "handoff",
+          "baseline": {
+            "confirm_step": null,
+            "latency_s": null
+          },
+          "fusion": {
+            "confirm_step": 11254,
+            "latency_s": 0.016666666666666666
+          },
+          "onset_s": 8.35
+        },
+        "first_observed_clear_censored": false
+      },
+      "24": {
+        "loss": {
+          "state": false,
+          "start": 12017,
+          "end": 12472,
+          "ticks": 456,
+          "window": "rear_stroke",
+          "baseline": {
+            "confirm_step": 12020,
+            "latency_s": 0.025
+          },
+          "fusion": {
+            "confirm_step": 12020,
+            "latency_s": 0.025
+          },
+          "onset_s": 14.725
+        },
+        "reload": {
+          "state": true,
+          "start": 12522,
+          "end": 12560,
+          "ticks": 39,
+          "window": "rear_stroke",
+          "baseline": {
+            "confirm_step": 12542,
+            "latency_s": 0.16666666666666666
+          },
+          "fusion": {
+            "confirm_step": 12542,
+            "latency_s": 0.16666666666666666
+          },
+          "onset_s": 18.933333333333334
+        },
+        "first_observed_clear_censored": false
+      }
+    },
+    "alerts": {
+      "baseline": {
+        "clear_false": 60,
+        "bearing_false": 18,
+        "clear_at_least_12": 28,
+        "bearing_6_to_11": 39,
+        "bearing_at_least_12": 201,
+        "bearing_1_to_5": 10,
+        "clear_1_to_5": 25,
+        "clear_6_to_11": 12
+      },
+      "fusion": {
+        "clear_false": 61,
+        "bearing_false": 19,
+        "clear_at_least_12": 39,
+        "bearing_at_least_12": 202,
+        "bearing_6_to_11": 38,
+        "bearing_1_to_5": 10,
+        "clear_1_to_5": 25,
+        "clear_6_to_11": 12
+      }
+    }
+  },
+  "windows": {
+    "handoff": {
+      "baseline": {
+        "states": {
+          "S5": {
+            "true": 1269,
+            "negative": 378,
+            "unknown_truth": 0,
+            "tp": 77,
+            "fp": 0,
+            "unknown_on_positive": 1188,
+            "unknown_on_negative": 363,
+            "recall": 0.06067769897557131,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "coverage": 0.058287795992714025
+          },
+          "S6": {
+            "true": 0,
+            "negative": 1647,
+            "unknown_truth": 0,
+            "tp": 0,
+            "fp": 0,
+            "unknown_on_positive": 0,
+            "unknown_on_negative": 1551,
+            "recall": null,
+            "fpr": 0.0,
+            "precision": null,
+            "coverage": 0.058287795992714025
+          }
+        },
+        "side": {
+          "true": 1269,
+          "negative": 378,
+          "unknown_truth": 0,
+          "tp": 77,
+          "fp": 0,
+          "unknown_on_positive": 1188,
+          "unknown_on_negative": 363,
+          "recall": 0.06067769897557131,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "coverage": 0.058287795992714025
+        },
+        "weak_side": {
+          "true": 984,
+          "tp": 16,
+          "recall": 0.016260162601626018,
+          "unknown": 967
+        },
+        "clear": {
+          "true": 378,
+          "negative": 1269,
+          "unknown_truth": 0,
+          "tp": 15,
+          "fp": 4,
+          "unknown_on_positive": 363,
+          "unknown_on_negative": 1188,
+          "recall": 0.03968253968253968,
+          "fpr": 0.0031520882584712374,
+          "precision": 0.7894736842105263,
+          "coverage": 0.058287795992714025
+        },
+        "alerts": {
+          "clear": {
+            "correct": 3,
+            "incorrect": 0,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 1,
+            "incorrect": 0,
+            "unverifiable": 0
+          }
+        }
+      },
+      "fusion": {
+        "states": {
+          "S5": {
+            "true": 1269,
+            "negative": 378,
+            "unknown_truth": 0,
+            "tp": 83,
+            "fp": 0,
+            "unknown_on_positive": 1182,
+            "unknown_on_negative": 363,
+            "recall": 0.06540583136327817,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "coverage": 0.061930783242258654
+          },
+          "S6": {
+            "true": 0,
+            "negative": 1647,
+            "unknown_truth": 0,
+            "tp": 0,
+            "fp": 0,
+            "unknown_on_positive": 0,
+            "unknown_on_negative": 1545,
+            "recall": null,
+            "fpr": 0.0,
+            "precision": null,
+            "coverage": 0.061930783242258654
+          }
+        },
+        "side": {
+          "true": 1269,
+          "negative": 378,
+          "unknown_truth": 0,
+          "tp": 83,
+          "fp": 0,
+          "unknown_on_positive": 1182,
+          "unknown_on_negative": 363,
+          "recall": 0.06540583136327817,
+          "fpr": 0.0,
+          "precision": 1.0,
+          "coverage": 0.061930783242258654
+        },
+        "weak_side": {
+          "true": 984,
+          "tp": 21,
+          "recall": 0.021341463414634148,
+          "unknown": 962
+        },
+        "clear": {
+          "true": 378,
+          "negative": 1269,
+          "unknown_truth": 0,
+          "tp": 15,
+          "fp": 4,
+          "unknown_on_positive": 363,
+          "unknown_on_negative": 1182,
+          "recall": 0.03968253968253968,
+          "fpr": 0.0031520882584712374,
+          "precision": 0.7894736842105263,
+          "coverage": 0.061930783242258654
+        },
+        "alerts": {
+          "clear": {
+            "correct": 3,
+            "incorrect": 0,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 2,
+            "incorrect": 0,
+            "unverifiable": 0
+          }
+        }
+      }
+    },
+    "rear_stroke": {
+      "baseline": {
+        "states": {
+          "S5": {
+            "true": 3304,
+            "negative": 1160,
+            "unknown_truth": 0,
+            "tp": 1167,
+            "fp": 81,
+            "unknown_on_positive": 2033,
+            "unknown_on_negative": 728,
+            "recall": 0.3532082324455206,
+            "fpr": 0.06982758620689655,
+            "precision": 0.9350961538461539,
+            "coverage": 0.38149641577060933
+          },
+          "S6": {
+            "true": 105,
+            "negative": 4359,
+            "unknown_truth": 0,
+            "tp": 57,
+            "fp": 0,
+            "unknown_on_positive": 41,
+            "unknown_on_negative": 2720,
+            "recall": 0.5428571428571428,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "coverage": 0.38149641577060933
+          }
+        },
+        "side": {
+          "true": 3408,
+          "negative": 1056,
+          "unknown_truth": 0,
+          "tp": 2163,
+          "fp": 74,
+          "unknown_on_positive": 978,
+          "unknown_on_negative": 385,
+          "recall": 0.6346830985915493,
+          "fpr": 0.07007575757575757,
+          "precision": 0.9669199821189093,
+          "coverage": 0.694668458781362
+        },
+        "weak_side": {
+          "true": 2455,
+          "tp": 1457,
+          "recall": 0.5934826883910387,
+          "unknown": 847
+        },
+        "clear": {
+          "true": 1056,
+          "negative": 3408,
+          "unknown_truth": 0,
+          "tp": 597,
+          "fp": 267,
+          "unknown_on_positive": 385,
+          "unknown_on_negative": 978,
+          "recall": 0.5653409090909091,
+          "fpr": 0.07834507042253522,
+          "precision": 0.6909722222222222,
+          "coverage": 0.694668458781362
+        },
+        "alerts": {
+          "clear": {
+            "correct": 62,
+            "incorrect": 60,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 250,
+            "incorrect": 18,
+            "unverifiable": 0
+          }
+        }
+      },
+      "fusion": {
+        "states": {
+          "S5": {
+            "true": 3304,
+            "negative": 1160,
+            "unknown_truth": 0,
+            "tp": 1168,
+            "fp": 82,
+            "unknown_on_positive": 2030,
+            "unknown_on_negative": 678,
+            "recall": 0.35351089588377727,
+            "fpr": 0.0706896551724138,
+            "precision": 0.9344,
+            "coverage": 0.39336917562724016
+          },
+          "S6": {
+            "true": 105,
+            "negative": 4359,
+            "unknown_truth": 0,
+            "tp": 57,
+            "fp": 0,
+            "unknown_on_positive": 41,
+            "unknown_on_negative": 2667,
+            "recall": 0.5428571428571428,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "coverage": 0.39336917562724016
+          }
+        },
+        "side": {
+          "true": 3408,
+          "negative": 1056,
+          "unknown_truth": 0,
+          "tp": 2166,
+          "fp": 75,
+          "unknown_on_positive": 973,
+          "unknown_on_negative": 335,
+          "recall": 0.6355633802816901,
+          "fpr": 0.07102272727272728,
+          "precision": 0.9665327978580991,
+          "coverage": 0.706989247311828
+        },
+        "weak_side": {
+          "true": 2455,
+          "tp": 1459,
+          "recall": 0.5942973523421589,
+          "unknown": 844
+        },
+        "clear": {
+          "true": 1056,
+          "negative": 3408,
+          "unknown_truth": 0,
+          "tp": 646,
+          "fp": 269,
+          "unknown_on_positive": 335,
+          "unknown_on_negative": 973,
+          "recall": 0.6117424242424242,
+          "fpr": 0.07893192488262911,
+          "precision": 0.7060109289617487,
+          "coverage": 0.706989247311828
+        },
+        "alerts": {
+          "clear": {
+            "correct": 73,
+            "incorrect": 61,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 249,
+            "incorrect": 19,
+            "unverifiable": 0
+          }
+        }
+      }
+    },
+    "early_handoff": {
+      "baseline": {
+        "states": {
+          "S5": {
+            "true": 240,
+            "negative": 0,
+            "unknown_truth": 0,
+            "tp": 76,
+            "fp": 0,
+            "unknown_on_positive": 164,
+            "unknown_on_negative": 0,
+            "recall": 0.31666666666666665,
+            "fpr": null,
+            "precision": 1.0,
+            "coverage": 0.31666666666666665
+          },
+          "S6": {
+            "true": 0,
+            "negative": 240,
+            "unknown_truth": 0,
+            "tp": 0,
+            "fp": 0,
+            "unknown_on_positive": 0,
+            "unknown_on_negative": 164,
+            "recall": null,
+            "fpr": 0.0,
+            "precision": null,
+            "coverage": 0.31666666666666665
+          }
+        },
+        "side": {
+          "true": 240,
+          "negative": 0,
+          "unknown_truth": 0,
+          "tp": 76,
+          "fp": 0,
+          "unknown_on_positive": 164,
+          "unknown_on_negative": 0,
+          "recall": 0.31666666666666665,
+          "fpr": null,
+          "precision": 1.0,
+          "coverage": 0.31666666666666665
+        },
+        "weak_side": {
+          "true": 174,
+          "tp": 15,
+          "recall": 0.08620689655172414,
+          "unknown": 159
+        },
+        "clear": {
+          "true": 0,
+          "negative": 240,
+          "unknown_truth": 0,
+          "tp": 0,
+          "fp": 0,
+          "unknown_on_positive": 0,
+          "unknown_on_negative": 164,
+          "recall": null,
+          "fpr": 0.0,
+          "precision": null,
+          "coverage": 0.31666666666666665
+        },
+        "alerts": {
+          "clear": {
+            "correct": 0,
+            "incorrect": 0,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 1,
+            "incorrect": 0,
+            "unverifiable": 0
+          }
+        }
+      },
+      "fusion": {
+        "states": {
+          "S5": {
+            "true": 240,
+            "negative": 0,
+            "unknown_truth": 0,
+            "tp": 76,
+            "fp": 0,
+            "unknown_on_positive": 164,
+            "unknown_on_negative": 0,
+            "recall": 0.31666666666666665,
+            "fpr": null,
+            "precision": 1.0,
+            "coverage": 0.31666666666666665
+          },
+          "S6": {
+            "true": 0,
+            "negative": 240,
+            "unknown_truth": 0,
+            "tp": 0,
+            "fp": 0,
+            "unknown_on_positive": 0,
+            "unknown_on_negative": 164,
+            "recall": null,
+            "fpr": 0.0,
+            "precision": null,
+            "coverage": 0.31666666666666665
+          }
+        },
+        "side": {
+          "true": 240,
+          "negative": 0,
+          "unknown_truth": 0,
+          "tp": 76,
+          "fp": 0,
+          "unknown_on_positive": 164,
+          "unknown_on_negative": 0,
+          "recall": 0.31666666666666665,
+          "fpr": null,
+          "precision": 1.0,
+          "coverage": 0.31666666666666665
+        },
+        "weak_side": {
+          "true": 174,
+          "tp": 15,
+          "recall": 0.08620689655172414,
+          "unknown": 159
+        },
+        "clear": {
+          "true": 0,
+          "negative": 240,
+          "unknown_truth": 0,
+          "tp": 0,
+          "fp": 0,
+          "unknown_on_positive": 0,
+          "unknown_on_negative": 164,
+          "recall": null,
+          "fpr": 0.0,
+          "precision": null,
+          "coverage": 0.31666666666666665
+        },
+        "alerts": {
+          "clear": {
+            "correct": 0,
+            "incorrect": 0,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 1,
+            "incorrect": 0,
+            "unverifiable": 0
+          }
+        }
+      }
+    }
+  }
+}

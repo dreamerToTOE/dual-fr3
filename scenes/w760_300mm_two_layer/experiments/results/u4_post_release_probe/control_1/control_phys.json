@@ -1,0 +1,51 @@
+{
+  "pre_probe_windows": {
+    "0.9": {
+      "last_step": 10347,
+      "side": {
+        "False": 12
+      },
+      "left_cup": {
+        "False": 12
+      },
+      "mean_side_N": 0.0,
+      "strict_detached": {
+        "True": 12
+      }
+    },
+    "1.6": {
+      "last_step": 10431,
+      "side": {
+        "False": 12
+      },
+      "left_cup": {
+        "False": 12
+      },
+      "mean_side_N": 0.0,
+      "strict_detached": {
+        "True": 12
+      }
+    }
+  },
+  "name": "control_1",
+  "hz": 120,
+  "handoff_start": 10239,
+  "handoff_end": 11886,
+  "handoff_ticks": 1647,
+  "first_physx_cup_clear_3_step": 10318,
+  "known": {
+    "True": 64,
+    "False": 1583
+  },
+  "longest_no_side_bearing": 1582,
+  "longest_bearing_from_unload": 0,
+  "longest_clear_from_unload": 1569,
+  "losses_ge12": [
+    {
+      "onset_step": 10305,
+      "end_step": 11886,
+      "duration_steps": 1582,
+      "onset_after_unload_s": 0.55
+    }
+  ]
+}
