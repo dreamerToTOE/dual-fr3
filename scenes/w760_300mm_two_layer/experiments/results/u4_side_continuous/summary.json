@@ -1,0 +1,1157 @@
+{
+  "trials": [
+    "back04",
+    "forward04",
+    "nominal"
+  ],
+  "windows": {
+    "handoff": {
+      "trials": 3,
+      "baseline": {
+        "weak_side": {
+          "tp": 64,
+          "true": 2736,
+          "fp": 6,
+          "negative": 1427,
+          "recall": 0.023391812865497075,
+          "fpr": 0.004204625087596356
+        },
+        "side": {
+          "tp": 223,
+          "true": 3519,
+          "fp": 6,
+          "negative": 1427,
+          "recall": 0.06337027564649048,
+          "fpr": 0.004204625087596356
+        },
+        "clear": {
+          "tp": 12,
+          "true": 1427,
+          "fp": 32,
+          "negative": 3519,
+          "recall": 0.008409250175192713,
+          "fpr": 0.009093492469451549
+        },
+        "S5": {
+          "tp": 223,
+          "true": 3519,
+          "fp": 6,
+          "negative": 1427,
+          "recall": 0.06337027564649048,
+          "fpr": 0.004204625087596356
+        },
+        "S6": {
+          "tp": 0,
+          "true": 0,
+          "fp": 0,
+          "negative": 4946,
+          "recall": null,
+          "fpr": 0.0
+        },
+        "alerts": {
+          "clear": {
+            "correct": 0,
+            "incorrect": 4,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 3,
+            "incorrect": 0,
+            "unverifiable": 0
+          }
+        }
+      },
+      "fusion": {
+        "weak_side": {
+          "tp": 64,
+          "true": 2736,
+          "fp": 6,
+          "negative": 1427,
+          "recall": 0.023391812865497075,
+          "fpr": 0.004204625087596356
+        },
+        "side": {
+          "tp": 223,
+          "true": 3519,
+          "fp": 6,
+          "negative": 1427,
+          "recall": 0.06337027564649048,
+          "fpr": 0.004204625087596356
+        },
+        "clear": {
+          "tp": 12,
+          "true": 1427,
+          "fp": 32,
+          "negative": 3519,
+          "recall": 0.008409250175192713,
+          "fpr": 0.009093492469451549
+        },
+        "S5": {
+          "tp": 223,
+          "true": 3519,
+          "fp": 6,
+          "negative": 1427,
+          "recall": 0.06337027564649048,
+          "fpr": 0.004204625087596356
+        },
+        "S6": {
+          "tp": 0,
+          "true": 0,
+          "fp": 0,
+          "negative": 4946,
+          "recall": null,
+          "fpr": 0.0
+        },
+        "alerts": {
+          "clear": {
+            "correct": 0,
+            "incorrect": 4,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 3,
+            "incorrect": 0,
+            "unverifiable": 0
+          }
+        }
+      }
+    },
+    "early_handoff": {
+      "trials": 3,
+      "baseline": {
+        "weak_side": {
+          "tp": 61,
+          "true": 290,
+          "fp": 6,
+          "negative": 202,
+          "recall": 0.2103448275862069,
+          "fpr": 0.0297029702970297
+        },
+        "side": {
+          "tp": 220,
+          "true": 518,
+          "fp": 6,
+          "negative": 202,
+          "recall": 0.4247104247104247,
+          "fpr": 0.0297029702970297
+        },
+        "clear": {
+          "tp": 0,
+          "true": 202,
+          "fp": 0,
+          "negative": 518,
+          "recall": 0.0,
+          "fpr": 0.0
+        },
+        "S5": {
+          "tp": 220,
+          "true": 518,
+          "fp": 6,
+          "negative": 202,
+          "recall": 0.4247104247104247,
+          "fpr": 0.0297029702970297
+        },
+        "S6": {
+          "tp": 0,
+          "true": 0,
+          "fp": 0,
+          "negative": 720,
+          "recall": null,
+          "fpr": 0.0
+        },
+        "alerts": {
+          "clear": {
+            "correct": 0,
+            "incorrect": 0,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 3,
+            "incorrect": 0,
+            "unverifiable": 0
+          }
+        }
+      },
+      "fusion": {
+        "weak_side": {
+          "tp": 61,
+          "true": 290,
+          "fp": 6,
+          "negative": 202,
+          "recall": 0.2103448275862069,
+          "fpr": 0.0297029702970297
+        },
+        "side": {
+          "tp": 220,
+          "true": 518,
+          "fp": 6,
+          "negative": 202,
+          "recall": 0.4247104247104247,
+          "fpr": 0.0297029702970297
+        },
+        "clear": {
+          "tp": 0,
+          "true": 202,
+          "fp": 0,
+          "negative": 518,
+          "recall": 0.0,
+          "fpr": 0.0
+        },
+        "S5": {
+          "tp": 220,
+          "true": 518,
+          "fp": 6,
+          "negative": 202,
+          "recall": 0.4247104247104247,
+          "fpr": 0.0297029702970297
+        },
+        "S6": {
+          "tp": 0,
+          "true": 0,
+          "fp": 0,
+          "negative": 720,
+          "recall": null,
+          "fpr": 0.0
+        },
+        "alerts": {
+          "clear": {
+            "correct": 0,
+            "incorrect": 0,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 3,
+            "incorrect": 0,
+            "unverifiable": 0
+          }
+        }
+      }
+    },
+    "rear_stroke": {
+      "trials": 3,
+      "baseline": {
+        "weak_side": {
+          "tp": 3217,
+          "true": 5227,
+          "fp": 242,
+          "negative": 2313,
+          "recall": 0.6154581978190167,
+          "fpr": 0.10462602680501513
+        },
+        "side": {
+          "tp": 4666,
+          "true": 7081,
+          "fp": 242,
+          "negative": 2313,
+          "recall": 0.658946476486372,
+          "fpr": 0.10462602680501513
+        },
+        "clear": {
+          "tp": 1103,
+          "true": 2313,
+          "fp": 533,
+          "negative": 7081,
+          "recall": 0.47686986597492437,
+          "fpr": 0.07527185425787318
+        },
+        "S5": {
+          "tp": 2731,
+          "true": 6889,
+          "fp": 241,
+          "negative": 2505,
+          "recall": 0.3964290898533895,
+          "fpr": 0.09620758483033932
+        },
+        "S6": {
+          "tp": 109,
+          "true": 207,
+          "fp": 0,
+          "negative": 9187,
+          "recall": 0.5265700483091788,
+          "fpr": 0.0
+        },
+        "alerts": {
+          "clear": {
+            "correct": 94,
+            "incorrect": 107,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 568,
+            "incorrect": 30,
+            "unverifiable": 0
+          }
+        }
+      },
+      "fusion": {
+        "weak_side": {
+          "tp": 3217,
+          "true": 5227,
+          "fp": 242,
+          "negative": 2313,
+          "recall": 0.6154581978190167,
+          "fpr": 0.10462602680501513
+        },
+        "side": {
+          "tp": 4666,
+          "true": 7081,
+          "fp": 242,
+          "negative": 2313,
+          "recall": 0.658946476486372,
+          "fpr": 0.10462602680501513
+        },
+        "clear": {
+          "tp": 1104,
+          "true": 2313,
+          "fp": 533,
+          "negative": 7081,
+          "recall": 0.4773022049286641,
+          "fpr": 0.07527185425787318
+        },
+        "S5": {
+          "tp": 2731,
+          "true": 6889,
+          "fp": 241,
+          "negative": 2505,
+          "recall": 0.3964290898533895,
+          "fpr": 0.09620758483033932
+        },
+        "S6": {
+          "tp": 109,
+          "true": 207,
+          "fp": 0,
+          "negative": 9187,
+          "recall": 0.5265700483091788,
+          "fpr": 0.0
+        },
+        "alerts": {
+          "clear": {
+            "correct": 95,
+            "incorrect": 107,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 568,
+            "incorrect": 30,
+            "unverifiable": 0
+          }
+        }
+      }
+    }
+  },
+  "events": {
+    "from_unload_command_3": {
+      "baseline": {
+        "clear_targets": 3,
+        "clear_hits": 1,
+        "reload_targets": 3,
+        "reload_hits": 0,
+        "both_hits": 0,
+        "new_clear_alerts": 1,
+        "new_reload_alerts": 0,
+        "both_new_alerts": 0
+      },
+      "fusion": {
+        "clear_targets": 3,
+        "clear_hits": 1,
+        "reload_targets": 3,
+        "reload_hits": 0,
+        "both_hits": 0,
+        "new_clear_alerts": 1,
+        "new_reload_alerts": 0,
+        "both_new_alerts": 0
+      }
+    },
+    "from_unload_command_12": {
+      "baseline": {
+        "clear_targets": 3,
+        "clear_hits": 2,
+        "reload_targets": 3,
+        "reload_hits": 2,
+        "both_hits": 1,
+        "new_clear_alerts": 1,
+        "new_reload_alerts": 2,
+        "both_new_alerts": 0
+      },
+      "fusion": {
+        "clear_targets": 3,
+        "clear_hits": 2,
+        "reload_targets": 3,
+        "reload_hits": 2,
+        "both_hits": 1,
+        "new_clear_alerts": 1,
+        "new_reload_alerts": 2,
+        "both_new_alerts": 0
+      }
+    }
+  },
+  "calibration_sha256": "eaab65cbe1756ae55d176362159e94afa88bb335c196e2c6dd273bd9d55e543f",
+  "threshold_sensitivity": {
+    "0.5": {
+      "windows": {
+        "handoff": {
+          "trials": 3,
+          "baseline": {
+            "weak_side": {
+              "tp": 64,
+              "true": 2736,
+              "fp": 6,
+              "negative": 1427,
+              "recall": 0.023391812865497075,
+              "fpr": 0.004204625087596356
+            },
+            "side": {
+              "tp": 223,
+              "true": 3519,
+              "fp": 6,
+              "negative": 1427,
+              "recall": 0.06337027564649048,
+              "fpr": 0.004204625087596356
+            },
+            "clear": {
+              "tp": 12,
+              "true": 1427,
+              "fp": 32,
+              "negative": 3519,
+              "recall": 0.008409250175192713,
+              "fpr": 0.009093492469451549
+            },
+            "S5": {
+              "tp": 223,
+              "true": 3519,
+              "fp": 6,
+              "negative": 1427,
+              "recall": 0.06337027564649048,
+              "fpr": 0.004204625087596356
+            },
+            "S6": {
+              "tp": 0,
+              "true": 0,
+              "fp": 0,
+              "negative": 4946,
+              "recall": null,
+              "fpr": 0.0
+            },
+            "alerts": {
+              "clear": {
+                "correct": 0,
+                "incorrect": 4,
+                "unverifiable": 0
+              },
+              "bearing": {
+                "correct": 3,
+                "incorrect": 0,
+                "unverifiable": 0
+              }
+            }
+          },
+          "fusion": {
+            "weak_side": {
+              "tp": 64,
+              "true": 2736,
+              "fp": 6,
+              "negative": 1427,
+              "recall": 0.023391812865497075,
+              "fpr": 0.004204625087596356
+            },
+            "side": {
+              "tp": 223,
+              "true": 3519,
+              "fp": 6,
+              "negative": 1427,
+              "recall": 0.06337027564649048,
+              "fpr": 0.004204625087596356
+            },
+            "clear": {
+              "tp": 12,
+              "true": 1427,
+              "fp": 32,
+              "negative": 3519,
+              "recall": 0.008409250175192713,
+              "fpr": 0.009093492469451549
+            },
+            "S5": {
+              "tp": 223,
+              "true": 3519,
+              "fp": 6,
+              "negative": 1427,
+              "recall": 0.06337027564649048,
+              "fpr": 0.004204625087596356
+            },
+            "S6": {
+              "tp": 0,
+              "true": 0,
+              "fp": 0,
+              "negative": 4946,
+              "recall": null,
+              "fpr": 0.0
+            },
+            "alerts": {
+              "clear": {
+                "correct": 0,
+                "incorrect": 4,
+                "unverifiable": 0
+              },
+              "bearing": {
+                "correct": 3,
+                "incorrect": 0,
+                "unverifiable": 0
+              }
+            }
+          }
+        },
+        "early_handoff": {
+          "trials": 3,
+          "baseline": {
+            "weak_side": {
+              "tp": 61,
+              "true": 290,
+              "fp": 6,
+              "negative": 202,
+              "recall": 0.2103448275862069,
+              "fpr": 0.0297029702970297
+            },
+            "side": {
+              "tp": 220,
+              "true": 518,
+              "fp": 6,
+              "negative": 202,
+              "recall": 0.4247104247104247,
+              "fpr": 0.0297029702970297
+            },
+            "clear": {
+              "tp": 0,
+              "true": 202,
+              "fp": 0,
+              "negative": 518,
+              "recall": 0.0,
+              "fpr": 0.0
+            },
+            "S5": {
+              "tp": 220,
+              "true": 518,
+              "fp": 6,
+              "negative": 202,
+              "recall": 0.4247104247104247,
+              "fpr": 0.0297029702970297
+            },
+            "S6": {
+              "tp": 0,
+              "true": 0,
+              "fp": 0,
+              "negative": 720,
+              "recall": null,
+              "fpr": 0.0
+            },
+            "alerts": {
+              "clear": {
+                "correct": 0,
+                "incorrect": 0,
+                "unverifiable": 0
+              },
+              "bearing": {
+                "correct": 3,
+                "incorrect": 0,
+                "unverifiable": 0
+              }
+            }
+          },
+          "fusion": {
+            "weak_side": {
+              "tp": 61,
+              "true": 290,
+              "fp": 6,
+              "negative": 202,
+              "recall": 0.2103448275862069,
+              "fpr": 0.0297029702970297
+            },
+            "side": {
+              "tp": 220,
+              "true": 518,
+              "fp": 6,
+              "negative": 202,
+              "recall": 0.4247104247104247,
+              "fpr": 0.0297029702970297
+            },
+            "clear": {
+              "tp": 0,
+              "true": 202,
+              "fp": 0,
+              "negative": 518,
+              "recall": 0.0,
+              "fpr": 0.0
+            },
+            "S5": {
+              "tp": 220,
+              "true": 518,
+              "fp": 6,
+              "negative": 202,
+              "recall": 0.4247104247104247,
+              "fpr": 0.0297029702970297
+            },
+            "S6": {
+              "tp": 0,
+              "true": 0,
+              "fp": 0,
+              "negative": 720,
+              "recall": null,
+              "fpr": 0.0
+            },
+            "alerts": {
+              "clear": {
+                "correct": 0,
+                "incorrect": 0,
+                "unverifiable": 0
+              },
+              "bearing": {
+                "correct": 3,
+                "incorrect": 0,
+                "unverifiable": 0
+              }
+            }
+          }
+        },
+        "rear_stroke": {
+          "trials": 3,
+          "baseline": {
+            "weak_side": {
+              "tp": 3217,
+              "true": 5227,
+              "fp": 242,
+              "negative": 2313,
+              "recall": 0.6154581978190167,
+              "fpr": 0.10462602680501513
+            },
+            "side": {
+              "tp": 4666,
+              "true": 7081,
+              "fp": 242,
+              "negative": 2313,
+              "recall": 0.658946476486372,
+              "fpr": 0.10462602680501513
+            },
+            "clear": {
+              "tp": 1103,
+              "true": 2313,
+              "fp": 533,
+              "negative": 7081,
+              "recall": 0.47686986597492437,
+              "fpr": 0.07527185425787318
+            },
+            "S5": {
+              "tp": 2731,
+              "true": 6889,
+              "fp": 241,
+              "negative": 2505,
+              "recall": 0.3964290898533895,
+              "fpr": 0.09620758483033932
+            },
+            "S6": {
+              "tp": 109,
+              "true": 207,
+              "fp": 0,
+              "negative": 9187,
+              "recall": 0.5265700483091788,
+              "fpr": 0.0
+            },
+            "alerts": {
+              "clear": {
+                "correct": 94,
+                "incorrect": 107,
+                "unverifiable": 0
+              },
+              "bearing": {
+                "correct": 568,
+                "incorrect": 30,
+                "unverifiable": 0
+              }
+            }
+          },
+          "fusion": {
+            "weak_side": {
+              "tp": 3268,
+              "true": 5227,
+              "fp": 249,
+              "negative": 2313,
+              "recall": 0.6252152286206237,
+              "fpr": 0.10765239948119326
+            },
+            "side": {
+              "tp": 4718,
+              "true": 7081,
+              "fp": 249,
+              "negative": 2313,
+              "recall": 0.6662900720237255,
+              "fpr": 0.10765239948119326
+            },
+            "clear": {
+              "tp": 1287,
+              "true": 2313,
+              "fp": 539,
+              "negative": 7081,
+              "recall": 0.556420233463035,
+              "fpr": 0.07611919220449088
+            },
+            "S5": {
+              "tp": 2747,
+              "true": 6889,
+              "fp": 248,
+              "negative": 2505,
+              "recall": 0.3987516330381768,
+              "fpr": 0.09900199600798404
+            },
+            "S6": {
+              "tp": 109,
+              "true": 207,
+              "fp": 0,
+              "negative": 9187,
+              "recall": 0.5265700483091788,
+              "fpr": 0.0
+            },
+            "alerts": {
+              "clear": {
+                "correct": 90,
+                "incorrect": 104,
+                "unverifiable": 0
+              },
+              "bearing": {
+                "correct": 576,
+                "incorrect": 30,
+                "unverifiable": 0
+              }
+            }
+          }
+        }
+      },
+      "events": {
+        "from_unload_command_3": {
+          "baseline": {
+            "clear_targets": 3,
+            "clear_hits": 1,
+            "reload_targets": 3,
+            "reload_hits": 0,
+            "both_hits": 0,
+            "new_clear_alerts": 1,
+            "new_reload_alerts": 0,
+            "both_new_alerts": 0
+          },
+          "fusion": {
+            "clear_targets": 3,
+            "clear_hits": 1,
+            "reload_targets": 3,
+            "reload_hits": 0,
+            "both_hits": 0,
+            "new_clear_alerts": 1,
+            "new_reload_alerts": 0,
+            "both_new_alerts": 0
+          }
+        },
+        "from_unload_command_12": {
+          "baseline": {
+            "clear_targets": 3,
+            "clear_hits": 2,
+            "reload_targets": 3,
+            "reload_hits": 2,
+            "both_hits": 1,
+            "new_clear_alerts": 1,
+            "new_reload_alerts": 2,
+            "both_new_alerts": 0
+          },
+          "fusion": {
+            "clear_targets": 3,
+            "clear_hits": 2,
+            "reload_targets": 3,
+            "reload_hits": 2,
+            "both_hits": 1,
+            "new_clear_alerts": 1,
+            "new_reload_alerts": 2,
+            "both_new_alerts": 0
+          }
+        }
+      }
+    },
+    "0.0": {
+      "windows": {
+        "handoff": {
+          "trials": 3,
+          "baseline": {
+            "weak_side": {
+              "tp": 64,
+              "true": 2736,
+              "fp": 6,
+              "negative": 1427,
+              "recall": 0.023391812865497075,
+              "fpr": 0.004204625087596356
+            },
+            "side": {
+              "tp": 223,
+              "true": 3519,
+              "fp": 6,
+              "negative": 1427,
+              "recall": 0.06337027564649048,
+              "fpr": 0.004204625087596356
+            },
+            "clear": {
+              "tp": 12,
+              "true": 1427,
+              "fp": 32,
+              "negative": 3519,
+              "recall": 0.008409250175192713,
+              "fpr": 0.009093492469451549
+            },
+            "S5": {
+              "tp": 223,
+              "true": 3519,
+              "fp": 6,
+              "negative": 1427,
+              "recall": 0.06337027564649048,
+              "fpr": 0.004204625087596356
+            },
+            "S6": {
+              "tp": 0,
+              "true": 0,
+              "fp": 0,
+              "negative": 4946,
+              "recall": null,
+              "fpr": 0.0
+            },
+            "alerts": {
+              "clear": {
+                "correct": 0,
+                "incorrect": 4,
+                "unverifiable": 0
+              },
+              "bearing": {
+                "correct": 3,
+                "incorrect": 0,
+                "unverifiable": 0
+              }
+            }
+          },
+          "fusion": {
+            "weak_side": {
+              "tp": 1944,
+              "true": 2736,
+              "fp": 674,
+              "negative": 1427,
+              "recall": 0.7105263157894737,
+              "fpr": 0.47231955150665733
+            },
+            "side": {
+              "tp": 2486,
+              "true": 3519,
+              "fp": 674,
+              "negative": 1427,
+              "recall": 0.7064506962205171,
+              "fpr": 0.47231955150665733
+            },
+            "clear": {
+              "tp": 748,
+              "true": 1427,
+              "fp": 1033,
+              "negative": 3519,
+              "recall": 0.524176594253679,
+              "fpr": 0.2935493037794828
+            },
+            "S5": {
+              "tp": 2486,
+              "true": 3519,
+              "fp": 674,
+              "negative": 1427,
+              "recall": 0.7064506962205171,
+              "fpr": 0.47231955150665733
+            },
+            "S6": {
+              "tp": 0,
+              "true": 0,
+              "fp": 0,
+              "negative": 4946,
+              "recall": null,
+              "fpr": 0.0
+            },
+            "alerts": {
+              "clear": {
+                "correct": 55,
+                "incorrect": 117,
+                "unverifiable": 0
+              },
+              "bearing": {
+                "correct": 155,
+                "incorrect": 82,
+                "unverifiable": 0
+              }
+            }
+          }
+        },
+        "early_handoff": {
+          "trials": 3,
+          "baseline": {
+            "weak_side": {
+              "tp": 61,
+              "true": 290,
+              "fp": 6,
+              "negative": 202,
+              "recall": 0.2103448275862069,
+              "fpr": 0.0297029702970297
+            },
+            "side": {
+              "tp": 220,
+              "true": 518,
+              "fp": 6,
+              "negative": 202,
+              "recall": 0.4247104247104247,
+              "fpr": 0.0297029702970297
+            },
+            "clear": {
+              "tp": 0,
+              "true": 202,
+              "fp": 0,
+              "negative": 518,
+              "recall": 0.0,
+              "fpr": 0.0
+            },
+            "S5": {
+              "tp": 220,
+              "true": 518,
+              "fp": 6,
+              "negative": 202,
+              "recall": 0.4247104247104247,
+              "fpr": 0.0297029702970297
+            },
+            "S6": {
+              "tp": 0,
+              "true": 0,
+              "fp": 0,
+              "negative": 720,
+              "recall": null,
+              "fpr": 0.0
+            },
+            "alerts": {
+              "clear": {
+                "correct": 0,
+                "incorrect": 0,
+                "unverifiable": 0
+              },
+              "bearing": {
+                "correct": 3,
+                "incorrect": 0,
+                "unverifiable": 0
+              }
+            }
+          },
+          "fusion": {
+            "weak_side": {
+              "tp": 275,
+              "true": 290,
+              "fp": 137,
+              "negative": 202,
+              "recall": 0.9482758620689655,
+              "fpr": 0.6782178217821783
+            },
+            "side": {
+              "tp": 499,
+              "true": 518,
+              "fp": 137,
+              "negative": 202,
+              "recall": 0.9633204633204633,
+              "fpr": 0.6782178217821783
+            },
+            "clear": {
+              "tp": 61,
+              "true": 202,
+              "fp": 19,
+              "negative": 518,
+              "recall": 0.30198019801980197,
+              "fpr": 0.03667953667953668
+            },
+            "S5": {
+              "tp": 499,
+              "true": 518,
+              "fp": 137,
+              "negative": 202,
+              "recall": 0.9633204633204633,
+              "fpr": 0.6782178217821783
+            },
+            "S6": {
+              "tp": 0,
+              "true": 0,
+              "fp": 0,
+              "negative": 720,
+              "recall": null,
+              "fpr": 0.0
+            },
+            "alerts": {
+              "clear": {
+                "correct": 8,
+                "incorrect": 1,
+                "unverifiable": 0
+              },
+              "bearing": {
+                "correct": 14,
+                "incorrect": 12,
+                "unverifiable": 0
+              }
+            }
+          }
+        },
+        "rear_stroke": {
+          "trials": 3,
+          "baseline": {
+            "weak_side": {
+              "tp": 3217,
+              "true": 5227,
+              "fp": 242,
+              "negative": 2313,
+              "recall": 0.6154581978190167,
+              "fpr": 0.10462602680501513
+            },
+            "side": {
+              "tp": 4666,
+              "true": 7081,
+              "fp": 242,
+              "negative": 2313,
+              "recall": 0.658946476486372,
+              "fpr": 0.10462602680501513
+            },
+            "clear": {
+              "tp": 1103,
+              "true": 2313,
+              "fp": 533,
+              "negative": 7081,
+              "recall": 0.47686986597492437,
+              "fpr": 0.07527185425787318
+            },
+            "S5": {
+              "tp": 2731,
+              "true": 6889,
+              "fp": 241,
+              "negative": 2505,
+              "recall": 0.3964290898533895,
+              "fpr": 0.09620758483033932
+            },
+            "S6": {
+              "tp": 109,
+              "true": 207,
+              "fp": 0,
+              "negative": 9187,
+              "recall": 0.5265700483091788,
+              "fpr": 0.0
+            },
+            "alerts": {
+              "clear": {
+                "correct": 94,
+                "incorrect": 107,
+                "unverifiable": 0
+              },
+              "bearing": {
+                "correct": 568,
+                "incorrect": 30,
+                "unverifiable": 0
+              }
+            }
+          },
+          "fusion": {
+            "weak_side": {
+              "tp": 4495,
+              "true": 5227,
+              "fp": 338,
+              "negative": 2313,
+              "recall": 0.8599579108475225,
+              "fpr": 0.1461305663640294
+            },
+            "side": {
+              "tp": 6042,
+              "true": 7081,
+              "fp": 338,
+              "negative": 2313,
+              "recall": 0.8532693122440334,
+              "fpr": 0.1461305663640294
+            },
+            "clear": {
+              "tp": 1974,
+              "true": 2313,
+              "fp": 1000,
+              "negative": 7081,
+              "recall": 0.8534370946822308,
+              "fpr": 0.14122299110295156
+            },
+            "S5": {
+              "tp": 3227,
+              "true": 6889,
+              "fp": 343,
+              "negative": 2505,
+              "recall": 0.46842792858179705,
+              "fpr": 0.13692614770459083
+            },
+            "S6": {
+              "tp": 118,
+              "true": 207,
+              "fp": 0,
+              "negative": 9187,
+              "recall": 0.5700483091787439,
+              "fpr": 0.0
+            },
+            "alerts": {
+              "clear": {
+                "correct": 109,
+                "incorrect": 228,
+                "unverifiable": 0
+              },
+              "bearing": {
+                "correct": 435,
+                "incorrect": 44,
+                "unverifiable": 0
+              }
+            }
+          }
+        }
+      },
+      "events": {
+        "from_unload_command_3": {
+          "baseline": {
+            "clear_targets": 3,
+            "clear_hits": 1,
+            "reload_targets": 3,
+            "reload_hits": 0,
+            "both_hits": 0,
+            "new_clear_alerts": 1,
+            "new_reload_alerts": 0,
+            "both_new_alerts": 0
+          },
+          "fusion": {
+            "clear_targets": 3,
+            "clear_hits": 2,
+            "reload_targets": 3,
+            "reload_hits": 2,
+            "both_hits": 1,
+            "new_clear_alerts": 2,
+            "new_reload_alerts": 2,
+            "both_new_alerts": 1
+          }
+        },
+        "from_unload_command_12": {
+          "baseline": {
+            "clear_targets": 3,
+            "clear_hits": 2,
+            "reload_targets": 3,
+            "reload_hits": 2,
+            "both_hits": 1,
+            "new_clear_alerts": 1,
+            "new_reload_alerts": 2,
+            "both_new_alerts": 0
+          },
+          "fusion": {
+            "clear_targets": 3,
+            "clear_hits": 2,
+            "reload_targets": 3,
+            "reload_hits": 2,
+            "both_hits": 1,
+            "new_clear_alerts": 2,
+            "new_reload_alerts": 1,
+            "both_new_alerts": 0
+          }
+        }
+      }
+    }
+  }
+}
