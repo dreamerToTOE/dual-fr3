@@ -2,6 +2,20 @@
 from textwrap import indent
 
 
+def near_rear(window, target_y, half, command_y, measured_y, load):
+    """Original U4 half-second command/force signature plus calibrated normal distance."""
+    if load < .5:
+        window.clear()
+        return False
+    window.append((command_y, measured_y, load))
+    if len(window) < 61 or not -.002 <= target_y - measured_y - half <= .001:
+        return False
+    rows = list(window)
+    command, motion, rise = (sum(row[i] for row in rows[-8:]) / 8 - sum(row[i] for row in rows[:8]) / 8
+                             for i in range(3))
+    return .000040 <= command <= .000130 and abs(motion) <= .35 * command and rise >= .30
+
+
 def cycle():
     start = 0.
     for name, end, ticks in (("pre", 0., 12), ("out_neg", -.00025, 36), ("hold_neg", -.00025, 12),
@@ -19,16 +33,17 @@ def run_u4_side_probe():
     q = applied_targets["right"].copy()
     anchor, rotation = tcp_fk("right", q)
     previous_phase = contact_monitor.phase
+    amplitude = 0. if U4_SIDE_PROBE == "sham" else .00025
     info = report["u4_side_probe"] = {"timing": U4_SIDE_PROBE, "arm": "right",
                                      "anchor_tcp_m": anchor.tolist(), "pre_step": tick,
-                                     "amplitude_m": .00025}
+                                     "amplitude_m": amplitude}
     contact_monitor.phase = "upper_B_u4_side_probe"
     record(contact_monitor.phase, "STARTED", timing=U4_SIDE_PROBE)
     try:
         with (output_directory / "u4_side_probe.jsonl").open("x") as stream:
             for section, dx in cycle():
                 target = anchor.copy()
-                target[0] += dx
+                target[0] += dx * (amplitude / .00025)
                 q = cartesian_joint_target("right", q, target, rotation)
                 center, attitude = sensed_cube()
                 issues = checker.check({**applied_targets, "right": q}, cube_center=center, cube_rotation=attitude,
@@ -45,7 +60,7 @@ def run_u4_side_probe():
                        "encoder_x_m": arm["tcp_position_m"][0], "right_wrench_world": w}
                 stream.write(json.dumps(row, allow_nan=False) + "\\n")
                 check_current_collision(contact_monitor.phase)
-                if np.linalg.norm(w[:3]) > 10. or np.linalg.norm(w[3:]) > .8:
+                if np.linalg.norm(w[:3]) > force_ceiling or np.linalg.norm(w[3:]) > .8:
                     raise RuntimeError(f"U4 side probe exceeded contact envelope at step {tick}: {w}")
         info["end_step"] = tick
         record(contact_monitor.phase, "RETURNED", timing=U4_SIDE_PROBE)
@@ -60,9 +75,20 @@ def inject(source):
     marker = "            def withdraw(side, axis, sign):"
     source = replace_once(source, marker, indent(PROBE.strip(), "            ") + "\n\n" + marker)
     marker = '                cartesian_move(side, position + .003 * outward, 1.5, phase + "_unload")'
-    source = replace_once(source, marker, marker + '\n                if slot == 4 and axis == 0 and U4_SIDE_PROBE == "early":\n                    run_u4_side_probe()')
+    source = replace_once(source, marker, marker + '\n                if slot == 4 and axis == 0 and U4_SIDE_PROBE in ("early", "sham"):\n                    run_u4_side_probe()')
     marker = "                    for _ in range(travel_ticks):\n                        normal = force(side, 1, 1)"
-    return replace_once(source, marker, '                    for rear_tick in range(travel_ticks):\n'
-                        '                        if U4_SIDE_PROBE == "late" and rear_tick == 300:\n'
-                        '                            run_u4_side_probe()\n'
-                        '                        normal = force(side, 1, 1)')
+    return replace_once(source, marker, '''                    from experiments.u4_side_probe import near_rear
+                    recent_right = deque(maxlen=61)
+                    for rear_tick in range(travel_ticks):
+                        sensor_trigger = False
+                        if U4_SIDE_PROBE == "near" and "u4_side_probe" not in report:
+                            command_y = tcp_fk(side, applied_targets[side])[0][1]
+                            right = last_force_sample[side]
+                            sensor_trigger = near_rear(recent_right, final[1], half, command_y,
+                                                       right["tcp_position_m"][1], -right["tcp_gravity_corrected_world"][1])
+                        if (U4_SIDE_PROBE == "late" and rear_tick == 300) or sensor_trigger:
+                            run_u4_side_probe()
+                            # Resume the admittance state, but rebuild windows that require consecutive motion ticks.
+                            confirmations.clear()
+                            measured_window.clear()
+                        normal = force(side, 1, 1)''')

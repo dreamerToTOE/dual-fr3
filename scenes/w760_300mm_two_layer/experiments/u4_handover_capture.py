@@ -26,15 +26,19 @@ def checkpoint(source, dy):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("isaac_python", type=Path)
-    parser.add_argument("output", type=Path, help="New directory for all three physical runs")
-    parser.add_argument("--side-probe", action="store_true", help="Run three early and two late single-probe trials")
+    parser.add_argument("output", type=Path, help="New directory for independent physical runs")
+    parser.add_argument("--side-probe", action="store_true",
+                        help="Run early (3), late (2), a zero-amplitude sham and near-wall (2) trials")
     args = parser.parse_args()
     source = (SCENE / "validation/upper4_after_transfer_checkpoint.json").read_bytes()
     args.output.mkdir(parents=True, exist_ok=False)
     trials = [(name, dy, None) for name, dy in TRIALS]
     if args.side_probe:
-        trials = [(when + "_" + name, dy, when) for when in ("early", "late")
-                  for name, dy in (TRIALS if when == "early" else TRIALS[:2])]
+        trials = [(when + "_" + name, dy, when)
+                  for when, subset in (("early", TRIALS), ("late", TRIALS[:2]),
+                                       ("sham", TRIALS[:1]), ("near", TRIALS[:2]))
+                  for name, dy in subset]
+    failures = []
     for name, dy, timing in trials:
         input_path = args.output / (name + ".json")
         input_path.write_text(json.dumps(checkpoint(source, dy), indent=2) + "\n")
@@ -44,12 +48,20 @@ def main():
                        "--resume", input_path, "--close-on-finish"]
             if timing:
                 command += ["--u4-side-probe", timing]
-            subprocess.run(command,
-                           stdout=log, stderr=subprocess.STDOUT, check=True)
+            process = subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=False)
+        if process.returncode or not (run / "runner_report.json").is_file():
+            if not args.side_probe:
+                raise RuntimeError(f"{name}: capture exited {process.returncode}, inspect {name}.log")
+            failures.append(name)
+            continue
         report = json.loads((run / "runner_report.json").read_text())
         if not any(e["phase"] == "upper_slot_complete" and e["status"] == "SEATED_STABLE"
                    and e.get("cube_id") == 10 for e in report["phases"]):
-            raise RuntimeError(f"{name}: missing U4 SEATED_STABLE, inspect {name}.log")
+            if not args.side_probe:
+                raise RuntimeError(f"{name}: missing U4 SEATED_STABLE, inspect {name}.log")
+            failures.append(name)
+    if failures:
+        raise SystemExit("Incomplete U4 trials (raw records retained): " + ", ".join(failures))
 
 
 if __name__ == "__main__":
