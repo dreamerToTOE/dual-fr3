@@ -82,6 +82,24 @@ def comparison_windows(rows, hz):
     return windows
 
 
+SENSITIVITY = (.5, 0.)
+
+
+def threshold_rows(rows, model, width):
+    middle = (model.clear_below + model.load_above) / 2
+    lower = middle + width * (model.clear_below - middle)
+    upper = middle + width * (model.load_above - middle)
+    for row in rows:
+        side, state = row["baseline_side"], row["baseline_state"]
+        score = row["continuous_side_score"]
+        if side is None and score is not None:
+            side = False if score < lower else True if score > upper else None
+            if side is not None:
+                rear = row["baseline_rear"]
+                state = ("S1", "S5", "S6")[int(side)+int(rear)] if rear is not None else "UNKNOWN"
+        yield {**row, "fusion_side": side, "fusion_state": state}
+
+
 def run(trial):
     from u4_side_continuous import ContinuousSideObserver, PARAMETERS
 
@@ -120,6 +138,13 @@ def run(trial):
         "windows": comparison_windows(rows, header["hz"]),
         "changed_side_steps": sum(r["baseline_side"] != r["fusion_side"] for r in rows),
     }
+    result["threshold_sensitivity"] = {}
+    for width in SENSITIVITY:
+        alternative = list(threshold_rows(rows, observer, width))
+        result["threshold_sensitivity"][str(width)] = {
+            "events": event_matches(alternative, evaluate(alternative, header["hz"])["events"]),
+            "windows": comparison_windows(alternative, header["hz"]),
+        }
     (trial/"counts.json").write_text(json.dumps(result, indent=2, allow_nan=False)+"\n")
     with gzip.open(trial/"timeline.csv.gz", "wt") as out:
         writer = csv.DictWriter(out, fieldnames=list(rows[0]))
@@ -139,8 +164,17 @@ def summarize(root):
         raise ValueError("No trials to summarize")
     if len({r["calibration_sha256"] for r in reports}) != 1:
         raise ValueError("Trials used different calibrations")
-    summary = {"trials": [r["source"] for r in reports], "windows": {}, "events": {},
+    summary = {"trials": [r["source"] for r in reports], **summary_metrics(reports),
                "calibration_sha256": reports[0]["calibration_sha256"]}
+    summary["threshold_sensitivity"] = {
+        str(width): summary_metrics([r["threshold_sensitivity"][str(width)] for r in reports])
+        for width in SENSITIVITY
+    }
+    (root/"summary.json").write_text(json.dumps(summary, indent=2, allow_nan=False)+"\n")
+
+
+def summary_metrics(reports):
+    summary = {"windows": {}, "events": {}}
     for window in ("handoff", "early_handoff", "rear_stroke"):
         all_scores = [r["windows"][window] for r in reports if window in r["windows"]]
         summary["windows"][window] = total(all_scores)
@@ -165,7 +199,7 @@ def summarize(root):
                                "both_hits": hit_both, "new_clear_alerts": strict_clear,
                                "new_reload_alerts": strict_reload, "both_new_alerts": strict_both}
         summary["events"][duration] = by_model
-    (root/"summary.json").write_text(json.dumps(summary, indent=2, allow_nan=False)+"\n")
+    return summary
 
 
 def total(all_scores):
