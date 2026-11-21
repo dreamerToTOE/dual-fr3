@@ -1,0 +1,31 @@
+{
+  "trial": "forward04",
+  "status": "EXTERNALLY_INTERRUPTED",
+  "original_status": "RUNNING",
+  "original_report_step": 12040,
+  "last_common_step": 13451,
+  "stream_tails": {
+    "contact_states/sensor_inputs.jsonl.gz": {
+      "gzip_trailer_present": false,
+      "complete_rows": 13451,
+      "trailing_partial_line_bytes": 521
+    },
+    "contact_states/reference.jsonl.gz": {
+      "gzip_trailer_present": false,
+      "complete_rows": 13522,
+      "trailing_partial_line_bytes": 2735
+    },
+    "wrench.jsonl.gz": {
+      "gzip_trailer_present": false,
+      "complete_rows": 13527,
+      "trailing_partial_line_bytes": 1818
+    }
+  },
+  "source_sha256": {
+    "runner_report.json": "8cce7bb1e7b9a4392e7ade9c993c3e7d525c6b5d00535e28f07c5171a240d611",
+    "contact_states/sensor_inputs.jsonl.gz": "9f94c0d4706c68235f61335d5e0b927c1a104494c9f2cbddf9e665208fb1de07",
+    "contact_states/reference.jsonl.gz": "a9dff63f3f1aae46b2250bf16d6105f88051e785b1dea7edbb232a34e79c0a53",
+    "wrench.jsonl.gz": "91795c3042af99cf8990099c254d94d7a9e063d812bc010d4eb2c4b753546b3f"
+  },
+  "input_checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e"
+}

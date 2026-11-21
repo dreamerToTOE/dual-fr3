@@ -167,7 +167,14 @@ def run(trial):
 
 
 def aggregate(root):
-    runs = [json.loads(p.read_text()) for p in sorted(root.glob("*/counts.json"))]
+    runs = []
+    for path in sorted(root.glob("*/counts.json")):
+        record = json.loads(path.read_text())
+        if record["source"] != path.parent.name:
+            raise ValueError(f"Score source disagrees with trial directory: {path}")
+        if runs and record["observer_sha256"] != runs[0]["observer_sha256"]:
+            raise ValueError("Trials used different observers")
+        runs.append(record)
     if not runs:
         raise ValueError("No scored runs")
     output = {"trials": [r["source"] for r in runs], "windows": {}}
