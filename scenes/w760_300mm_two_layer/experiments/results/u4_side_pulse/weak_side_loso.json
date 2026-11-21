@@ -1,0 +1,178 @@
+{
+  "older_u4": {
+    "cutoff": 1.8631805006038968,
+    "standardized_weights": {
+      "side_gap_mm": 0.2250638613959432,
+      "right_shear_N": 0.4917249402202845,
+      "right_yaw_Nm": 0.40455886310831457,
+      "front_load_N": -0.8516641678699014,
+      "shear_std_N": -0.07514851928677245,
+      "yaw_std_Nm": -0.34456816317342237,
+      "right_encoder_dx_um": -0.17501879685006047
+    },
+    "windows": {
+      "exchange_and_rear": {
+        "weak_N": 0,
+        "weak_passive_tp": 0,
+        "weak_added_tp": 0,
+        "positive_N": 2995,
+        "added_tp": 0,
+        "negative_N": 2726,
+        "passive_fp": 114,
+        "added_fp": 587
+      },
+      "exchange": {
+        "weak_N": 0,
+        "weak_passive_tp": 0,
+        "weak_added_tp": 0,
+        "positive_N": 61,
+        "added_tp": 0,
+        "negative_N": 1587,
+        "passive_fp": 18,
+        "added_fp": 587
+      },
+      "rear": {
+        "weak_N": 0,
+        "weak_passive_tp": 0,
+        "weak_added_tp": 0,
+        "positive_N": 2934,
+        "added_tp": 0,
+        "negative_N": 1139,
+        "passive_fp": 96,
+        "added_fp": 0
+      }
+    }
+  },
+  "nominal": {
+    "cutoff": 0.9891096762827302,
+    "standardized_weights": {
+      "side_gap_mm": 0.09606302818961164,
+      "right_shear_N": 0.5324119839297151,
+      "right_yaw_Nm": 0.4081882475673383,
+      "front_load_N": -0.35434187834646336,
+      "shear_std_N": 0.2025632004616862,
+      "yaw_std_Nm": -0.11380777692664672,
+      "right_encoder_dx_um": -0.11740629923029988
+    },
+    "windows": {
+      "exchange_and_rear": {
+        "weak_N": 3786,
+        "weak_passive_tp": 1352,
+        "weak_added_tp": 37,
+        "positive_N": 4847,
+        "added_tp": 48,
+        "negative_N": 1021,
+        "passive_fp": 75,
+        "added_fp": 5
+      },
+      "exchange": {
+        "weak_N": 1487,
+        "weak_passive_tp": 6,
+        "weak_added_tp": 0,
+        "positive_N": 1647,
+        "added_tp": 0,
+        "negative_N": 0,
+        "passive_fp": 0,
+        "added_fp": 0
+      },
+      "rear": {
+        "weak_N": 2299,
+        "weak_passive_tp": 1346,
+        "weak_added_tp": 37,
+        "positive_N": 3200,
+        "added_tp": 48,
+        "negative_N": 1021,
+        "passive_fp": 75,
+        "added_fp": 5
+      }
+    }
+  },
+  "forward04": {
+    "cutoff": 0.9184861103254859,
+    "standardized_weights": {
+      "side_gap_mm": -0.04403069791147867,
+      "right_shear_N": 0.49880669659606514,
+      "right_yaw_Nm": 0.4202215179591277,
+      "front_load_N": -0.42744026936988844,
+      "shear_std_N": 0.14573983520222816,
+      "yaw_std_Nm": -0.14795089084959212,
+      "right_encoder_dx_um": -0.15211638818539722
+    },
+    "windows": {
+      "exchange_and_rear": {
+        "weak_N": 3941,
+        "weak_passive_tp": 1407,
+        "weak_added_tp": 24,
+        "positive_N": 5158,
+        "added_tp": 30,
+        "negative_N": 853,
+        "passive_fp": 60,
+        "added_fp": 1
+      },
+      "exchange": {
+        "weak_N": 1406,
+        "weak_passive_tp": 10,
+        "weak_added_tp": 0,
+        "positive_N": 1621,
+        "added_tp": 0,
+        "negative_N": 26,
+        "passive_fp": 0,
+        "added_fp": 0
+      },
+      "rear": {
+        "weak_N": 2535,
+        "weak_passive_tp": 1397,
+        "weak_added_tp": 24,
+        "positive_N": 3537,
+        "added_tp": 30,
+        "negative_N": 827,
+        "passive_fp": 60,
+        "added_fp": 1
+      }
+    }
+  },
+  "back04": {
+    "cutoff": 1.1731201147676875,
+    "standardized_weights": {
+      "side_gap_mm": 0.019612957182684642,
+      "right_shear_N": 0.410859212431594,
+      "right_yaw_Nm": 0.5666592539070409,
+      "front_load_N": -0.3777678968350803,
+      "shear_std_N": 0.23364100110906208,
+      "yaw_std_Nm": -0.15267577092795748,
+      "right_encoder_dx_um": -0.08941532758683339
+    },
+    "windows": {
+      "exchange_and_rear": {
+        "weak_N": 3739,
+        "weak_passive_tp": 1444,
+        "weak_added_tp": 31,
+        "positive_N": 4519,
+        "added_tp": 42,
+        "negative_N": 1149,
+        "passive_fp": 102,
+        "added_fp": 4
+      },
+      "exchange": {
+        "weak_N": 1559,
+        "weak_passive_tp": 18,
+        "weak_added_tp": 0,
+        "positive_N": 1651,
+        "added_tp": 0,
+        "negative_N": 0,
+        "passive_fp": 0,
+        "added_fp": 0
+      },
+      "rear": {
+        "weak_N": 2180,
+        "weak_passive_tp": 1426,
+        "weak_added_tp": 31,
+        "positive_N": 2868,
+        "added_tp": 42,
+        "negative_N": 1149,
+        "passive_fp": 102,
+        "added_fp": 4
+      }
+    }
+  }
+}
