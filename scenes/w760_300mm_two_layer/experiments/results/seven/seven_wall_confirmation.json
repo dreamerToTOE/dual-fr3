@@ -1,0 +1,36 @@
+{
+  "run": "probe035_passive",
+  "control_hz": 120,
+  "scored_steps": [
+    3555,
+    8086
+  ],
+  "method": "Frozen seven-state raw ArUco/FK/wrench wall nominations intersected with archived command/response windows",
+  "comparison": "Same run was previously scored by the local active_probe_replay rule; held out only from seven-observer development",
+  "confirmed_windows_overlap": true,
+  "current_bearing_steps": 90,
+  "sustained_bearing_steps": 67,
+  "first_current_bearing": 7997,
+  "first_sustained_bearing": 8020,
+  "frozen_passive": {
+    "first_step": 7165,
+    "candidate_steps": 922,
+    "candidate_episodes": 1,
+    "without_current_bearing": 832,
+    "without_sustained_bearing": 855,
+    "episodes_starting_before_first_contact": 1
+  },
+  "confirmed": {
+    "first_step": 8034,
+    "candidate_steps": 16,
+    "candidate_episodes": 1,
+    "without_current_bearing": 0,
+    "without_sustained_bearing": 0,
+    "episodes_starting_before_first_contact": 0
+  },
+  "first_confirmation": {
+    "command_advance_m": 4.9124999995930896e-05,
+    "encoder_advance_m": 1.6195647894123866e-05,
+    "axial_force_rise_N": 1.0829056799583636
+  }
+}

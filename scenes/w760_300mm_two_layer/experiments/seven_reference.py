@@ -22,9 +22,11 @@ class SevenReference:
         self.weight = physics["cube_mass_kg"] * self.gravity
         self.tops = {name: pos[2] + dims[2] / 2 for name, pos, dims in config["static_boxes"]
                      if name in ("floor", "supply")}
+        self.floor_box = next((pos, dims) for name, pos, dims in config["static_boxes"] if name == "floor")
         self.centers = {str(key).rsplit("_", 1)[-1]: xyz for key, xyz in (object_positions or {}).items()}
         self.last_step = None
         self.cube_id = None
+        self.seals = ()
         self.load = deque(maxlen=max(4, round(.12 * hz)))
 
     def _box_face(self, other, pair, pos):
@@ -55,6 +57,9 @@ class SevenReference:
         self.cube_id, self.last_step = cube_id, step
         pos = frame["cube_position_m"]
         sealed = sorted(k for k, held in frame["attachments"].items() if held)
+        if tuple(sealed) != self.seals:
+            self.load.clear()
+        self.seals = tuple(sealed)
         supports, sides, cups, directions = set(), set(), set(), set()
         z_impulse, normal_load = 0., 0.
         has_axes = True
@@ -62,6 +67,7 @@ class SevenReference:
         tool_uncertain = False
         ambiguous_contacts = set()
         reason = "missing_current_contact_evidence"
+        stable_support = False
         state, fraction, trend, inferred_tool_share = "UNKNOWN", None, None, None
         active = f"/World/Cube_{cube_id}"
         snapshot = frame["cube_contacts"]
@@ -129,6 +135,9 @@ class SevenReference:
                 trend = median(load for load, _ in samples[-group:]) - median(load for load, _ in samples[:group])
                 # Difference of equal-duration pose slopes gives vertical acceleration
                 # from physical positions, independently of the measured wrist wrench.
+                loads, heights = zip(*samples)
+                stable_support = (min(loads) >= .10 and max(loads) - min(loads) < .08
+                                  and max(heights) - min(heights) < .0005)
                 n = len(samples)
                 v0 = (samples[group][1] - samples[0][1]) * self.hz / group
                 v1 = (samples[-1][1] - samples[-1-group][1]) * self.hz / group
@@ -139,10 +148,16 @@ class SevenReference:
             self.load.clear()
 
         # The box remains upright. A positive clearance above both possible support
-        # levels (or above the floor but below the upper support) disambiguates flight.
+        # levels under its footprint disambiguates flight; the supply pad is outside the tray.
         half_z = self.size * sum(abs(v) for v in frame["cube_rotation_world"][2]) / 2
         bottom = pos[2] - half_z
-        gaps = [bottom - top for top in (*self.tops.values(), self.floor + self.size)]
+        gaps = [bottom - top for top in self.tops.values()]
+        floor_center, floor_size = self.floor_box
+        overlaps_tray = all(abs(pos[i] - floor_center[i]) <=
+                            (floor_size[i] + self.size * sum(abs(r) for r in frame["cube_rotation_world"][i])) / 2
+                            for i in (0, 1))
+        if overlaps_tray:
+            gaps.append(bottom - self.floor - self.size)
         clear = bottom > self.floor + .002 and all(abs(gap) > .002 for gap in gaps)
         # An unorientable lower-box edge cannot negate two independently witnessed
         # horizontal bearings, or reattach an already separated tool.
@@ -164,6 +179,8 @@ class SevenReference:
                     state, reason = "S5", "single_bearing_face"
                 elif not sealed:
                     state, reason = "S1", "cup_impulse_bottom_bearing"
+                elif stable_support:
+                    state, reason = "S2", "native_attachment_stable_bottom_share"
                 elif (fraction if fraction is not None else normal_load * self.hz / self.weight) >= .94:
                     state, reason = "S2", "native_attachment_bottom_bears_weight"
                 else:

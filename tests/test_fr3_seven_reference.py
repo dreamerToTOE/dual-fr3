@@ -43,20 +43,22 @@ def test_current_box_contacts_and_load_transfer():
         assert model.update(frame(step, [bottom]))["state"] == "S0"
     assert model.update(frame(17, [bottom, cup]))["state"] == "S1"
     assert model.update(frame(18, [bottom, cup], True))["state"] == "S2"
+    for step in range(19, 33):
+        assert model.update(frame(step, [bottom, cup], True))["state"] == "S2"
     partial = hit("/World/Cube_1", "cube_neighbor", 2, .04)
-    for step in range(19, 23):
+    for step in range(33, 37):
         transfer = model.update(frame(step, [partial, cup], True))
     assert transfer["state"] == "S3" and transfer["reason"] == "unloading_bottom"
-    assert model.update(frame(23, [cup], True, z=1.))["state"] == "S4"
-    assert model.update(frame(24, [bottom, side, cup]))["state"] == "S5"
-    out = model.update(frame(25, [bottom, side, rear, cup]))
+    assert model.update(frame(37, [cup], True, z=1.))["state"] == "S4"
+    assert model.update(frame(38, [bottom, side, cup]))["state"] == "S5"
+    out = model.update(frame(39, [bottom, side, rear, cup]))
     assert out["state"] == "S6" and out["horizontal_objects"] == sorted([side["collider1"], rear["collider1"]])
-    assert model.update(frame(26, [{**bottom, "current_step_observed": False}]))["state"] == "UNKNOWN"
-    assert model.update(frame(27, []))["state"] == "UNKNOWN"
+    assert model.update(frame(40, [{**bottom, "current_step_observed": False}]))["state"] == "UNKNOWN"
+    assert model.update(frame(41, []))["state"] == "UNKNOWN"
     old = {k: v for k, v in partial.items() if k != "normal_axis_impulse_abs_Ns"}
-    out = model.update(frame(28, [old], True))
+    out = model.update(frame(42, [old], True))
     assert out["support_load_fraction"] is None and out["state"] == "UNKNOWN"
     unoriented = hit("/World/Cube_99", "cube_neighbor", 0, .02)
-    assert model.update(frame(29, [bottom, unoriented]))["state"] == "S0"
-    assert model.update(frame(30, [bottom, cup, side, rear, unoriented]))["state"] == "S6"
-    assert model.update(frame(31, [bottom, cup, side, unoriented]))["state"] == "UNKNOWN"
+    assert model.update(frame(43, [bottom, unoriented]))["state"] == "S0"
+    assert model.update(frame(44, [bottom, cup, side, rear, unoriented]))["state"] == "S6"
+    assert model.update(frame(45, [bottom, cup, side, unoriented]))["state"] == "UNKNOWN"

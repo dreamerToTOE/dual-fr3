@@ -1,0 +1,390 @@
+{
+  "run": "upper1_A",
+  "simulation": "Isaac Sim 4.5.0 visible, one Kit instance, two lower rows preplaced",
+  "checkpoint": "validation/lower_two_rows_checkpoint.json",
+  "checkpoint_sha256": "aa24d31887a6f0ed882f68dcb21b73dbcb1dca0d52b53a8e405678217113d463",
+  "capture_source_sha256": "03f0db73a885074ccfbdc4099d5017f546b62aa0b2ab151458db3e42a3984d9b",
+  "command_tail": "two_row_physx.py OUTPUT --resume validation/lower_two_rows_checkpoint.json --stop-after-upper-a --close-on-finish",
+  "capture_status": "LANDED_RELEASED_RETRACTED",
+  "overall_partial_row_status": "PARTIAL_W760_UPPER_ROW",
+  "cube_id": 7,
+  "physical_step_hz": 120,
+  "box_weight_N": 12.262500000000001,
+  "paired_steps": 21014,
+  "time_span_s": [
+    0.025000001303851604,
+    175.13334246724844
+  ],
+  "sensor_stream_sha256": "47504ffa243c632e06259687d092c1257e87f64ed06de8cc18c60051a80d8c7e",
+  "reference_stream_sha256": "c8387dd9906f2fbe6a60474993815522c98442ed436865721a549df23d384bc7",
+  "observed_positive_normal_pairs": 42089,
+  "of_these_missing_normal_projection": 0,
+  "raw_camera_unique_frame_status": {
+    "detected": 2581,
+    "marker_not_visible": 40
+  },
+  "raw_camera_median_capture_to_receive_s": 0.0,
+  "phases": [
+    {
+      "phase": "upper_supply",
+      "event": "READY_FOR_RGB_LOCALIZATION",
+      "controller_time_s": 1.2
+    },
+    {
+      "phase": "A_approach",
+      "event": "RUNNING",
+      "controller_time_s": 2.2
+    },
+    {
+      "phase": "A_seal_contact",
+      "event": "RUNNING",
+      "controller_time_s": 18.975
+    },
+    {
+      "phase": "A_attach",
+      "event": "SURFACE_GRIPPERS_CLOSED",
+      "controller_time_s": 36.24166666666667
+    },
+    {
+      "phase": "A_lift_and_align",
+      "event": "RUNNING",
+      "controller_time_s": 36.74166666666667
+    },
+    {
+      "phase": "A_lift_and_align",
+      "event": "CLEAR_PHYSX_EXECUTION",
+      "controller_time_s": 47.30833333333333
+    },
+    {
+      "phase": "A_loaded_rail_transfer",
+      "event": "RUNNING",
+      "controller_time_s": 47.30833333333333
+    },
+    {
+      "phase": "A_loaded_rail_transfer",
+      "event": "CLEAR_PHYSX_EXECUTION",
+      "controller_time_s": 109.95
+    },
+    {
+      "phase": "A_vertical_descent",
+      "event": "RUNNING",
+      "controller_time_s": 110.15
+    },
+    {
+      "phase": "A_vertical_descent",
+      "event": "CLEAR_PHYSX_EXECUTION",
+      "controller_time_s": 116.01666666666667
+    },
+    {
+      "phase": "A_support_transfer",
+      "event": "VERTICAL_WRIST_LOAD_CONFIRMATION",
+      "controller_time_s": 116.01666666666667
+    },
+    {
+      "phase": "upper_support_confirmed",
+      "event": "FORCE_TRANSFERRED",
+      "controller_time_s": 120.66666666666667
+    },
+    {
+      "phase": "upper_release",
+      "event": "OPENING_BOTH_SIDE_GRIPPERS",
+      "controller_time_s": 120.66666666666667
+    },
+    {
+      "phase": "A_withdraw_laterally",
+      "event": "RUNNING",
+      "controller_time_s": 121.16666666666667
+    },
+    {
+      "phase": "A_withdraw_laterally",
+      "event": "CLEAR_PHYSX_EXECUTION",
+      "controller_time_s": 123.98333333333333
+    },
+    {
+      "phase": "A_withdraw_up",
+      "event": "RUNNING",
+      "controller_time_s": 123.98333333333333
+    },
+    {
+      "phase": "A_withdraw_up",
+      "event": "CLEAR_PHYSX_EXECUTION",
+      "controller_time_s": 129.85833333333332
+    },
+    {
+      "phase": "A_empty_repark",
+      "event": "RUNNING",
+      "controller_time_s": 129.85833333333332
+    },
+    {
+      "phase": "upper_A_capture",
+      "event": "LANDED_RELEASED_RETRACTED",
+      "controller_time_s": 175.11666666666667
+    },
+    {
+      "phase": "upper_row_complete",
+      "event": "PARTIAL_W760_UPPER_ROW",
+      "controller_time_s": 175.11666666666667
+    }
+  ],
+  "native_support_window_after_release": {
+    "positive_steps": 60,
+    "median_contact_impulse_Ns": 0.1019278861562834,
+    "samples": 60,
+    "median_support_load_N": 12.231346338754008,
+    "support_load_fraction": 0.997459436391764
+  },
+  "units_note": "Per-pair sum of absolute world-axis projections of normal impulses. Magnitudes for confirmed bottom objects multiplied by physics Hz. These are not signed net forces. Wrist columns are shown separately and do not define the reference labels.",
+  "matching_note": "Reference and sensor clocks agree on every step. Controller report uses tick/120 while reference and sensor rows use world simulation time.",
+  "selected_observations": [
+    {
+      "physics_step": 262,
+      "time_s": 2.20000011,
+      "native_seal": {
+        "left": false,
+        "right": false
+      },
+      "cube_z_m": 0.7870000004768372,
+      "vertical_normal_force_magnitudes_by_bottom_object_N": {
+        "/World/Environment/supply": 12.26254798
+      },
+      "bottom_load_fraction_of_weight": 1.0000039,
+      "left_right_measured_wrist_world_z_N": [
+        -3.16619863757389e-07,
+        -5.550384586653847e-07
+      ]
+    },
+    {
+      "physics_step": 4408,
+      "time_s": 36.75000192,
+      "native_seal": {
+        "left": true,
+        "right": true
+      },
+      "cube_z_m": 0.7869999408721924,
+      "vertical_normal_force_magnitudes_by_bottom_object_N": {
+        "/World/Environment/supply": 11.30480122
+      },
+      "bottom_load_fraction_of_weight": 0.9219002,
+      "left_right_measured_wrist_world_z_N": [
+        -0.6837080386385764,
+        -0.2709343821515692
+      ]
+    },
+    {
+      "physics_step": 4414,
+      "time_s": 36.80000192,
+      "native_seal": {
+        "left": true,
+        "right": true
+      },
+      "cube_z_m": 0.7869998812675476,
+      "vertical_normal_force_magnitudes_by_bottom_object_N": {
+        "/World/Environment/supply": 10.55028353
+      },
+      "bottom_load_fraction_of_weight": 0.8603697,
+      "left_right_measured_wrist_world_z_N": [
+        -1.2041448585259695,
+        -0.5096339812892032
+      ]
+    },
+    {
+      "physics_step": 4426,
+      "time_s": 36.90000192,
+      "native_seal": {
+        "left": true,
+        "right": true
+      },
+      "cube_z_m": 0.7869999408721924,
+      "vertical_normal_force_magnitudes_by_bottom_object_N": {
+        "/World/Environment/supply": 5.26541289
+      },
+      "bottom_load_fraction_of_weight": 0.4293915,
+      "left_right_measured_wrist_world_z_N": [
+        -4.310712996761383,
+        -2.703129121228521
+      ]
+    },
+    {
+      "physics_step": 4438,
+      "time_s": 37.00000193,
+      "native_seal": {
+        "left": true,
+        "right": true
+      },
+      "cube_z_m": 0.7870080471038818,
+      "vertical_normal_force_magnitudes_by_bottom_object_N": {
+        "/World/Environment/supply": 0.03184311
+      },
+      "bottom_load_fraction_of_weight": 0.0025968,
+      "left_right_measured_wrist_world_z_N": [
+        -6.1553658628219265,
+        -6.068563088472404
+      ]
+    },
+    {
+      "physics_step": 5674,
+      "time_s": 47.30000247,
+      "native_seal": {
+        "left": true,
+        "right": true
+      },
+      "cube_z_m": 1.1249239444732666,
+      "vertical_normal_force_magnitudes_by_bottom_object_N": {},
+      "bottom_load_fraction_of_weight": 0.0,
+      "left_right_measured_wrist_world_z_N": [
+        -7.218616420141551,
+        -5.025880953553929
+      ]
+    },
+    {
+      "physics_step": 13920,
+      "time_s": 116.01667272,
+      "native_seal": {
+        "left": true,
+        "right": true
+      },
+      "cube_z_m": 0.9374821186065674,
+      "vertical_normal_force_magnitudes_by_bottom_object_N": {},
+      "bottom_load_fraction_of_weight": 0.0,
+      "left_right_measured_wrist_world_z_N": [
+        -6.121167064372138,
+        -6.151947402278289
+      ]
+    },
+    {
+      "physics_step": 14386,
+      "time_s": 119.90000625,
+      "native_seal": {
+        "left": true,
+        "right": true
+      },
+      "cube_z_m": 0.9370319247245789,
+      "vertical_normal_force_magnitudes_by_bottom_object_N": {
+        "/World/Cube_5": 0.72741771
+      },
+      "bottom_load_fraction_of_weight": 0.0593205,
+      "left_right_measured_wrist_world_z_N": [
+        -6.016352404530084,
+        -5.4649829856081515
+      ]
+    },
+    {
+      "physics_step": 14400,
+      "time_s": 120.01667293,
+      "native_seal": {
+        "left": true,
+        "right": true
+      },
+      "cube_z_m": 0.9370241761207581,
+      "vertical_normal_force_magnitudes_by_bottom_object_N": {
+        "/World/Cube_5": 2.2765886,
+        "/World/Cube_6": 0.06347955
+      },
+      "bottom_load_fraction_of_weight": 0.1908312,
+      "left_right_measured_wrist_world_z_N": [
+        -5.533459699768887,
+        -4.398870170180404
+      ]
+    },
+    {
+      "physics_step": 14440,
+      "time_s": 120.35000628,
+      "native_seal": {
+        "left": true,
+        "right": true
+      },
+      "cube_z_m": 0.9369995594024658,
+      "vertical_normal_force_magnitudes_by_bottom_object_N": {
+        "/World/Cube_13": 0.80991648,
+        "/World/Cube_3": 1.09804158,
+        "/World/Cube_5": 4.32732054,
+        "/World/Cube_6": 3.62193989
+      },
+      "bottom_load_fraction_of_weight": 0.8038506,
+      "left_right_measured_wrist_world_z_N": [
+        -1.0739158878103183,
+        -1.3304986975466022
+      ]
+    },
+    {
+      "physics_step": 14480,
+      "time_s": 120.68333963,
+      "native_seal": {
+        "left": true,
+        "right": true
+      },
+      "cube_z_m": 0.9369995594024658,
+      "vertical_normal_force_magnitudes_by_bottom_object_N": {
+        "/World/Cube_13": 0.30359535,
+        "/World/Cube_3": 1.31515363,
+        "/World/Cube_5": 5.75842001,
+        "/World/Cube_6": 5.10369916
+      },
+      "bottom_load_fraction_of_weight": 1.0178078,
+      "left_right_measured_wrist_world_z_N": [
+        1.0470312614514639,
+        -0.8227578405273916
+      ]
+    },
+    {
+      "physics_step": 14481,
+      "time_s": 120.69167296,
+      "native_seal": {
+        "left": false,
+        "right": false
+      },
+      "cube_z_m": 0.9369999766349792,
+      "vertical_normal_force_magnitudes_by_bottom_object_N": {
+        "/World/Cube_13": 0.4196612,
+        "/World/Cube_3": 2.05279351,
+        "/World/Cube_5": 6.4155757,
+        "/World/Cube_6": 3.39217759
+      },
+      "bottom_load_fraction_of_weight": 1.0014441,
+      "left_right_measured_wrist_world_z_N": [
+        -0.0028977761024995565,
+        -0.002669925616236277
+      ]
+    },
+    {
+      "physics_step": 14638,
+      "time_s": 122.00000636,
+      "native_seal": {
+        "left": false,
+        "right": false
+      },
+      "cube_z_m": 0.9369998574256897,
+      "vertical_normal_force_magnitudes_by_bottom_object_N": {
+        "/World/Cube_13": 0.20069921,
+        "/World/Cube_3": 1.83925096,
+        "/World/Cube_5": 6.63873131,
+        "/World/Cube_6": 3.57863705
+      },
+      "bottom_load_fraction_of_weight": 0.9995775,
+      "left_right_measured_wrist_world_z_N": [
+        -0.0002988368132664037,
+        -0.0003311134111815136
+      ]
+    },
+    {
+      "physics_step": 21012,
+      "time_s": 175.1166758,
+      "native_seal": {
+        "left": false,
+        "right": false
+      },
+      "cube_z_m": 0.9369998574256897,
+      "vertical_normal_force_magnitudes_by_bottom_object_N": {
+        "/World/Cube_13": 0.16099676,
+        "/World/Cube_3": 3.79389712,
+        "/World/Cube_5": 3.17706603,
+        "/World/Cube_6": 5.12581801
+      },
+      "bottom_load_fraction_of_weight": 0.9996149,
+      "left_right_measured_wrist_world_z_N": [
+        -7.97900119158002e-07,
+        -8.237867811134964e-08
+      ]
+    }
+  ]
+}

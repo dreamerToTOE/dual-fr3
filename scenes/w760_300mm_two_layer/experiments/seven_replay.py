@@ -112,6 +112,67 @@ def plot(rows, title, output):
     plt.close(fig)
 
 
+def plot_transfer(samples, physical, estimated, config, output):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    t = np.array([s["time_s"] for s, _ in samples])
+    weight = config["physics"]["cube_mass_kg"] * abs(config["physics"]["gravity_m_s2"][2])
+    bottom = np.array([np.nan if r["support_load_fraction"] is None else r["support_load_fraction"]
+                       for r in physical])
+    wrist = np.array([-(s["left_wrench_world"][2] + s["right_wrench_world"][2]) / weight
+                      for s, _ in samples])
+    airborne = [i for i, r in enumerate(physical) if r["state"] == "S4"]
+    if not airborne:
+        return
+    fig, panels = plt.subplots(1, 2, figsize=(10, 3.2), sharey=True, constrained_layout=True)
+    for ax, label, reason, fallback in zip(panels, ("Lift-off", "Landing"),
+                                           ("unloading_bottom", "loading_bottom"), (airborne[0], airborne[-1])):
+        transfer_times = [t[i] for i, r in enumerate(physical) if r["state"] == "S3" and r["reason"] == reason]
+        center = float(np.median(transfer_times)) if transfer_times else t[fallback]
+        window = np.abs(t-center) <= 1.0
+        ax.plot(t[window]-center, bottom[window], label="Bottom / PhysX", color="#136a8a")
+        ax.plot(t[window]-center, wrist[window], label="Wrists / sensors", color="#ce650c")
+        for y, seq, source, color in ((-.10, physical, "Reference S3", "#3f5889"),
+                                      (-.22, estimated, "Estimated S3", "#934774")):
+            ticks = window & np.array([(r.get("state", r.get("pred")) == "S3") for r in seq])
+            ax.scatter(t[ticks]-center, np.full(ticks.sum(), y), s=8, marker="|", label=source, color=color)
+        ax.axhline(1, lw=.5, color=".55", ls="--")
+        ax.set(title=label, xlabel="Time from transfer midpoint (s)")
+    panels[0].set_ylabel("Vertical load / box weight")
+    panels[1].legend(fontsize=8, loc="upper right")
+    fig.savefig(output, dpi=145)
+    plt.close(fig)
+
+
+def optical_audit(samples, image):
+    """Score the raw marker estimate against the independent pose at exposure."""
+    times = np.array([physical["time_s"] for _, physical in samples])
+    positions = np.array([physical["cube_position_m"] for _, physical in samples])
+    errors, ages = [], []
+    packets = detected = 0
+    for sensor, _ in samples:
+        packet = sensor.get(image)
+        if not packet:
+            continue
+        packets += 1
+        if packet.get("status") != "detected" or packet.get("position_m") is None:
+            continue
+        detected += 1
+        stamp = packet["capture_time_s"]
+        if not times[0] <= stamp <= times[-1]:
+            continue
+        location = [np.interp(stamp, times, axis) for axis in positions.T]
+        errors.append(1000 * (np.asarray(packet["position_m"]) - location))
+        ages.append(1000 * (packet["received_time_s"] - stamp))
+    result = {"packets": packets, "detected": detected, "paired": len(errors)}
+    if errors:
+        result.update(median_signed_xyz_mm=np.median(errors, axis=0).tolist(),
+                      median_exposure_to_receive_ms=float(np.median(ages)))
+    return result
+
+
 def replay(source, output):
     with gzip.open(source, "rt") as file:
         header = json.loads(next(file))
@@ -141,10 +202,15 @@ def replay(source, output):
                     trace.append({"xy_error_mm": float(np.linalg.norm(error[:2])) if error is not None else None,
                                   "z_error_mm": float(error[2]) if error is not None else None,
                                   "step": sensor["physics_step"], "time_s": sensor["time_s"], "ref": truth["state"],
-                                  "pred": result["state"], "reference_objects": sorted(truth["horizontal_objects"]),
+                                  "reason": truth["reason"], "pred": result["state"], "reference_objects": sorted(truth["horizontal_objects"]),
                                   "boundaries": sorted(result["boundaries"]), "camera_age_s": result["camera_age_s"]})
                 scores[key] = metrics(trace, hz)
                 scores[key]["target_confirmation"] = target_events(header, trace)
+                if header["case"] == "a":
+                    scores[key]["transfer_by_direction"] = {
+                        reason: {"n": sum(r["ref"] == "S3" and r["reason"] == reason for r in trace),
+                                 "hits": sum(r["ref"] == r["pred"] == "S3" and r["reason"] == reason for r in trace)}
+                        for reason in ("loading_bottom", "unloading_bottom")}
                 scores[key]["position_errors"] = {}
                 for state in ("all", *STATES):
                     valid = [r for r in trace if r["xy_error_mm"] is not None and (state == "all" or r["ref"] == state)]
@@ -158,6 +224,8 @@ def replay(source, output):
                 if image == "rgb" and delay == 0:
                     tracks[mode] = trace
             if tracks:
+                if header["case"] == "a":
+                    plot_transfer(samples, reference, tracks["fusion_compensated"], cfg, output / "a_transfer.png")
                 plot(tracks, {"a": "A  |  Lift, transport and landing", "u4": "Upper 4  |  Side contact and rear seating",
                               "u5": "Upper 5  |  Straight insertion and withdrawal"}[header["case"]],
                      output / (header["case"] + "_timeline.png"))
@@ -175,6 +243,8 @@ def replay(source, output):
                                                                 for s in ("left", "right")]])
     destination = output / (header["case"] + "_scores.json")
     destination.write_text(json.dumps({"case": header["case"], "source": header["source"],
+                                      "raw_optics": {k: optical_audit(samples, k) for k in
+                                                     (("camera", "blur") if header["has_blur"] else ("camera",))},
                                       "scores": scores}, indent=1, allow_nan=False)+"\n")
     print(f'{header["case"]}: {len(samples)} paired samples, {len(scores)} conditions -> {destination}')
 
