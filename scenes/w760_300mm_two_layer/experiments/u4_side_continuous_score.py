@@ -11,25 +11,57 @@ from u4_left_unload_score import MODELS, evaluate, left_cup_reference
 from u4_pulse_score import digest, scores, tally
 
 
-def alerts(rows, model, n):
-    """Count one alert per new sustained call, checking all its confirmation steps."""
+def declarations(rows, model, n):
+    """Yield the first confirmation step for every contiguous, known prediction."""
     history = []
     previous = None
-    result = {"clear": Counter(), "bearing": Counter()}
     for row in rows:
         tick, call = row["step"], row[model + "_side"]
         if previous != (tick - 1, call):
             history.clear()
         previous = (tick, call)
-        if call is None or len(history) == n:
-            continue
-        history.append(row["truth_side"])
-        if len(history) == n:
-            outcome = ("incorrect" if (not call) in history else
-                       "unverifiable" if None in history else "correct")
-            result["bearing" if call else "clear"][outcome] += 1
+        if call is not None and len(history) < n:
+            history.append(row["truth_side"])
+            if len(history) == n:
+                yield tick-n+1, tick, call, history.copy()
+
+
+def alerts(rows, model, n):
+    """Check all steps of each sustained call against present-step PhysX."""
+    result = {"clear": Counter(), "bearing": Counter()}
+    for _, _, call, history in declarations(rows, model, n):
+        outcome = ("incorrect" if (not call) in history else
+                   "unverifiable" if None in history else "correct")
+        result["bearing" if call else "clear"][outcome] += 1
     return {target: {key: counts[key] for key in ("correct", "incorrect", "unverifiable")}
             for target, counts in result.items()}
+
+
+def event_matches(rows, events):
+    if events is None:
+        return None
+    start = events["unload_command_start_step"]
+    exchange = [r for r in rows if r["window"] in ("handoff", "rear_stroke")]
+    traces = [r for r in rows if start-120 < r["step"] <= exchange[-1]["step"]]
+    for name in ("from_unload_command_3", "from_unload_command_12"):
+        event = events[name]
+        n = event["minimum_consecutive_steps"]
+        clear_start = event["true_clear_onset_step"]
+        clear_end = event["clear_bout_last_observed_step"]
+        reload_confirm = event["true_reload_confirm_step"]
+        reload_start = reload_end = None
+        if reload_confirm is not None:
+            reload_start = reload_confirm-n+1
+            reload_end = next((r["step"]-1 for r in exchange if r["step"] > reload_confirm
+                               and r["truth_side"] is not True), exchange[-1]["step"])
+        for model in MODELS:
+            calls = list(declarations(traces, model, n))
+            for key, positive, onset, end in (("clear", False, clear_start, clear_end),
+                                               ("reload", True, reload_start, reload_end)):
+                hit = next((last for first,last,label,_ in calls
+                            if label is positive and onset is not None and onset <= first <= last <= end), None)
+                event[model][f"new_{key}_declaration_step"] = hit
+    return events
 
 
 def comparison_windows(rows, hz):
@@ -83,7 +115,7 @@ def run(trial):
         "command_sha256": digest(commands),
         "last_step": header["stop_step"],
         "incomplete_run": header.get("incomplete_run"),
-        "events": evaluate(rows, header["hz"])["events"],
+        "events": event_matches(rows, evaluate(rows, header["hz"])["events"]),
         "windows": comparison_windows(rows, header["hz"]),
         "changed_side_steps": sum(r["baseline_side"] != r["fusion_side"] for r in rows),
     }
@@ -120,9 +152,14 @@ def summarize(root):
             hit_both = sum(e[model]["clear_confirm_within_first_true_bout_step"] is not None and
                            e[model]["bearing_confirm_within_first_true_reload_bout_step"] is not None
                            for e in reloads)
+            strict_clear = sum(e[model]["new_clear_declaration_step"] is not None for e in clear)
+            strict_reload = sum(e[model]["new_reload_declaration_step"] is not None for e in reloads)
+            strict_both = sum(e[model]["new_clear_declaration_step"] is not None and
+                              e[model]["new_reload_declaration_step"] is not None for e in reloads)
             by_model[model] = {"clear_targets": len(clear), "clear_hits": hit_clear,
                                "reload_targets": len(reloads), "reload_hits": hit_reload,
-                               "both_hits": hit_both}
+                               "both_hits": hit_both, "new_clear_alerts": strict_clear,
+                               "new_reload_alerts": strict_reload, "both_new_alerts": strict_both}
         summary["events"][duration] = by_model
     (root/"summary.json").write_text(json.dumps(summary, indent=2, allow_nan=False)+"\n")
 
