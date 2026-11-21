@@ -188,7 +188,7 @@ def reacquisition(rows, hz):
     return out
 
 
-def paired_rows(source, command_source, compare_pulse=None):
+def paired_rows(source, command_source, compare_pulse=None, reference_fields=None):
     from u4_contact_observer import U4ContactObserver
 
     with gzip.open(command_source, "rt") as commands:
@@ -234,6 +234,8 @@ def paired_rows(source, command_source, compare_pulse=None):
             for arm in ("left", "right"):
                 for i, k in enumerate(("fx", "fy")):
                     row[arm+"_"+k+"_N"] = sensor[arm+"_wrench_world"][i]
+            if reference_fields is not None:
+                row.update(reference_fields(physical, hz))
             rows.append({**row, **extra})
     if not rows or rows[-1]["step"] != points[-1]:
         raise ValueError("U4 stop step not reached")
