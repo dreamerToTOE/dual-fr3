@@ -138,10 +138,10 @@ def archived_control(path, rear_ticks):
             "windows": windows(rows, ("passive",))}
 
 
-def run(source, command_source, telemetry, output, control=None):
+def replay(source, command_source, telemetry, reference_fields=None):
     from u4_side_probe_observer import PulseObserver
 
-    data = [json.loads(line) for line in telemetry.read_text().splitlines()]
+    data = [json.loads(line) for line in telemetry.read_text().splitlines()] if telemetry.is_file() else []
     ticks = [d["physics_step"] for d in data]
     if ticks and ticks != list(range(ticks[0], ticks[0]+len(data))):
         raise ValueError("Discontinuous pulse telemetry")
@@ -162,11 +162,12 @@ def run(source, command_source, telemetry, output, control=None):
             pulse = {k: record[k] for k in ("physics_step", "segment", "command_dx_m")}
         active = observer.update(sensor, passive, pulse)
         return active, {"segment": record["segment"] if record else "",
+                        "command_dx_m": record["command_dx_m"] if record else None,
                         "probe_before_loaded": active.get("probe_before_loaded"),
                         "probe_applied": active["probe_applied"],
                         "probe_response": active.get("probe_response")}
 
-    header, cmd, _, rows = paired_rows(source, command_source, compare)
+    header, cmd, _, rows = paired_rows(source, command_source, compare, reference_fields=reference_fields)
     if ticks and (ticks[0] < rows[0]["step"] or ticks[-1] > rows[-1]["step"]):
         raise ValueError("Probe outside the paired interval")
     for row in rows:
@@ -176,6 +177,21 @@ def run(source, command_source, telemetry, output, control=None):
     phase_markers = {(e["phase"], e["status"]) for e in header["phase_times_for_scoring_only"]}
     if bool(ticks) != (("upper_B_u4_side_probe", "STARTED") in phase_markers):
         raise ValueError("Probe telemetry disagrees with the physical runner's pulse event")
+    return header, cmd, rows
+
+
+def write_timeline(path, rows):
+    with gzip.open(path, "wt") as f:
+        writer = csv.DictWriter(f, fieldnames=list(rows[0]))
+        writer.writeheader()
+        for r in rows:
+            writer.writerow({k: int(v) if isinstance(v, bool) else json.dumps(v) if isinstance(v, dict) else v
+                             for k, v in r.items()})
+
+
+def run(source, command_source, telemetry, output, control=None):
+    header, cmd, rows = replay(source, command_source, telemetry)
+    phase_markers = {(e["phase"], e["status"]) for e in header["phase_times_for_scoring_only"]}
     result = {"source": header["source"], "hz": header["hz"], "source_sha256": header["source_sha256"],
               "incomplete_run": header.get("incomplete_run"), "last_step": header["stop_step"],
               "physical_status": "STOPPED" if header.get("incomplete_run") else "SEATED_STABLE",
@@ -198,12 +214,7 @@ def run(source, command_source, telemetry, output, control=None):
         result["common_rear_prefix"] = {m: scores(common, m) for m in MODELS}
     output.mkdir(parents=True, exist_ok=True)
     (output/"scores.json").write_text(json.dumps(result, indent=1, allow_nan=False)+"\n")
-    with gzip.open(output/"timeline.csv.gz", "wt") as f:
-        writer = csv.DictWriter(f, fieldnames=list(rows[0]))
-        writer.writeheader()
-        for r in rows:
-            writer.writerow({k: int(v) if isinstance(v, bool) else json.dumps(v) if isinstance(v,dict) else v
-                             for k,v in r.items()})
+    write_timeline(output/"timeline.csv.gz", rows)
 
 
 if __name__ == "__main__":

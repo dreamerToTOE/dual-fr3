@@ -27,8 +27,13 @@ def cycle():
         start = end
 
 
+def detached_ready(elapsed_ticks, retreat_m, force_x_N):
+    """Wait for the left cup to unload and recede using encoder and wrist feedback."""
+    return elapsed_ticks >= 96 and retreat_m >= .00015 and abs(force_x_N) <= .12
+
+
 PROBE = """
-def run_u4_side_probe():
+def run_u4_side_probe(detach_gate=None):
     from experiments.u4_side_probe import cycle
     q = applied_targets["right"].copy()
     anchor, rotation = tcp_fk("right", q)
@@ -37,20 +42,26 @@ def run_u4_side_probe():
     info = report["u4_side_probe"] = {"timing": U4_SIDE_PROBE, "arm": "right",
                                      "anchor_tcp_m": anchor.tolist(), "pre_step": tick,
                                      "amplitude_m": amplitude}
+    if detach_gate is not None:
+        info["left_detach_gate"] = detach_gate
     contact_monitor.phase = "upper_B_u4_side_probe"
     record(contact_monitor.phase, "STARTED", timing=U4_SIDE_PROBE)
     try:
         with (output_directory / "u4_side_probe.jsonl").open("x") as stream:
             for section, dx in cycle():
-                target = anchor.copy()
-                target[0] += dx * (amplitude / .00025)
-                q = cartesian_joint_target("right", q, target, rotation)
-                center, attitude = sensed_cube()
-                issues = checker.check({**applied_targets, "right": q}, cube_center=center, cube_rotation=attitude,
-                                       cup_contacts=allowed_contacts, margin_m=0., first_only=True)
-                if issues:
-                    raise RuntimeError(f"U4 side probe command in collision: {issues[0]}")
-                command_positions("right", q)
+                if detach_gate is None or section != "pre":
+                    target = anchor.copy()
+                    target[0] += dx * (amplitude / .00025)
+                    q = cartesian_joint_target("right", q, target, rotation)
+                    center, attitude = sensed_cube()
+                    issues = checker.check({**applied_targets, "right": q}, cube_center=center, cube_rotation=attitude,
+                                           cup_contacts=allowed_contacts, margin_m=0., first_only=True)
+                    if issues:
+                        raise RuntimeError(f"U4 side probe command in collision: {issues[0]}")
+                    if detach_gate is not None and "first_motion_step" not in info:
+                        info["first_motion_step"] = tick + 1
+                        record(contact_monitor.phase, "MOTION_COMMAND", command_step=tick + 1)
+                    command_positions("right", q)
                 step()
                 arm = last_force_sample["right"]
                 w = arm["tcp_gravity_corrected_world"]
@@ -69,13 +80,45 @@ def run_u4_side_probe():
 """
 
 
-def inject(source):
+DETACHED_UNLOAD = """
+if slot == 4 and axis == 0 and side == "left":
+    from experiments.u4_side_probe import detached_ready
+
+    unload_start = tick
+    before_x = last_force_sample["left"]["tcp_position_m"][0]
+
+    def after_unload_step():
+        if "u4_side_probe" in report:
+            return
+        left = last_force_sample["left"]
+        retreat_m = before_x - left["tcp_position_m"][0]
+        force_x_N = left["tcp_gravity_corrected_world"][0]
+        if detached_ready(tick - unload_start, retreat_m, force_x_N):
+            run_u4_side_probe({"step": tick, "left_retreat_m": retreat_m, "left_force_x_N": force_x_N})
+
+    cartesian_move(side, position + .003 * outward, 1.5, phase + "_unload", after_step=after_unload_step)
+    if "u4_side_probe" not in report:
+        record("upper_B_u4_side_probe", "DETACH_NOT_CONFIRMED")
+else:
+    cartesian_move(side, position + .003 * outward, 1.5, phase + "_unload")
+"""
+
+
+def inject(source, *, detached=False):
     from source_hooks import replace_once
 
     marker = "            def withdraw(side, axis, sign):"
     source = replace_once(source, marker, indent(PROBE.strip(), "            ") + "\n\n" + marker)
-    marker = '                cartesian_move(side, position + .003 * outward, 1.5, phase + "_unload")'
-    source = replace_once(source, marker, marker + '\n                if slot == 4 and axis == 0 and U4_SIDE_PROBE in ("early", "sham"):\n                    run_u4_side_probe()')
+    unload = '                cartesian_move(side, position + .003 * outward, 1.5, phase + "_unload")'
+    if detached:
+        source = replace_once(source, unload, indent(DETACHED_UNLOAD.strip(), "                "))
+        source = replace_once(source, "def cartesian_move(side, destination, duration, phase):",
+                              "def cartesian_move(side, destination, duration, phase, *, after_step=None):")
+        marker = "                check_current_collision(phase)\n\n        def align_contact_plane"
+        return replace_once(source, marker, "                check_current_collision(phase)\n"
+                            "                if after_step is not None:\n"
+                            "                    after_step()\n\n        def align_contact_plane")
+    source = replace_once(source, unload, unload + '\n                if slot == 4 and axis == 0 and U4_SIDE_PROBE in ("early", "sham"):\n                    run_u4_side_probe()')
     marker = "                    for _ in range(travel_ticks):\n                        normal = force(side, 1, 1)"
     return replace_once(source, marker, '''                    from experiments.u4_side_probe import near_rear
                     recent_right = deque(maxlen=61)

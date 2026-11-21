@@ -3,7 +3,8 @@ from collections import Counter, deque
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scenes/w760_300mm_two_layer"))
-from experiments.u4_side_probe import cycle, near_rear
+from experiments.u4_side_probe import cycle, detached_ready, inject, near_rear
+from two_row_physx import build
 
 
 def test_transverse_cycle_returns_to_entry_after_both_directions():
@@ -26,3 +27,19 @@ def test_near_wall_trigger_needs_loaded_stalled_response_and_geometric_proximity
     assert apply(1.001, .000001) == [False] * 60 + [True]
     assert not any(apply(.995, .000001))
     assert not any(apply(1.001, 0.))
+
+
+def test_detached_probe_gate_needs_elapsed_retreat_and_low_wrist_force():
+    assert detached_ready(96, .00015, .12)
+    assert not detached_ready(95, .00015, .12)
+    assert not detached_ready(96, .00014, .12)
+    assert not detached_ready(96, .00015, -.121)
+
+
+def test_detached_probe_injects_mid_unload_callback_without_changing_early_mode():
+    source = build()
+    detached = inject(source, detached=True)
+    compile(detached, "<detached pulse runner>", "exec")
+    assert "after_step=after_unload_step" in detached
+    assert '"MOTION_COMMAND", command_step=tick + 1' in detached
+    assert "after_step=after_unload_step" not in inject(source)

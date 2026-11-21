@@ -112,7 +112,7 @@ def following_reload(bouts, after, duration=SUSTAINED):
                  and r["start"] > after and prev["state"] is False), None)
 
 
-def analyze(rows, hz, incomplete, preload_start=None):
+def analyze(rows, hz, incomplete, preload_start=None, *, require_observed_loss=False):
     handoff = [r for r in rows if r["window"]=="handoff"]
     rear = [r for r in rows if r["window"]=="rear_stroke"]
     preload = preload_outcome(rows, preload_start, handoff, rear, hz, incomplete) if preload_start is not None else None
@@ -127,8 +127,15 @@ def analyze(rows, hz, incomplete, preload_start=None):
     end = exchange[-1]["step"]
     physics, _ = evaluate_bouts(handoff, hz, prior)
     combined, _ = evaluate_bouts(exchange, hz, prior)
+
+    def loss_onset_observed(idx):
+        if idx:
+            return physics[idx-1]["state"] is True
+        return bool(prior and prior[-1]["step"]==zero and prior[-1]["truth_side"] is True)
+
     def contact_events(duration):
-        idx = next((i for i, r in enumerate(physics) if r["state"] is False and r["ticks"]>=duration), None)
+        idx = next((i for i, r in enumerate(physics) if r["state"] is False and r["ticks"] >= duration
+                    and (not require_observed_loss or loss_onset_observed(i))), None)
         loss = physics[idx] if idx is not None else None
         local_reload = following_reload(physics, loss["end"], duration) if loss else None
         reload = following_reload(combined, loss["end"], duration) if loss else None
@@ -140,9 +147,7 @@ def analyze(rows, hz, incomplete, preload_start=None):
             "reload_right_censored_at_stop": bool(incomplete and loss is not None and reload is None),
         }
         if loss is not None:
-            result["first_sustained_handoff_loss"]["onset_observed"] = (
-                physics[idx-1]["state"] is True if idx else
-                bool(prior and prior[-1]["step"]==zero and prior[-1]["truth_side"] is True))
+            result["first_sustained_handoff_loss"]["onset_observed"] = loss_onset_observed(idx)
         return result
 
     primary = contact_events(SUSTAINED)

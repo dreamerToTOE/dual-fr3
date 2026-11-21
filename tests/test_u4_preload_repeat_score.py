@@ -72,3 +72,12 @@ def test_preload_force_stop_preserves_observed_clear_even_without_handoff():
     early = report["preload"]["first_sustained_preload_loss"]
     assert early["ticks"]==15 and early["right_censored_at_stop"]
     assert report["preload"]["errors"]["baseline"]["truth_clear_steps"]==15
+
+
+def test_observed_loss_can_skip_censored_clear_at_start_of_handoff():
+    rows = series([None] * 2 + [False] * 12 + [True] * 13 + [False] * 15 + [True] * 15, 48)
+    inherited = analyze(rows, 120, None)["first_sustained_handoff_loss"]
+    assert inherited["start"] == 3 and not inherited["onset_observed"]
+    targeted = analyze(rows, 120, None, require_observed_loss=True)
+    event = targeted["first_sustained_handoff_loss"]
+    assert event["start"] == 28 and event["onset_observed"]
