@@ -21,7 +21,7 @@ def select(row, fields):
     return {name: row[name] for name in fields if name in row}
 
 
-def extract(run, clip, output):
+def extract(run, clip, output, allow_incomplete=False):
     report = json.loads((run / "runner_report.json").read_text())
     config = report["scene_parameters"]
     hz = report["simulation_clock"]["control_hz"]
@@ -29,9 +29,9 @@ def extract(run, clip, output):
     events = [e for e in report["phases"] if e.get("cube_id") == cube_id]
     end_phase = "upper_slot_complete" if clip != "a" else "upper_A_capture"
     endings = [e for e in events if e["phase"] == end_phase]
-    if not endings:
+    if not endings and not (allow_incomplete and clip == "u4" and report["status"] == "STOPPED"):
         raise ValueError(f"No {end_phase} for cube {cube_id}: inspect capture end before scoring.")
-    end = round(endings[-1]["sim_time_s"] * hz)
+    end = round(endings[-1]["sim_time_s"] * hz) if endings else report["simulation_clock"]["control_steps"]
     poses = report["upper_row"]
     positions = {str(row["cube_id"]): row["position_m"]
                  for key in ("initial_lower_poses", "restored_lower_poses_at_start", "initial_upper_poses")
@@ -69,6 +69,8 @@ def extract(run, clip, output):
               "source_sha256": {str(p.relative_to(run)): hashlib.sha256(p.read_bytes()).hexdigest()
                                 for p in paths}}
     output.parent.mkdir(parents=True, exist_ok=True)
+    if not endings:
+        header["incomplete_run"] = {"status": report["status"], "reason": report.get("error")}
     count = 0
     last_frame_id = None
     with gzip.open(output, "wt", compresslevel=6) as out, gzip.open(raw, "rt") as obs, gzip.open(truth, "rt") as ref:
@@ -108,5 +110,6 @@ if __name__ == "__main__":
     parser.add_argument("run", type=Path)
     parser.add_argument("case", choices=("a", "u4", "u5"))
     parser.add_argument("output", type=Path)
+    parser.add_argument("--allow-incomplete", action="store_true", help="Keep an interrupted U4 contact trial through its last physical step")
     args = parser.parse_args()
-    extract(args.run, args.case, args.output)
+    extract(args.run, args.case, args.output, args.allow_incomplete)

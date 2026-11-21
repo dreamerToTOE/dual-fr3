@@ -23,9 +23,15 @@ WINDOWS = ("side_stroke", "handoff", "rear_stroke", "withdraw")
 def anchors(header):
     events = {(e["phase"], e["status"]): round(e["sim_time_s"] * header["hz"])
               for e in header["phase_times_for_scoring_only"]}
-    points = [events[k] for k in (("upper_B_side", "RUNNING"), ("upper_B_side_unload", "RUNNING"),
-                                  ("upper_B_rear", "RUNNING"), ("upper_B_rear", "FORCE_CONFIRMED"),
-                                  ("upper_slot_complete", "SEATED_STABLE"))]
+    points = []
+    for key in (("upper_B_side", "RUNNING"), ("upper_B_side_unload", "RUNNING"),
+                ("upper_B_rear", "RUNNING"), ("upper_B_rear", "FORCE_CONFIRMED"),
+                ("upper_slot_complete", "SEATED_STABLE")):
+        if key not in events and header.get("incomplete_run"):
+            if not points or header["stop_step"] > points[-1]:
+                points.append(header["stop_step"])
+            break
+        points.append(events[key])
     if any(a >= b for a, b in zip(points, points[1:])):
         raise ValueError("Missing or misordered U4 exchange")
     return points
@@ -182,7 +188,7 @@ def reacquisition(rows, hz):
     return out
 
 
-def run(source, command_source, output):
+def paired_rows(source, command_source, compare_pulse=None):
     from u4_contact_observer import U4ContactObserver
 
     with gzip.open(command_source, "rt") as commands:
@@ -197,7 +203,7 @@ def run(source, command_source, output):
             raise ValueError("Command sidecar does not match the source and step range")
         hz, points = header["hz"], anchors(header)
         truth = SevenReference(header["config"], hz, header["reference_positions"])
-        baseline = SevenObserver(header["config"], "fusion_compensated")
+        baseline = SevenObserver(header["config"], "fusion_compensated") if compare_pulse is None else None
         fusion = U4ContactObserver(header["config"])
         rows = []
         for line in stream:
@@ -205,13 +211,20 @@ def run(source, command_source, output):
             tick = sensor["physics_step"]
             if tick != physical["physics_step"] or tick != cmd["first_step"] + len(rows):
                 raise ValueError(f"Missing or mismatched tick {tick}")
-            baseline_result = baseline.update(sensor, neighbors=header["optical_neighbors"])
             sensor_with_command = dict(sensor, right_command_y_m=cmd["target_y_m"][tick - cmd["first_step"]])
             fusion_result = fusion.update(sensor_with_command, neighbors=header["optical_neighbors"])
+            extra = {}
+            if compare_pulse is None:
+                baseline_result = baseline.update(sensor, neighbors=header["optical_neighbors"])
+            else:
+                baseline_result = fusion_result
+                fusion_result, extra = compare_pulse(sensor_with_command, baseline_result)
             ref = truth.update(physical)
             win = next((w for w, a, b in zip(WINDOWS, points, points[1:]) if a < tick <= b), "other")
             row = {"step": tick, "time_s": sensor["time_s"], "window": win, "truth_state": ref["state"],
                    "truth_objects": "|".join(sorted(ref["horizontal_objects"]))}
+            if compare_pulse is not None:
+                row["truth_box_x_m"], row["truth_box_y_m"] = physical["cube_position_m"][:2]
             for axis, target, i in zip(AXES, (SIDE, BACK), (0, 1)):
                 row["truth_"+axis], row["truth_"+axis+"_N"] = load_at(physical["cube_contacts"], ref, target, i, hz)
             for m, result in (("baseline", baseline_result), ("fusion", fusion_result)):
@@ -221,9 +234,15 @@ def run(source, command_source, output):
             for arm in ("left", "right"):
                 for i, k in enumerate(("fx", "fy")):
                     row[arm+"_"+k+"_N"] = sensor[arm+"_wrench_world"][i]
-            rows.append(row)
+            rows.append({**row, **extra})
     if not rows or rows[-1]["step"] != points[-1]:
         raise ValueError("U4 stop step not reached")
+    return header, cmd, points, rows
+
+
+def run(source, command_source, output):
+    header, cmd, points, rows = paired_rows(source, command_source)
+    hz = header["hz"]
     output.mkdir(parents=True, exist_ok=True)
     scores = {"source": header["source"], "hz": hz, "boundaries": [SIDE, BACK], "source_sha256": header["source_sha256"],
               "observer_sha256": {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
