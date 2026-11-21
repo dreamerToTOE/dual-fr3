@@ -1,0 +1,600 @@
+{
+  "source": "probe_4",
+  "hz": 120,
+  "last_step": 16993,
+  "incomplete_run": null,
+  "observer_sha256": {
+    "u4_side_probe_observer.py": "71edc302e59bb6769aea353aa09a2b5f39376d03924e37ae1869d18f096d973b",
+    "u4_contact_observer.py": "8f90aaf4b10eefb803390a9b92459d9133f2a7650173111a673053a2a349c7ab"
+  },
+  "paired_sha256": "c09d3f131ea8fa16df44590c6ad79ecd90488b6a9785e0b8c432692a3a2a906b",
+  "commands_sha256": "d49cc0ce64f4fb6929815d76654a15e44e466cdab55420035668cf48518467e5",
+  "probe_telemetry_sha256": "2f2515ad705c1cb47c13fe2b246bb55cdc4538c9a3f3ab7478e303d67b383370",
+  "side_load_before_baseline_hold": {
+    "truth": false,
+    "label": "clear",
+    "start_step": 9942,
+    "end_step": 9953,
+    "left_cup_clear_steps": 12,
+    "bearing_steps": 0,
+    "clear_steps": 12,
+    "unknown_steps": 0,
+    "median_side_force_N": 0.0
+  },
+  "status": "LATERAL_MOTION_OBSERVED",
+  "first_motion_step": 9966,
+  "first_motion_after_unload_s": 0.9083333333333333,
+  "left_cup_detached_confirm_step": 9937,
+  "last_pulse_sample_step": 10145,
+  "preexisting_side_load": {
+    "truth": false,
+    "label": "clear",
+    "start_step": 9954,
+    "end_step": 9965,
+    "left_cup_clear_steps": 12,
+    "bearing_steps": 0,
+    "clear_steps": 12,
+    "unknown_steps": 0,
+    "median_side_force_N": 0.0
+  },
+  "preexisting_state_comparison": {
+    "passive_at_last_premotion_sample": {
+      "call": null,
+      "step": 9965,
+      "outcome": "abstain"
+    },
+    "frozen_pulse_retrospective": {
+      "call": null,
+      "step": 10133,
+      "outcome": "abstain"
+    },
+    "passive_current_at_pulse_decision": null,
+    "frozen_pulse_response": {
+      "force_tolerance_N": 0.08,
+      "unload_N": 0.33555784646137693,
+      "reload_before_positive_command_N": 0.5272490449792745,
+      "compression_N": 0.14828448420779433,
+      "return_residual_N": -0.35842521296126495,
+      "negative_travel_m": 0.00020780262602237975,
+      "positive_travel_m": 0.00020566480107883645,
+      "reason": "ambiguous_directional_response"
+    }
+  },
+  "new_bearing_during_intervention_if_preclear": {
+    "first_step": null,
+    "first_3step_confirm": null,
+    "last_step": null,
+    "positive_ticks": 0,
+    "episodes": 0,
+    "longest_ticks": 0,
+    "first_12step_onset": null,
+    "first_12step_confirm": null,
+    "median_side_force_N": null,
+    "max_side_force_N": null
+  },
+  "unloading_before_positive_command_if_prebearing": null,
+  "new_bearing_before_positive_command_if_preclear": {
+    "first_step": null,
+    "first_3step_confirm": null,
+    "last_step": null,
+    "positive_ticks": 0,
+    "episodes": 0,
+    "longest_ticks": 0,
+    "first_12step_onset": null,
+    "first_12step_confirm": null,
+    "median_side_force_N": null,
+    "max_side_force_N": null
+  },
+  "first_positive_command_step": 10044,
+  "premotion_events_only": {
+    "handoff_observed": true,
+    "right_push_observed": false,
+    "preload": null,
+    "handoff_start_step": 9857,
+    "last_handoff_step": 9965,
+    "end_reason": "physical_stop_or_capture_end",
+    "handoff_bouts": {
+      "ticks": 108,
+      "seconds": 0.9,
+      "counts": {
+        "bearing": 70,
+        "clear": 38,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 70,
+        "clear": 38,
+        "unknown": 0
+      },
+      "from_start": {
+        "bearing": 70
+      },
+      "bout_counts": {
+        "bearing": {
+          "at_least_12": 1
+        },
+        "clear": {
+          "at_least_12": 1
+        },
+        "unknown": {}
+      }
+    },
+    "rear_bouts": {
+      "ticks": 0,
+      "seconds": 0.0,
+      "counts": {
+        "bearing": 0,
+        "clear": 0,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 0,
+        "clear": 0,
+        "unknown": 0
+      },
+      "from_start": {},
+      "bout_counts": {
+        "bearing": {},
+        "clear": {},
+        "unknown": {}
+      }
+    },
+    "last_12_pre_unload_median_left_compression_N": null,
+    "left_cup_clear_confirm_step": 9936,
+    "first_12_from_left_cup_clear": "clear",
+    "from_left_cup_clear": {
+      "ticks": 30,
+      "seconds": 0.25,
+      "counts": {
+        "bearing": 0,
+        "clear": 30,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 0,
+        "clear": 30,
+        "unknown": 0
+      },
+      "from_start": {
+        "clear": 30
+      },
+      "bout_counts": {
+        "bearing": {},
+        "clear": {
+          "at_least_12": 1
+        },
+        "unknown": {}
+      }
+    },
+    "first_1p5s_from_left_cup_clear": {
+      "ticks": 30,
+      "seconds": 0.25,
+      "counts": {
+        "bearing": 0,
+        "clear": 30,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 0,
+        "clear": 30,
+        "unknown": 0
+      },
+      "from_start": {
+        "clear": 30
+      },
+      "bout_counts": {
+        "bearing": {},
+        "clear": {
+          "at_least_12": 1
+        },
+        "unknown": {}
+      }
+    },
+    "handoff_loss_eligible": true,
+    "first_sustained_handoff_loss": {
+      "state": false,
+      "start": 9928,
+      "end": 9965,
+      "ticks": 38,
+      "window": "handoff",
+      "baseline": {
+        "confirm_step": null,
+        "latency_s": null
+      },
+      "fusion": {
+        "confirm_step": null,
+        "latency_s": null
+      },
+      "sustained_confirm_step": 9939,
+      "onset_s": 0.5916666666666667,
+      "duration_s": 0.31666666666666665,
+      "continues_to_window_boundary": true,
+      "right_censored_at_stop": true,
+      "onset_observed": true
+    },
+    "first_sustained_reload_within_handoff": null,
+    "first_sustained_reload_including_rear": null,
+    "reload_right_censored_at_stop": true,
+    "sensitivity_24": {
+      "first_sustained_handoff_loss": {
+        "state": false,
+        "start": 9928,
+        "end": 9965,
+        "ticks": 38,
+        "window": "handoff",
+        "baseline": {
+          "confirm_step": null,
+          "latency_s": null
+        },
+        "fusion": {
+          "confirm_step": null,
+          "latency_s": null
+        },
+        "sustained_confirm_step": 9951,
+        "onset_s": 0.5916666666666667,
+        "duration_s": 0.31666666666666665,
+        "continues_to_window_boundary": true,
+        "right_censored_at_stop": true,
+        "onset_observed": true
+      },
+      "first_sustained_reload_within_handoff": null,
+      "first_sustained_reload_including_rear": null,
+      "reload_right_censored_at_stop": true
+    },
+    "errors": {
+      "handoff": {
+        "baseline": {
+          "truth_bearing_steps": 70,
+          "truth_clear_steps": 38,
+          "false_clear_steps": 0,
+          "false_bearing_steps": 4,
+          "false_clear_alerts": 0,
+          "false_bearing_alerts": 0,
+          "unverifiable_alerts": 0
+        },
+        "fusion": {
+          "truth_bearing_steps": 70,
+          "truth_clear_steps": 38,
+          "false_clear_steps": 0,
+          "false_bearing_steps": 4,
+          "false_clear_alerts": 0,
+          "false_bearing_alerts": 0,
+          "unverifiable_alerts": 0
+        }
+      },
+      "rear_stroke": null
+    }
+  },
+  "events_over_observed_motion": {
+    "handoff_observed": true,
+    "right_push_observed": true,
+    "preload": null,
+    "handoff_start_step": 9857,
+    "last_handoff_step": 11700,
+    "end_reason": "completed_capture",
+    "handoff_bouts": {
+      "ticks": 1843,
+      "seconds": 15.358333333333333,
+      "counts": {
+        "bearing": 70,
+        "clear": 1773,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 70,
+        "clear": 1773,
+        "unknown": 0
+      },
+      "from_start": {
+        "bearing": 70
+      },
+      "bout_counts": {
+        "bearing": {
+          "at_least_12": 1
+        },
+        "clear": {
+          "at_least_12": 1
+        },
+        "unknown": {}
+      }
+    },
+    "rear_bouts": {
+      "ticks": 4112,
+      "seconds": 34.266666666666666,
+      "counts": {
+        "bearing": 2916,
+        "clear": 1196,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 536,
+        "clear": 612,
+        "unknown": 0
+      },
+      "from_start": {
+        "clear": 612
+      },
+      "bout_counts": {
+        "bearing": {
+          "1_to_5": 116,
+          "6_to_11": 42,
+          "at_least_12": 81
+        },
+        "clear": {
+          "at_least_12": 3,
+          "1_to_5": 215,
+          "6_to_11": 21
+        },
+        "unknown": {}
+      }
+    },
+    "last_12_pre_unload_median_left_compression_N": null,
+    "left_cup_clear_confirm_step": 9936,
+    "first_12_from_left_cup_clear": "clear",
+    "from_left_cup_clear": {
+      "ticks": 1765,
+      "seconds": 14.708333333333334,
+      "counts": {
+        "bearing": 0,
+        "clear": 1765,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 0,
+        "clear": 1765,
+        "unknown": 0
+      },
+      "from_start": {
+        "clear": 1765
+      },
+      "bout_counts": {
+        "bearing": {},
+        "clear": {
+          "at_least_12": 1
+        },
+        "unknown": {}
+      }
+    },
+    "first_1p5s_from_left_cup_clear": {
+      "ticks": 180,
+      "seconds": 1.5,
+      "counts": {
+        "bearing": 0,
+        "clear": 180,
+        "unknown": 0
+      },
+      "longest": {
+        "bearing": 0,
+        "clear": 180,
+        "unknown": 0
+      },
+      "from_start": {
+        "clear": 180
+      },
+      "bout_counts": {
+        "bearing": {},
+        "clear": {
+          "at_least_12": 1
+        },
+        "unknown": {}
+      }
+    },
+    "handoff_loss_eligible": true,
+    "first_sustained_handoff_loss": {
+      "state": false,
+      "start": 9928,
+      "end": 11700,
+      "ticks": 1773,
+      "window": "handoff",
+      "baseline": {
+        "confirm_step": 9976,
+        "latency_s": 0.4
+      },
+      "fusion": {
+        "confirm_step": 9976,
+        "latency_s": 0.4
+      },
+      "sustained_confirm_step": 9939,
+      "onset_s": 0.5916666666666667,
+      "duration_s": 14.775,
+      "continues_to_window_boundary": true,
+      "right_censored_at_stop": false,
+      "onset_observed": true,
+      "onset_period": "before_motion",
+      "confirmation_period": "before_motion"
+    },
+    "first_sustained_reload_within_handoff": null,
+    "first_sustained_reload_including_rear": {
+      "state": true,
+      "start": 12381,
+      "end": 12413,
+      "ticks": 33,
+      "window": "rear_stroke",
+      "baseline": {
+        "confirm_step": 12383,
+        "latency_s": 0.016666666666666666
+      },
+      "fusion": {
+        "confirm_step": 12383,
+        "latency_s": 0.016666666666666666
+      },
+      "sustained_confirm_step": 12392,
+      "onset_s": 21.033333333333335,
+      "duration_s": 0.275,
+      "continues_to_window_boundary": false,
+      "right_censored_at_stop": false,
+      "onset_period": "after_intervention",
+      "confirmation_period": "after_intervention"
+    },
+    "reload_right_censored_at_stop": false,
+    "sensitivity_24": {
+      "first_sustained_handoff_loss": {
+        "state": false,
+        "start": 9928,
+        "end": 11700,
+        "ticks": 1773,
+        "window": "handoff",
+        "baseline": {
+          "confirm_step": 9976,
+          "latency_s": 0.4
+        },
+        "fusion": {
+          "confirm_step": 9976,
+          "latency_s": 0.4
+        },
+        "sustained_confirm_step": 9951,
+        "onset_s": 0.5916666666666667,
+        "duration_s": 14.775,
+        "continues_to_window_boundary": true,
+        "right_censored_at_stop": false,
+        "onset_observed": true
+      },
+      "first_sustained_reload_within_handoff": null,
+      "first_sustained_reload_including_rear": {
+        "state": true,
+        "start": 12381,
+        "end": 12413,
+        "ticks": 33,
+        "window": "rear_stroke",
+        "baseline": {
+          "confirm_step": 12383,
+          "latency_s": 0.016666666666666666
+        },
+        "fusion": {
+          "confirm_step": 12383,
+          "latency_s": 0.016666666666666666
+        },
+        "sustained_confirm_step": 12404,
+        "onset_s": 21.033333333333335,
+        "duration_s": 0.275,
+        "continues_to_window_boundary": false,
+        "right_censored_at_stop": false
+      },
+      "reload_right_censored_at_stop": false
+    },
+    "errors": {
+      "handoff": {
+        "baseline": {
+          "truth_bearing_steps": 70,
+          "truth_clear_steps": 1773,
+          "false_clear_steps": 0,
+          "false_bearing_steps": 47,
+          "false_clear_alerts": 0,
+          "false_bearing_alerts": 3,
+          "unverifiable_alerts": 0
+        },
+        "fusion": {
+          "truth_bearing_steps": 70,
+          "truth_clear_steps": 1773,
+          "false_clear_steps": 0,
+          "false_bearing_steps": 47,
+          "false_clear_alerts": 0,
+          "false_bearing_alerts": 3,
+          "unverifiable_alerts": 0
+        }
+      },
+      "rear_stroke": {
+        "baseline": {
+          "truth_bearing_steps": 2916,
+          "truth_clear_steps": 1196,
+          "false_clear_steps": 174,
+          "false_bearing_steps": 132,
+          "false_clear_alerts": 48,
+          "false_bearing_alerts": 22,
+          "unverifiable_alerts": 0
+        },
+        "fusion": {
+          "truth_bearing_steps": 2916,
+          "truth_clear_steps": 1196,
+          "false_clear_steps": 174,
+          "false_bearing_steps": 132,
+          "false_clear_alerts": 48,
+          "false_bearing_alerts": 22,
+          "unverifiable_alerts": 0
+        }
+      }
+    }
+  },
+  "false_alarms_by_window": {
+    "premotion_handoff": {
+      "baseline": {
+        "truth_bearing_steps": 70,
+        "truth_clear_steps": 38,
+        "false_clear_steps": 0,
+        "false_bearing_steps": 4,
+        "false_clear_alerts": 0,
+        "false_bearing_alerts": 0,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 70,
+        "truth_clear_steps": 38,
+        "false_clear_steps": 0,
+        "false_bearing_steps": 4,
+        "false_clear_alerts": 0,
+        "false_bearing_alerts": 0,
+        "unverifiable_alerts": 0
+      }
+    },
+    "lateral_motion_and_settling": {
+      "baseline": {
+        "truth_bearing_steps": 0,
+        "truth_clear_steps": 180,
+        "false_clear_steps": 0,
+        "false_bearing_steps": 43,
+        "false_clear_alerts": 0,
+        "false_bearing_alerts": 3,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 0,
+        "truth_clear_steps": 180,
+        "false_clear_steps": 0,
+        "false_bearing_steps": 43,
+        "false_clear_alerts": 0,
+        "false_bearing_alerts": 3,
+        "unverifiable_alerts": 0
+      }
+    },
+    "post_pulse_handoff": {
+      "baseline": {
+        "truth_bearing_steps": 0,
+        "truth_clear_steps": 1555,
+        "false_clear_steps": 0,
+        "false_bearing_steps": 0,
+        "false_clear_alerts": 0,
+        "false_bearing_alerts": 0,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 0,
+        "truth_clear_steps": 1555,
+        "false_clear_steps": 0,
+        "false_bearing_steps": 0,
+        "false_clear_alerts": 0,
+        "false_bearing_alerts": 0,
+        "unverifiable_alerts": 0
+      }
+    },
+    "rear_stroke": {
+      "baseline": {
+        "truth_bearing_steps": 2916,
+        "truth_clear_steps": 1196,
+        "false_clear_steps": 174,
+        "false_bearing_steps": 132,
+        "false_clear_alerts": 48,
+        "false_bearing_alerts": 22,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 2916,
+        "truth_clear_steps": 1196,
+        "false_clear_steps": 174,
+        "false_bearing_steps": 132,
+        "false_clear_alerts": 48,
+        "false_bearing_alerts": 22,
+        "unverifiable_alerts": 0
+      }
+    }
+  }
+}

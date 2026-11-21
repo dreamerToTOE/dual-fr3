@@ -117,6 +117,10 @@ def compare_trial(rows, start, hz, incomplete):
     return {
         "status": "LATERAL_MOTION_OBSERVED",
         "first_motion_step": start,
+        "first_motion_after_unload_s": ((start - before["handoff_start_step"]) / hz
+                                       if before["handoff_observed"] else None),
+        "left_cup_detached_confirm_step": first_streak(
+            [r for r in pre if r["window"] == "handoff"], "truth_left_detached", True, 3),
         "last_pulse_sample_step": last,
         "preexisting_side_load": prestate,
         "preexisting_state_comparison": {

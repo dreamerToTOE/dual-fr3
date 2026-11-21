@@ -1,0 +1,25 @@
+{
+  "source": "probe_5",
+  "hz": 120,
+  "last_step": 10253,
+  "incomplete_run": {
+    "status": "STOPPED",
+    "reason": "upper_B_seam_pacing: B wrist envelope exceeded at tick 10253: [{'arm': 'left', 'force_N': 9.131551474620531, 'torque_Nm': 0.39265533854236634, 'wrench_world': [-8.906714377800714, -1.9774746684367681, 0.3811368017042339, 0.05547119541707835, -0.2935231394967768, 0.254843732402381]}]"
+  },
+  "observer_sha256": {
+    "u4_side_probe_observer.py": "71edc302e59bb6769aea353aa09a2b5f39376d03924e37ae1869d18f096d973b",
+    "u4_contact_observer.py": "8f90aaf4b10eefb803390a9b92459d9133f2a7650173111a673053a2a349c7ab"
+  },
+  "paired_sha256": "3e1d59ffa5ca3d23cf8318e4b19dcb059222214bbc2176a4b43cbffc3a4ea2fa",
+  "commands_sha256": "095a0eb4a2a8a88f8ea3eaf0c4a3cc0af915534330949e2646a5ff41f7ab8b21",
+  "probe_telemetry_sha256": null,
+  "side_load_before_baseline_hold": null,
+  "status": "NO_LATERAL_MOTION_SAMPLE",
+  "before_motion": {
+    "handoff_observed": false,
+    "right_push_observed": false,
+    "preload": null,
+    "handoff_loss_eligible": null,
+    "end_reason": "stopped_before_handoff"
+  }
+}
