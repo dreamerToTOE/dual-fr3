@@ -82,6 +82,7 @@ def test_monitor_routes_cube_wall_impulses_and_zero_data_lost_without_changing_r
     assert not snapshot["contacts"]["wall_left"]
     assert snapshot["loaded_contacts"]["wall_left"]
     assert snapshot["pairs"][0]["normal_impulse_Ns"] == 5.
+    assert snapshot["pairs"][0]["normal_axis_impulse_abs_Ns"] == [1., 0., 4.]
     assert monitor.contact_count == monitor.unexpected_contact_count == 0
     monitor.raise_if_collision()
     monitor.physics_step_index = 8

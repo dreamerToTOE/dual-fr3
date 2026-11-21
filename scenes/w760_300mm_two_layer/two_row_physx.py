@@ -257,6 +257,8 @@ def main():
     parser.add_argument("--upper5-blur-ms", type=float, help="Also detect ArUco on a causal D455 exposure composite")
     parser.add_argument("--upper5-active-probe", action="store_true", help="Record the active rear-wall probing experiment")
     parser.add_argument("--stop-after-front", type=int, choices=range(1, 6))
+    parser.add_argument("--stop-after-upper-a", action="store_true",
+                        help="Collect the next upper supply, lift and landing, ending after withdrawal")
     args = parser.parse_args()
     checkpoint = {}
     if args.resume:
@@ -268,6 +270,8 @@ def main():
         parser.error("The requested stopping slot is already complete in the checkpoint")
     first_id = FRONT_IDS[front-1] if front < 6 else 6 + upper
     release = checkpoint.get("front_landed") or checkpoint.get("landed")
+    if args.stop_after_upper_a and (front != 6 or release or args.stop_after_front is not None):
+        parser.error("--stop-after-upper-a needs a completed lower row and the next upper box at supply")
     terminal = (release or {}).get("terminal_probe")
     if terminal is not None and (front != 6 or upper != 5 or args.upper5_yaw_deg not in (None, 0.)):
         parser.error("A terminal probe checkpoint requires upper slot 5 with its measured orientation")
@@ -295,6 +299,11 @@ def main():
     output = args.output.resolve()
     snapshot = output / "runner_snapshot.py"
     source = build()
+    if args.stop_after_upper_a:
+        marker = "            save_upper_checkpoint(slot, landed_now)"
+        source = replace_once(source, marker, marker +
+                              '\n            record("upper_A_capture", "LANDED_RELEASED_RETRACTED", cube_id=task_id)'
+                              '\n            break')
     if experiment is not None:
         source = replace_once(source, '        report["upper_row"] = {',
                               '        report["upper5_experiment"] = UPPER5_EXPERIMENT\n'
