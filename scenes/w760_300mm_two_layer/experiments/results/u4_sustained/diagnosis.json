@@ -24,6 +24,17 @@
     12638,
     12659
   ],
+  "bearing_bout_counts_between_first_loss_and_12step_reload": {
+    "1": 109,
+    "2": 50,
+    "3": 15,
+    "4": 3,
+    "5": 7,
+    "6": 2,
+    "7": 4,
+    "8": 2,
+    "9": 2
+  },
   "preceding_12_steps": {
     "steps": 12,
     "truth_side": {
