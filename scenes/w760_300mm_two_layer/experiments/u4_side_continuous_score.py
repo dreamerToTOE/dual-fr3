@@ -83,7 +83,7 @@ def comparison_windows(rows, hz):
 
 
 def run(trial):
-    from u4_side_continuous import ContinuousSideObserver
+    from u4_side_continuous import ContinuousSideObserver, PARAMETERS
 
     observer = ContinuousSideObserver()
 
@@ -111,6 +111,7 @@ def run(trial):
         "source_sha256": header["source_sha256"],
         "observer_sha256": {name: digest(Path(__file__).with_name(name))
                             for name in ("u4_contact_observer.py", "u4_side_continuous.py")},
+        "calibration_sha256": digest(PARAMETERS),
         "paired_sha256": digest(paired),
         "command_sha256": digest(commands),
         "last_step": header["stop_step"],
@@ -136,7 +137,10 @@ def summarize(root):
         reports.append(r)
     if not reports:
         raise ValueError("No trials to summarize")
-    summary = {"trials": [r["source"] for r in reports], "windows": {}, "events": {}}
+    if len({r["calibration_sha256"] for r in reports}) != 1:
+        raise ValueError("Trials used different calibrations")
+    summary = {"trials": [r["source"] for r in reports], "windows": {}, "events": {},
+               "calibration_sha256": reports[0]["calibration_sha256"]}
     for window in ("handoff", "early_handoff", "rear_stroke"):
         all_scores = [r["windows"][window] for r in reports if window in r["windows"]]
         summary["windows"][window] = total(all_scores)

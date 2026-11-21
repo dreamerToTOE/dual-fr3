@@ -1,0 +1,1340 @@
+{
+  "window_physics_steps": 6,
+  "sensor_features": [
+    "side_gap_m",
+    "right_fx_N",
+    "right_mz_Nm",
+    "right_compression_N",
+    "left_compression_N",
+    "delta_right_fx_N",
+    "delta_right_mz_Nm",
+    "delta_right_compression_N",
+    "delta_left_compression_N",
+    "delta_right_tcp_x_m",
+    "delta_right_tcp_y_m"
+  ],
+  "ridge": 0.15,
+  "fit_scope": "Historical U4 handoff and rear push data, strictly before any probe action. PhysX used only for calibration and scoring. Classes balanced per run and class. Labels with unavailable PhysX evidence omitted.",
+  "thresholds": "Per-class training extrema on pooled scores, avoid overlapping bounds; strict inequalities with abstention in between.",
+  "whole_run_holdout": {
+    "u4_handover/back04": {
+      "paired_sha256": "118a794fe123c815a5b66af37cfd8f51da931ad58e59bb510486803bbdc8a919",
+      "windows": {
+        "handoff": {
+          "ticks": 1651,
+          "baseline": {
+            "weak": 1559,
+            "weak_hits": 18,
+            "loaded": 1651,
+            "loaded_hits": 77,
+            "clear": 0,
+            "clear_hits": 0,
+            "false_load": 0,
+            "false_clear": 19
+          },
+          "fusion": {
+            "weak": 1559,
+            "weak_hits": 18,
+            "loaded": 1651,
+            "loaded_hits": 77,
+            "clear": 0,
+            "clear_hits": 0,
+            "false_load": 0,
+            "false_clear": 19
+          }
+        },
+        "rear": {
+          "ticks": 4017,
+          "baseline": {
+            "weak": 2180,
+            "weak_hits": 1426,
+            "loaded": 2868,
+            "loaded_hits": 1914,
+            "clear": 1149,
+            "clear_hits": 514,
+            "false_load": 102,
+            "false_clear": 183
+          },
+          "fusion": {
+            "weak": 2180,
+            "weak_hits": 1426,
+            "loaded": 2868,
+            "loaded_hits": 1914,
+            "clear": 1149,
+            "clear_hits": 514,
+            "false_load": 102,
+            "false_clear": 183
+          }
+        }
+      },
+      "first_transition": {
+        "minimum_consecutive_steps": 3,
+        "last_observed_bearing_before_clear_step": 11757,
+        "true_clear_onset_step": 11758,
+        "true_clear_onset_s": 14.491666666666667,
+        "true_clear_confirm_step": 11760,
+        "true_clear_confirm_s": 14.508333333333333,
+        "clear_bout_last_observed_step": 11760,
+        "initial_loss_unwitnessed": false,
+        "true_reload_confirm_step": 11763,
+        "true_reload_confirm_s": 14.533333333333333,
+        "baseline": {
+          "first_clear_confirm_step": 10985,
+          "first_clear_confirm_s": 8.05,
+          "first_declaration_minus_true_confirm_s": -6.458333333333333,
+          "early_declaration": true,
+          "clear_confirm_within_first_true_bout_step": 11760,
+          "missed_first_clear_bout": false,
+          "matched_clear_delay_from_true_onset_s": 0.016666666666666666,
+          "predicted_reload_after_predicted_clear_step": 12020,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        },
+        "fusion": {
+          "first_clear_confirm_step": 10985,
+          "first_clear_confirm_s": 8.05,
+          "first_declaration_minus_true_confirm_s": -6.458333333333333,
+          "early_declaration": true,
+          "clear_confirm_within_first_true_bout_step": 11760,
+          "missed_first_clear_bout": false,
+          "matched_clear_delay_from_true_onset_s": 0.016666666666666666,
+          "predicted_reload_after_predicted_clear_step": 12020,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        }
+      }
+    },
+    "u4_handover/forward04": {
+      "paired_sha256": "f1ff3e69a6b93309e2eb35ce3dc8c139595c8df7739dbcabfafebeb648a6040e",
+      "windows": {
+        "handoff": {
+          "ticks": 1647,
+          "baseline": {
+            "weak": 1406,
+            "weak_hits": 10,
+            "loaded": 1621,
+            "loaded_hits": 74,
+            "clear": 26,
+            "clear_hits": 2,
+            "false_load": 0,
+            "false_clear": 11
+          },
+          "fusion": {
+            "weak": 1406,
+            "weak_hits": 10,
+            "loaded": 1621,
+            "loaded_hits": 74,
+            "clear": 26,
+            "clear_hits": 2,
+            "false_load": 0,
+            "false_clear": 11
+          }
+        },
+        "rear": {
+          "ticks": 4364,
+          "baseline": {
+            "weak": 2535,
+            "weak_hits": 1397,
+            "loaded": 3537,
+            "loaded_hits": 2197,
+            "clear": 827,
+            "clear_hits": 464,
+            "false_load": 60,
+            "false_clear": 346
+          },
+          "fusion": {
+            "weak": 2535,
+            "weak_hits": 1397,
+            "loaded": 3537,
+            "loaded_hits": 2198,
+            "clear": 827,
+            "clear_hits": 464,
+            "false_load": 60,
+            "false_clear": 346
+          }
+        }
+      },
+      "first_transition": {
+        "minimum_consecutive_steps": 3,
+        "last_observed_bearing_before_clear_step": 12083,
+        "true_clear_onset_step": 12084,
+        "true_clear_onset_s": 14.65,
+        "true_clear_confirm_step": 12086,
+        "true_clear_confirm_s": 14.666666666666666,
+        "clear_bout_last_observed_step": 12086,
+        "initial_loss_unwitnessed": false,
+        "true_reload_confirm_step": 12094,
+        "true_reload_confirm_s": 14.733333333333333,
+        "baseline": {
+          "first_clear_confirm_step": 11293,
+          "first_clear_confirm_s": 8.058333333333334,
+          "first_declaration_minus_true_confirm_s": -6.608333333333333,
+          "early_declaration": true,
+          "clear_confirm_within_first_true_bout_step": 12086,
+          "missed_first_clear_bout": false,
+          "matched_clear_delay_from_true_onset_s": 0.016666666666666666,
+          "predicted_reload_after_predicted_clear_step": 12411,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        },
+        "fusion": {
+          "first_clear_confirm_step": 11293,
+          "first_clear_confirm_s": 8.058333333333334,
+          "first_declaration_minus_true_confirm_s": -6.608333333333333,
+          "early_declaration": true,
+          "clear_confirm_within_first_true_bout_step": 12086,
+          "missed_first_clear_bout": false,
+          "matched_clear_delay_from_true_onset_s": 0.016666666666666666,
+          "predicted_reload_after_predicted_clear_step": 12411,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        }
+      }
+    },
+    "u4_handover/nominal": {
+      "paired_sha256": "8e80aec00858276eb905859ed75509392f8a16ec0685818cd99b583896b949f4",
+      "windows": {
+        "handoff": {
+          "ticks": 1647,
+          "baseline": {
+            "weak": 1487,
+            "weak_hits": 6,
+            "loaded": 1647,
+            "loaded_hits": 76,
+            "clear": 0,
+            "clear_hits": 0,
+            "false_load": 0,
+            "false_clear": 14
+          },
+          "fusion": {
+            "weak": 1487,
+            "weak_hits": 6,
+            "loaded": 1647,
+            "loaded_hits": 76,
+            "clear": 0,
+            "clear_hits": 0,
+            "false_load": 0,
+            "false_clear": 14
+          }
+        },
+        "rear": {
+          "ticks": 4221,
+          "baseline": {
+            "weak": 2299,
+            "weak_hits": 1346,
+            "loaded": 3200,
+            "loaded_hits": 2066,
+            "clear": 1021,
+            "clear_hits": 592,
+            "false_load": 75,
+            "false_clear": 221
+          },
+          "fusion": {
+            "weak": 2299,
+            "weak_hits": 1346,
+            "loaded": 3200,
+            "loaded_hits": 2066,
+            "clear": 1021,
+            "clear_hits": 592,
+            "false_load": 75,
+            "false_clear": 221
+          }
+        }
+      },
+      "first_transition": {
+        "minimum_consecutive_steps": 3,
+        "last_observed_bearing_before_clear_step": 12259,
+        "true_clear_onset_step": 12260,
+        "true_clear_onset_s": 14.675,
+        "true_clear_confirm_step": 12262,
+        "true_clear_confirm_s": 14.691666666666666,
+        "clear_bout_last_observed_step": 12264,
+        "initial_loss_unwitnessed": false,
+        "true_reload_confirm_step": 12270,
+        "true_reload_confirm_s": 14.758333333333333,
+        "baseline": {
+          "first_clear_confirm_step": 11465,
+          "first_clear_confirm_s": 8.05,
+          "first_declaration_minus_true_confirm_s": -6.641666666666667,
+          "early_declaration": true,
+          "clear_confirm_within_first_true_bout_step": 12262,
+          "missed_first_clear_bout": false,
+          "matched_clear_delay_from_true_onset_s": 0.016666666666666666,
+          "predicted_reload_after_predicted_clear_step": 12540,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        },
+        "fusion": {
+          "first_clear_confirm_step": 11465,
+          "first_clear_confirm_s": 8.05,
+          "first_declaration_minus_true_confirm_s": -6.641666666666667,
+          "early_declaration": true,
+          "clear_confirm_within_first_true_bout_step": 12262,
+          "missed_first_clear_bout": false,
+          "matched_clear_delay_from_true_onset_s": 0.016666666666666666,
+          "predicted_reload_after_predicted_clear_step": 12540,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        }
+      }
+    },
+    "u4_left_unload/back04": {
+      "paired_sha256": "044368722f4abcc2e37b071d54bbdb2f2995ff97698a95ec6315a5daac27464a",
+      "windows": {
+        "handoff": {
+          "ticks": 1651,
+          "baseline": {
+            "weak": 1404,
+            "weak_hits": 42,
+            "loaded": 1567,
+            "loaded_hits": 88,
+            "clear": 84,
+            "clear_hits": 3,
+            "false_load": 8,
+            "false_clear": 21
+          },
+          "fusion": {
+            "weak": 1404,
+            "weak_hits": 42,
+            "loaded": 1567,
+            "loaded_hits": 88,
+            "clear": 84,
+            "clear_hits": 3,
+            "false_load": 8,
+            "false_clear": 21
+          }
+        },
+        "rear": {
+          "ticks": 4159,
+          "baseline": {
+            "weak": 2318,
+            "weak_hits": 1530,
+            "loaded": 3059,
+            "loaded_hits": 2023,
+            "clear": 1100,
+            "clear_hits": 517,
+            "false_load": 75,
+            "false_clear": 220
+          },
+          "fusion": {
+            "weak": 2318,
+            "weak_hits": 1530,
+            "loaded": 3059,
+            "loaded_hits": 2023,
+            "clear": 1100,
+            "clear_hits": 517,
+            "false_load": 75,
+            "false_clear": 220
+          }
+        }
+      },
+      "first_transition": {
+        "minimum_consecutive_steps": 3,
+        "last_observed_bearing_before_clear_step": 9868,
+        "true_clear_onset_step": 9869,
+        "true_clear_onset_s": 0.5833333333333334,
+        "true_clear_confirm_step": 9871,
+        "true_clear_confirm_s": 0.6,
+        "clear_bout_last_observed_step": 9941,
+        "initial_loss_unwitnessed": false,
+        "true_reload_confirm_step": 9944,
+        "true_reload_confirm_s": 1.2083333333333333,
+        "baseline": {
+          "first_clear_confirm_step": 10762,
+          "first_clear_confirm_s": 8.025,
+          "first_declaration_minus_true_confirm_s": 7.425,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 11710,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        },
+        "fusion": {
+          "first_clear_confirm_step": 10762,
+          "first_clear_confirm_s": 8.025,
+          "first_declaration_minus_true_confirm_s": 7.425,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 11710,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        }
+      }
+    },
+    "u4_left_unload/forward04": {
+      "paired_sha256": "2b725b52ecf22ab681be92eda46890c9ac0a75ad8bddd9ceb1914dfd3e6bbdf7",
+      "windows": {
+        "handoff": {
+          "ticks": 1647,
+          "baseline": {
+            "weak": 691,
+            "weak_hits": 13,
+            "loaded": 1032,
+            "loaded_hits": 76,
+            "clear": 615,
+            "clear_hits": 10,
+            "false_load": 0,
+            "false_clear": 3
+          },
+          "fusion": {
+            "weak": 691,
+            "weak_hits": 13,
+            "loaded": 1032,
+            "loaded_hits": 76,
+            "clear": 615,
+            "clear_hits": 10,
+            "false_load": 0,
+            "false_clear": 3
+          }
+        },
+        "rear": {
+          "ticks": 1411,
+          "baseline": {
+            "weak": 614,
+            "weak_hits": 528,
+            "loaded": 828,
+            "loaded_hits": 710,
+            "clear": 583,
+            "clear_hits": 309,
+            "false_load": 52,
+            "false_clear": 11
+          },
+          "fusion": {
+            "weak": 614,
+            "weak_hits": 529,
+            "loaded": 828,
+            "loaded_hits": 711,
+            "clear": 583,
+            "clear_hits": 311,
+            "false_load": 54,
+            "false_clear": 11
+          }
+        }
+      },
+      "first_transition": {
+        "minimum_consecutive_steps": 3,
+        "last_observed_bearing_before_clear_step": 10503,
+        "true_clear_onset_step": 10504,
+        "true_clear_onset_s": 0.925,
+        "true_clear_confirm_step": 10506,
+        "true_clear_confirm_s": 0.9416666666666667,
+        "clear_bout_last_observed_step": 10506,
+        "initial_loss_unwitnessed": false,
+        "true_reload_confirm_step": 10518,
+        "true_reload_confirm_s": 1.0416666666666667,
+        "baseline": {
+          "first_clear_confirm_step": 11356,
+          "first_clear_confirm_s": 8.025,
+          "first_declaration_minus_true_confirm_s": 7.083333333333333,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 12541,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        },
+        "fusion": {
+          "first_clear_confirm_step": 11356,
+          "first_clear_confirm_s": 8.025,
+          "first_declaration_minus_true_confirm_s": 7.083333333333333,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 12541,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        }
+      }
+    },
+    "u4_left_unload/nominal": {
+      "paired_sha256": "9f4f6dd7d616076aa1ac4274661c3938c8a274698d82ff2e350c64c846e3e6a9",
+      "windows": {
+        "handoff": {
+          "ticks": 1648,
+          "baseline": {
+            "weak": 1204,
+            "weak_hits": 18,
+            "loaded": 1518,
+            "loaded_hits": 76,
+            "clear": 130,
+            "clear_hits": 4,
+            "false_load": 1,
+            "false_clear": 8
+          },
+          "fusion": {
+            "weak": 1204,
+            "weak_hits": 18,
+            "loaded": 1518,
+            "loaded_hits": 76,
+            "clear": 130,
+            "clear_hits": 4,
+            "false_load": 1,
+            "false_clear": 8
+          }
+        },
+        "rear": {
+          "ticks": 4194,
+          "baseline": {
+            "weak": 2254,
+            "weak_hits": 1368,
+            "loaded": 3171,
+            "loaded_hits": 2072,
+            "clear": 1023,
+            "clear_hits": 519,
+            "false_load": 67,
+            "false_clear": 225
+          },
+          "fusion": {
+            "weak": 2254,
+            "weak_hits": 1368,
+            "loaded": 3171,
+            "loaded_hits": 2072,
+            "clear": 1023,
+            "clear_hits": 523,
+            "false_load": 67,
+            "false_clear": 226
+          }
+        }
+      },
+      "first_transition": {
+        "minimum_consecutive_steps": 3,
+        "last_observed_bearing_before_clear_step": 10692,
+        "true_clear_onset_step": 10693,
+        "true_clear_onset_s": 0.65,
+        "true_clear_confirm_step": 10695,
+        "true_clear_confirm_s": 0.6666666666666666,
+        "clear_bout_last_observed_step": 10712,
+        "initial_loss_unwitnessed": false,
+        "true_reload_confirm_step": 10731,
+        "true_reload_confirm_s": 0.9666666666666667,
+        "baseline": {
+          "first_clear_confirm_step": 11582,
+          "first_clear_confirm_s": 8.058333333333334,
+          "first_declaration_minus_true_confirm_s": 7.391666666666667,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 12812,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        },
+        "fusion": {
+          "first_clear_confirm_step": 11582,
+          "first_clear_confirm_s": 8.058333333333334,
+          "first_declaration_minus_true_confirm_s": 7.391666666666667,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 12812,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        }
+      }
+    },
+    "u4_side_pulse/early_back04": {
+      "paired_sha256": "fbe12fda15a5e77a9840993d87230f1d4e57fbbe3eb96eb1d930842ac9d01b61",
+      "windows": {
+        "handoff": {
+          "ticks": 180,
+          "baseline": {
+            "weak": 126,
+            "weak_hits": 31,
+            "loaded": 180,
+            "loaded_hits": 85,
+            "clear": 0,
+            "clear_hits": 0,
+            "false_load": 0,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 126,
+            "weak_hits": 31,
+            "loaded": 180,
+            "loaded_hits": 85,
+            "clear": 0,
+            "clear_hits": 0,
+            "false_load": 0,
+            "false_clear": 0
+          }
+        },
+        "rear": {
+          "ticks": 0,
+          "baseline": {
+            "weak": 0,
+            "weak_hits": 0,
+            "loaded": 0,
+            "loaded_hits": 0,
+            "clear": 0,
+            "clear_hits": 0,
+            "false_load": 0,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 0,
+            "weak_hits": 0,
+            "loaded": 0,
+            "loaded_hits": 0,
+            "clear": 0,
+            "clear_hits": 0,
+            "false_load": 0,
+            "false_clear": 0
+          }
+        }
+      },
+      "first_transition": {
+        "minimum_consecutive_steps": 3,
+        "last_observed_bearing_before_clear_step": null,
+        "true_clear_onset_step": null,
+        "true_clear_onset_s": null,
+        "true_clear_confirm_step": null,
+        "true_clear_confirm_s": null,
+        "clear_bout_last_observed_step": null,
+        "initial_loss_unwitnessed": false,
+        "true_reload_confirm_step": null,
+        "true_reload_confirm_s": null,
+        "baseline": {
+          "first_clear_confirm_step": null,
+          "first_clear_confirm_s": null,
+          "first_declaration_minus_true_confirm_s": null,
+          "early_declaration": null,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": null,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": null,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        },
+        "fusion": {
+          "first_clear_confirm_step": null,
+          "first_clear_confirm_s": null,
+          "first_declaration_minus_true_confirm_s": null,
+          "early_declaration": null,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": null,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": null,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        }
+      }
+    },
+    "u4_side_pulse/early_forward04": {
+      "paired_sha256": "2a56bed54b5adb9fb5138faf08421153c70a100d76e6b69d07c4c5803137432b",
+      "windows": {
+        "handoff": {
+          "ticks": 180,
+          "baseline": {
+            "weak": 29,
+            "weak_hits": 29,
+            "loaded": 62,
+            "loaded_hits": 62,
+            "clear": 118,
+            "clear_hits": 0,
+            "false_load": 15,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 29,
+            "weak_hits": 29,
+            "loaded": 62,
+            "loaded_hits": 62,
+            "clear": 118,
+            "clear_hits": 0,
+            "false_load": 15,
+            "false_clear": 0
+          }
+        },
+        "rear": {
+          "ticks": 0,
+          "baseline": {
+            "weak": 0,
+            "weak_hits": 0,
+            "loaded": 0,
+            "loaded_hits": 0,
+            "clear": 0,
+            "clear_hits": 0,
+            "false_load": 0,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 0,
+            "weak_hits": 0,
+            "loaded": 0,
+            "loaded_hits": 0,
+            "clear": 0,
+            "clear_hits": 0,
+            "false_load": 0,
+            "false_clear": 0
+          }
+        }
+      },
+      "first_transition": {
+        "minimum_consecutive_steps": 3,
+        "last_observed_bearing_before_clear_step": 10347,
+        "true_clear_onset_step": 10348,
+        "true_clear_onset_s": 0.5416666666666666,
+        "true_clear_confirm_step": 10350,
+        "true_clear_confirm_s": 0.5583333333333333,
+        "clear_bout_last_observed_step": 10463,
+        "initial_loss_unwitnessed": false,
+        "true_reload_confirm_step": null,
+        "true_reload_confirm_s": null,
+        "baseline": {
+          "first_clear_confirm_step": null,
+          "first_clear_confirm_s": null,
+          "first_declaration_minus_true_confirm_s": null,
+          "early_declaration": null,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": null,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        },
+        "fusion": {
+          "first_clear_confirm_step": null,
+          "first_clear_confirm_s": null,
+          "first_declaration_minus_true_confirm_s": null,
+          "early_declaration": null,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": null,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        }
+      }
+    },
+    "u4_side_pulse/early_nominal": {
+      "paired_sha256": "d26c92f9ec21059e2525592e16034cfb66864974710b9e2a0d1a46f03a5d4bea",
+      "windows": {
+        "handoff": {
+          "ticks": 180,
+          "baseline": {
+            "weak": 17,
+            "weak_hits": 17,
+            "loaded": 71,
+            "loaded_hits": 71,
+            "clear": 109,
+            "clear_hits": 0,
+            "false_load": 5,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 17,
+            "weak_hits": 17,
+            "loaded": 71,
+            "loaded_hits": 71,
+            "clear": 109,
+            "clear_hits": 0,
+            "false_load": 5,
+            "false_clear": 0
+          }
+        },
+        "rear": {
+          "ticks": 0,
+          "baseline": {
+            "weak": 0,
+            "weak_hits": 0,
+            "loaded": 0,
+            "loaded_hits": 0,
+            "clear": 0,
+            "clear_hits": 0,
+            "false_load": 0,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 0,
+            "weak_hits": 0,
+            "loaded": 0,
+            "loaded_hits": 0,
+            "clear": 0,
+            "clear_hits": 0,
+            "false_load": 0,
+            "false_clear": 0
+          }
+        }
+      },
+      "first_transition": {
+        "minimum_consecutive_steps": 3,
+        "last_observed_bearing_before_clear_step": 10524,
+        "true_clear_onset_step": 10525,
+        "true_clear_onset_s": 0.6166666666666667,
+        "true_clear_confirm_step": 10527,
+        "true_clear_confirm_s": 0.6333333333333333,
+        "clear_bout_last_observed_step": 10631,
+        "initial_loss_unwitnessed": false,
+        "true_reload_confirm_step": null,
+        "true_reload_confirm_s": null,
+        "baseline": {
+          "first_clear_confirm_step": null,
+          "first_clear_confirm_s": null,
+          "first_declaration_minus_true_confirm_s": null,
+          "early_declaration": null,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": null,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        },
+        "fusion": {
+          "first_clear_confirm_step": null,
+          "first_clear_confirm_s": null,
+          "first_declaration_minus_true_confirm_s": null,
+          "early_declaration": null,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": null,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        }
+      }
+    },
+    "u4_side_pulse/near_back04": {
+      "paired_sha256": "55d31a452b003ce8bf4fe478ee42a9e8a7fa1ece56626e03389c13966311b004",
+      "windows": {
+        "handoff": {
+          "ticks": 1650,
+          "baseline": {
+            "weak": 490,
+            "weak_hits": 33,
+            "loaded": 851,
+            "loaded_hits": 69,
+            "clear": 799,
+            "clear_hits": 13,
+            "false_load": 9,
+            "false_clear": 7
+          },
+          "fusion": {
+            "weak": 490,
+            "weak_hits": 33,
+            "loaded": 851,
+            "loaded_hits": 69,
+            "clear": 799,
+            "clear_hits": 13,
+            "false_load": 9,
+            "false_clear": 7
+          }
+        },
+        "rear": {
+          "ticks": 4078,
+          "baseline": {
+            "weak": 2251,
+            "weak_hits": 1482,
+            "loaded": 2979,
+            "loaded_hits": 1982,
+            "clear": 1099,
+            "clear_hits": 595,
+            "false_load": 56,
+            "false_clear": 169
+          },
+          "fusion": {
+            "weak": 2251,
+            "weak_hits": 1482,
+            "loaded": 2979,
+            "loaded_hits": 1982,
+            "clear": 1099,
+            "clear_hits": 595,
+            "false_load": 56,
+            "false_clear": 169
+          }
+        }
+      },
+      "first_transition": {
+        "minimum_consecutive_steps": 3,
+        "last_observed_bearing_before_clear_step": 9876,
+        "true_clear_onset_step": 9877,
+        "true_clear_onset_s": 0.55,
+        "true_clear_confirm_step": 9879,
+        "true_clear_confirm_s": 0.5666666666666667,
+        "clear_bout_last_observed_step": 9880,
+        "initial_loss_unwitnessed": false,
+        "true_reload_confirm_step": 9945,
+        "true_reload_confirm_s": 1.1166666666666667,
+        "baseline": {
+          "first_clear_confirm_step": 10776,
+          "first_clear_confirm_s": 8.041666666666666,
+          "first_declaration_minus_true_confirm_s": 7.475,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 11963,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        },
+        "fusion": {
+          "first_clear_confirm_step": 10776,
+          "first_clear_confirm_s": 8.041666666666666,
+          "first_declaration_minus_true_confirm_s": 7.475,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 11963,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        }
+      }
+    },
+    "u4_side_pulse/near_forward04": {
+      "paired_sha256": "120beb7cc807989612f07f100066ee24853c60a40f8d00cb17bf7faaefb741e5",
+      "windows": {
+        "handoff": {
+          "ticks": 1647,
+          "baseline": {
+            "weak": 19,
+            "weak_hits": 19,
+            "loaded": 69,
+            "loaded_hits": 69,
+            "clear": 1578,
+            "clear_hits": 15,
+            "false_load": 9,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 19,
+            "weak_hits": 19,
+            "loaded": 69,
+            "loaded_hits": 69,
+            "clear": 1578,
+            "clear_hits": 15,
+            "false_load": 9,
+            "false_clear": 0
+          }
+        },
+        "rear": {
+          "ticks": 1099,
+          "baseline": {
+            "weak": 373,
+            "weak_hits": 355,
+            "loaded": 523,
+            "loaded_hits": 489,
+            "clear": 576,
+            "clear_hits": 317,
+            "false_load": 48,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 373,
+            "weak_hits": 355,
+            "loaded": 523,
+            "loaded_hits": 489,
+            "clear": 576,
+            "clear_hits": 317,
+            "false_load": 48,
+            "false_clear": 0
+          }
+        }
+      },
+      "first_transition": {
+        "minimum_consecutive_steps": 3,
+        "last_observed_bearing_before_clear_step": 10357,
+        "true_clear_onset_step": 10358,
+        "true_clear_onset_s": 0.575,
+        "true_clear_confirm_step": 10360,
+        "true_clear_confirm_s": 0.5916666666666667,
+        "clear_bout_last_observed_step": 10360,
+        "initial_loss_unwitnessed": false,
+        "true_reload_confirm_step": 12494,
+        "true_reload_confirm_s": 18.375,
+        "baseline": {
+          "first_clear_confirm_step": 11252,
+          "first_clear_confirm_s": 8.025,
+          "first_declaration_minus_true_confirm_s": 7.433333333333334,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 12425,
+          "bearing_confirm_within_first_true_reload_bout_step": 12498
+        },
+        "fusion": {
+          "first_clear_confirm_step": 11252,
+          "first_clear_confirm_s": 8.025,
+          "first_declaration_minus_true_confirm_s": 7.433333333333334,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 12425,
+          "bearing_confirm_within_first_true_reload_bout_step": 12498
+        }
+      }
+    },
+    "u4_side_pulse/near_nominal": {
+      "paired_sha256": "9ad64f1b7a78a7d37c9a061652777d6b4d9693dcaf9874e9fc2a045b6145f4c7",
+      "windows": {
+        "handoff": {
+          "ticks": 1648,
+          "baseline": {
+            "weak": 28,
+            "weak_hits": 28,
+            "loaded": 80,
+            "loaded_hits": 73,
+            "clear": 1568,
+            "clear_hits": 19,
+            "false_load": 9,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 28,
+            "weak_hits": 28,
+            "loaded": 80,
+            "loaded_hits": 73,
+            "clear": 1568,
+            "clear_hits": 19,
+            "false_load": 9,
+            "false_clear": 0
+          }
+        },
+        "rear": {
+          "ticks": 1038,
+          "baseline": {
+            "weak": 399,
+            "weak_hits": 392,
+            "loaded": 497,
+            "loaded_hits": 484,
+            "clear": 541,
+            "clear_hits": 276,
+            "false_load": 53,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 399,
+            "weak_hits": 392,
+            "loaded": 497,
+            "loaded_hits": 484,
+            "clear": 541,
+            "clear_hits": 276,
+            "false_load": 53,
+            "false_clear": 0
+          }
+        }
+      },
+      "first_transition": {
+        "minimum_consecutive_steps": 3,
+        "last_observed_bearing_before_clear_step": 10429,
+        "true_clear_onset_step": 10430,
+        "true_clear_onset_s": 0.6416666666666667,
+        "true_clear_confirm_step": 10432,
+        "true_clear_confirm_s": 0.6583333333333333,
+        "clear_bout_last_observed_step": 10468,
+        "initial_loss_unwitnessed": false,
+        "true_reload_confirm_step": 12529,
+        "true_reload_confirm_s": 18.133333333333333,
+        "baseline": {
+          "first_clear_confirm_step": 11316,
+          "first_clear_confirm_s": 8.025,
+          "first_declaration_minus_true_confirm_s": 7.366666666666666,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 12438,
+          "bearing_confirm_within_first_true_reload_bout_step": 12529
+        },
+        "fusion": {
+          "first_clear_confirm_step": 11316,
+          "first_clear_confirm_s": 8.025,
+          "first_declaration_minus_true_confirm_s": 7.366666666666666,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 12438,
+          "bearing_confirm_within_first_true_reload_bout_step": 12529
+        }
+      }
+    },
+    "u4_side_pulse/sham_nominal_retry": {
+      "paired_sha256": "2458311c0cd93f71e082d428850aa5fd8a01777244fb60c03e674942f8802391",
+      "windows": {
+        "handoff": {
+          "ticks": 180,
+          "baseline": {
+            "weak": 106,
+            "weak_hits": 21,
+            "loaded": 170,
+            "loaded_hits": 77,
+            "clear": 10,
+            "clear_hits": 0,
+            "false_load": 3,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 106,
+            "weak_hits": 21,
+            "loaded": 170,
+            "loaded_hits": 77,
+            "clear": 10,
+            "clear_hits": 0,
+            "false_load": 3,
+            "false_clear": 0
+          }
+        },
+        "rear": {
+          "ticks": 0,
+          "baseline": {
+            "weak": 0,
+            "weak_hits": 0,
+            "loaded": 0,
+            "loaded_hits": 0,
+            "clear": 0,
+            "clear_hits": 0,
+            "false_load": 0,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 0,
+            "weak_hits": 0,
+            "loaded": 0,
+            "loaded_hits": 0,
+            "clear": 0,
+            "clear_hits": 0,
+            "false_load": 0,
+            "false_clear": 0
+          }
+        }
+      },
+      "first_transition": {
+        "minimum_consecutive_steps": 3,
+        "last_observed_bearing_before_clear_step": 10539,
+        "true_clear_onset_step": 10540,
+        "true_clear_onset_s": 0.65,
+        "true_clear_confirm_step": 10542,
+        "true_clear_confirm_s": 0.6666666666666666,
+        "clear_bout_last_observed_step": 10546,
+        "initial_loss_unwitnessed": false,
+        "true_reload_confirm_step": 10552,
+        "true_reload_confirm_s": 0.75,
+        "baseline": {
+          "first_clear_confirm_step": null,
+          "first_clear_confirm_s": null,
+          "first_declaration_minus_true_confirm_s": null,
+          "early_declaration": null,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": null,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        },
+        "fusion": {
+          "first_clear_confirm_step": null,
+          "first_clear_confirm_s": null,
+          "first_declaration_minus_true_confirm_s": null,
+          "early_declaration": null,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": null,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        }
+      }
+    },
+    "u4_side_pulse/weak_back04": {
+      "paired_sha256": "a67aaa05eef753cb773a304207040401d0192b482907121df99b5b10d5695683",
+      "windows": {
+        "handoff": {
+          "ticks": 1652,
+          "baseline": {
+            "weak": 94,
+            "weak_hits": 18,
+            "loaded": 164,
+            "loaded_hits": 74,
+            "clear": 1488,
+            "clear_hits": 18,
+            "false_load": 2,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 94,
+            "weak_hits": 18,
+            "loaded": 164,
+            "loaded_hits": 74,
+            "clear": 1488,
+            "clear_hits": 18,
+            "false_load": 2,
+            "false_clear": 0
+          }
+        },
+        "rear": {
+          "ticks": 720,
+          "baseline": {
+            "weak": 89,
+            "weak_hits": 82,
+            "loaded": 112,
+            "loaded_hits": 96,
+            "clear": 608,
+            "clear_hits": 235,
+            "false_load": 69,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 89,
+            "weak_hits": 82,
+            "loaded": 112,
+            "loaded_hits": 96,
+            "clear": 608,
+            "clear_hits": 235,
+            "false_load": 69,
+            "false_clear": 0
+          }
+        }
+      },
+      "first_transition": {
+        "minimum_consecutive_steps": 3,
+        "last_observed_bearing_before_clear_step": 10051,
+        "true_clear_onset_step": 10052,
+        "true_clear_onset_s": 0.625,
+        "true_clear_confirm_step": 10054,
+        "true_clear_confirm_s": 0.6416666666666667,
+        "clear_bout_last_observed_step": 10054,
+        "initial_loss_unwitnessed": false,
+        "true_reload_confirm_step": 10070,
+        "true_reload_confirm_s": 0.775,
+        "baseline": {
+          "first_clear_confirm_step": 10940,
+          "first_clear_confirm_s": 8.025,
+          "first_declaration_minus_true_confirm_s": 7.383333333333334,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 12178,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        },
+        "fusion": {
+          "first_clear_confirm_step": 10940,
+          "first_clear_confirm_s": 8.025,
+          "first_declaration_minus_true_confirm_s": 7.383333333333334,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 12178,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        }
+      }
+    },
+    "u4_side_pulse/weak_forward04": {
+      "paired_sha256": "c9416458889f122b57ef75dacee3818ace905f72aa6cd246deb64d42b44f277f",
+      "windows": {
+        "handoff": {
+          "ticks": 1647,
+          "baseline": {
+            "weak": 339,
+            "weak_hits": 17,
+            "loaded": 550,
+            "loaded_hits": 72,
+            "clear": 1097,
+            "clear_hits": 15,
+            "false_load": 17,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 339,
+            "weak_hits": 17,
+            "loaded": 550,
+            "loaded_hits": 72,
+            "clear": 1097,
+            "clear_hits": 15,
+            "false_load": 17,
+            "false_clear": 0
+          }
+        },
+        "rear": {
+          "ticks": 720,
+          "baseline": {
+            "weak": 109,
+            "weak_hits": 105,
+            "loaded": 135,
+            "loaded_hits": 124,
+            "clear": 585,
+            "clear_hits": 306,
+            "false_load": 48,
+            "false_clear": 0
+          },
+          "fusion": {
+            "weak": 109,
+            "weak_hits": 105,
+            "loaded": 135,
+            "loaded_hits": 124,
+            "clear": 585,
+            "clear_hits": 309,
+            "false_load": 48,
+            "false_clear": 0
+          }
+        }
+      },
+      "first_transition": {
+        "minimum_consecutive_steps": 3,
+        "last_observed_bearing_before_clear_step": 10333,
+        "true_clear_onset_step": 10334,
+        "true_clear_onset_s": 0.6333333333333333,
+        "true_clear_confirm_step": 10336,
+        "true_clear_confirm_s": 0.65,
+        "clear_bout_last_observed_step": 10382,
+        "initial_loss_unwitnessed": false,
+        "true_reload_confirm_step": 10547,
+        "true_reload_confirm_s": 2.408333333333333,
+        "baseline": {
+          "first_clear_confirm_step": 11221,
+          "first_clear_confirm_s": 8.025,
+          "first_declaration_minus_true_confirm_s": 7.375,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 12395,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        },
+        "fusion": {
+          "first_clear_confirm_step": 11221,
+          "first_clear_confirm_s": 8.025,
+          "first_declaration_minus_true_confirm_s": 7.375,
+          "early_declaration": false,
+          "clear_confirm_within_first_true_bout_step": null,
+          "missed_first_clear_bout": true,
+          "matched_clear_delay_from_true_onset_s": null,
+          "predicted_reload_after_predicted_clear_step": 12395,
+          "bearing_confirm_within_first_true_reload_bout_step": null
+        }
+      }
+    }
+  },
+  "model": {
+    "center": [
+      -0.005030241778030982,
+      0.020327003575958853,
+      0.012405779305898765,
+      2.5756055363844377,
+      0.0019333103754278769,
+      0.0467734702060982,
+      -0.00098014520390834,
+      0.04480635182570713,
+      -0.005295345472869027,
+      3.73894916367697e-08,
+      3.7292362523694415e-05
+    ],
+    "scale": [
+      0.001146240625631605,
+      0.2542769750311717,
+      0.02637056728847089,
+      2.7383677160290794,
+      0.021798510246046607,
+      0.24736696898546023,
+      0.014993252622202745,
+      0.2558303402573525,
+      0.0382295441808793,
+      1.387686770199525e-06,
+      8.19248224243386e-05
+    ],
+    "intercept": -0.0034996909554362676,
+    "weights": [
+      0.010639602921199295,
+      -0.44343807668477336,
+      -0.21038298828496774,
+      -0.12516928484993414,
+      0.050212915435954214,
+      0.03452112353409445,
+      -0.001339815818066464,
+      -0.01039329966060406,
+      0.09359760269503527,
+      -0.06285090795212628,
+      -0.02694657924685713
+    ],
+    "clear_below": -2.143851779063802,
+    "load_above": 2.155763761982052
+  }
+}
