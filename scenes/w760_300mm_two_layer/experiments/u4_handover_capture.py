@@ -27,16 +27,24 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("isaac_python", type=Path)
     parser.add_argument("output", type=Path, help="New directory for all three physical runs")
+    parser.add_argument("--side-probe", action="store_true", help="Run three early and two late single-probe trials")
     args = parser.parse_args()
     source = (SCENE / "validation/upper4_after_transfer_checkpoint.json").read_bytes()
     args.output.mkdir(parents=True, exist_ok=False)
-    for name, dy in TRIALS:
+    trials = [(name, dy, None) for name, dy in TRIALS]
+    if args.side_probe:
+        trials = [(when + "_" + name, dy, when) for when in ("early", "late")
+                  for name, dy in (TRIALS if when == "early" else TRIALS[:2])]
+    for name, dy, timing in trials:
         input_path = args.output / (name + ".json")
         input_path.write_text(json.dumps(checkpoint(source, dy), indent=2) + "\n")
         run = args.output / name
         with (args.output / (name + ".log")).open("w") as log:
-            subprocess.run([args.isaac_python, SCENE / "two_row_physx.py", run,
-                            "--resume", input_path, "--close-on-finish"],
+            command = [args.isaac_python, SCENE / "two_row_physx.py", run,
+                       "--resume", input_path, "--close-on-finish"]
+            if timing:
+                command += ["--u4-side-probe", timing]
+            subprocess.run(command,
                            stdout=log, stderr=subprocess.STDOUT, check=True)
         report = json.loads((run / "runner_report.json").read_text())
         if not any(e["phase"] == "upper_slot_complete" and e["status"] == "SEATED_STABLE"

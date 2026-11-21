@@ -256,6 +256,7 @@ def main():
     parser.add_argument("--upper5-z-unload", action="store_true", help="Test vertical force feedback during the upper-5 straight push")
     parser.add_argument("--upper5-blur-ms", type=float, help="Also detect ArUco on a causal D455 exposure composite")
     parser.add_argument("--upper5-active-probe", action="store_true", help="Record the active rear-wall probing experiment")
+    parser.add_argument("--u4-side-probe", choices=("early", "late"), help="One transverse probe at U4 handoff or after 300 rear-push steps")
     parser.add_argument("--stop-after-front", type=int, choices=range(1, 6))
     parser.add_argument("--stop-after-upper-a", action="store_true",
                         help="Collect the next upper supply, lift and landing, ending after withdrawal")
@@ -270,6 +271,8 @@ def main():
         parser.error("The requested stopping slot is already complete in the checkpoint")
     first_id = FRONT_IDS[front-1] if front < 6 else 6 + upper
     release = checkpoint.get("front_landed") or checkpoint.get("landed")
+    if args.u4_side_probe and (front != 6 or upper != 4 or not release or release["cube_id"] != 10):
+        parser.error("--u4-side-probe requires the upper-4 landing checkpoint")
     if args.stop_after_upper_a and (front != 6 or release or args.stop_after_front is not None):
         parser.error("--stop-after-upper-a needs a completed lower row and the next upper box at supply")
     terminal = (release or {}).get("terminal_probe")
@@ -299,6 +302,9 @@ def main():
     output = args.output.resolve()
     snapshot = output / "runner_snapshot.py"
     source = build()
+    if args.u4_side_probe:
+        from experiments.u4_side_probe import inject
+        source = inject(source)
     if args.stop_after_upper_a:
         marker = "            save_upper_checkpoint(slot, landed_now)"
         source = replace_once(source, marker, marker +
@@ -351,7 +357,7 @@ def main():
             sys.argv.append("--close-on-finish")
         exec(runner, {"__file__": sys.argv[0], "__name__": "__main__", "SCENE": SCENE, "LOWER_IDS": LOWER_IDS,
                       "FRONT_IDS": FRONT_IDS, "START_FRONT": front, "START_SLOT": upper, "FIRST_ID": first_id,
-                      "STOP_AFTER_FRONT": args.stop_after_front,
+                      "STOP_AFTER_FRONT": args.stop_after_front, "U4_SIDE_PROBE": args.u4_side_probe,
                       "INITIAL_BOXES": saved, "RUNTIME_GUIDES": row_guide_paths(), "CHECKPOINT": checkpoint,
                       "RELEASE_CHECKPOINT": release, "UPPER5_EXPERIMENT": experiment,
                       "SUPPORT_TOP_BEVEL_M": None, "UPPER_REST_OFFSET_M": None, "CUBE_CONTACT_OFFSET_M": None})
