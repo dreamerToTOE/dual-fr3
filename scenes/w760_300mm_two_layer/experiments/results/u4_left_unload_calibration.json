@@ -1,0 +1,169 @@
+{
+  "sources": [
+    "u4_handover",
+    "u4_side_pulse"
+  ],
+  "unused_missing_event": [
+    "late_forward04",
+    "late_nominal",
+    "sham_nominal",
+    "weak_nominal"
+  ],
+  "features": [
+    "left_normal_recoil_um",
+    "right_shear_N"
+  ],
+  "target": "Side bearing on >=7 of 12 physical steps starting with the causal recoil decision. All features stop at the decision. Events precede any transverse pulse.",
+  "fit": "Class-balanced standardized linear ridge, lambda=0.3, one sample per physical trial. Score is a decision score, not a calibrated probability. Thresholds 0.35/0.65. Whole-trial LOO is a development diagnostic.",
+  "intercept": 0.8522049462037623,
+  "weights": [
+    0.07240978494889197,
+    9.955218366084464
+  ],
+  "development_runs": {
+    "back04": {
+      "event_step": 10102,
+      "feature": [
+        14.150879126206828,
+        -0.11186715199594643
+      ],
+      "loaded_ticks": 12,
+      "ticks": 12,
+      "target": true,
+      "loo_score": 0.7379695038136749,
+      "loo_call": true
+    },
+    "forward04": {
+      "event_step": 10412,
+      "feature": [
+        8.050468350340179,
+        -0.07551908419111297
+      ],
+      "loaded_ticks": 12,
+      "ticks": 12,
+      "target": true,
+      "loo_score": 0.5572239969320694,
+      "loo_call": null
+    },
+    "nominal": {
+      "event_step": 10587,
+      "feature": [
+        12.198031985294344,
+        -0.09245548968532694
+      ],
+      "loaded_ticks": 12,
+      "ticks": 12,
+      "target": true,
+      "loo_score": 0.806657990933731,
+      "loo_call": true
+    },
+    "early_back04": {
+      "event_step": 9934,
+      "feature": [
+        14.285152747012253,
+        -0.12034043384936972
+      ],
+      "loaded_ticks": 12,
+      "ticks": 12,
+      "target": true,
+      "loo_score": 0.6435162964416921,
+      "loo_call": null
+    },
+    "early_forward04": {
+      "event_step": 10369,
+      "feature": [
+        9.546214710692835,
+        -0.1323590317105924
+      ],
+      "loaded_ticks": 0,
+      "ticks": 12,
+      "target": false,
+      "loo_score": 0.2270133226321276,
+      "loo_call": false
+    },
+    "early_nominal": {
+      "event_step": 10538,
+      "feature": [
+        7.548236260035424,
+        -0.12210230412634225
+      ],
+      "loaded_ticks": 0,
+      "ticks": 12,
+      "target": false,
+      "loo_score": 0.18192988655189557,
+      "loo_call": false
+    },
+    "near_back04": {
+      "event_step": 9895,
+      "feature": [
+        13.286003324231022,
+        -0.16562582912412105
+      ],
+      "loaded_ticks": 0,
+      "ticks": 12,
+      "target": false,
+      "loo_score": 0.17278099011490855,
+      "loo_call": false
+    },
+    "near_forward04": {
+      "event_step": 10376,
+      "feature": [
+        9.43851355048042,
+        -0.10864405000196448
+      ],
+      "loaded_ticks": 0,
+      "ticks": 12,
+      "target": false,
+      "loo_score": 0.48621456236160054,
+      "loo_call": null
+    },
+    "near_nominal": {
+      "event_step": 10439,
+      "feature": [
+        11.561011389910059,
+        -0.13692344860578087
+      ],
+      "loaded_ticks": 0,
+      "ticks": 12,
+      "target": false,
+      "loo_score": 0.34719488037584445,
+      "loo_call": false
+    },
+    "sham_nominal_retry": {
+      "event_step": 10548,
+      "feature": [
+        9.939106737882897,
+        -0.1268847438232455
+      ],
+      "loaded_ticks": 10,
+      "ticks": 12,
+      "target": true,
+      "loo_score": 0.24120609126081338,
+      "loo_call": false
+    },
+    "weak_back04": {
+      "event_step": 10064,
+      "feature": [
+        14.906728306396388,
+        -0.07985018572814301
+      ],
+      "loaded_ticks": 9,
+      "ticks": 12,
+      "target": true,
+      "loo_score": 1.295993820814901,
+      "loo_call": true
+    },
+    "weak_forward04": {
+      "event_step": 10344,
+      "feature": [
+        7.520420726603305,
+        -0.11521726604827791
+      ],
+      "loaded_ticks": 0,
+      "ticks": 12,
+      "target": false,
+      "loo_score": 0.2670223594674783,
+      "loo_call": false
+    }
+  }
+}
