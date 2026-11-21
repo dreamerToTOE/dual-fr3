@@ -256,8 +256,8 @@ def main():
     parser.add_argument("--upper5-z-unload", action="store_true", help="Test vertical force feedback during the upper-5 straight push")
     parser.add_argument("--upper5-blur-ms", type=float, help="Also detect ArUco on a causal D455 exposure composite")
     parser.add_argument("--upper5-active-probe", action="store_true", help="Record the active rear-wall probing experiment")
-    parser.add_argument("--u4-side-probe", choices=("early", "late", "near", "sham"),
-                        help="Single U4 pulse at handoff, after 300 rear-push steps, near the wall, or zero-amplitude handoff control")
+    parser.add_argument("--u4-side-probe", choices=("early", "late", "weak", "near", "sham"),
+                        help="Single U4 pulse at handoff, after 300/720 rear-push steps, near the wall, or a zero-amplitude handoff control")
     parser.add_argument("--stop-after-front", type=int, choices=range(1, 6))
     parser.add_argument("--stop-after-upper-a", action="store_true",
                         help="Collect the next upper supply, lift and landing, ending after withdrawal")

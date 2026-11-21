@@ -69,6 +69,9 @@ def episode(rows):
     selected = [r for r in rows if r["segment"]]
     if not selected:
         return {"complete_sequence": False, "status": "NO_PROBE_EXECUTED", "segments": {}}
+    start = selected[0]["step"]
+    incoming = [r for r in rows if start-12 <= r["step"] < start]
+    prior = stable_end(incoming)
     parts = {s: [r for r in selected if r["segment"] == s] for s in SEGMENTS}
     before = stable_end(parts["pre"])
     during = [r for r in selected if r["segment"] not in ("pre", "post")]
@@ -82,6 +85,9 @@ def episode(rows):
     decision = responses[0] if responses else None
     conclusion = decision["probe_before_loaded"] if decision else None
     return {"segments": {s: exposure(rs) for s, rs in parts.items() if rs},
+            "before_command_hold_12": exposure(incoming) if incoming else None,
+            "before_command_hold_end_loaded": prior,
+            "load_changed_during_pre_hold": prior != before if prior is not None and before is not None else None,
             "complete_sequence": [len(parts[s]) for s in SEGMENTS] == list(COUNTS),
             "pre_end_loaded": before, "post_end_loaded": stable_end(parts["post"]),
             "box_range_m": {axis: max(r[k] for r in selected) - min(r[k] for r in selected)
@@ -95,6 +101,8 @@ def episode(rows):
             "retrospective_decision_step": decision["step"] if decision else None,
             "estimated_pre_loaded": conclusion, "retrospective_correct": (
                 before == conclusion if before is not None and conclusion is not None else None),
+            "retrospective_matches_preintervention": (
+                prior == conclusion if prior is not None and conclusion is not None else None),
             "probe_response": decision["probe_response"] if decision else None}
 
 

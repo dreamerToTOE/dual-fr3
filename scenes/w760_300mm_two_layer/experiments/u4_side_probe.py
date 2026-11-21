@@ -86,7 +86,8 @@ def inject(source):
                             right = last_force_sample[side]
                             sensor_trigger = near_rear(recent_right, final[1], half, command_y,
                                                        right["tcp_position_m"][1], -right["tcp_gravity_corrected_world"][1])
-                        if (U4_SIDE_PROBE == "late" and rear_tick == 300) or sensor_trigger:
+                        fixed_tick = {"late": 300, "weak": 720}.get(U4_SIDE_PROBE)
+                        if rear_tick == fixed_tick or sensor_trigger:
                             run_u4_side_probe()
                             # Resume the admittance state, but rebuild windows that require consecutive motion ticks.
                             confirmations.clear()

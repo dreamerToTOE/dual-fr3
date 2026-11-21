@@ -30,6 +30,10 @@ def test_onset_during_probe_is_distinct_from_preexisting_contact():
     event = episode(trial([False]*6 + [True, False, True] + [False]*3))
     assert event["during_single_tick_load"] == 7 and event["during_load_ticks"] == 2
     assert event["single_tick_contact_during_previously_clear"] and not event["sustained_contact_during_previously_clear"]
+    incoming = [dict(r[0], step=i, segment="", truth_side=True) for i in range(-11,1)]
+    event = episode(incoming + trial([False]*6+[True]*6))
+    assert event["before_command_hold_12"]["known_loaded"] == 12 and event["load_changed_during_pre_hold"]
+    assert event["retrospective_correct"] and not event["retrospective_matches_preintervention"]
 
 
 def test_fpr_and_weak_recall_treat_abstentions_as_unsolved():
