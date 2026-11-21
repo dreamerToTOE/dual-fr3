@@ -1,8 +1,8 @@
 """Plot the handoff against measured left-cup and side-neighbor bearing."""
+import argparse
 import csv
 import gzip
 from pathlib import Path
-import sys
 
 import matplotlib
 matplotlib.use("Agg")
@@ -14,7 +14,7 @@ def values(rows, key):
     return np.array([float(r[key]) if r[key] else np.nan for r in rows])
 
 
-def plot(root):
+def plot(root, continuous=False):
     trials = []
     for path in sorted(root.glob("*/timeline.csv.gz")):
         with gzip.open(path, "rt") as stream:
@@ -48,7 +48,7 @@ def plot(root):
             ax.spines[["top", "right"]].set_visible(False)
         force.axhspan(.1, 1, color="#b4e2d6", alpha=.35, zorder=0, label="目标弱载范围")
         vision.axhline(0, color="#aaa", lw=.6, zorder=0)
-        labels = ["左杯真值", "侧邻箱真值", "被动融合", "撤力曲线融合"]
+        labels = ["左杯真值", "侧邻箱真值", "被动融合", "连续融合" if continuous else "撤力曲线融合"]
         for y, key in enumerate(("truth_left_cup", "truth_side", "baseline_side", "fusion_side")):
             obs = values(rows, key)
             for mask, color in ((obs == 1, "#007c72"), (obs == 0, "#b8c5cc"), (np.isnan(obs), "#f0dfb7")):
@@ -58,15 +58,22 @@ def plot(root):
         force.set_title(name)
     grid[0, 0].set_ylabel("力 (N)")
     grid[1, 0].set_ylabel("侧隙 (mm)")
-    fig.suptitle("上层第 4 箱 · 换臂时左腕撤力与箱间承载", fontsize=16)
+    title = "上层第 4 箱 · 换臂时侧载的连续判断" if continuous else "上层第 4 箱 · 换臂时左腕撤力与箱间承载"
+    fig.suptitle(title, fontsize=16)
     h, l = grid[0, 0].get_legend_handles_labels()
     h2, l2 = grid[1, 0].get_legend_handles_labels()
     fig.legend(h+h2, l+l2, loc="upper center", bbox_to_anchor=(.50, .94), ncol=4, frameon=False)
-    fig.text(.52, .046, "绿：承载　灰：无载　浅黄：待确认\n竖虚线：撤力开始　紫色点线：撤力特征计算完成",
-             ha="center", fontsize=9)
+    caption = "绿：承载　灰：无载　浅黄：待确认\n竖虚线：撤力开始"
+    if not continuous:
+        caption += "　紫色点线：撤力特征计算完成"
+    fig.text(.52, .046, caption, ha="center", fontsize=9)
     fig.savefig(root / "handoff.png", dpi=160)
     plt.close(fig)
 
 
 if __name__ == "__main__":
-    plot(Path(sys.argv[1]))
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("path", type=Path)
+    parser.add_argument("--continuous", action="store_true")
+    args = parser.parse_args()
+    plot(args.path, args.continuous)
