@@ -1,0 +1,158 @@
+{
+  "nominal": {
+    "initial": {
+      "source_checkpoint_sha256": "687f9f9d9540a7076c0a28ae6666bd2d7bc9f88b2e39a3f039e08b4d1f09b7e6",
+      "active_box_world_Y_offset_m": 0
+    },
+    "checkpoint_sha256": "279237f8a83d294104bd31c8c128bfe5dc8bc1a89cc5ed83bef6ff3549734116",
+    "runner_report_sha256": "d05bb568cfae36424f1dbe2bc5ab92dbe57f3a7fde13a3c419ac5ee98006dbf0",
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "restored_box_position_m": [
+      0.14006192982196808,
+      1.0094431638717651,
+      0.9369998574256897
+    ],
+    "tool_parked_s": 145.54166666666666,
+    "seated_stable_s": 146.24166666666667,
+    "simulation_clock": {
+      "control_hz": 120,
+      "render_hz": 30,
+      "render_count": 4629,
+      "uncommanded_physics_steps": 0,
+      "control_steps": 17549,
+      "physics_steps": 17549
+    },
+    "slot": 4,
+    "cube_id": 10,
+    "target_m": [
+      0.15342561315986797,
+      1.076,
+      0.9369999999999999
+    ],
+    "rgb_final_m": [
+      0.1541024066271645,
+      1.075085433157811,
+      0.9369999999999999
+    ],
+    "physical_final_m": [
+      0.1527828723192215,
+      1.0758445262908936,
+      0.9369997382164001
+    ],
+    "yaw_pitch_roll_deg": [
+      -0.11829399488105241,
+      3.1939645055781786e-05,
+      -0.00025745061902644945
+    ],
+    "support": {
+      "positive_steps": 60,
+      "median_contact_impulse_Ns": 0.09988137384428668,
+      "samples": 60
+    },
+    "max_lower_shift_m": 7.017322443115735e-05
+  },
+  "forward04": {
+    "initial": {
+      "source_checkpoint_sha256": "687f9f9d9540a7076c0a28ae6666bd2d7bc9f88b2e39a3f039e08b4d1f09b7e6",
+      "active_box_world_Y_offset_m": 0.0004
+    },
+    "checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e",
+    "runner_report_sha256": "c595775d40cab59f43a43bacde19ef8e2aae82b3e4502deed96554ef8214792b",
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "restored_box_position_m": [
+      0.14006181061267853,
+      1.0098426342010498,
+      0.9370000958442688
+    ],
+    "tool_parked_s": 145.3,
+    "seated_stable_s": 146.0,
+    "simulation_clock": {
+      "control_hz": 120,
+      "render_hz": 30,
+      "render_count": 4622,
+      "uncommanded_physics_steps": 0,
+      "control_steps": 17520,
+      "physics_steps": 17520
+    },
+    "slot": 4,
+    "cube_id": 10,
+    "target_m": [
+      0.1533095199714991,
+      1.076,
+      0.9369999999999999
+    ],
+    "rgb_final_m": [
+      0.1540155933149765,
+      1.0750554455569288,
+      0.9369999999999999
+    ],
+    "physical_final_m": [
+      0.15265235304832458,
+      1.075915813446045,
+      0.9369997978210449
+    ],
+    "yaw_pitch_roll_deg": [
+      -0.06431352903189094,
+      1.369742264206707e-05,
+      -0.00012059310440837023
+    ],
+    "support": {
+      "positive_steps": 60,
+      "median_contact_impulse_Ns": 0.10026932548771299,
+      "samples": 60
+    },
+    "max_lower_shift_m": 7.002374019658576e-05
+  },
+  "back04": {
+    "initial": {
+      "source_checkpoint_sha256": "687f9f9d9540a7076c0a28ae6666bd2d7bc9f88b2e39a3f039e08b4d1f09b7e6",
+      "active_box_world_Y_offset_m": -0.0004
+    },
+    "checkpoint_sha256": "b6a873720cc6d6cb178fda9385b92d727aa5669a52911633600e2483f3ccca34",
+    "runner_report_sha256": "88fea5b92b2044a412321b5f60ee57e411e24adefbc2ad6ef48be14337d92b47",
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "restored_box_position_m": [
+      0.14006195962429047,
+      1.0090430974960327,
+      0.9369998574256897
+    ],
+    "tool_parked_s": 139.86666666666667,
+    "seated_stable_s": 140.56666666666666,
+    "simulation_clock": {
+      "control_hz": 120,
+      "render_hz": 30,
+      "render_count": 4466,
+      "uncommanded_physics_steps": 0,
+      "control_steps": 16868,
+      "physics_steps": 16868
+    },
+    "slot": 4,
+    "cube_id": 10,
+    "target_m": [
+      0.15331200587310462,
+      1.076,
+      0.9369999999999999
+    ],
+    "rgb_final_m": [
+      0.15406812616420695,
+      1.0746157661839912,
+      0.9369999999999999
+    ],
+    "physical_final_m": [
+      0.15276691317558289,
+      1.0756522417068481,
+      0.936999499797821
+    ],
+    "yaw_pitch_roll_deg": [
+      -0.26576946063537976,
+      -7.184832848659348e-05,
+      -0.0005169030575416402
+    ],
+    "support": {
+      "positive_steps": 60,
+      "median_contact_impulse_Ns": 0.10304326564333749,
+      "samples": 60
+    },
+    "max_lower_shift_m": 7.018423510672363e-05
+  }
+}

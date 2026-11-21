@@ -1,0 +1,1742 @@
+{
+ "source": "back04",
+ "hz": 120,
+ "boundaries": [
+  "/World/Cube_8",
+  "/World/Environment/wall_back"
+ ],
+ "source_sha256": {
+  "contact_states/sensor_inputs.jsonl.gz": "a6b18a05b61c27f88c2a6118e2f6f32b92d1e997501ee02f33eb62b58b4088d5",
+  "contact_states/reference.jsonl.gz": "c1c1b4c1861b8d5836894465b276e5a7e0c76edabcf9951b5d768827ec514592",
+  "runner_report.json": "88fea5b92b2044a412321b5f60ee57e411e24adefbc2ad6ef48be14337d92b47"
+ },
+ "observer_sha256": {
+  "u4_contact_observer.py": "8f90aaf4b10eefb803390a9b92459d9133f2a7650173111a673053a2a349c7ab",
+  "seven_observer.py": "a1d6b9a296e629c7c906947a9e7ac17495574cd13e24508e5eeb31ddabebd224",
+  "seven_reference.py": "97e33bf313f92a6402432c8585944ceedfa46a49b00a8b2d06bc1f94b50a2038"
+ },
+ "source_wrench_sha256": "f3d40313d6775980417f51e9ab1f60035ddef9d07ee225a68d4c7301b632c5cb",
+ "robot_sha256": {
+  "fr3.urdf": "3b22a3f5f4707e91eacf9491ce4b273ab380bf3c4a6b06d4c63859b380e6b2f6",
+  "fr3_robot_description.yaml": "573442a5993f698f8e1052f1c2c299653da44495654a806baca6374e105f7201"
+ },
+ "phase_steps_for_scoring_only": {
+  "side_stroke": 6906,
+  "handoff": 10019,
+  "rear_stroke": 11670,
+  "withdraw": 15687,
+  "complete": 16868
+ },
+ "rear_first_step_by_force_N": {
+  "0.1": 15578,
+  "1.0": 15579
+ },
+ "windows": {
+  "full_clip": {
+   "steps": [
+    1,
+    16868
+   ],
+   "ticks": 16868,
+   "baseline": {
+    "states": {
+     "totals": {
+      "S5": {
+       "true": 4446,
+       "predicted_on_known": 578,
+       "tp": 327,
+       "tp_exact_objects": 119,
+       "unknown_on_true": 35,
+       "precision": 0.5657439446366782,
+       "recall": 0.07354925775978408
+      },
+      "S6": {
+       "true": 187,
+       "predicted_on_known": 0,
+       "tp": 0,
+       "tp_exact_objects": 0,
+       "unknown_on_true": 3,
+       "precision": null,
+       "recall": 0.0
+      }
+     },
+     "known_truth": 16868,
+     "coverage_on_known": 0.7111097936921983,
+     "confusion": {
+      "S0": {
+       "UNKNOWN": 2568,
+       "S0": 2846
+      },
+      "S1": {
+       "S1": 4483,
+       "UNKNOWN": 2267,
+       "S5": 71
+      },
+      "S5": {
+       "UNKNOWN": 35,
+       "S1": 4084,
+       "S5": 327
+      },
+      "S6": {
+       "S5": 180,
+       "S1": 4,
+       "UNKNOWN": 3
+      }
+     }
+    },
+    "side": {
+     "known_truth": 16868,
+     "truth_pos": 5737,
+     "truth_neg": 11131,
+     "truth_unknown": 0,
+     "tp": 119,
+     "fp": 0,
+     "tn": 4554,
+     "negative_on_positive": 4476,
+     "abstain_on_positive": 1142,
+     "abstain_on_negative": 6577,
+     "precision": 1.0,
+     "recall_including_abstentions": 0.020742548370228344,
+     "coverage_on_known": 0.5423879535214607,
+     "truth_events": {
+      "first_step": 9983,
+      "first_3step_confirm": 9985,
+      "last_step": 16868,
+      "positive_ticks": 5737,
+      "episodes": 215,
+      "longest_ticks": 1775
+     },
+     "predicted_events": {
+      "first_step": 10000,
+      "first_3step_confirm": 10002,
+      "last_step": 14818,
+      "positive_ticks": 119,
+      "episodes": 16,
+      "longest_ticks": 91
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": 0.14166666666666666,
+     "confirmation_minus_first_bearing_s": 0.15833333333333333,
+     "confirmation_minus_3step_truth_s": 0.14166666666666666
+    },
+    "rear": {
+     "known_truth": 16868,
+     "truth_pos": 1200,
+     "truth_neg": 15668,
+     "truth_unknown": 0,
+     "tp": 180,
+     "fp": 279,
+     "tn": 8686,
+     "negative_on_positive": 4,
+     "abstain_on_positive": 1016,
+     "abstain_on_negative": 6703,
+     "precision": 0.39215686274509803,
+     "recall_including_abstentions": 0.15,
+     "coverage_on_known": 0.5423879535214607,
+     "truth_events": {
+      "first_step": 15578,
+      "first_3step_confirm": 15580,
+      "last_step": 16868,
+      "positive_ticks": 1200,
+      "episodes": 66,
+      "longest_ticks": 351
+     },
+     "predicted_events": {
+      "first_step": 15299,
+      "first_3step_confirm": 15301,
+      "last_step": 15757,
+      "positive_ticks": 459,
+      "episodes": 1,
+      "longest_ticks": 459
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": 15299,
+      "first_3step_confirm": 15301,
+      "last_step": 15577,
+      "positive_ticks": 279,
+      "episodes": 1,
+      "longest_ticks": 279
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": -2.325,
+     "confirmation_minus_first_bearing_s": -2.308333333333333,
+     "confirmation_minus_3step_truth_s": -2.325
+    }
+   },
+   "fusion": {
+    "states": {
+     "totals": {
+      "S5": {
+       "true": 4446,
+       "predicted_on_known": 1225,
+       "tp": 1100,
+       "tp_exact_objects": 1100,
+       "unknown_on_true": 3233,
+       "precision": 0.8979591836734694,
+       "recall": 0.24741340530814215
+      },
+      "S6": {
+       "true": 187,
+       "predicted_on_known": 133,
+       "tp": 133,
+       "tp_exact_objects": 133,
+       "unknown_on_true": 44,
+       "precision": 1.0,
+       "recall": 0.7112299465240641
+      }
+     },
+     "known_truth": 16868,
+     "coverage_on_known": 0.2647023950675836,
+     "confusion": {
+      "S0": {
+       "UNKNOWN": 2568,
+       "S0": 2846
+      },
+      "S1": {
+       "UNKNOWN": 6558,
+       "S5": 115,
+       "S1": 148
+      },
+      "S5": {
+       "UNKNOWN": 3233,
+       "S5": 1100,
+       "S1": 113
+      },
+      "S6": {
+       "UNKNOWN": 44,
+       "S5": 10,
+       "S6": 133
+      }
+     }
+    },
+    "side": {
+     "known_truth": 16868,
+     "truth_pos": 5737,
+     "truth_neg": 11131,
+     "truth_unknown": 0,
+     "tp": 2085,
+     "fp": 115,
+     "tn": 537,
+     "negative_on_positive": 202,
+     "abstain_on_positive": 3450,
+     "abstain_on_negative": 10479,
+     "precision": 0.9477272727272728,
+     "recall_including_abstentions": 0.36343036430189996,
+     "coverage_on_known": 0.17423523832108134,
+     "truth_events": {
+      "first_step": 9983,
+      "first_3step_confirm": 9985,
+      "last_step": 16868,
+      "positive_ticks": 5737,
+      "episodes": 215,
+      "longest_ticks": 1775
+     },
+     "predicted_events": {
+      "first_step": 5998,
+      "first_3step_confirm": 6934,
+      "last_step": 15761,
+      "positive_ticks": 2200,
+      "episodes": 502,
+      "longest_ticks": 117
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": 5998,
+      "first_3step_confirm": 6934,
+      "last_step": 6940,
+      "positive_ticks": 13,
+      "episodes": 5,
+      "longest_ticks": 9
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": 11945,
+      "first_3step_confirm": 12020,
+      "last_step": 13570,
+      "positive_ticks": 102,
+      "episodes": 72,
+      "longest_ticks": 5
+     },
+     "first_positive_minus_first_bearing_s": -33.208333333333336,
+     "confirmation_minus_first_bearing_s": -25.408333333333335,
+     "confirmation_minus_3step_truth_s": -25.425
+    },
+    "rear": {
+     "known_truth": 16868,
+     "truth_pos": 1200,
+     "truth_neg": 15668,
+     "truth_unknown": 0,
+     "tp": 152,
+     "fp": 0,
+     "tn": 13708,
+     "negative_on_positive": 0,
+     "abstain_on_positive": 1048,
+     "abstain_on_negative": 1960,
+     "precision": 1.0,
+     "recall_including_abstentions": 0.12666666666666668,
+     "coverage_on_known": 0.82167417595447,
+     "truth_events": {
+      "first_step": 15578,
+      "first_3step_confirm": 15580,
+      "last_step": 16868,
+      "positive_ticks": 1200,
+      "episodes": 66,
+      "longest_ticks": 351
+     },
+     "predicted_events": {
+      "first_step": 15610,
+      "first_3step_confirm": 15612,
+      "last_step": 15761,
+      "positive_ticks": 152,
+      "episodes": 1,
+      "longest_ticks": 152
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": 0.26666666666666666,
+     "confirmation_minus_first_bearing_s": 0.2833333333333333,
+     "confirmation_minus_3step_truth_s": 0.26666666666666666
+    }
+   },
+   "side_positive_load_bins_N": {
+    "[0,0.1)": {
+     "ticks": 208,
+     "baseline": {
+      "hit": 0,
+      "unknown": 0
+     },
+     "fusion": {
+      "hit": 29,
+      "unknown": 125
+     }
+    },
+    "[0.1,1)": {
+     "ticks": 4834,
+     "baseline": {
+      "hit": 29,
+      "unknown": 1110
+     },
+     "fusion": {
+      "hit": 1445,
+      "unknown": 3252
+     }
+    },
+    "[1,inf)": {
+     "ticks": 695,
+     "baseline": {
+      "hit": 90,
+      "unknown": 32
+     },
+     "fusion": {
+      "hit": 611,
+      "unknown": 73
+     }
+    }
+   }
+  },
+  "side_stroke": {
+   "steps": [
+    6907,
+    10019
+   ],
+   "ticks": 3113,
+   "baseline": {
+    "states": {
+     "totals": {
+      "S5": {
+       "true": 37,
+       "predicted_on_known": 20,
+       "tp": 20,
+       "tp_exact_objects": 20,
+       "unknown_on_true": 15,
+       "precision": 1.0,
+       "recall": 0.5405405405405406
+      },
+      "S6": {
+       "true": 0,
+       "predicted_on_known": 0,
+       "tp": 0,
+       "tp_exact_objects": 0,
+       "unknown_on_true": 0,
+       "precision": null,
+       "recall": null
+      }
+     },
+     "known_truth": 3113,
+     "coverage_on_known": 0.2884677160295535,
+     "confusion": {
+      "S1": {
+       "UNKNOWN": 2200,
+       "S1": 876
+      },
+      "S5": {
+       "UNKNOWN": 15,
+       "S1": 2,
+       "S5": 20
+      }
+     }
+    },
+    "side": {
+     "known_truth": 3113,
+     "truth_pos": 37,
+     "truth_neg": 3076,
+     "truth_unknown": 0,
+     "tp": 20,
+     "fp": 0,
+     "tn": 876,
+     "negative_on_positive": 2,
+     "abstain_on_positive": 15,
+     "abstain_on_negative": 2200,
+     "precision": 1.0,
+     "recall_including_abstentions": 0.5405405405405406,
+     "coverage_on_known": 0.2884677160295535,
+     "truth_events": {
+      "first_step": 9983,
+      "first_3step_confirm": 9985,
+      "last_step": 10019,
+      "positive_ticks": 37,
+      "episodes": 1,
+      "longest_ticks": 37
+     },
+     "predicted_events": {
+      "first_step": 10000,
+      "first_3step_confirm": 10002,
+      "last_step": 10019,
+      "positive_ticks": 20,
+      "episodes": 1,
+      "longest_ticks": 20
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": 0.14166666666666666,
+     "confirmation_minus_first_bearing_s": 0.15833333333333333,
+     "confirmation_minus_3step_truth_s": 0.14166666666666666
+    },
+    "rear": {
+     "known_truth": 3113,
+     "truth_pos": 0,
+     "truth_neg": 3113,
+     "truth_unknown": 0,
+     "tp": 0,
+     "fp": 0,
+     "tn": 898,
+     "negative_on_positive": 0,
+     "abstain_on_positive": 0,
+     "abstain_on_negative": 2215,
+     "precision": null,
+     "recall_including_abstentions": null,
+     "coverage_on_known": 0.2884677160295535,
+     "truth_events": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "predicted_events": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": null,
+     "confirmation_minus_first_bearing_s": null,
+     "confirmation_minus_3step_truth_s": null
+    }
+   },
+   "fusion": {
+    "states": {
+     "totals": {
+      "S5": {
+       "true": 37,
+       "predicted_on_known": 29,
+       "tp": 20,
+       "tp_exact_objects": 20,
+       "unknown_on_true": 17,
+       "precision": 0.6896551724137931,
+       "recall": 0.5405405405405406
+      },
+      "S6": {
+       "true": 0,
+       "predicted_on_known": 0,
+       "tp": 0,
+       "tp_exact_objects": 0,
+       "unknown_on_true": 0,
+       "precision": null,
+       "recall": null
+      }
+     },
+     "known_truth": 3113,
+     "coverage_on_known": 0.015097976228718278,
+     "confusion": {
+      "S1": {
+       "UNKNOWN": 3049,
+       "S5": 9,
+       "S1": 18
+      },
+      "S5": {
+       "UNKNOWN": 17,
+       "S5": 20
+      }
+     }
+    },
+    "side": {
+     "known_truth": 3113,
+     "truth_pos": 37,
+     "truth_neg": 3076,
+     "truth_unknown": 0,
+     "tp": 20,
+     "fp": 9,
+     "tn": 18,
+     "negative_on_positive": 0,
+     "abstain_on_positive": 17,
+     "abstain_on_negative": 3049,
+     "precision": 0.6896551724137931,
+     "recall_including_abstentions": 0.5405405405405406,
+     "coverage_on_known": 0.015097976228718278,
+     "truth_events": {
+      "first_step": 9983,
+      "first_3step_confirm": 9985,
+      "last_step": 10019,
+      "positive_ticks": 37,
+      "episodes": 1,
+      "longest_ticks": 37
+     },
+     "predicted_events": {
+      "first_step": 6932,
+      "first_3step_confirm": 6934,
+      "last_step": 10019,
+      "positive_ticks": 29,
+      "episodes": 2,
+      "longest_ticks": 20
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": 6932,
+      "first_3step_confirm": 6934,
+      "last_step": 6940,
+      "positive_ticks": 9,
+      "episodes": 1,
+      "longest_ticks": 9
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": -25.425,
+     "confirmation_minus_first_bearing_s": -25.408333333333335,
+     "confirmation_minus_3step_truth_s": -25.425
+    },
+    "rear": {
+     "known_truth": 3113,
+     "truth_pos": 0,
+     "truth_neg": 3113,
+     "truth_unknown": 0,
+     "tp": 0,
+     "fp": 0,
+     "tn": 3113,
+     "negative_on_positive": 0,
+     "abstain_on_positive": 0,
+     "abstain_on_negative": 0,
+     "precision": null,
+     "recall_including_abstentions": null,
+     "coverage_on_known": 1.0,
+     "truth_events": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "predicted_events": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": null,
+     "confirmation_minus_first_bearing_s": null,
+     "confirmation_minus_3step_truth_s": null
+    }
+   },
+   "side_positive_load_bins_N": {
+    "[0,0.1)": {
+     "ticks": 0,
+     "baseline": {
+      "hit": 0,
+      "unknown": 0
+     },
+     "fusion": {
+      "hit": 0,
+      "unknown": 0
+     }
+    },
+    "[0.1,1)": {
+     "ticks": 5,
+     "baseline": {
+      "hit": 0,
+      "unknown": 4
+     },
+     "fusion": {
+      "hit": 0,
+      "unknown": 5
+     }
+    },
+    "[1,inf)": {
+     "ticks": 32,
+     "baseline": {
+      "hit": 20,
+      "unknown": 11
+     },
+     "fusion": {
+      "hit": 20,
+      "unknown": 12
+     }
+    }
+   }
+  },
+  "handoff": {
+   "steps": [
+    10020,
+    11670
+   ],
+   "ticks": 1651,
+   "baseline": {
+    "states": {
+     "totals": {
+      "S5": {
+       "true": 1651,
+       "predicted_on_known": 71,
+       "tp": 71,
+       "tp_exact_objects": 71,
+       "unknown_on_true": 4,
+       "precision": 1.0,
+       "recall": 0.04300423985463356
+      },
+      "S6": {
+       "true": 0,
+       "predicted_on_known": 0,
+       "tp": 0,
+       "tp_exact_objects": 0,
+       "unknown_on_true": 0,
+       "precision": null,
+       "recall": null
+      }
+     },
+     "known_truth": 1651,
+     "coverage_on_known": 0.9975772259236826,
+     "confusion": {
+      "S5": {
+       "S5": 71,
+       "S1": 1576,
+       "UNKNOWN": 4
+      }
+     }
+    },
+    "side": {
+     "known_truth": 1651,
+     "truth_pos": 1651,
+     "truth_neg": 0,
+     "truth_unknown": 0,
+     "tp": 71,
+     "fp": 0,
+     "tn": 0,
+     "negative_on_positive": 1576,
+     "abstain_on_positive": 4,
+     "abstain_on_negative": 0,
+     "precision": 1.0,
+     "recall_including_abstentions": 0.04300423985463356,
+     "coverage_on_known": 0.9975772259236826,
+     "truth_events": {
+      "first_step": 10020,
+      "first_3step_confirm": 10022,
+      "last_step": 11670,
+      "positive_ticks": 1651,
+      "episodes": 1,
+      "longest_ticks": 1651
+     },
+     "predicted_events": {
+      "first_step": 10020,
+      "first_3step_confirm": 10022,
+      "last_step": 10090,
+      "positive_ticks": 71,
+      "episodes": 1,
+      "longest_ticks": 71
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": 0.0,
+     "confirmation_minus_first_bearing_s": 0.016666666666666666,
+     "confirmation_minus_3step_truth_s": 0.0
+    },
+    "rear": {
+     "known_truth": 1651,
+     "truth_pos": 0,
+     "truth_neg": 1651,
+     "truth_unknown": 0,
+     "tp": 0,
+     "fp": 0,
+     "tn": 1647,
+     "negative_on_positive": 0,
+     "abstain_on_positive": 0,
+     "abstain_on_negative": 4,
+     "precision": null,
+     "recall_including_abstentions": null,
+     "coverage_on_known": 0.9975772259236826,
+     "truth_events": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "predicted_events": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": null,
+     "confirmation_minus_first_bearing_s": null,
+     "confirmation_minus_3step_truth_s": null
+    }
+   },
+   "fusion": {
+    "states": {
+     "totals": {
+      "S5": {
+       "true": 1651,
+       "predicted_on_known": 77,
+       "tp": 77,
+       "tp_exact_objects": 77,
+       "unknown_on_true": 1555,
+       "precision": 1.0,
+       "recall": 0.04663840096910963
+      },
+      "S6": {
+       "true": 0,
+       "predicted_on_known": 0,
+       "tp": 0,
+       "tp_exact_objects": 0,
+       "unknown_on_true": 0,
+       "precision": null,
+       "recall": null
+      }
+     },
+     "known_truth": 1651,
+     "coverage_on_known": 0.058146577831617204,
+     "confusion": {
+      "S5": {
+       "S5": 77,
+       "UNKNOWN": 1555,
+       "S1": 19
+      }
+     }
+    },
+    "side": {
+     "known_truth": 1651,
+     "truth_pos": 1651,
+     "truth_neg": 0,
+     "truth_unknown": 0,
+     "tp": 77,
+     "fp": 0,
+     "tn": 0,
+     "negative_on_positive": 19,
+     "abstain_on_positive": 1555,
+     "abstain_on_negative": 0,
+     "precision": 1.0,
+     "recall_including_abstentions": 0.04663840096910963,
+     "coverage_on_known": 0.058146577831617204,
+     "truth_events": {
+      "first_step": 10020,
+      "first_3step_confirm": 10022,
+      "last_step": 11670,
+      "positive_ticks": 1651,
+      "episodes": 1,
+      "longest_ticks": 1651
+     },
+     "predicted_events": {
+      "first_step": 10020,
+      "first_3step_confirm": 10022,
+      "last_step": 10778,
+      "positive_ticks": 77,
+      "episodes": 7,
+      "longest_ticks": 71
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": 0.0,
+     "confirmation_minus_first_bearing_s": 0.016666666666666666,
+     "confirmation_minus_3step_truth_s": 0.0
+    },
+    "rear": {
+     "known_truth": 1651,
+     "truth_pos": 0,
+     "truth_neg": 1651,
+     "truth_unknown": 0,
+     "tp": 0,
+     "fp": 0,
+     "tn": 1651,
+     "negative_on_positive": 0,
+     "abstain_on_positive": 0,
+     "abstain_on_negative": 0,
+     "precision": null,
+     "recall_including_abstentions": null,
+     "coverage_on_known": 1.0,
+     "truth_events": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "predicted_events": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": null,
+     "confirmation_minus_first_bearing_s": null,
+     "confirmation_minus_3step_truth_s": null
+    }
+   },
+   "side_positive_load_bins_N": {
+    "[0,0.1)": {
+     "ticks": 2,
+     "baseline": {
+      "hit": 0,
+      "unknown": 0
+     },
+     "fusion": {
+      "hit": 0,
+      "unknown": 2
+     }
+    },
+    "[0.1,1)": {
+     "ticks": 1559,
+     "baseline": {
+      "hit": 13,
+      "unknown": 4
+     },
+     "fusion": {
+      "hit": 18,
+      "unknown": 1522
+     }
+    },
+    "[1,inf)": {
+     "ticks": 90,
+     "baseline": {
+      "hit": 58,
+      "unknown": 0
+     },
+     "fusion": {
+      "hit": 59,
+      "unknown": 31
+     }
+    }
+   }
+  },
+  "rear_stroke": {
+   "steps": [
+    11671,
+    15687
+   ],
+   "ticks": 4017,
+   "baseline": {
+    "states": {
+     "totals": {
+      "S5": {
+       "true": 2758,
+       "predicted_on_known": 417,
+       "tp": 236,
+       "tp_exact_objects": 28,
+       "unknown_on_true": 16,
+       "precision": 0.565947242206235,
+       "recall": 0.08556925308194344
+      },
+      "S6": {
+       "true": 110,
+       "predicted_on_known": 0,
+       "tp": 0,
+       "tp_exact_objects": 0,
+       "unknown_on_true": 0,
+       "precision": null,
+       "recall": 0.0
+      }
+     },
+     "known_truth": 4017,
+     "coverage_on_known": 0.996016928055763,
+     "confusion": {
+      "S1": {
+       "S1": 1078,
+       "S5": 71
+      },
+      "S5": {
+       "S1": 2506,
+       "S5": 236,
+       "UNKNOWN": 16
+      },
+      "S6": {
+       "S5": 110
+      }
+     }
+    },
+    "side": {
+     "known_truth": 4017,
+     "truth_pos": 2868,
+     "truth_neg": 1149,
+     "truth_unknown": 0,
+     "tp": 28,
+     "fp": 0,
+     "tn": 1149,
+     "negative_on_positive": 2824,
+     "abstain_on_positive": 16,
+     "abstain_on_negative": 0,
+     "precision": 1.0,
+     "recall_including_abstentions": 0.009762900976290097,
+     "coverage_on_known": 0.996016928055763,
+     "truth_events": {
+      "first_step": 11671,
+      "first_3step_confirm": 11673,
+      "last_step": 15687,
+      "positive_ticks": 2868,
+      "episodes": 215,
+      "longest_ticks": 557
+     },
+     "predicted_events": {
+      "first_step": 12262,
+      "first_3step_confirm": 12486,
+      "last_step": 14818,
+      "positive_ticks": 28,
+      "episodes": 15,
+      "longest_ticks": 4
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": 4.925,
+     "confirmation_minus_first_bearing_s": 6.791666666666667,
+     "confirmation_minus_3step_truth_s": 6.775
+    },
+    "rear": {
+     "known_truth": 4017,
+     "truth_pos": 110,
+     "truth_neg": 3907,
+     "truth_unknown": 0,
+     "tp": 110,
+     "fp": 279,
+     "tn": 3612,
+     "negative_on_positive": 0,
+     "abstain_on_positive": 0,
+     "abstain_on_negative": 16,
+     "precision": 0.2827763496143959,
+     "recall_including_abstentions": 1.0,
+     "coverage_on_known": 0.996016928055763,
+     "truth_events": {
+      "first_step": 15578,
+      "first_3step_confirm": 15580,
+      "last_step": 15687,
+      "positive_ticks": 110,
+      "episodes": 1,
+      "longest_ticks": 110
+     },
+     "predicted_events": {
+      "first_step": 15299,
+      "first_3step_confirm": 15301,
+      "last_step": 15687,
+      "positive_ticks": 389,
+      "episodes": 1,
+      "longest_ticks": 389
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": 15299,
+      "first_3step_confirm": 15301,
+      "last_step": 15577,
+      "positive_ticks": 279,
+      "episodes": 1,
+      "longest_ticks": 279
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": -2.325,
+     "confirmation_minus_first_bearing_s": -2.308333333333333,
+     "confirmation_minus_3step_truth_s": -2.325
+    }
+   },
+   "fusion": {
+    "states": {
+     "totals": {
+      "S5": {
+       "true": 2758,
+       "predicted_on_known": 1115,
+       "tp": 1003,
+       "tp_exact_objects": 1003,
+       "unknown_on_true": 1661,
+       "precision": 0.8995515695067264,
+       "recall": 0.3636693255982596
+      },
+      "S6": {
+       "true": 110,
+       "predicted_on_known": 59,
+       "tp": 59,
+       "tp_exact_objects": 59,
+       "unknown_on_true": 41,
+       "precision": 1.0,
+       "recall": 0.5363636363636364
+      }
+     },
+     "known_truth": 4017,
+     "coverage_on_known": 0.3467762011451332,
+     "confusion": {
+      "S1": {
+       "S1": 125,
+       "UNKNOWN": 922,
+       "S5": 102
+      },
+      "S5": {
+       "UNKNOWN": 1661,
+       "S1": 94,
+       "S5": 1003
+      },
+      "S6": {
+       "UNKNOWN": 41,
+       "S5": 10,
+       "S6": 59
+      }
+     }
+    },
+    "side": {
+     "known_truth": 4017,
+     "truth_pos": 2868,
+     "truth_neg": 1149,
+     "truth_unknown": 0,
+     "tp": 1914,
+     "fp": 102,
+     "tn": 514,
+     "negative_on_positive": 183,
+     "abstain_on_positive": 771,
+     "abstain_on_negative": 533,
+     "precision": 0.9494047619047619,
+     "recall_including_abstentions": 0.6673640167364017,
+     "coverage_on_known": 0.6753796365446851,
+     "truth_events": {
+      "first_step": 11671,
+      "first_3step_confirm": 11673,
+      "last_step": 15687,
+      "positive_ticks": 2868,
+      "episodes": 215,
+      "longest_ticks": 557
+     },
+     "predicted_events": {
+      "first_step": 11945,
+      "first_3step_confirm": 12020,
+      "last_step": 15687,
+      "positive_ticks": 2016,
+      "episodes": 490,
+      "longest_ticks": 93
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": 11945,
+      "first_3step_confirm": 12020,
+      "last_step": 13570,
+      "positive_ticks": 102,
+      "episodes": 72,
+      "longest_ticks": 5
+     },
+     "first_positive_minus_first_bearing_s": 2.283333333333333,
+     "confirmation_minus_first_bearing_s": 2.908333333333333,
+     "confirmation_minus_3step_truth_s": 2.8916666666666666
+    },
+    "rear": {
+     "known_truth": 4017,
+     "truth_pos": 110,
+     "truth_neg": 3907,
+     "truth_unknown": 0,
+     "tp": 78,
+     "fp": 0,
+     "tn": 2057,
+     "negative_on_positive": 0,
+     "abstain_on_positive": 32,
+     "abstain_on_negative": 1850,
+     "precision": 1.0,
+     "recall_including_abstentions": 0.7090909090909091,
+     "coverage_on_known": 0.5314911625591238,
+     "truth_events": {
+      "first_step": 15578,
+      "first_3step_confirm": 15580,
+      "last_step": 15687,
+      "positive_ticks": 110,
+      "episodes": 1,
+      "longest_ticks": 110
+     },
+     "predicted_events": {
+      "first_step": 15610,
+      "first_3step_confirm": 15612,
+      "last_step": 15687,
+      "positive_ticks": 78,
+      "episodes": 1,
+      "longest_ticks": 78
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": 0.26666666666666666,
+     "confirmation_minus_first_bearing_s": 0.2833333333333333,
+     "confirmation_minus_3step_truth_s": 0.26666666666666666
+    }
+   },
+   "side_positive_load_bins_N": {
+    "[0,0.1)": {
+     "ticks": 206,
+     "baseline": {
+      "hit": 0,
+      "unknown": 0
+     },
+     "fusion": {
+      "hit": 29,
+      "unknown": 123
+     }
+    },
+    "[0.1,1)": {
+     "ticks": 2180,
+     "baseline": {
+      "hit": 16,
+      "unknown": 13
+     },
+     "fusion": {
+      "hit": 1426,
+      "unknown": 636
+     }
+    },
+    "[1,inf)": {
+     "ticks": 482,
+     "baseline": {
+      "hit": 12,
+      "unknown": 3
+     },
+     "fusion": {
+      "hit": 459,
+      "unknown": 12
+     }
+    }
+   }
+  },
+  "withdraw": {
+   "steps": [
+    15688,
+    16868
+   ],
+   "ticks": 1181,
+   "baseline": {
+    "states": {
+     "totals": {
+      "S5": {
+       "true": 0,
+       "predicted_on_known": 70,
+       "tp": 0,
+       "tp_exact_objects": 0,
+       "unknown_on_true": 0,
+       "precision": 0.0,
+       "recall": null
+      },
+      "S6": {
+       "true": 77,
+       "predicted_on_known": 0,
+       "tp": 0,
+       "tp_exact_objects": 0,
+       "unknown_on_true": 3,
+       "precision": null,
+       "recall": 0.0
+      }
+     },
+     "known_truth": 1181,
+     "coverage_on_known": 0.6232006773920407,
+     "confusion": {
+      "S0": {
+       "UNKNOWN": 442,
+       "S0": 662
+      },
+      "S6": {
+       "S5": 70,
+       "S1": 4,
+       "UNKNOWN": 3
+      }
+     }
+    },
+    "side": {
+     "known_truth": 1181,
+     "truth_pos": 1181,
+     "truth_neg": 0,
+     "truth_unknown": 0,
+     "tp": 0,
+     "fp": 0,
+     "tn": 0,
+     "negative_on_positive": 74,
+     "abstain_on_positive": 1107,
+     "abstain_on_negative": 0,
+     "precision": null,
+     "recall_including_abstentions": 0.0,
+     "coverage_on_known": 0.06265876375952582,
+     "truth_events": {
+      "first_step": 15688,
+      "first_3step_confirm": 15690,
+      "last_step": 16868,
+      "positive_ticks": 1181,
+      "episodes": 1,
+      "longest_ticks": 1181
+     },
+     "predicted_events": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": null,
+     "confirmation_minus_first_bearing_s": null,
+     "confirmation_minus_3step_truth_s": null
+    },
+    "rear": {
+     "known_truth": 1181,
+     "truth_pos": 1090,
+     "truth_neg": 91,
+     "truth_unknown": 0,
+     "tp": 70,
+     "fp": 0,
+     "tn": 0,
+     "negative_on_positive": 4,
+     "abstain_on_positive": 1016,
+     "abstain_on_negative": 91,
+     "precision": 1.0,
+     "recall_including_abstentions": 0.06422018348623854,
+     "coverage_on_known": 0.06265876375952582,
+     "truth_events": {
+      "first_step": 15688,
+      "first_3step_confirm": 15690,
+      "last_step": 16868,
+      "positive_ticks": 1090,
+      "episodes": 66,
+      "longest_ticks": 241
+     },
+     "predicted_events": {
+      "first_step": 15688,
+      "first_3step_confirm": 15690,
+      "last_step": 15757,
+      "positive_ticks": 70,
+      "episodes": 1,
+      "longest_ticks": 70
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": 0.0,
+     "confirmation_minus_first_bearing_s": 0.016666666666666666,
+     "confirmation_minus_3step_truth_s": 0.0
+    }
+   },
+   "fusion": {
+    "states": {
+     "totals": {
+      "S5": {
+       "true": 0,
+       "predicted_on_known": 0,
+       "tp": 0,
+       "tp_exact_objects": 0,
+       "unknown_on_true": 0,
+       "precision": null,
+       "recall": null
+      },
+      "S6": {
+       "true": 77,
+       "predicted_on_known": 74,
+       "tp": 74,
+       "tp_exact_objects": 74,
+       "unknown_on_true": 3,
+       "precision": 1.0,
+       "recall": 0.961038961038961
+      }
+     },
+     "known_truth": 1181,
+     "coverage_on_known": 0.6232006773920407,
+     "confusion": {
+      "S0": {
+       "UNKNOWN": 442,
+       "S0": 662
+      },
+      "S6": {
+       "S6": 74,
+       "UNKNOWN": 3
+      }
+     }
+    },
+    "side": {
+     "known_truth": 1181,
+     "truth_pos": 1181,
+     "truth_neg": 0,
+     "truth_unknown": 0,
+     "tp": 74,
+     "fp": 0,
+     "tn": 0,
+     "negative_on_positive": 0,
+     "abstain_on_positive": 1107,
+     "abstain_on_negative": 0,
+     "precision": 1.0,
+     "recall_including_abstentions": 0.06265876375952582,
+     "coverage_on_known": 0.06265876375952582,
+     "truth_events": {
+      "first_step": 15688,
+      "first_3step_confirm": 15690,
+      "last_step": 16868,
+      "positive_ticks": 1181,
+      "episodes": 1,
+      "longest_ticks": 1181
+     },
+     "predicted_events": {
+      "first_step": 15688,
+      "first_3step_confirm": 15690,
+      "last_step": 15761,
+      "positive_ticks": 74,
+      "episodes": 1,
+      "longest_ticks": 74
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": 0.0,
+     "confirmation_minus_first_bearing_s": 0.016666666666666666,
+     "confirmation_minus_3step_truth_s": 0.0
+    },
+    "rear": {
+     "known_truth": 1181,
+     "truth_pos": 1090,
+     "truth_neg": 91,
+     "truth_unknown": 0,
+     "tp": 74,
+     "fp": 0,
+     "tn": 0,
+     "negative_on_positive": 0,
+     "abstain_on_positive": 1016,
+     "abstain_on_negative": 91,
+     "precision": 1.0,
+     "recall_including_abstentions": 0.06788990825688074,
+     "coverage_on_known": 0.06265876375952582,
+     "truth_events": {
+      "first_step": 15688,
+      "first_3step_confirm": 15690,
+      "last_step": 16868,
+      "positive_ticks": 1090,
+      "episodes": 66,
+      "longest_ticks": 241
+     },
+     "predicted_events": {
+      "first_step": 15688,
+      "first_3step_confirm": 15690,
+      "last_step": 15761,
+      "positive_ticks": 74,
+      "episodes": 1,
+      "longest_ticks": 74
+     },
+     "false_positives_before_first_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "false_positives_after_observed_window_load": {
+      "first_step": null,
+      "first_3step_confirm": null,
+      "last_step": null,
+      "positive_ticks": 0,
+      "episodes": 0,
+      "longest_ticks": 0
+     },
+     "first_positive_minus_first_bearing_s": 0.0,
+     "confirmation_minus_first_bearing_s": 0.016666666666666666,
+     "confirmation_minus_3step_truth_s": 0.0
+    }
+   },
+   "side_positive_load_bins_N": {
+    "[0,0.1)": {
+     "ticks": 0,
+     "baseline": {
+      "hit": 0,
+      "unknown": 0
+     },
+     "fusion": {
+      "hit": 0,
+      "unknown": 0
+     }
+    },
+    "[0.1,1)": {
+     "ticks": 1090,
+     "baseline": {
+      "hit": 0,
+      "unknown": 1089
+     },
+     "fusion": {
+      "hit": 1,
+      "unknown": 1089
+     }
+    },
+    "[1,inf)": {
+     "ticks": 91,
+     "baseline": {
+      "hit": 0,
+      "unknown": 18
+     },
+     "fusion": {
+      "hit": 73,
+      "unknown": 18
+     }
+    }
+   }
+  }
+ },
+ "side_reacquisition": {
+  "three_step_unloaded": 11760,
+  "first_subsequent_load": 11761,
+  "baseline": {
+   "known_truth": 3927,
+   "truth_pos": 2781,
+   "truth_neg": 1146,
+   "truth_unknown": 0,
+   "tp": 28,
+   "fp": 0,
+   "tn": 1146,
+   "negative_on_positive": 2737,
+   "abstain_on_positive": 16,
+   "abstain_on_negative": 0,
+   "precision": 1.0,
+   "recall_including_abstentions": 0.010068320747932399,
+   "coverage_on_known": 0.9959256429844665,
+   "truth_events": {
+    "first_step": 11761,
+    "first_3step_confirm": 11763,
+    "last_step": 15687,
+    "positive_ticks": 2781,
+    "episodes": 214,
+    "longest_ticks": 557
+   },
+   "predicted_events": {
+    "first_step": 12262,
+    "first_3step_confirm": 12486,
+    "last_step": 14818,
+    "positive_ticks": 28,
+    "episodes": 15,
+    "longest_ticks": 4
+   },
+   "false_positives_before_first_window_load": {
+    "first_step": null,
+    "first_3step_confirm": null,
+    "last_step": null,
+    "positive_ticks": 0,
+    "episodes": 0,
+    "longest_ticks": 0
+   },
+   "false_positives_after_observed_window_load": {
+    "first_step": null,
+    "first_3step_confirm": null,
+    "last_step": null,
+    "positive_ticks": 0,
+    "episodes": 0,
+    "longest_ticks": 0
+   },
+   "first_positive_minus_first_bearing_s": 4.175,
+   "confirmation_minus_first_bearing_s": 6.041666666666667,
+   "confirmation_minus_3step_truth_s": 6.025,
+   "negative_seen_before_reload": true
+  },
+  "fusion": {
+   "known_truth": 3927,
+   "truth_pos": 2781,
+   "truth_neg": 1146,
+   "truth_unknown": 0,
+   "tp": 1914,
+   "fp": 102,
+   "tn": 511,
+   "negative_on_positive": 115,
+   "abstain_on_positive": 752,
+   "abstain_on_negative": 533,
+   "precision": 0.9494047619047619,
+   "recall_including_abstentions": 0.6882416396979504,
+   "coverage_on_known": 0.6727782021899669,
+   "truth_events": {
+    "first_step": 11761,
+    "first_3step_confirm": 11763,
+    "last_step": 15687,
+    "positive_ticks": 2781,
+    "episodes": 214,
+    "longest_ticks": 557
+   },
+   "predicted_events": {
+    "first_step": 11945,
+    "first_3step_confirm": 12020,
+    "last_step": 15687,
+    "positive_ticks": 2016,
+    "episodes": 490,
+    "longest_ticks": 93
+   },
+   "false_positives_before_first_window_load": {
+    "first_step": null,
+    "first_3step_confirm": null,
+    "last_step": null,
+    "positive_ticks": 0,
+    "episodes": 0,
+    "longest_ticks": 0
+   },
+   "false_positives_after_observed_window_load": {
+    "first_step": 11945,
+    "first_3step_confirm": 12020,
+    "last_step": 13570,
+    "positive_ticks": 102,
+    "episodes": 72,
+    "longest_ticks": 5
+   },
+   "first_positive_minus_first_bearing_s": 1.5333333333333334,
+   "confirmation_minus_first_bearing_s": 2.158333333333333,
+   "confirmation_minus_3step_truth_s": 2.1416666666666666,
+   "negative_seen_before_reload": true
+  }
+ }
+}
