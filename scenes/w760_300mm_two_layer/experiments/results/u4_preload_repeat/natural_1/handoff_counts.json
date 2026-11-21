@@ -1,0 +1,178 @@
+{
+  "source": "natural_1",
+  "hz": 120,
+  "model_sha256": {
+    "u4_sustained_observer.py": "528c0aab3228d7e2980e8d9660d729b755c6aaa3a495bb768ef69671627e62eb",
+    "u4_contact_observer.py": "8f90aaf4b10eefb803390a9b92459d9133f2a7650173111a673053a2a349c7ab",
+    "u4_sustained_calibration.json": "fbef1f84c6c1cb8e23aed4fb3f55a5f5c259615308fbc2d301885916fa522c36"
+  },
+  "paired_sha256": "d55bc63a1d51dc0dc0d146a720c9674c90cb7cb1ca73a62998172ff4f1fb9112",
+  "last_step": 13034,
+  "incomplete_run": {
+    "status": "STOPPED",
+    "reason": "upper_B_rear_travel: B wrist envelope exceeded at tick 13034: [{'arm': 'right', 'force_N': 9.736379914583111, 'torque_Nm': 0.34573801374759666, 'wrench_world': [-1.236281146586007, -9.06338202063221, 3.3352374901608184, 0.32132378246765964, -0.08618145492959345, -0.09411991179887468]}]"
+  },
+  "handoff_observed": true,
+  "right_push_observed": true,
+  "preload": null,
+  "handoff_start_step": 10286,
+  "last_handoff_step": 11933,
+  "end_reason": "physical_stop_or_capture_end",
+  "handoff_bouts": {
+    "ticks": 1647,
+    "seconds": 13.725,
+    "counts": {
+      "bearing": 1647,
+      "clear": 0,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 1647,
+      "clear": 0,
+      "unknown": 0
+    },
+    "from_start": {
+      "bearing": 1647
+    },
+    "bout_counts": {
+      "bearing": {
+        "at_least_12": 1
+      },
+      "clear": {},
+      "unknown": {}
+    }
+  },
+  "rear_bouts": {
+    "ticks": 1101,
+    "seconds": 9.175,
+    "counts": {
+      "bearing": 658,
+      "clear": 443,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 141,
+      "clear": 413,
+      "unknown": 0
+    },
+    "from_start": {
+      "bearing": 141
+    },
+    "bout_counts": {
+      "bearing": {
+        "at_least_12": 15,
+        "1_to_5": 13,
+        "6_to_11": 2
+      },
+      "clear": {
+        "at_least_12": 1,
+        "1_to_5": 28
+      },
+      "unknown": {}
+    }
+  },
+  "last_12_pre_unload_median_left_compression_N": 7.190180899725204,
+  "left_cup_clear_confirm_step": 10365,
+  "first_12_from_left_cup_clear": "bearing",
+  "from_left_cup_clear": {
+    "ticks": 1569,
+    "seconds": 13.075,
+    "counts": {
+      "bearing": 1569,
+      "clear": 0,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 1569,
+      "clear": 0,
+      "unknown": 0
+    },
+    "from_start": {
+      "bearing": 1569
+    },
+    "bout_counts": {
+      "bearing": {
+        "at_least_12": 1
+      },
+      "clear": {},
+      "unknown": {}
+    }
+  },
+  "first_1p5s_from_left_cup_clear": {
+    "ticks": 180,
+    "seconds": 1.5,
+    "counts": {
+      "bearing": 180,
+      "clear": 0,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 180,
+      "clear": 0,
+      "unknown": 0
+    },
+    "from_start": {
+      "bearing": 180
+    },
+    "bout_counts": {
+      "bearing": {
+        "at_least_12": 1
+      },
+      "clear": {},
+      "unknown": {}
+    }
+  },
+  "handoff_loss_eligible": false,
+  "first_sustained_handoff_loss": null,
+  "first_sustained_reload_within_handoff": null,
+  "first_sustained_reload_including_rear": null,
+  "reload_right_censored_at_stop": false,
+  "sensitivity_24": {
+    "first_sustained_handoff_loss": null,
+    "first_sustained_reload_within_handoff": null,
+    "first_sustained_reload_including_rear": null,
+    "reload_right_censored_at_stop": false
+  },
+  "errors": {
+    "handoff": {
+      "baseline": {
+        "truth_bearing_steps": 1647,
+        "truth_clear_steps": 0,
+        "false_clear_steps": 21,
+        "false_bearing_steps": 0,
+        "false_clear_alerts": 1,
+        "false_bearing_alerts": 0,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 1647,
+        "truth_clear_steps": 0,
+        "false_clear_steps": 22,
+        "false_bearing_steps": 0,
+        "false_clear_alerts": 1,
+        "false_bearing_alerts": 0,
+        "unverifiable_alerts": 0
+      }
+    },
+    "rear_stroke": {
+      "baseline": {
+        "truth_bearing_steps": 658,
+        "truth_clear_steps": 443,
+        "false_clear_steps": 120,
+        "false_bearing_steps": 48,
+        "false_clear_alerts": 2,
+        "false_bearing_alerts": 8,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 658,
+        "truth_clear_steps": 443,
+        "false_clear_steps": 120,
+        "false_bearing_steps": 48,
+        "false_clear_alerts": 2,
+        "false_bearing_alerts": 8,
+        "unverifiable_alerts": 0
+      }
+    }
+  }
+}
