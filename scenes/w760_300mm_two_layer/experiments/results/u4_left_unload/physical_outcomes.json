@@ -1,0 +1,51 @@
+{
+  "checkpoint_sha256": "687f9f9d9540a7076c0a28ae6666bd2d7bc9f88b2e39a3f039e08b4d1f09b7e6",
+  "trials": [
+    {
+      "trial": "nominal",
+      "initial_y_offset_m": 0,
+      "input_checkpoint_sha256": "279237f8a83d294104bd31c8c128bfe5dc8bc1a89cc5ed83bef6ff3549734116",
+      "runner_report_sha256": "0e6adbdd5764fb18774232d92e9121e4c9495aec366da3c73486d3c3868a9743",
+      "started_unload": true,
+      "started_rear_push": true,
+      "stable": true,
+      "last_step": 17639,
+      "error": null,
+      "runner_exit_code": 0
+    },
+    {
+      "trial": "forward04",
+      "initial_y_offset_m": 0.0004,
+      "input_checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e",
+      "runner_report_sha256": "8cce7bb1e7b9a4392e7ade9c993c3e7d525c6b5d00535e28f07c5171a240d611",
+      "started_unload": true,
+      "started_rear_push": true,
+      "stable": false,
+      "last_step": 13451,
+      "status": "EXTERNALLY_INTERRUPTED",
+      "runner_exit_code": null
+    },
+    {
+      "trial": "back04",
+      "initial_y_offset_m": -0.0004,
+      "input_checkpoint_sha256": "b6a873720cc6d6cb178fda9385b92d727aa5669a52911633600e2483f3ccca34",
+      "runner_report_sha256": "befbad0a102a2f79596a7d34818a68894cde5be839ec1e8919d37dd7260bd158",
+      "started_unload": true,
+      "started_rear_push": true,
+      "stable": true,
+      "last_step": 16791,
+      "error": null
+    },
+    {
+      "trial": "forward04_repeat",
+      "initial_y_offset_m": 0.0004,
+      "input_checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e",
+      "runner_report_sha256": "e683729a09597eefeb6a5d44aacb641dabdf6f1e21c54755971dcca8dcd0abd5",
+      "started_unload": false,
+      "started_rear_push": false,
+      "stable": false,
+      "last_step": 10322,
+      "error": "upper_B_seam_pacing: B wrist envelope exceeded at tick 10322: [{'arm': 'left', 'force_N': 9.220117044527225, 'torque_Nm': 0.39327551608085537, 'wrench_world': [-8.921256112311532, -2.2592454228522363, 0.5635226815726027, 0.0648792795050476, -0.2970085243579698, 0.24948396160529096]}]"
+    }
+  ]
+}

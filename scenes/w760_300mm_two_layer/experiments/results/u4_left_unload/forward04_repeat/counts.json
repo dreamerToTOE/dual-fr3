@@ -1,0 +1,28 @@
+{
+ "source": "forward04_repeat",
+ "source_sha256": {
+  "contact_states/sensor_inputs.jsonl.gz": "2011d6d68652bc066b255a49733f0c8e27905d68076fc4c9c0d44572941ac277",
+  "contact_states/reference.jsonl.gz": "0512bcaa5a6d01e90f3fd6946da4a1c004347acf215b83673bb06f597b1e5adb",
+  "runner_report.json": "e683729a09597eefeb6a5d44aacb641dabdf6f1e21c54755971dcca8dcd0abd5"
+ },
+ "hz": 120,
+ "last_step": 10322,
+ "incomplete_run": {
+  "status": "STOPPED",
+  "reason": "upper_B_seam_pacing: B wrist envelope exceeded at tick 10322: [{'arm': 'left', 'force_N': 9.220117044527225, 'torque_Nm': 0.39327551608085537, 'wrench_world': [-8.921256112311532, -2.2592454228522363, 0.5635226815726027, 0.0648792795050476, -0.2970085243579698, 0.24948396160529096]}]"
+ },
+ "wrench_sha256": "1508c067c77c79ef7c9ad606cb056bde58e287ffdf94eee1dfbbe826f040f61b",
+ "paired_sha256": "9b058d4a038fb89e60043033ce811bdc8133c5b9da7ba2681c6df9af84ba0631",
+ "command_sha256": "7c30505932f6a31a9b0cdb252b906b19f59f9edfe7d9c17b5608fa4bbfeacf72",
+ "calibration_sha256": "44ec9d477ac5b86389a38dd520cf39bd9de6b5694ac39264d6ed28d3280c09b8",
+ "observer_sha256": {
+  "u4_contact_observer.py": "8f90aaf4b10eefb803390a9b92459d9133f2a7650173111a673053a2a349c7ab",
+  "u4_left_unload_observer.py": "fb974d27d4e85e157a53db592fcf55c3071df1bcca9843f55da1fdb5a06597e1"
+ },
+ "changed_state_steps": 0,
+ "changed_side_steps": 0,
+ "unload_events": [],
+ "event_observations": [],
+ "windows": {},
+ "events": null
+}
