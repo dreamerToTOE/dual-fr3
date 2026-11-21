@@ -1,0 +1,41 @@
+{
+  "checkpoint_sha256": "687f9f9d9540a7076c0a28ae6666bd2d7bc9f88b2e39a3f039e08b4d1f09b7e6",
+  "trials": [
+    {
+      "trial": "natural_1",
+      "initial_y_offset_m": 0.0004,
+      "input_checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e",
+      "runner_report_sha256": "1dc11271cc0ecb23414df48d0dfd63ba45f07ca1ab9e7a1c727f302d5b51215a",
+      "started_unload": true,
+      "started_rear_push": true,
+      "stable": false,
+      "last_step": 13034,
+      "status": "STOPPED",
+      "error": "upper_B_rear_travel: B wrist envelope exceeded at tick 13034: [{'arm': 'right', 'force_N': 9.736379914583111, 'torque_Nm': 0.34573801374759666, 'wrench_world': [-1.236281146586007, -9.06338202063221, 3.3352374901608184, 0.32132378246765964, -0.08618145492959345, -0.09411991179887468]}]"
+    },
+    {
+      "trial": "natural_2",
+      "initial_y_offset_m": 0.0004,
+      "input_checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e",
+      "runner_report_sha256": "e4297052810ab69309ba85ab3f9d218e8de050d2e95522c0b30942cbef0a5e21",
+      "started_unload": true,
+      "started_rear_push": true,
+      "stable": true,
+      "last_step": 17590,
+      "status": "PARTIAL_W760_UPPER_ROW",
+      "error": null
+    },
+    {
+      "trial": "natural_3",
+      "initial_y_offset_m": 0.0004,
+      "input_checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e",
+      "runner_report_sha256": "2bae23f75bd6e2ccdfbd587209e7a76eed27c98651c8fa4ae4ee4a82d310a6f9",
+      "started_unload": true,
+      "started_rear_push": true,
+      "stable": true,
+      "last_step": 17550,
+      "status": "PARTIAL_W760_UPPER_ROW",
+      "error": null
+    }
+  ]
+}

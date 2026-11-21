@@ -1,0 +1,583 @@
+{
+  "source": "natural_3",
+  "source_sha256": {
+    "contact_states/sensor_inputs.jsonl.gz": "2aec6e958c902098b15d3ac114612491ff18f4ea7fcfd74c4390bb37eade4b97",
+    "contact_states/reference.jsonl.gz": "ee71100ea6697b058b04b52e350159b9899a6b60db15649b84885ed3ac856b49",
+    "runner_report.json": "2bae23f75bd6e2ccdfbd587209e7a76eed27c98651c8fa4ae4ee4a82d310a6f9"
+  },
+  "model_sha256": {
+    "u4_sustained_observer.py": "528c0aab3228d7e2980e8d9660d729b755c6aaa3a495bb768ef69671627e62eb",
+    "u4_contact_observer.py": "8f90aaf4b10eefb803390a9b92459d9133f2a7650173111a673053a2a349c7ab",
+    "u4_sustained_calibration.json": "fbef1f84c6c1cb8e23aed4fb3f55a5f5c259615308fbc2d301885916fa522c36"
+  },
+  "paired_sha256": "065285f79bb7f6042e1355e854350934f2f9b94e3f14f881d1e35c97b83cac2e",
+  "command_sha256": "62d23b003411610dd87c04c117d37a92235a88cd0ee68edbfb9d0ca03cc05650",
+  "last_step": 17550,
+  "incomplete_run": null,
+  "events": {
+    "unload_command_start_step": 10273,
+    "true_bouts": {
+      "bearing": {
+        "at_least_12": 112,
+        "1_to_5": 263,
+        "6_to_11": 90
+      },
+      "clear": {
+        "1_to_5": 416,
+        "6_to_11": 36,
+        "at_least_12": 12
+      }
+    },
+    "last_physical_bout": {
+      "state": true,
+      "ticks": 100,
+      "end": 16367
+    },
+    "first": {
+      "12": {
+        "loss": {
+          "state": false,
+          "start": 10367,
+          "end": 10387,
+          "ticks": 21,
+          "window": "handoff",
+          "baseline": {
+            "confirm_step": null,
+            "latency_s": null
+          },
+          "fusion": {
+            "confirm_step": null,
+            "latency_s": null
+          },
+          "onset_s": 0.7833333333333333
+        },
+        "reload": {
+          "state": true,
+          "start": 10459,
+          "end": 10472,
+          "ticks": 14,
+          "window": "handoff",
+          "baseline": {
+            "confirm_step": null,
+            "latency_s": null
+          },
+          "fusion": {
+            "confirm_step": null,
+            "latency_s": null
+          },
+          "onset_s": 1.55
+        },
+        "first_observed_clear_censored": false
+      },
+      "24": {
+        "loss": {
+          "state": false,
+          "start": 11450,
+          "end": 11520,
+          "ticks": 71,
+          "window": "handoff",
+          "baseline": {
+            "confirm_step": null,
+            "latency_s": null
+          },
+          "fusion": {
+            "confirm_step": null,
+            "latency_s": null
+          },
+          "onset_s": 9.808333333333334
+        },
+        "reload": {
+          "state": true,
+          "start": 11718,
+          "end": 11830,
+          "ticks": 113,
+          "window": "handoff",
+          "baseline": {
+            "confirm_step": null,
+            "latency_s": null
+          },
+          "fusion": {
+            "confirm_step": null,
+            "latency_s": null
+          },
+          "onset_s": 12.041666666666666
+        },
+        "first_observed_clear_censored": false
+      }
+    },
+    "alerts": {
+      "baseline": {
+        "clear_false": 57,
+        "bearing_false": 16,
+        "clear_at_least_12": 20,
+        "bearing_1_to_5": 12,
+        "bearing_6_to_11": 64,
+        "bearing_at_least_12": 194,
+        "clear_1_to_5": 38,
+        "clear_6_to_11": 14
+      },
+      "fusion": {
+        "clear_false": 57,
+        "bearing_false": 17,
+        "clear_at_least_12": 27,
+        "bearing_1_to_5": 12,
+        "bearing_6_to_11": 64,
+        "bearing_at_least_12": 194,
+        "clear_1_to_5": 38,
+        "clear_6_to_11": 14
+      }
+    }
+  },
+  "windows": {
+    "handoff": {
+      "baseline": {
+        "states": {
+          "S5": {
+            "true": 957,
+            "negative": 690,
+            "unknown_truth": 0,
+            "tp": 74,
+            "fp": 3,
+            "unknown_on_positive": 878,
+            "unknown_on_negative": 681,
+            "recall": 0.07732497387669801,
+            "fpr": 0.004347826086956522,
+            "precision": 0.961038961038961,
+            "coverage": 0.05343047965998786
+          },
+          "S6": {
+            "true": 0,
+            "negative": 1647,
+            "unknown_truth": 0,
+            "tp": 0,
+            "fp": 0,
+            "unknown_on_positive": 0,
+            "unknown_on_negative": 1559,
+            "recall": null,
+            "fpr": 0.0,
+            "precision": null,
+            "coverage": 0.05343047965998786
+          }
+        },
+        "side": {
+          "true": 957,
+          "negative": 690,
+          "unknown_truth": 0,
+          "tp": 74,
+          "fp": 3,
+          "unknown_on_positive": 878,
+          "unknown_on_negative": 681,
+          "recall": 0.07732497387669801,
+          "fpr": 0.004347826086956522,
+          "precision": 0.961038961038961,
+          "coverage": 0.05343047965998786
+        },
+        "weak_side": {
+          "true": 719,
+          "tp": 26,
+          "recall": 0.03616133518776078,
+          "unknown": 691
+        },
+        "clear": {
+          "true": 690,
+          "negative": 957,
+          "unknown_truth": 0,
+          "tp": 6,
+          "fp": 5,
+          "unknown_on_positive": 681,
+          "unknown_on_negative": 878,
+          "recall": 0.008695652173913044,
+          "fpr": 0.00522466039707419,
+          "precision": 0.5454545454545454,
+          "coverage": 0.05343047965998786
+        },
+        "alerts": {
+          "clear": {
+            "correct": 0,
+            "incorrect": 1,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 1,
+            "incorrect": 0,
+            "unverifiable": 0
+          }
+        }
+      },
+      "fusion": {
+        "states": {
+          "S5": {
+            "true": 957,
+            "negative": 690,
+            "unknown_truth": 0,
+            "tp": 80,
+            "fp": 11,
+            "unknown_on_positive": 872,
+            "unknown_on_negative": 673,
+            "recall": 0.08359456635318704,
+            "fpr": 0.015942028985507246,
+            "precision": 0.8791208791208791,
+            "coverage": 0.061930783242258654
+          },
+          "S6": {
+            "true": 0,
+            "negative": 1647,
+            "unknown_truth": 0,
+            "tp": 0,
+            "fp": 0,
+            "unknown_on_positive": 0,
+            "unknown_on_negative": 1545,
+            "recall": null,
+            "fpr": 0.0,
+            "precision": null,
+            "coverage": 0.061930783242258654
+          }
+        },
+        "side": {
+          "true": 957,
+          "negative": 690,
+          "unknown_truth": 0,
+          "tp": 80,
+          "fp": 11,
+          "unknown_on_positive": 872,
+          "unknown_on_negative": 673,
+          "recall": 0.08359456635318704,
+          "fpr": 0.015942028985507246,
+          "precision": 0.8791208791208791,
+          "coverage": 0.061930783242258654
+        },
+        "weak_side": {
+          "true": 719,
+          "tp": 30,
+          "recall": 0.04172461752433936,
+          "unknown": 687
+        },
+        "clear": {
+          "true": 690,
+          "negative": 957,
+          "unknown_truth": 0,
+          "tp": 6,
+          "fp": 5,
+          "unknown_on_positive": 673,
+          "unknown_on_negative": 872,
+          "recall": 0.008695652173913044,
+          "fpr": 0.00522466039707419,
+          "precision": 0.5454545454545454,
+          "coverage": 0.061930783242258654
+        },
+        "alerts": {
+          "clear": {
+            "correct": 0,
+            "incorrect": 1,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 1,
+            "incorrect": 1,
+            "unverifiable": 0
+          }
+        }
+      }
+    },
+    "rear_stroke": {
+      "baseline": {
+        "states": {
+          "S5": {
+            "true": 3208,
+            "negative": 1239,
+            "unknown_truth": 0,
+            "tp": 1213,
+            "fp": 62,
+            "unknown_on_positive": 1922,
+            "unknown_on_negative": 766,
+            "recall": 0.37811720698254364,
+            "fpr": 0.05004035512510089,
+            "precision": 0.9513725490196079,
+            "coverage": 0.3955475601529121
+          },
+          "S6": {
+            "true": 102,
+            "negative": 4345,
+            "unknown_truth": 0,
+            "tp": 65,
+            "fp": 0,
+            "unknown_on_positive": 31,
+            "unknown_on_negative": 2657,
+            "recall": 0.6372549019607843,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "coverage": 0.3955475601529121
+          }
+        },
+        "side": {
+          "true": 3301,
+          "negative": 1146,
+          "unknown_truth": 0,
+          "tp": 2208,
+          "fp": 57,
+          "unknown_on_positive": 912,
+          "unknown_on_negative": 369,
+          "recall": 0.6688882156922145,
+          "fpr": 0.049738219895287955,
+          "precision": 0.9748344370860927,
+          "coverage": 0.7119406341353721
+        },
+        "weak_side": {
+          "true": 2315,
+          "tp": 1428,
+          "recall": 0.6168466522678185,
+          "unknown": 799
+        },
+        "clear": {
+          "true": 1146,
+          "negative": 3301,
+          "unknown_truth": 0,
+          "tp": 720,
+          "fp": 181,
+          "unknown_on_positive": 369,
+          "unknown_on_negative": 912,
+          "recall": 0.6282722513089005,
+          "fpr": 0.054831869130566493,
+          "precision": 0.7991120976692564,
+          "coverage": 0.7119406341353721
+        },
+        "alerts": {
+          "clear": {
+            "correct": 72,
+            "incorrect": 56,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 270,
+            "incorrect": 16,
+            "unverifiable": 0
+          }
+        }
+      },
+      "fusion": {
+        "states": {
+          "S5": {
+            "true": 3208,
+            "negative": 1239,
+            "unknown_truth": 0,
+            "tp": 1214,
+            "fp": 63,
+            "unknown_on_positive": 1921,
+            "unknown_on_negative": 706,
+            "recall": 0.378428927680798,
+            "fpr": 0.05084745762711865,
+            "precision": 0.9506656225528582,
+            "coverage": 0.40926467281313245
+          },
+          "S6": {
+            "true": 102,
+            "negative": 4345,
+            "unknown_truth": 0,
+            "tp": 65,
+            "fp": 0,
+            "unknown_on_positive": 31,
+            "unknown_on_negative": 2596,
+            "recall": 0.6372549019607843,
+            "fpr": 0.0,
+            "precision": 1.0,
+            "coverage": 0.40926467281313245
+          }
+        },
+        "side": {
+          "true": 3301,
+          "negative": 1146,
+          "unknown_truth": 0,
+          "tp": 2211,
+          "fp": 59,
+          "unknown_on_positive": 909,
+          "unknown_on_negative": 308,
+          "recall": 0.6697970312026659,
+          "fpr": 0.05148342059336824,
+          "precision": 0.9740088105726872,
+          "coverage": 0.7263323588936361
+        },
+        "weak_side": {
+          "true": 2315,
+          "tp": 1431,
+          "recall": 0.6181425485961123,
+          "unknown": 796
+        },
+        "clear": {
+          "true": 1146,
+          "negative": 3301,
+          "unknown_truth": 0,
+          "tp": 779,
+          "fp": 181,
+          "unknown_on_positive": 308,
+          "unknown_on_negative": 909,
+          "recall": 0.6797556719022687,
+          "fpr": 0.054831869130566493,
+          "precision": 0.8114583333333333,
+          "coverage": 0.7263323588936361
+        },
+        "alerts": {
+          "clear": {
+            "correct": 79,
+            "incorrect": 56,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 270,
+            "incorrect": 16,
+            "unverifiable": 0
+          }
+        }
+      }
+    },
+    "early_handoff": {
+      "baseline": {
+        "states": {
+          "S5": {
+            "true": 151,
+            "negative": 89,
+            "unknown_truth": 0,
+            "tp": 73,
+            "fp": 3,
+            "unknown_on_positive": 78,
+            "unknown_on_negative": 86,
+            "recall": 0.48344370860927155,
+            "fpr": 0.033707865168539325,
+            "precision": 0.9605263157894737,
+            "coverage": 0.31666666666666665
+          },
+          "S6": {
+            "true": 0,
+            "negative": 240,
+            "unknown_truth": 0,
+            "tp": 0,
+            "fp": 0,
+            "unknown_on_positive": 0,
+            "unknown_on_negative": 164,
+            "recall": null,
+            "fpr": 0.0,
+            "precision": null,
+            "coverage": 0.31666666666666665
+          }
+        },
+        "side": {
+          "true": 151,
+          "negative": 89,
+          "unknown_truth": 0,
+          "tp": 73,
+          "fp": 3,
+          "unknown_on_positive": 78,
+          "unknown_on_negative": 86,
+          "recall": 0.48344370860927155,
+          "fpr": 0.033707865168539325,
+          "precision": 0.9605263157894737,
+          "coverage": 0.31666666666666665
+        },
+        "weak_side": {
+          "true": 83,
+          "tp": 25,
+          "recall": 0.30120481927710846,
+          "unknown": 58
+        },
+        "clear": {
+          "true": 89,
+          "negative": 151,
+          "unknown_truth": 0,
+          "tp": 0,
+          "fp": 0,
+          "unknown_on_positive": 86,
+          "unknown_on_negative": 78,
+          "recall": 0.0,
+          "fpr": 0.0,
+          "precision": null,
+          "coverage": 0.31666666666666665
+        },
+        "alerts": {
+          "clear": {
+            "correct": 0,
+            "incorrect": 0,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 1,
+            "incorrect": 0,
+            "unverifiable": 0
+          }
+        }
+      },
+      "fusion": {
+        "states": {
+          "S5": {
+            "true": 151,
+            "negative": 89,
+            "unknown_truth": 0,
+            "tp": 73,
+            "fp": 3,
+            "unknown_on_positive": 78,
+            "unknown_on_negative": 86,
+            "recall": 0.48344370860927155,
+            "fpr": 0.033707865168539325,
+            "precision": 0.9605263157894737,
+            "coverage": 0.31666666666666665
+          },
+          "S6": {
+            "true": 0,
+            "negative": 240,
+            "unknown_truth": 0,
+            "tp": 0,
+            "fp": 0,
+            "unknown_on_positive": 0,
+            "unknown_on_negative": 164,
+            "recall": null,
+            "fpr": 0.0,
+            "precision": null,
+            "coverage": 0.31666666666666665
+          }
+        },
+        "side": {
+          "true": 151,
+          "negative": 89,
+          "unknown_truth": 0,
+          "tp": 73,
+          "fp": 3,
+          "unknown_on_positive": 78,
+          "unknown_on_negative": 86,
+          "recall": 0.48344370860927155,
+          "fpr": 0.033707865168539325,
+          "precision": 0.9605263157894737,
+          "coverage": 0.31666666666666665
+        },
+        "weak_side": {
+          "true": 83,
+          "tp": 25,
+          "recall": 0.30120481927710846,
+          "unknown": 58
+        },
+        "clear": {
+          "true": 89,
+          "negative": 151,
+          "unknown_truth": 0,
+          "tp": 0,
+          "fp": 0,
+          "unknown_on_positive": 86,
+          "unknown_on_negative": 78,
+          "recall": 0.0,
+          "fpr": 0.0,
+          "precision": null,
+          "coverage": 0.31666666666666665
+        },
+        "alerts": {
+          "clear": {
+            "correct": 0,
+            "incorrect": 0,
+            "unverifiable": 0
+          },
+          "bearing": {
+            "correct": 1,
+            "incorrect": 0,
+            "unverifiable": 0
+          }
+        }
+      }
+    }
+  }
+}

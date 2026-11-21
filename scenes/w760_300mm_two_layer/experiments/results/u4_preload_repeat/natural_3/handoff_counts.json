@@ -1,0 +1,310 @@
+{
+  "source": "natural_3",
+  "hz": 120,
+  "model_sha256": {
+    "u4_sustained_observer.py": "528c0aab3228d7e2980e8d9660d729b755c6aaa3a495bb768ef69671627e62eb",
+    "u4_contact_observer.py": "8f90aaf4b10eefb803390a9b92459d9133f2a7650173111a673053a2a349c7ab",
+    "u4_sustained_calibration.json": "fbef1f84c6c1cb8e23aed4fb3f55a5f5c259615308fbc2d301885916fa522c36"
+  },
+  "paired_sha256": "065285f79bb7f6042e1355e854350934f2f9b94e3f14f881d1e35c97b83cac2e",
+  "last_step": 17550,
+  "incomplete_run": null,
+  "handoff_observed": true,
+  "right_push_observed": true,
+  "preload": null,
+  "handoff_start_step": 10273,
+  "last_handoff_step": 11920,
+  "end_reason": "completed_capture",
+  "handoff_bouts": {
+    "ticks": 1647,
+    "seconds": 13.725,
+    "counts": {
+      "bearing": 957,
+      "clear": 690,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 113,
+      "clear": 71,
+      "unknown": 0
+    },
+    "from_start": {
+      "bearing": 72
+    },
+    "bout_counts": {
+      "bearing": {
+        "at_least_12": 18,
+        "1_to_5": 152,
+        "6_to_11": 22
+      },
+      "clear": {
+        "1_to_5": 169,
+        "6_to_11": 14,
+        "at_least_12": 8
+      },
+      "unknown": {}
+    }
+  },
+  "rear_bouts": {
+    "ticks": 4447,
+    "seconds": 37.05833333333333,
+    "counts": {
+      "bearing": 3301,
+      "clear": 1146,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 267,
+      "clear": 454,
+      "unknown": 0
+    },
+    "from_start": {
+      "bearing": 2
+    },
+    "bout_counts": {
+      "bearing": {
+        "1_to_5": 112,
+        "6_to_11": 68,
+        "at_least_12": 94
+      },
+      "clear": {
+        "1_to_5": 247,
+        "at_least_12": 4,
+        "6_to_11": 22
+      },
+      "unknown": {}
+    }
+  },
+  "last_12_pre_unload_median_left_compression_N": 7.120121369035598,
+  "left_cup_clear_confirm_step": 10353,
+  "first_12_from_left_cup_clear": "mixed",
+  "from_left_cup_clear": {
+    "ticks": 1568,
+    "seconds": 13.066666666666666,
+    "counts": {
+      "bearing": 883,
+      "clear": 685,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 113,
+      "clear": 71,
+      "unknown": 0
+    },
+    "from_start": {
+      "clear": 8
+    },
+    "bout_counts": {
+      "bearing": {
+        "1_to_5": 151,
+        "at_least_12": 17,
+        "6_to_11": 22
+      },
+      "clear": {
+        "6_to_11": 14,
+        "1_to_5": 168,
+        "at_least_12": 8
+      },
+      "unknown": {}
+    }
+  },
+  "first_1p5s_from_left_cup_clear": {
+    "ticks": 180,
+    "seconds": 1.5,
+    "counts": {
+      "bearing": 88,
+      "clear": 92,
+      "unknown": 0
+    },
+    "longest": {
+      "bearing": 14,
+      "clear": 21,
+      "unknown": 0
+    },
+    "from_start": {
+      "clear": 8
+    },
+    "bout_counts": {
+      "bearing": {
+        "1_to_5": 29,
+        "at_least_12": 1,
+        "6_to_11": 2
+      },
+      "clear": {
+        "6_to_11": 3,
+        "1_to_5": 29,
+        "at_least_12": 1
+      },
+      "unknown": {}
+    }
+  },
+  "handoff_loss_eligible": true,
+  "first_sustained_handoff_loss": {
+    "state": false,
+    "start": 10367,
+    "end": 10387,
+    "ticks": 21,
+    "window": "handoff",
+    "baseline": {
+      "confirm_step": null,
+      "latency_s": null
+    },
+    "fusion": {
+      "confirm_step": null,
+      "latency_s": null
+    },
+    "sustained_confirm_step": 10378,
+    "onset_s": 0.7833333333333333,
+    "duration_s": 0.175,
+    "continues_to_window_boundary": false,
+    "right_censored_at_stop": false,
+    "onset_observed": true
+  },
+  "first_sustained_reload_within_handoff": {
+    "state": true,
+    "start": 10459,
+    "end": 10472,
+    "ticks": 14,
+    "window": "handoff",
+    "baseline": {
+      "confirm_step": null,
+      "latency_s": null
+    },
+    "fusion": {
+      "confirm_step": null,
+      "latency_s": null
+    },
+    "sustained_confirm_step": 10470,
+    "onset_s": 1.55,
+    "duration_s": 0.11666666666666667,
+    "continues_to_window_boundary": false,
+    "right_censored_at_stop": false
+  },
+  "first_sustained_reload_including_rear": {
+    "state": true,
+    "start": 10459,
+    "end": 10472,
+    "ticks": 14,
+    "window": "handoff",
+    "baseline": {
+      "confirm_step": null,
+      "latency_s": null
+    },
+    "fusion": {
+      "confirm_step": null,
+      "latency_s": null
+    },
+    "sustained_confirm_step": 10470,
+    "onset_s": 1.55,
+    "duration_s": 0.11666666666666667,
+    "continues_to_window_boundary": false,
+    "right_censored_at_stop": false
+  },
+  "reload_right_censored_at_stop": false,
+  "sensitivity_24": {
+    "first_sustained_handoff_loss": {
+      "state": false,
+      "start": 11450,
+      "end": 11520,
+      "ticks": 71,
+      "window": "handoff",
+      "baseline": {
+        "confirm_step": null,
+        "latency_s": null
+      },
+      "fusion": {
+        "confirm_step": null,
+        "latency_s": null
+      },
+      "sustained_confirm_step": 11473,
+      "onset_s": 9.808333333333334,
+      "duration_s": 0.5916666666666667,
+      "continues_to_window_boundary": false,
+      "right_censored_at_stop": false,
+      "onset_observed": true
+    },
+    "first_sustained_reload_within_handoff": {
+      "state": true,
+      "start": 11718,
+      "end": 11830,
+      "ticks": 113,
+      "window": "handoff",
+      "baseline": {
+        "confirm_step": null,
+        "latency_s": null
+      },
+      "fusion": {
+        "confirm_step": null,
+        "latency_s": null
+      },
+      "sustained_confirm_step": 11741,
+      "onset_s": 12.041666666666666,
+      "duration_s": 0.9416666666666667,
+      "continues_to_window_boundary": false,
+      "right_censored_at_stop": false
+    },
+    "first_sustained_reload_including_rear": {
+      "state": true,
+      "start": 11718,
+      "end": 11830,
+      "ticks": 113,
+      "window": "handoff",
+      "baseline": {
+        "confirm_step": null,
+        "latency_s": null
+      },
+      "fusion": {
+        "confirm_step": null,
+        "latency_s": null
+      },
+      "sustained_confirm_step": 11741,
+      "onset_s": 12.041666666666666,
+      "duration_s": 0.9416666666666667,
+      "continues_to_window_boundary": false,
+      "right_censored_at_stop": false
+    },
+    "reload_right_censored_at_stop": false
+  },
+  "errors": {
+    "handoff": {
+      "baseline": {
+        "truth_bearing_steps": 957,
+        "truth_clear_steps": 690,
+        "false_clear_steps": 5,
+        "false_bearing_steps": 3,
+        "false_clear_alerts": 1,
+        "false_bearing_alerts": 0,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 957,
+        "truth_clear_steps": 690,
+        "false_clear_steps": 5,
+        "false_bearing_steps": 11,
+        "false_clear_alerts": 1,
+        "false_bearing_alerts": 1,
+        "unverifiable_alerts": 0
+      }
+    },
+    "rear_stroke": {
+      "baseline": {
+        "truth_bearing_steps": 3301,
+        "truth_clear_steps": 1146,
+        "false_clear_steps": 181,
+        "false_bearing_steps": 57,
+        "false_clear_alerts": 56,
+        "false_bearing_alerts": 16,
+        "unverifiable_alerts": 0
+      },
+      "fusion": {
+        "truth_bearing_steps": 3301,
+        "truth_clear_steps": 1146,
+        "false_clear_steps": 181,
+        "false_bearing_steps": 59,
+        "false_clear_alerts": 56,
+        "false_bearing_alerts": 16,
+        "unverifiable_alerts": 0
+      }
+    }
+  }
+}
