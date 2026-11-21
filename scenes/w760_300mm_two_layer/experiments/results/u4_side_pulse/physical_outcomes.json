@@ -1,0 +1,360 @@
+{
+  "early_back04": {
+    "offset_world_y_m": -0.0004,
+    "input_checkpoint_sha256": "b6a873720cc6d6cb178fda9385b92d727aa5669a52911633600e2483f3ccca34",
+    "runner_report_sha256": "9ab9f1d3f643eadb8679d4128840e678834e83fc3f451d191fd0fd01d98747e0",
+    "physics_steps": 16895,
+    "hz": 120,
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "status": "PARTIAL_W760_UPPER_ROW",
+    "error": null,
+    "probe": {
+      "timing": "early",
+      "arm": "right",
+      "anchor_tcp_m": [
+        0.15429088675226582,
+        0.9350816430878407,
+        0.9412575145440301
+      ],
+      "pre_step": 10029,
+      "amplitude_m": 0.00025,
+      "end_step": 10221
+    },
+    "probe_peak_right_force_N": 1.174835912220972,
+    "probe_peak_right_moment_Nm": 0.0473531154504937,
+    "peak_to_peak_encoder_X_mm": 0.4524913313443957,
+    "cube4_final": {
+      "slot": 4,
+      "cube_id": 10,
+      "target_m": [
+        0.15340892327965291,
+        1.076,
+        0.9369999999999999
+      ],
+      "rgb_final_m": [
+        0.15411936727073738,
+        1.0745181248058673,
+        0.9369999999999999
+      ],
+      "physical_final_m": [
+        0.15282905101776123,
+        1.0756009817123413,
+        0.9369994401931763
+      ],
+      "yaw_pitch_roll_deg": [
+        -0.30479013633176966,
+        -4.6061119247309406e-05,
+        -0.00040865933151470053
+      ],
+      "support": {
+        "positive_steps": 60,
+        "median_contact_impulse_Ns": 0.10188639765158963,
+        "samples": 60
+      },
+      "max_lower_shift_m": 7.037790667620252e-05
+    }
+  },
+  "early_forward04": {
+    "offset_world_y_m": 0.0004,
+    "input_checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e",
+    "runner_report_sha256": "6e8b2d87740129ab6657ebfc389d08c75c91296c5a8a513ad1e229a4d951176f",
+    "physics_steps": 13170,
+    "hz": 120,
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "status": "STOPPED",
+    "error": "upper_B_rear_travel: B wrist envelope exceeded at tick 13170: [{'arm': 'right', 'force_N': 9.31765172010429, 'torque_Nm': 0.3271813971293074, 'wrench_world': [-1.1002862465267906, -8.7479972284091, 3.0133948039732794, 0.31166144880051544, -0.0655265370583877, -0.0749738681153972]}]",
+    "probe": {
+      "timing": "early",
+      "arm": "right",
+      "anchor_tcp_m": [
+        0.15464231279714424,
+        0.9355173314340113,
+        0.9412554359964351
+      ],
+      "pre_step": 10463,
+      "amplitude_m": 0.00025,
+      "end_step": 10655
+    },
+    "probe_peak_right_force_N": 1.2593387506567975,
+    "probe_peak_right_moment_Nm": 0.05129503103667589,
+    "peak_to_peak_encoder_X_mm": 0.4515926725165431,
+    "cube4_final": null
+  },
+  "early_nominal": {
+    "offset_world_y_m": 0,
+    "input_checkpoint_sha256": "279237f8a83d294104bd31c8c128bfe5dc8bc1a89cc5ed83bef6ff3549734116",
+    "runner_report_sha256": "b6d97a17192c859106d10e91f8aa2cd28c8c8ba4218ff831e78920391b1132d8",
+    "physics_steps": 13330,
+    "hz": 120,
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "status": "STOPPED",
+    "error": "upper_B_rear_travel: B wrist envelope exceeded at tick 13330: [{'arm': 'right', 'force_N': 9.067217960906236, 'torque_Nm': 0.30663081086895344, 'wrench_world': [-0.3700238803111795, -8.493286782184896, 3.1530308457329492, 0.30044385583780037, -0.02345758942020482, -0.056618770403992345]}]",
+    "probe": {
+      "timing": "early",
+      "arm": "right",
+      "anchor_tcp_m": [
+        0.1547220732445526,
+        0.9350673202019236,
+        0.9412555776957979
+      ],
+      "pre_step": 10631,
+      "amplitude_m": 0.00025,
+      "end_step": 10823
+    },
+    "probe_peak_right_force_N": 1.23607583977446,
+    "probe_peak_right_moment_Nm": 0.04983619984038151,
+    "peak_to_peak_encoder_X_mm": 0.45308305033414653,
+    "cube4_final": null
+  },
+  "late_forward04": {
+    "offset_world_y_m": 0.0004,
+    "input_checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e",
+    "runner_report_sha256": "2f91dbe579ea964fa434a75fb0d42ede84284067149a3b19053e51f5f4184a2e",
+    "physics_steps": 10314,
+    "hz": 120,
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "status": "STOPPED",
+    "error": "upper_B_seam_pacing: B wrist envelope exceeded at tick 10314: [{'arm': 'left', 'force_N': 9.138398751266402, 'torque_Nm': 0.39479381671551605, 'wrench_world': [-8.900474543445831, -2.0071500141937033, 0.5130628218281738, 0.059903727235741236, -0.290484739701867, 0.26056154202109144]}]",
+    "probe": null,
+    "probe_peak_right_force_N": null,
+    "probe_peak_right_moment_Nm": null,
+    "peak_to_peak_encoder_X_mm": null,
+    "cube4_final": null
+  },
+  "late_nominal": {
+    "offset_world_y_m": 0,
+    "input_checkpoint_sha256": "279237f8a83d294104bd31c8c128bfe5dc8bc1a89cc5ed83bef6ff3549734116",
+    "runner_report_sha256": "88b5975e6114d04c3dee562a83f8c0e11ccf6ab22046b13b47e32e94d0b20524",
+    "physics_steps": 10513,
+    "hz": 120,
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "status": "STOPPED",
+    "error": "upper_B_seam_pacing: B wrist envelope exceeded at tick 10513: [{'arm': 'left', 'force_N': 9.082354523218646, 'torque_Nm': 0.38948578030129605, 'wrench_world': [-8.854223741205349, -1.9572221213697625, 0.511045197342258, 0.05031826398134366, -0.2935529872114356, 0.2509858343932103]}]",
+    "probe": null,
+    "probe_peak_right_force_N": null,
+    "probe_peak_right_moment_Nm": null,
+    "peak_to_peak_encoder_X_mm": null,
+    "cube4_final": null
+  },
+  "near_back04": {
+    "offset_world_y_m": -0.0004,
+    "input_checkpoint_sha256": "b6a873720cc6d6cb178fda9385b92d727aa5669a52911633600e2483f3ccca34",
+    "runner_report_sha256": "e2a5060c9d2ab04d851ea6b209918e0d75b265c63ab09f3488fdf9ad6c6a795c",
+    "physics_steps": 15564,
+    "hz": 120,
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "status": "STOPPED",
+    "error": "upper_B_u4_side_probe: B wrist envelope exceeded at tick 15564: [{'arm': 'right', 'force_N': 9.337705431669757, 'torque_Nm': 0.3337143568521862, 'wrench_world': [2.5384765883602074, -8.522733211592529, 2.848139382649613, 0.29101158034742514, 0.09672587836648773, 0.131611688414038]}]",
+    "probe": {
+      "timing": "near",
+      "arm": "right",
+      "anchor_tcp_m": [
+        0.15524646691065774,
+        1.0016145547178348,
+        0.9413525583042062
+      ],
+      "pre_step": 15539,
+      "amplitude_m": 0.00025
+    },
+    "probe_peak_right_force_N": 8.686045715656586,
+    "probe_peak_right_moment_Nm": 0.2912398837897393,
+    "peak_to_peak_encoder_X_mm": 0.003660807574829006,
+    "cube4_final": null
+  },
+  "near_forward04": {
+    "offset_world_y_m": 0.0004,
+    "input_checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e",
+    "runner_report_sha256": "24862cb905a6877d6f25d85224a2e1adf1b8dc6cc6454206c9c842bf40211a70",
+    "physics_steps": 13035,
+    "hz": 120,
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "status": "STOPPED",
+    "error": "upper_B_rear_travel: B wrist envelope exceeded at tick 13035: [{'arm': 'right', 'force_N': 9.519840040217872, 'torque_Nm': 0.3243013021229779, 'wrench_world': [-0.9273374419779153, -8.786944086769301, 3.5435876278189133, 0.3150600701566594, -0.058470134955184744, -0.04989719500996389]}]",
+    "probe": null,
+    "probe_peak_right_force_N": null,
+    "probe_peak_right_moment_Nm": null,
+    "peak_to_peak_encoder_X_mm": null,
+    "cube4_final": null
+  },
+  "near_nominal": {
+    "offset_world_y_m": 0,
+    "input_checkpoint_sha256": "279237f8a83d294104bd31c8c128bfe5dc8bc1a89cc5ed83bef6ff3549734116",
+    "runner_report_sha256": "f84dbb5180832f56b021c6441bf30550049d2b1462679ba47695ea9e110d4dae",
+    "physics_steps": 13039,
+    "hz": 120,
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "status": "STOPPED",
+    "error": "upper_B_rear_travel: B wrist envelope exceeded at tick 13039: [{'arm': 'right', 'force_N': 9.125470943170136, 'torque_Nm': 0.30888870135693164, 'wrench_world': [-1.2690034528822915, -8.545544736259217, 2.9389650103068035, 0.304243400188434, -0.04747389073145933, -0.024380585853698653]}]",
+    "probe": null,
+    "probe_peak_right_force_N": null,
+    "probe_peak_right_moment_Nm": null,
+    "peak_to_peak_encoder_X_mm": null,
+    "cube4_final": null
+  },
+  "sham_nominal": {
+    "offset_world_y_m": 0,
+    "input_checkpoint_sha256": "279237f8a83d294104bd31c8c128bfe5dc8bc1a89cc5ed83bef6ff3549734116",
+    "runner_report_sha256": "e2f90f33c8a6a63b0ae3d94fe9a4ca51bed3e9f3485a9b766a59adee170b4d49",
+    "physics_steps": 10382,
+    "hz": 120,
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "status": "STOPPED",
+    "error": "upper_B_seam_pacing: B wrist envelope exceeded at tick 10382: [{'arm': 'left', 'force_N': 9.029477394574783, 'torque_Nm': 0.3889328290772097, 'wrench_world': [-8.764257096572612, -2.141732249487507, 0.3636516682469957, 0.05969582193983709, -0.26646473513241065, 0.27695071638785035]}]",
+    "probe": null,
+    "probe_peak_right_force_N": null,
+    "probe_peak_right_moment_Nm": null,
+    "peak_to_peak_encoder_X_mm": null,
+    "cube4_final": null
+  },
+  "sham_nominal_retry": {
+    "offset_world_y_m": 0,
+    "input_checkpoint_sha256": "279237f8a83d294104bd31c8c128bfe5dc8bc1a89cc5ed83bef6ff3549734116",
+    "runner_report_sha256": "a1d3d4040ab1e153f60dcc9dc4d0b16c502a682d95ff3011a6b65135104ab40e",
+    "physics_steps": 17701,
+    "hz": 120,
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "status": "PARTIAL_W760_UPPER_ROW",
+    "error": null,
+    "probe": {
+      "timing": "sham",
+      "arm": "right",
+      "anchor_tcp_m": [
+        0.15462856040517337,
+        0.93501668696698,
+        0.9412562634533799
+      ],
+      "pre_step": 10642,
+      "amplitude_m": 0.0,
+      "end_step": 10834
+    },
+    "probe_peak_right_force_N": 0.8063605364071148,
+    "probe_peak_right_moment_Nm": 0.03402406769255858,
+    "peak_to_peak_encoder_X_mm": 0.0012086623986384826,
+    "cube4_final": {
+      "slot": 4,
+      "cube_id": 10,
+      "target_m": [
+        0.15329055310242906,
+        1.076,
+        0.9369999999999999
+      ],
+      "rgb_final_m": [
+        0.15402036240144013,
+        1.0750414887580262,
+        0.9369999999999999
+      ],
+      "physical_final_m": [
+        0.15270081162452698,
+        1.0758326053619385,
+        0.9369996190071106
+      ],
+      "yaw_pitch_roll_deg": [
+        -0.12739137572608078,
+        1.5192497075629516e-05,
+        -0.00029356500555335744
+      ],
+      "support": {
+        "positive_steps": 60,
+        "median_contact_impulse_Ns": 0.10005271586447964,
+        "samples": 60
+      },
+      "max_lower_shift_m": 7.004587021233796e-05
+    }
+  },
+  "weak_back04": {
+    "offset_world_y_m": -0.0004,
+    "input_checkpoint_sha256": "b6a873720cc6d6cb178fda9385b92d727aa5669a52911633600e2483f3ccca34",
+    "runner_report_sha256": "1caf748d37b01ce4df2140cd845c1be1311d0c483d15e88fd3a5b69786789ffe",
+    "physics_steps": 12543,
+    "hz": 120,
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "status": "STOPPED",
+    "error": "upper_B_rear_travel: B wrist envelope exceeded at tick 12543: [{'arm': 'right', 'force_N': 9.018547461886044, 'torque_Nm': 0.33017015452397763, 'wrench_world': [2.180564888957976, -8.073663227696047, 3.3756921028262568, 0.2711073279868825, -0.02560578827136333, -0.18670161021587978]}]",
+    "probe": {
+      "timing": "weak",
+      "arm": "right",
+      "anchor_tcp_m": [
+        0.15546861302033824,
+        0.9649912188858425,
+        0.9413386918292426
+      ],
+      "pre_step": 12349,
+      "amplitude_m": 0.00025,
+      "end_step": 12541
+    },
+    "probe_peak_right_force_N": 7.162567482921405,
+    "probe_peak_right_moment_Nm": 0.26142254345961635,
+    "peak_to_peak_encoder_X_mm": 0.43379940243126747,
+    "cube4_final": null
+  },
+  "weak_forward04": {
+    "offset_world_y_m": 0.0004,
+    "input_checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e",
+    "runner_report_sha256": "3b9821ffba0970d2f76b13d6e4af50d1b3548a5b22ef0577b0f97c46794a59f8",
+    "physics_steps": 17578,
+    "hz": 120,
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "status": "PARTIAL_W760_UPPER_ROW",
+    "error": null,
+    "probe": {
+      "timing": "weak",
+      "arm": "right",
+      "anchor_tcp_m": [
+        0.15558840478903327,
+        0.9605479957222065,
+        0.9413360817185048
+      ],
+      "pre_step": 12625,
+      "amplitude_m": 0.00025,
+      "end_step": 12817
+    },
+    "probe_peak_right_force_N": 7.8989745497477655,
+    "probe_peak_right_moment_Nm": 0.26800748359726523,
+    "peak_to_peak_encoder_X_mm": 0.4340520331751474,
+    "cube4_final": {
+      "slot": 4,
+      "cube_id": 10,
+      "target_m": [
+        0.1533317208106739,
+        1.076,
+        0.9369999999999999
+      ],
+      "rgb_final_m": [
+        0.15404919721820484,
+        1.07516707100672,
+        0.9369999999999999
+      ],
+      "physical_final_m": [
+        0.152601420879364,
+        1.075950264930725,
+        0.9369997382164001
+      ],
+      "yaw_pitch_roll_deg": [
+        -0.03781132220539831,
+        9.385054854986035e-06,
+        -0.00027931149976878194
+      ],
+      "support": {
+        "positive_steps": 60,
+        "median_contact_impulse_Ns": 0.10016942574577756,
+        "samples": 60
+      },
+      "max_lower_shift_m": 7.03169865987555e-05
+    }
+  },
+  "weak_nominal": {
+    "offset_world_y_m": 0,
+    "input_checkpoint_sha256": "279237f8a83d294104bd31c8c128bfe5dc8bc1a89cc5ed83bef6ff3549734116",
+    "runner_report_sha256": "c38bbdd21915baf9a1b7d0aab5695858ae021ed071c73f78ccd20f5e0195e3ba",
+    "physics_steps": 10541,
+    "hz": 120,
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "status": "STOPPED",
+    "error": "upper_B_seam_pacing: B wrist envelope exceeded at tick 10541: [{'arm': 'left', 'force_N': 9.022037128718354, 'torque_Nm': 0.3915732556595422, 'wrench_world': [-8.802386559005896, -1.9338477330817183, 0.41878128308174245, 0.051681356553235906, -0.27218684790981884, 0.2767182172491498]}]",
+    "probe": null,
+    "probe_peak_right_force_N": null,
+    "probe_peak_right_moment_Nm": null,
+    "peak_to_peak_encoder_X_mm": null,
+    "cube4_final": null
+  }
+}

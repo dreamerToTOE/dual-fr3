@@ -1,0 +1,740 @@
+{
+  "early": {
+    "trials": [
+      "early_back04",
+      "early_forward04",
+      "early_nominal"
+    ],
+    "outcomes": {
+      "attempts": 3,
+      "scored": 3,
+      "entered": 3,
+      "unreached": 0,
+      "complete_cycle": 3,
+      "complete_rear_scored": 1,
+      "seated": 1,
+      "stopped": 2,
+      "changed_state_steps": 0,
+      "changed_side_steps": 0
+    },
+    "same_trajectory": {
+      "handoff_weak": {
+        "passive": {
+          "runs": 3,
+          "positive": 1826,
+          "tp": 131,
+          "negative": 3522,
+          "fp": 113,
+          "recall": 0.07174151150054764,
+          "fpr": 0.03208404315729699
+        },
+        "active": {
+          "runs": 3,
+          "positive": 1826,
+          "tp": 131,
+          "negative": 3522,
+          "fp": 113,
+          "recall": 0.07174151150054764,
+          "fpr": 0.03208404315729699
+        },
+        "delta_recall_pp": 0.0,
+        "delta_fpr_pp": 0.0
+      },
+      "rear_S5": {
+        "passive": {
+          "runs": 3,
+          "positive": 3975,
+          "tp": 1938,
+          "negative": 2134,
+          "fp": 241,
+          "recall": 0.48754716981132074,
+          "fpr": 0.11293345829428304
+        },
+        "active": {
+          "runs": 3,
+          "positive": 3975,
+          "tp": 1938,
+          "negative": 2134,
+          "fp": 241,
+          "recall": 0.48754716981132074,
+          "fpr": 0.11293345829428304
+        },
+        "delta_recall_pp": 0.0,
+        "delta_fpr_pp": 0.0
+      },
+      "rear_S6": {
+        "passive": {
+          "runs": 3,
+          "positive": 106,
+          "tp": 53,
+          "negative": 6003,
+          "fp": 0,
+          "recall": 0.5,
+          "fpr": 0.0
+        },
+        "active": {
+          "runs": 3,
+          "positive": 106,
+          "tp": 53,
+          "negative": 6003,
+          "fp": 0,
+          "recall": 0.5,
+          "fpr": 0.0
+        },
+        "delta_recall_pp": 0.0,
+        "delta_fpr_pp": 0.0
+      }
+    },
+    "matched_rear_prefix": {
+      "rear_S5": {
+        "no_pulse": {
+          "runs": 3,
+          "positive": 4029,
+          "tp": 1949,
+          "negative": 2075,
+          "fp": 233,
+          "recall": 0.4837428642343013,
+          "fpr": 0.11228915662650603
+        },
+        "pulse_trajectory_passive": {
+          "runs": 3,
+          "positive": 3975,
+          "tp": 1938,
+          "negative": 2129,
+          "fp": 241,
+          "recall": 0.48754716981132074,
+          "fpr": 0.11319868482855801
+        },
+        "delta_recall_pp": 0.380430557701944,
+        "delta_fpr_pp": 0.0909528202051979
+      },
+      "rear_S6": {
+        "no_pulse": {
+          "runs": 3,
+          "positive": 110,
+          "tp": 59,
+          "negative": 5994,
+          "fp": 0,
+          "recall": 0.5363636363636364,
+          "fpr": 0.0
+        },
+        "pulse_trajectory_passive": {
+          "runs": 3,
+          "positive": 101,
+          "tp": 48,
+          "negative": 6003,
+          "fp": 0,
+          "recall": 0.4752475247524752,
+          "fpr": 0.0
+        },
+        "delta_recall_pp": -6.111611161116115,
+        "delta_fpr_pp": 0.0
+      }
+    },
+    "probe_events": {
+      "pre_known": 3,
+      "pre_loaded": 1,
+      "pre_clear": 2,
+      "weak_pre": 1,
+      "correct_weak_pre": 0,
+      "changed_by_pre_hold": 0,
+      "pre_reported_on_known": 0,
+      "pre_correct": 0,
+      "pre_false_positive": 0,
+      "clear_then_any_load": 1,
+      "clear_then_only_short_load": 1,
+      "clear_then_sustained_load": 0,
+      "short_only_events_load_ticks": 8
+    }
+  },
+  "late": {
+    "trials": [
+      "late_forward04",
+      "late_nominal"
+    ],
+    "outcomes": {
+      "attempts": 2,
+      "scored": 2,
+      "entered": 0,
+      "unreached": 2,
+      "complete_cycle": 0,
+      "complete_rear_scored": 0,
+      "seated": 0,
+      "stopped": 2,
+      "changed_state_steps": 0,
+      "changed_side_steps": 0
+    },
+    "same_trajectory": {
+      "handoff_weak": {
+        "passive": {
+          "runs": 0,
+          "positive": 0,
+          "tp": 0,
+          "negative": 0,
+          "fp": 0,
+          "recall": null,
+          "fpr": null
+        },
+        "active": {
+          "runs": 0,
+          "positive": 0,
+          "tp": 0,
+          "negative": 0,
+          "fp": 0,
+          "recall": null,
+          "fpr": null
+        },
+        "delta_recall_pp": null,
+        "delta_fpr_pp": null
+      },
+      "rear_S5": {
+        "passive": {
+          "runs": 0,
+          "positive": 0,
+          "tp": 0,
+          "negative": 0,
+          "fp": 0,
+          "recall": null,
+          "fpr": null
+        },
+        "active": {
+          "runs": 0,
+          "positive": 0,
+          "tp": 0,
+          "negative": 0,
+          "fp": 0,
+          "recall": null,
+          "fpr": null
+        },
+        "delta_recall_pp": null,
+        "delta_fpr_pp": null
+      },
+      "rear_S6": {
+        "passive": {
+          "runs": 0,
+          "positive": 0,
+          "tp": 0,
+          "negative": 0,
+          "fp": 0,
+          "recall": null,
+          "fpr": null
+        },
+        "active": {
+          "runs": 0,
+          "positive": 0,
+          "tp": 0,
+          "negative": 0,
+          "fp": 0,
+          "recall": null,
+          "fpr": null
+        },
+        "delta_recall_pp": null,
+        "delta_fpr_pp": null
+      }
+    },
+    "matched_rear_prefix": {
+      "rear_S5": {
+        "no_pulse": {
+          "runs": 0,
+          "positive": 0,
+          "tp": 0,
+          "negative": 0,
+          "fp": 0,
+          "recall": null,
+          "fpr": null
+        },
+        "pulse_trajectory_passive": {
+          "runs": 0,
+          "positive": 0,
+          "tp": 0,
+          "negative": 0,
+          "fp": 0,
+          "recall": null,
+          "fpr": null
+        },
+        "delta_recall_pp": null,
+        "delta_fpr_pp": null
+      },
+      "rear_S6": {
+        "no_pulse": {
+          "runs": 0,
+          "positive": 0,
+          "tp": 0,
+          "negative": 0,
+          "fp": 0,
+          "recall": null,
+          "fpr": null
+        },
+        "pulse_trajectory_passive": {
+          "runs": 0,
+          "positive": 0,
+          "tp": 0,
+          "negative": 0,
+          "fp": 0,
+          "recall": null,
+          "fpr": null
+        },
+        "delta_recall_pp": null,
+        "delta_fpr_pp": null
+      }
+    },
+    "probe_events": {
+      "pre_known": 0,
+      "pre_loaded": 0,
+      "pre_clear": 0,
+      "weak_pre": 0,
+      "correct_weak_pre": 0,
+      "changed_by_pre_hold": 0,
+      "pre_reported_on_known": 0,
+      "pre_correct": 0,
+      "pre_false_positive": 0,
+      "clear_then_any_load": 0,
+      "clear_then_only_short_load": 0,
+      "clear_then_sustained_load": 0,
+      "short_only_events_load_ticks": 0
+    }
+  },
+  "near": {
+    "trials": [
+      "near_back04",
+      "near_forward04",
+      "near_nominal"
+    ],
+    "outcomes": {
+      "attempts": 3,
+      "scored": 3,
+      "entered": 1,
+      "unreached": 2,
+      "complete_cycle": 0,
+      "complete_rear_scored": 0,
+      "seated": 0,
+      "stopped": 3,
+      "changed_state_steps": 0,
+      "changed_side_steps": 0
+    },
+    "same_trajectory": {
+      "handoff_weak": {
+        "passive": {
+          "runs": 3,
+          "positive": 537,
+          "tp": 80,
+          "negative": 3945,
+          "fp": 27,
+          "recall": 0.148975791433892,
+          "fpr": 0.006844106463878327
+        },
+        "active": {
+          "runs": 3,
+          "positive": 537,
+          "tp": 80,
+          "negative": 3945,
+          "fp": 27,
+          "recall": 0.148975791433892,
+          "fpr": 0.006844106463878327
+        },
+        "delta_recall_pp": 0.0,
+        "delta_fpr_pp": 0.0
+      },
+      "rear_S5": {
+        "passive": {
+          "runs": 3,
+          "positive": 3957,
+          "tp": 2156,
+          "negative": 2283,
+          "fp": 159,
+          "recall": 0.5448572150619156,
+          "fpr": 0.06964520367936924
+        },
+        "active": {
+          "runs": 3,
+          "positive": 3957,
+          "tp": 2156,
+          "negative": 2283,
+          "fp": 159,
+          "recall": 0.5448572150619156,
+          "fpr": 0.06964520367936924
+        },
+        "delta_recall_pp": 0.0,
+        "delta_fpr_pp": 0.0
+      },
+      "rear_S6": {
+        "passive": {
+          "runs": 3,
+          "positive": 67,
+          "tp": 21,
+          "negative": 6173,
+          "fp": 0,
+          "recall": 0.31343283582089554,
+          "fpr": 0.0
+        },
+        "active": {
+          "runs": 3,
+          "positive": 67,
+          "tp": 21,
+          "negative": 6173,
+          "fp": 0,
+          "recall": 0.31343283582089554,
+          "fpr": 0.0
+        },
+        "delta_recall_pp": 0.0,
+        "delta_fpr_pp": 0.0
+      }
+    },
+    "matched_rear_prefix": {
+      "rear_S5": {
+        "no_pulse": {
+          "runs": 3,
+          "positive": 4076,
+          "tp": 1994,
+          "negative": 2078,
+          "fp": 235,
+          "recall": 0.4892051030421982,
+          "fpr": 0.11308950914340712
+        },
+        "pulse_trajectory_passive": {
+          "runs": 3,
+          "positive": 3938,
+          "tp": 2155,
+          "negative": 2216,
+          "fp": 157,
+          "recall": 0.5472320975114271,
+          "fpr": 0.07084837545126353
+        },
+        "delta_recall_pp": 5.802699446922888,
+        "delta_fpr_pp": -4.2241133692143595
+      },
+      "rear_S6": {
+        "no_pulse": {
+          "runs": 3,
+          "positive": 110,
+          "tp": 59,
+          "negative": 6044,
+          "fp": 0,
+          "recall": 0.5363636363636364,
+          "fpr": 0.0
+        },
+        "pulse_trajectory_passive": {
+          "runs": 3,
+          "positive": 0,
+          "tp": 0,
+          "negative": 6154,
+          "fp": 0,
+          "recall": null,
+          "fpr": 0.0
+        },
+        "delta_recall_pp": null,
+        "delta_fpr_pp": 0.0
+      }
+    },
+    "probe_events": {
+      "pre_known": 1,
+      "pre_loaded": 1,
+      "pre_clear": 0,
+      "weak_pre": 0,
+      "correct_weak_pre": 0,
+      "changed_by_pre_hold": 0,
+      "pre_reported_on_known": 0,
+      "pre_correct": 0,
+      "pre_false_positive": 0,
+      "clear_then_any_load": 0,
+      "clear_then_only_short_load": 0,
+      "clear_then_sustained_load": 0,
+      "short_only_events_load_ticks": 0
+    }
+  },
+  "weak": {
+    "trials": [
+      "weak_back04",
+      "weak_forward04",
+      "weak_nominal"
+    ],
+    "outcomes": {
+      "attempts": 3,
+      "scored": 3,
+      "entered": 2,
+      "unreached": 1,
+      "complete_cycle": 2,
+      "complete_rear_scored": 1,
+      "seated": 1,
+      "stopped": 2,
+      "changed_state_steps": 0,
+      "changed_side_steps": 0
+    },
+    "same_trajectory": {
+      "handoff_weak": {
+        "passive": {
+          "runs": 2,
+          "positive": 433,
+          "tp": 35,
+          "negative": 2585,
+          "fp": 19,
+          "recall": 0.08083140877598152,
+          "fpr": 0.007350096711798839
+        },
+        "active": {
+          "runs": 2,
+          "positive": 433,
+          "tp": 35,
+          "negative": 2585,
+          "fp": 19,
+          "recall": 0.08083140877598152,
+          "fpr": 0.007350096711798839
+        },
+        "delta_recall_pp": 0.0,
+        "delta_fpr_pp": 0.0
+      },
+      "rear_S5": {
+        "passive": {
+          "runs": 2,
+          "positive": 3335,
+          "tp": 1243,
+          "negative": 2069,
+          "fp": 236,
+          "recall": 0.37271364317841077,
+          "fpr": 0.11406476558724021
+        },
+        "active": {
+          "runs": 2,
+          "positive": 3335,
+          "tp": 1243,
+          "negative": 2069,
+          "fp": 236,
+          "recall": 0.37271364317841077,
+          "fpr": 0.11406476558724021
+        },
+        "delta_recall_pp": 0.0,
+        "delta_fpr_pp": 0.0
+      },
+      "rear_S6": {
+        "passive": {
+          "runs": 2,
+          "positive": 117,
+          "tp": 65,
+          "negative": 5287,
+          "fp": 0,
+          "recall": 0.5555555555555556,
+          "fpr": 0.0
+        },
+        "active": {
+          "runs": 2,
+          "positive": 117,
+          "tp": 65,
+          "negative": 5287,
+          "fp": 0,
+          "recall": 0.5555555555555556,
+          "fpr": 0.0
+        },
+        "delta_recall_pp": 0.0,
+        "delta_fpr_pp": 0.0
+      }
+    },
+    "matched_rear_prefix": {
+      "rear_S5": {
+        "no_pulse": {
+          "runs": 2,
+          "positive": 3910,
+          "tp": 1547,
+          "negative": 1368,
+          "fp": 143,
+          "recall": 0.39565217391304347,
+          "fpr": 0.10453216374269006
+        },
+        "pulse_trajectory_passive": {
+          "runs": 2,
+          "positive": 3324,
+          "tp": 1243,
+          "negative": 1954,
+          "fp": 236,
+          "recall": 0.3739470517448857,
+          "fpr": 0.12077789150460594
+        },
+        "delta_recall_pp": -2.1705122168157787,
+        "delta_fpr_pp": 1.624572776191588
+      },
+      "rear_S6": {
+        "no_pulse": {
+          "runs": 2,
+          "positive": 108,
+          "tp": 69,
+          "negative": 5170,
+          "fp": 0,
+          "recall": 0.6388888888888888,
+          "fpr": 0.0
+        },
+        "pulse_trajectory_passive": {
+          "runs": 2,
+          "positive": 2,
+          "tp": 0,
+          "negative": 5276,
+          "fp": 0,
+          "recall": 0.0,
+          "fpr": 0.0
+        },
+        "delta_recall_pp": -63.888888888888886,
+        "delta_fpr_pp": 0.0
+      }
+    },
+    "probe_events": {
+      "pre_known": 2,
+      "pre_loaded": 2,
+      "pre_clear": 0,
+      "weak_pre": 1,
+      "correct_weak_pre": 0,
+      "changed_by_pre_hold": 0,
+      "pre_reported_on_known": 0,
+      "pre_correct": 0,
+      "pre_false_positive": 0,
+      "clear_then_any_load": 0,
+      "clear_then_only_short_load": 0,
+      "clear_then_sustained_load": 0,
+      "short_only_events_load_ticks": 0
+    }
+  },
+  "sham": {
+    "trials": [
+      "sham_nominal",
+      "sham_nominal_retry"
+    ],
+    "outcomes": {
+      "attempts": 2,
+      "scored": 2,
+      "entered": 1,
+      "unreached": 1,
+      "complete_cycle": 1,
+      "complete_rear_scored": 1,
+      "seated": 1,
+      "stopped": 1,
+      "changed_state_steps": 0,
+      "changed_side_steps": 0
+    },
+    "same_trajectory": {
+      "handoff_weak": {
+        "passive": {
+          "runs": 1,
+          "positive": 1653,
+          "tp": 29,
+          "negative": 22,
+          "fp": 3,
+          "recall": 0.017543859649122806,
+          "fpr": 0.13636363636363635
+        },
+        "active": {
+          "runs": 1,
+          "positive": 1653,
+          "tp": 29,
+          "negative": 22,
+          "fp": 3,
+          "recall": 0.017543859649122806,
+          "fpr": 0.13636363636363635
+        },
+        "delta_recall_pp": 0.0,
+        "delta_fpr_pp": 0.0
+      },
+      "rear_S5": {
+        "passive": {
+          "runs": 1,
+          "positive": 2980,
+          "tp": 1120,
+          "negative": 1238,
+          "fp": 65,
+          "recall": 0.37583892617449666,
+          "fpr": 0.05250403877221325
+        },
+        "active": {
+          "runs": 1,
+          "positive": 2980,
+          "tp": 1120,
+          "negative": 1238,
+          "fp": 65,
+          "recall": 0.37583892617449666,
+          "fpr": 0.05250403877221325
+        },
+        "delta_recall_pp": 0.0,
+        "delta_fpr_pp": 0.0
+      },
+      "rear_S6": {
+        "passive": {
+          "runs": 1,
+          "positive": 115,
+          "tp": 72,
+          "negative": 4103,
+          "fp": 0,
+          "recall": 0.6260869565217392,
+          "fpr": 0.0
+        },
+        "active": {
+          "runs": 1,
+          "positive": 115,
+          "tp": 72,
+          "negative": 4103,
+          "fp": 0,
+          "recall": 0.6260869565217392,
+          "fpr": 0.0
+        },
+        "delta_recall_pp": 0.0,
+        "delta_fpr_pp": 0.0
+      }
+    },
+    "matched_rear_prefix": {
+      "rear_S5": {
+        "no_pulse": {
+          "runs": 1,
+          "positive": 3110,
+          "tp": 1093,
+          "negative": 1108,
+          "fp": 75,
+          "recall": 0.35144694533762055,
+          "fpr": 0.06768953068592058
+        },
+        "pulse_trajectory_passive": {
+          "runs": 1,
+          "positive": 2980,
+          "tp": 1120,
+          "negative": 1238,
+          "fp": 65,
+          "recall": 0.37583892617449666,
+          "fpr": 0.05250403877221325
+        },
+        "delta_recall_pp": 2.4391980836876104,
+        "delta_fpr_pp": -1.5185491913707334
+      },
+      "rear_S6": {
+        "no_pulse": {
+          "runs": 1,
+          "positive": 101,
+          "tp": 57,
+          "negative": 4117,
+          "fp": 0,
+          "recall": 0.5643564356435643,
+          "fpr": 0.0
+        },
+        "pulse_trajectory_passive": {
+          "runs": 1,
+          "positive": 115,
+          "tp": 72,
+          "negative": 4103,
+          "fp": 0,
+          "recall": 0.6260869565217392,
+          "fpr": 0.0
+        },
+        "delta_recall_pp": 6.173052087817488,
+        "delta_fpr_pp": 0.0
+      }
+    },
+    "probe_events": {
+      "pre_known": 1,
+      "pre_loaded": 1,
+      "pre_clear": 0,
+      "weak_pre": 1,
+      "correct_weak_pre": 0,
+      "changed_by_pre_hold": 0,
+      "pre_reported_on_known": 0,
+      "pre_correct": 0,
+      "pre_false_positive": 0,
+      "clear_then_any_load": 0,
+      "clear_then_only_short_load": 0,
+      "clear_then_sustained_load": 0,
+      "short_only_events_load_ticks": 0
+    }
+  }
+}
