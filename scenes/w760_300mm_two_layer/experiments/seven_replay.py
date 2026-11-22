@@ -249,9 +249,46 @@ def replay(source, output):
     print(f'{header["case"]}: {len(samples)} paired samples, {len(scores)} conditions -> {destination}')
 
 
+def replay_revision(source, output):
+    tracks = {"frozen": [], "revised": []}
+    with gzip.open(source, "rt") as stream:
+        header = json.loads(next(stream))
+        reference = SevenReference(header["config"], header["hz"], header["reference_positions"])
+        observers = {name: SevenObserver(header["config"], "fusion_compensated", revised=name == "revised")
+                     for name in tracks}
+        command_samples = 0
+        for line in stream:
+            sensor, physical = json.loads(line)
+            if sensor["physics_step"] != physical["physics_step"] or sensor["time_s"] != physical["time_s"]:
+                raise ValueError("Unpaired reference sample")
+            command_samples += bool(sensor.get("tcp_command_positions_m"))
+            ref = reference.update(physical)
+            row = {"step": sensor["physics_step"], "time_s": sensor["time_s"], "ref": ref["state"],
+                   "reference_objects": sorted(ref["horizontal_objects"])}
+            for name, observer in observers.items():
+                result = observer.update(sensor, neighbors=header["optical_neighbors"])
+                tracks[name].append({**row, "pred": result["state"], "boundaries": result["boundaries"]})
+    if header["case"] in ("u4", "u5") and not command_samples:
+        raise ValueError("Enrich the paired push clip with its issued TCP commands using seven_commands.py")
+    scores = {}
+    for name, rows in tracks.items():
+        summary = metrics(rows, header["hz"])
+        summary["target_confirmation"] = target_events(header, rows)
+        summary["false_boundaries_during_s1"] = dict(Counter(
+            path for row in rows if row["ref"] == "S1" for path in row["boundaries"]))
+        scores[name] = summary
+    output.mkdir(parents=True, exist_ok=True)
+    path = output / (header["case"] + "_revision.json")
+    path.write_text(json.dumps({"case": header["case"], "source": header["source"],
+                                "command_samples": command_samples, "scores": scores},
+                               indent=1, allow_nan=False) + "\n")
+    print(f'{header["case"]}: {len(tracks["frozen"])} paired samples -> {path}')
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source", type=Path)
     parser.add_argument("output", type=Path)
+    parser.add_argument("--revised", action="store_true", help="Compare the revised fusion with the frozen baseline")
     args = parser.parse_args()
-    replay(args.source, args.output)
+    (replay_revision if args.revised else replay)(args.source, args.output)

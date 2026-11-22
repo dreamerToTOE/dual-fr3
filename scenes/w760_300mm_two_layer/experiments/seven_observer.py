@@ -5,6 +5,8 @@ import math
 
 import numpy as np
 
+from active_probe_replay import (AVERAGE_END_S, MAX_COMMAND_M, MAX_TCP_FOLLOW_FRACTION,
+                                 MIN_COMMAND_M, MIN_FORCE_RISE_N, WINDOW_S, response)
 from fusion_upper5 import CAMERA_HOLD_S, FRONT_LOAD_N, axes_for, yaw_of
 
 
@@ -13,10 +15,11 @@ SIDES = ("left", "right")
 
 
 class SevenObserver:
-    def __init__(self, config, mode, delay_ms=0):
+    def __init__(self, config, mode, delay_ms=0, *, revised=False):
         if mode not in MODES or not math.isfinite(delay_ms) or delay_ms < 0:
             raise ValueError("Invalid observation mode or delivery delay")
         self.mode = mode
+        self.revised = revised
         self.delay = delay_ms / 1000.
         self.half = config["cube_size_m"] / 2.
         self.weight = config["physics"]["cube_mass_kg"] * abs(config["physics"]["gravity_m_s2"][2])
@@ -34,6 +37,13 @@ class SevenObserver:
         self.known_grip = np.zeros(2, dtype=bool)
         self.last_now = -math.inf
         self.previous_boundaries = set()
+        if revised:
+            self.command_windows = [deque() for _ in SIDES]
+            self.boundary_witnesses = {}
+            self.detached_tools = set()
+            # Memory is limited to this one replayed task and is only reused after a wall witness.
+            self.neighbor_memory = {}
+            self.wall_memory = {}
 
     def _read_camera(self, packet, now):
         if packet and packet["frame_id"] != self.last_frame:
@@ -105,6 +115,79 @@ class SevenObserver:
                     hits[path] = (axis, int(np.sign(direction[axis])))
         return hits
 
+    def _neighbor_candidates(self, center, yaw, neighbors, now, max_gap=.012):
+        """Return geometrically near neighbor faces without requiring a commanded normal."""
+        basis = axes_for(yaw)
+        candidates = {}
+        for path, info in (neighbors or {}).items():
+            if not (info["capture_time_s"] <= info["received_time_s"]
+                    and info["received_time_s"] + self.delay <= now + 1.e-7):
+                continue
+            other = np.asarray(info["position_m"])
+            if abs(other[2] - center[2]) > self.half:
+                continue
+            other_axes = axes_for(yaw_of(info["rotation_world"]))
+            delta = other[:2] - center[:2]
+            directions = np.column_stack((basis, other_axes))
+            dot = directions.T @ delta
+            span = self.half * (np.abs(directions.T @ basis).sum(axis=1)
+                                + np.abs(directions.T @ other_axes).sum(axis=1))
+            gaps = np.abs(dot) - span
+            idx = int(np.argmax(gaps))
+            direction = np.sign(dot[idx]) * directions[:, idx]
+            if -.004 <= gaps[idx] <= max_gap:
+                axis = int(np.argmax(np.abs(direction)))
+                candidates[path] = (axis, int(np.sign(direction[axis])), float(gaps[idx]))
+        return candidates
+
+    def _command_response(self, sensor_row, now, tcp, inward, forces, compression):
+        responses = {}
+        commands = sensor_row.get("tcp_command_positions_m", {})
+        for i, side in enumerate(SIDES):
+            window = self.command_windows[i]
+            n = inward[i]
+            axis = int(np.argmax(np.abs(n[:2])))
+            sign = int(np.sign(n[axis]))
+            target = np.asarray(commands.get(side, ()), dtype=float)
+            if (abs(n[axis]) <= .95 or compression[i] < FRONT_LOAD_N or
+                    target.shape != (3,) or not np.all(np.isfinite(target))):
+                window.clear()
+                continue
+            direction = (axis, sign)
+            if window and (now - window[-1][0] > .013 or window[-1][1] != direction):
+                window.clear()
+            window.append((now, direction, (sign * target[axis], sign * tcp[i, axis], -sign * forces[i, axis])))
+            while len(window) > 1 and window[1][0] <= now - WINDOW_S + 1e-7:
+                window.popleft()
+            if now - window[0][0] >= WINDOW_S - 1e-6:
+                width = sum(t < window[0][0] + AVERAGE_END_S - 1e-7 for t, _, _ in window)
+                responses[i, direction] = response([sample for _, _, sample in window], width)
+        return responses
+
+    def _confirm_boundaries(self, candidates, responses):
+        confirmed = {}
+        witnesses = {}
+        for path, direction in candidates.items():
+            # A single force response cannot distinguish two overlapping candidates on the same normal.
+            if sum(value == direction for value in candidates.values()) != 1:
+                continue
+            for (arm, normal), change in responses.items():
+                if normal != direction:
+                    continue
+                advance = change["command_advance_m"]
+                follows = abs(change["encoder_advance_m"]) > MAX_TCP_FOLLOW_FRACTION * abs(advance)
+                new_contact = (MIN_COMMAND_M <= advance <= MAX_COMMAND_M and not follows
+                               and change["axial_force_rise_N"] >= MIN_FORCE_RISE_N)
+                holding_still = abs(advance) < MIN_COMMAND_M / 2 and abs(change["encoder_advance_m"]) <= .000020
+                held_contact = (self.boundary_witnesses.get(path) == (arm, direction) and
+                                (holding_still or advance > 0 and not follows))
+                if new_contact or held_contact:
+                    confirmed[path] = direction
+                    witnesses[path] = (arm, direction)
+                    break
+        self.boundary_witnesses = witnesses
+        return confirmed
+
     def update(self, sensor_row, neighbors=None):
         now = sensor_row["time_s"]
         if not math.isfinite(now) or now <= self.last_now:
@@ -114,17 +197,19 @@ class SevenObserver:
         use_vision = self.mode != "wrench_fk"
         tcp = np.asarray([sensor_row["tcp_positions_m"][s] for s in SIDES], dtype=float)
         inward = np.asarray([sensor_row["cup_normals_world"][s] for s in SIDES], dtype=float)
-        forces = (np.asarray([sensor_row[s + "_wrench_world"][:3] for s in SIDES]) if use_force
-                  else np.zeros((2, 3)))
+        wrenches = (np.asarray([sensor_row[s + "_wrench_world"] for s in SIDES], dtype=float)
+                    if use_force else np.zeros((2, 6)))
+        forces = wrenches[:, :3]
         if not all(np.all(np.isfinite(x)) for x in (tcp, inward, forces)):
             raise ValueError("Invalid encoder or wrench sample")
         compression = -np.sum(inward * forces, axis=1)
         force_norm = np.linalg.norm(forces, axis=1)
         loaded = ((np.abs(compression) >= FRONT_LOAD_N) | (np.abs(forces[:, 2]) > .9))
         vertical = -sum(forces[:, 2]) / self.weight
-        self.history.append((now, tcp, loaded, vertical, -forces.sum(axis=0)))
+        self.history.append((now, tcp, loaded, vertical, -forces.sum(axis=0), force_norm < .3))
         while len(self.history) > 2 and self.history[1][0] < now - CAMERA_HOLD_S - .05:
             self.history.popleft()
+        responses = self._command_response(sensor_row, now, tcp, inward, forces, compression) if self.revised else {}
         optical = self._read_camera(sensor_row.get("camera"), now) if use_vision else None
         age = now - optical[1] if optical else None
         optical_ok = optical is not None and 0 <= age <= .40
@@ -157,14 +242,26 @@ class SevenObserver:
                 axial_error = (face_center - xyz) @ n
                 xyz += .85 * axial_error * n
         support_error = self._support_level(xyz) if xyz is not None else math.inf
+        if self.revised and support_error > .04 and loaded.all() and opposed and self.known_grip.any():
+            support_error = min(support_error, self._support_level(face_center))
         recent = next((e for e in reversed(self.history) if e[0] <= now - .10), self.history[0])
         vertical_change = abs(vertical - recent[3])
         palm_motion_z = np.max(np.abs(tcp[:, 2] - recent[1][:, 2]))
         hands = {s: "loaded" if loaded[i] else "unconfirmed" for i, s in enumerate(SIDES)}
+        retreat_complete = dict.fromkeys(SIDES, False)
         if xyz is not None:
             separation = np.linalg.norm(np.maximum(np.abs(tcp - xyz) - self.half, 0), axis=1)
+            if self.revised and use_force:
+                radius = self.half * (np.abs(inward[:, :2] @ axes_for(yaw)).sum(axis=1) + np.abs(inward[:, 2]))
+                face_gap = np.sum((xyz - tcp) * inward, axis=1) - radius
+                outward = np.sum((recent[1] - tcp) * inward, axis=1)
+                quiet = [row[5] for row in self.history if row[0] >= now - .05 - 1e-7]
             for i, s in enumerate(SIDES):
                 if not loaded[i] and separation[i] > .025:
+                    hands[s] = "separated"
+                    retreat_complete[s] = True
+                elif (self.revised and use_force and not loaded[i] and face_gap[i] >= .005 and
+                      self.history[0][0] <= now - .05 and all(row[i] for row in quiet)):
                     hands[s] = "separated"
         state, hits = "UNKNOWN", {}
         if not use_force and optical_ok and len(self.camera_history) >= 3:
@@ -190,11 +287,12 @@ class SevenObserver:
                         state = "S6" if len(set(hits.values())) >= 2 else "S5"
                     elif np.any(touch & follows) and np.linalg.norm(delta_box[:2]) > .0015:
                         state = "S1"
-        if holding_load:
-            state = "S4"
-        elif (.12 < vertical < .88 and loaded.all() and opposed and
-              (vertical_change > .07 or palm_motion_z > .0004) and support_error < .04):
+        transfer = (.12 < vertical < .88 and loaded.all() and opposed and
+                    (vertical_change > .07 or palm_motion_z > .0004) and support_error < .04)
+        if transfer and (self.revised or not holding_load):
             state = "S3"
+        elif holding_load:
+            state = "S4"
         elif loaded.any() and support_error <= .04 and abs(vertical) < .40:
             push = -forces.sum(axis=0)
             aligned = {}
@@ -204,18 +302,62 @@ class SevenObserver:
                     aligned[axis] = (i, tcp[i, axis] + self.half * n[axis])
             hits = self._boundaries(xyz, yaw, push, neighbors, now,
                                     {axis: value[1] for axis, value in aligned.items()})
-            earlier = next((e for e in reversed(self.history) if e[0] <= now - .24), None)
-            for path, (axis, sign) in list(hits.items()):
-                if path in self.previous_boundaries:
-                    continue
-                # A new constraint needs a causal force rise along its normal while motion slows.
-                # A retained transverse constraint can be inferred from the other loaded wrist.
-                if earlier is None or not loaded.any() or (push[axis] - earlier[4][axis]) * sign < .30:
-                    del hits[path]
-                    continue
-                i = aligned[axis][0] if axis in aligned else arm
-                if (not earlier[2][i] or abs(tcp[i, axis] - earlier[1][i, axis]) > .000020):
-                    del hits[path]
+            if not self.revised:
+                earlier = next((e for e in reversed(self.history) if e[0] <= now - .24), None)
+                for path, (axis, sign) in list(hits.items()):
+                    if path in self.previous_boundaries:
+                        continue
+                    if earlier is None or (push[axis] - earlier[4][axis]) * sign < .30:
+                        del hits[path]
+                        continue
+                    i = aligned[axis][0] if axis in aligned else arm
+                    if not earlier[2][i] or abs(tcp[i, axis] - earlier[1][i, axis]) > .000020:
+                        del hits[path]
+            else:
+                prior_boundaries = set(self.previous_boundaries)
+                prior_witnesses = dict(self.boundary_witnesses)
+                hits = self._confirm_boundaries(hits, responses)
+                for path, direction in hits.items():
+                    if path in self.walls:
+                        self.wall_memory[path] = direction
+                    else:
+                        self.neighbor_memory[path] = direction
+                for path, direction in list(self.wall_memory.items()):
+                    if any(normal == direction and
+                           abs(change["command_advance_m"]) >= MIN_COMMAND_M and
+                           abs(change["encoder_advance_m"]) > MAX_TCP_FOLLOW_FRACTION
+                           * abs(change["command_advance_m"])
+                           for (_, normal), change in responses.items()):
+                        del self.wall_memory[path]
+                wall_candidates = self._boundaries(xyz, yaw, None, neighbors, now)
+                for path, direction in self.wall_memory.items():
+                    if path in wall_candidates and path not in hits:
+                        hits[path] = direction
+                # A side neighbor can remain loaded after its aligned arm withdraws.
+                # Require a separate geometric candidate and transverse wrist evidence.
+                loose_candidates = self._neighbor_candidates(xyz, yaw, neighbors, now, max_gap=.04)
+                for path, direction in self.neighbor_memory.items():
+                    loose_candidates.setdefault(path, (direction[0], direction[1], math.inf))
+                for path, (axis, sign, gap) in loose_candidates.items():
+                    if path in hits:
+                        continue
+                    retained = path in prior_boundaries or path in prior_witnesses or path in self.neighbor_memory
+                    if not retained:
+                        continue
+                    if not any(path_name in self.walls for path_name in hits):
+                        continue
+                    for i, n in enumerate(inward):
+                        normal_axis = int(np.argmax(np.abs(n[:2])))
+                        if not loaded[i] or normal_axis == axis:
+                            continue
+                        transverse_force = abs(forces[i, axis])
+                        transverse_torque = abs(wrenches[i, 5])
+                        if (transverse_force >= .15
+                                or (transverse_torque >= .055 and compression[i] >= FRONT_LOAD_N)):
+                            hits[path] = (axis, sign)
+                            if path in prior_witnesses:
+                                self.boundary_witnesses[path] = prior_witnesses[path]
+                            break
             if hits:
                 state = "S6" if len(set(hits.values())) >= 2 else "S5"
             elif self.known_grip.any():
@@ -226,9 +368,14 @@ class SevenObserver:
               and (not use_force or np.max(force_norm) < .3)):
             state = "S0"
         self.previous_boundaries = set(hits)
+        if self.revised:
+            if not hits:
+                self.boundary_witnesses.clear()
+            self.detached_tools = {s for i, s in enumerate(SIDES) if hands[s] == "separated" and force_norm[i] < .3}
         for i, side in enumerate(SIDES):
             if self.known_grip[i]:
                 hands[side] = "inferred_seal"
         return {"state": state, "boundaries": sorted(hits), "camera_age_s": age,
                 "position_m": xyz.tolist() if xyz is not None else None,
-                "tools": hands, "vertical_load_fraction": vertical if use_force else None}
+                "tools": hands, "vertical_load_fraction": vertical if use_force else None,
+                **({"tool_retreat_complete": retreat_complete} if self.revised else {})}

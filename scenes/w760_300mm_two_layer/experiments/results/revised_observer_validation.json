@@ -1,0 +1,58 @@
+{
+  "observer": "SevenObserver(revised=True)",
+  "source": "offline causal replay of seven command-enriched paired clips",
+  "frozen_observer_unchanged": true,
+  "tests": {"pytest": "133 passed"},
+  "changes": {
+    "S1": "Use issued TCP displacement, measured TCP displacement and force rise before confirming a new boundary. A slow command that the TCP follows remains S1.",
+    "S2": "When opposed tools already have grip evidence, cross-check the support plane with the TCP face estimate when the RGB height rejects it.",
+    "S3": "Evaluate partial support transfer before the high-load suspended-tool shortcut.",
+    "S0": "Separate tool release from the 25 mm parking retreat. A signed face gap of at least 5 mm plus 50 ms of low force can mark release. The 25 mm value remains the parking-complete flag.",
+    "S5_S6": "Confirm each boundary independently. Retain a previously witnessed neighbor only after a rear-wall witness and require transverse force or torque before upgrading to S6."
+  },
+  "validation": {
+    "A": {
+      "source": "upper1_A",
+      "S0": {"frozen": [6770, 10346], "revised": [7296, 10346]},
+      "S1": {"frozen": [171, 536], "revised": [171, 536]},
+      "S2": {"frozen": [57, 97], "revised": [88, 97]},
+      "S3": {"frozen": [28, 53], "revised": [48, 53]},
+      "S4": {"frozen": [9331, 9331], "revised": [9331, 9331]}
+    },
+    "U5_primary": {
+      "source": "plus_half_z_blur",
+      "S0": {"frozen": [2119, 4622], "revised": [3001, 4622]},
+      "S1": {"frozen": [3218, 4411], "revised": [4407, 4411]},
+      "S5": {"frozen": [14, 19], "revised": [0, 19]},
+      "false_wall_or_neighbor_boundaries_on_S1": {"frozen": 1304, "revised": 0},
+      "early_wall_confirmation": {"frozen": 7398, "revised": 8032, "first_physical": 8006}
+    },
+    "U5_repeat": {
+      "source": "probe035_passive",
+      "S0": {"frozen": [2153, 4615], "revised": [3463, 4615]},
+      "S1": {"frozen": [2954, 4399], "revised": [4396, 4399]},
+      "S5": {"frozen": [11, 32], "revised": [1, 32]},
+      "false_wall_or_neighbor_boundaries_on_S1": {"frozen": 1612, "revised": 0},
+      "early_wall_confirmation": {"frozen": 7167, "revised": 8036, "first_physical": 7997}
+    },
+    "U4_independent": {
+      "source": "back04, forward04, nominal",
+      "S6": {
+        "back04": [0, 187],
+        "forward04": [95, 185],
+        "nominal": [101, 179],
+        "pooled": [196, 551]
+      },
+      "S5": {
+        "back04": [0, 4446],
+        "forward04": [64, 5348],
+        "nominal": [46, 5155]
+      }
+    }
+  },
+  "limitations": [
+    "The A numbers use the existing paired A run. The attempted fresh visual A startup did not produce a runner report.",
+    "The generic S5/S6 observer still misses an independent U4 back04 S6 segment because the side witness was not established in that run.",
+    "All results are offline replay. The revised observer is not yet in closed-loop task control."
+  ]
+}
