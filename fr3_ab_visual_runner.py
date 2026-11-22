@@ -780,7 +780,7 @@ def main():
                         task = {}
                     task_cube_id = task.get("cube_id")
                     task_contact_target = task.get("contact_target")
-                    task_goal = task.get("goal_center_m") or [control_center[0]]
+                    task_goal = task.get("goal_center_m") or [0.]
                     task_goal_x = task_goal[0]
                     neighbor_name = ("Cube_8" if task_cube_id == 10 else task_contact_target)
                     neighbor_phase = (contact_monitor.phase in ("B2_push", "B2_push_seat", "B2_push_unload")
@@ -1044,7 +1044,7 @@ def main():
                         "cube_contacts": reference_contacts,
                     },
                     auxiliary={
-                        "cube_id": current_task["cube_id"],
+                        "cube_id": None if current_task is None else current_task.get("cube_id"),
                         "neighbors": {
                             path: {
                                 "position_m": np.asarray(value[0], dtype=float).tolist(),
