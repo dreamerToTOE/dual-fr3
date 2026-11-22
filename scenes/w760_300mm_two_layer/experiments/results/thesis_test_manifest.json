@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "description": "Run-level split for innovation-2 state estimation. Development and validation are historical calibration archives. Test contains only fresh 2026-11-22 complete runs.",
+  "runs": [
+    {
+      "name": "archive_a_dev",
+      "split": "development",
+      "path": "/tmp/dual-fr3-revised-command-clips/a.jsonl.gz"
+    },
+    {
+      "name": "archive_u4_dev",
+      "split": "development",
+      "path": "/tmp/dual-fr3-revised-command-clips/u4.jsonl.gz"
+    },
+    {
+      "name": "archive_u5_dev",
+      "split": "development",
+      "path": "/tmp/dual-fr3-revised-command-clips/u5.jsonl.gz"
+    },
+    {
+      "name": "archive_u4_forward_validation",
+      "split": "validation",
+      "path": "/tmp/dual-fr3-revised-command-clips/u4-forward04.jsonl.gz"
+    },
+    {
+      "name": "archive_u5_repeat_validation",
+      "split": "validation",
+      "path": "/tmp/dual-fr3-revised-command-clips/u5-repeat.jsonl.gz"
+    },
+    {
+      "name": "archive_u5_repeat_check_validation",
+      "split": "validation",
+      "path": "/tmp/dual-fr3-revised-command-clips/u5-repeat-check.jsonl.gz"
+    },
+    {
+      "name": "fresh_a_01",
+      "split": "test",
+      "path": "../runs/innovation2-thesis-test-20261122/A_01/paired_commands.jsonl.gz"
+    },
+    {
+      "name": "fresh_a_02",
+      "split": "test",
+      "path": "../runs/innovation2-thesis-test-20261122/A_02/paired_commands.jsonl.gz"
+    },
+    {
+      "name": "fresh_a_03",
+      "split": "test",
+      "path": "../runs/innovation2-thesis-test-20261122/A_03/paired_commands.jsonl.gz"
+    },
+    {
+      "name": "fresh_u4_03_minus_040mm",
+      "split": "test",
+      "path": "../runs/innovation2-thesis-test-20261122/U4_03/paired_commands.jsonl.gz"
+    },
+    {
+      "name": "fresh_u5_01_yaw_000",
+      "split": "test",
+      "path": "../runs/innovation2-thesis-test-20261122/U5_01/paired_commands.jsonl.gz"
+    },
+    {
+      "name": "fresh_u5_02_yaw_035",
+      "split": "test",
+      "path": "../runs/innovation2-thesis-test-20261122/U5_02/paired_commands.jsonl.gz"
+    }
+  ],
+  "excluded_anomaly_runs": [
+    {
+      "name": "fresh_u4_01_plus_040mm",
+      "path": "../runs/innovation2-thesis-test-20261122/U4_01/paired_commands.jsonl.gz",
+      "reason": "B wrist envelope exceeded during rear travel"
+    },
+    {
+      "name": "fresh_u4_02_nominal",
+      "path": "../runs/innovation2-thesis-test-20261122/U4_02/paired_commands.jsonl.gz",
+      "reason": "B wrist envelope exceeded during rear travel"
+    },
+    {
+      "name": "fresh_u5_03_yaw_050",
+      "path": "../runs/innovation2-thesis-test-20261122/U5_03/runner_report.json",
+      "reason": "B wrist envelope exceeded during rear travel"
+    }
+  ],
+  "run_log_manifest": "thesis_run_manifest.json",
+  "bootstrap": "run-level, 5000 resamples, seed 20261122, 95% CI"
+}

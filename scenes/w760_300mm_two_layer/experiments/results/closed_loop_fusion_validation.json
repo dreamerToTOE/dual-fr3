@@ -1,0 +1,22 @@
+{
+  "run_dir": "../runs/innovation2-thesis-test-20261122/closed_loop_fusion_u5",
+  "mode": "fusion",
+  "estimator_mode": "fusion",
+  "status": "STOPPED",
+  "error": "upper_B_rear_travel: B wrist envelope exceeded at tick 13056: [{'arm': 'left', 'force_N': 9.017419526398397, 'torque_Nm': 0.2969681819366174, 'wrench_world': [-0.9466554573437315, -8.212125162212285, 3.6025961028558666, 0.2854078997345278, 0.012953704500552183, 0.08102242523880651]}]",
+  "control_steps": 13056,
+  "decisions": 13056,
+  "hold_steps": 9392,
+  "continue_steps": 3664,
+  "hold_rate": 0.7193627450980392,
+  "physx_states": [
+    "NO_TOOL_CONTACT",
+    "UNKNOWN"
+  ],
+  "prediction_states": [
+    "INCONSISTENT",
+    "NO_TOOL_CONTACT",
+    "UNKNOWN"
+  ],
+  "control_policy": "hold current joint targets after three consecutive states outside the phase target"
+}

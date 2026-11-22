@@ -1,0 +1,126 @@
+{
+  "root": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/runs/innovation2-thesis-test-20261122",
+  "isaac_single_instance": true,
+  "trials": [
+    {
+      "name": "A_01",
+      "kind": "A",
+      "checkpoint": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3-innovation-2/scenes/w760_300mm_two_layer/validation/lower_two_rows_checkpoint.json",
+      "checkpoint_sha256": "aa24d31887a6f0ed882f68dcb21b73dbcb1dca0d52b53a8e405678217113d463",
+      "command": "/home/ubuntu2004/isaacsim-4.5.0/python.sh scenes/w760_300mm_two_layer/two_row_physx.py ../runs/innovation2-thesis-test-20261122/A_01 --resume scenes/w760_300mm_two_layer/validation/lower_two_rows_checkpoint.json --stop-after-upper-a --close-on-finish",
+      "note": "full A from lower_two_rows_checkpoint",
+      "status": "PARTIAL_W760_UPPER_ROW",
+      "control_steps": 21062,
+      "error": null,
+      "complete": true
+    },
+    {
+      "name": "A_02",
+      "kind": "A",
+      "checkpoint": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3-innovation-2/scenes/w760_300mm_two_layer/validation/lower_two_rows_checkpoint.json",
+      "checkpoint_sha256": "aa24d31887a6f0ed882f68dcb21b73dbcb1dca0d52b53a8e405678217113d463",
+      "command": "/home/ubuntu2004/isaacsim-4.5.0/python.sh scenes/w760_300mm_two_layer/two_row_physx.py ../runs/innovation2-thesis-test-20261122/A_02 --resume scenes/w760_300mm_two_layer/validation/lower_two_rows_checkpoint.json --stop-after-upper-a --close-on-finish",
+      "note": "full A from lower_two_rows_checkpoint",
+      "status": "PARTIAL_W760_UPPER_ROW",
+      "control_steps": 21006,
+      "error": null,
+      "complete": true
+    },
+    {
+      "name": "A_03",
+      "kind": "A",
+      "checkpoint": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3-innovation-2/scenes/w760_300mm_two_layer/validation/lower_two_rows_checkpoint.json",
+      "checkpoint_sha256": "aa24d31887a6f0ed882f68dcb21b73dbcb1dca0d52b53a8e405678217113d463",
+      "command": "/home/ubuntu2004/isaacsim-4.5.0/python.sh scenes/w760_300mm_two_layer/two_row_physx.py ../runs/innovation2-thesis-test-20261122/A_03 --resume scenes/w760_300mm_two_layer/validation/lower_two_rows_checkpoint.json --stop-after-upper-a --close-on-finish",
+      "note": "full A from lower_two_rows_checkpoint",
+      "status": "PARTIAL_W760_UPPER_ROW",
+      "control_steps": 21016,
+      "error": null,
+      "complete": true
+    },
+    {
+      "name": "U4_01",
+      "kind": "U4",
+      "checkpoint": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/runs/innovation2-thesis-test-20261122/U4_01.json",
+      "checkpoint_sha256": "b63dbe06ec32a9c2bb5e5497e279d9176dbf933ff77f7bb5d9586d0c88fc266e",
+      "command": "/home/ubuntu2004/isaacsim-4.5.0/python.sh scenes/w760_300mm_two_layer/two_row_physx.py ../runs/innovation2-thesis-test-20261122/U4_01 --resume ../runs/innovation2-thesis-test-20261122/U4_01.json --resume U4_01.json --close-on-finish",
+      "note": "+0.40mm from upper4_after_transfer_checkpoint",
+      "status": "STOPPED",
+      "control_steps": 12969,
+      "error": "upper_B_rear_travel: B wrist envelope exceeded at tick 12969: [{'arm': 'right', 'force_N': 10.078590485759877, 'torque_Nm': 0.3516241747483312, 'wrench_world': [-1.228434668783455, -9.287595363688714, 3.71611447678463, 0.3336582753962605, -0.0734935227691503, -0.08312892179030427]}]",
+      "complete": false
+    },
+    {
+      "name": "U4_02",
+      "kind": "U4",
+      "checkpoint": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/runs/innovation2-thesis-test-20261122/U4_02.json",
+      "checkpoint_sha256": "9a553ee2f1977bb844b42f4a8bc44d1e1e7326002b773adf721c166eac17389b",
+      "command": "/home/ubuntu2004/isaacsim-4.5.0/python.sh scenes/w760_300mm_two_layer/two_row_physx.py ../runs/innovation2-thesis-test-20261122/U4_02 --resume ../runs/innovation2-thesis-test-20261122/U4_02.json --resume U4_02.json --close-on-finish",
+      "note": "0mm from upper4_after_transfer_checkpoint",
+      "status": "STOPPED",
+      "control_steps": 13342,
+      "error": "upper_B_rear_travel: B wrist envelope exceeded at tick 13342: [{'arm': 'right', 'force_N': 9.391524901101459, 'torque_Nm': 0.32720074708145774, 'wrench_world': [-1.6876833650770566, -8.804895754739483, 2.7975481363904313, 0.31448115077896677, -0.0784461403206172, -0.04481225015772909]}]",
+      "complete": false
+    },
+    {
+      "name": "U4_03",
+      "kind": "U4",
+      "checkpoint": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/runs/innovation2-thesis-test-20261122/U4_03.json",
+      "checkpoint_sha256": "b6a873720cc6d6cb178fda9385b92d727aa5669a52911633600e2483f3ccca34",
+      "command": "/home/ubuntu2004/isaacsim-4.5.0/python.sh scenes/w760_300mm_two_layer/two_row_physx.py ../runs/innovation2-thesis-test-20261122/U4_03 --resume ../runs/innovation2-thesis-test-20261122/U4_03.json --resume U4_03.json --close-on-finish",
+      "note": "-0.40mm from upper4_after_transfer_checkpoint",
+      "status": "PARTIAL_W760_UPPER_ROW",
+      "control_steps": 17118,
+      "error": null,
+      "complete": true
+    },
+    {
+      "name": "U5_01",
+      "kind": "U5",
+      "checkpoint": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3-innovation-2/scenes/w760_300mm_two_layer/validation/upper5_landing_checkpoint.json",
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "command": "/home/ubuntu2004/isaacsim-4.5.0/python.sh scenes/w760_300mm_two_layer/two_row_physx.py ../runs/innovation2-thesis-test-20261122/U5_01 --resume scenes/w760_300mm_two_layer/validation/upper5_landing_checkpoint.json --upper5-yaw-deg 0.0 --close-on-finish",
+      "note": "full U5 from upper5 landing checkpoint",
+      "status": "PASS_W760_UPPER_ROW",
+      "control_steps": 8971,
+      "error": null,
+      "complete": true
+    },
+    {
+      "name": "U5_02",
+      "kind": "U5",
+      "checkpoint": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3-innovation-2/scenes/w760_300mm_two_layer/validation/upper5_landing_checkpoint.json",
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "command": "/home/ubuntu2004/isaacsim-4.5.0/python.sh scenes/w760_300mm_two_layer/two_row_physx.py ../runs/innovation2-thesis-test-20261122/U5_02 --resume scenes/w760_300mm_two_layer/validation/upper5_landing_checkpoint.json --upper5-yaw-deg 0.35 --close-on-finish",
+      "note": "full U5 from upper5 landing checkpoint",
+      "status": "PASS_W760_UPPER_ROW",
+      "control_steps": 9167,
+      "error": null,
+      "complete": true
+    },
+    {
+      "name": "U5_03",
+      "kind": "U5",
+      "checkpoint": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3-innovation-2/scenes/w760_300mm_two_layer/validation/upper5_landing_checkpoint.json",
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "command": "/home/ubuntu2004/isaacsim-4.5.0/python.sh scenes/w760_300mm_two_layer/two_row_physx.py ../runs/innovation2-thesis-test-20261122/U5_03 --resume scenes/w760_300mm_two_layer/validation/upper5_landing_checkpoint.json --upper5-yaw-deg 0.50 --close-on-finish",
+      "note": "full U5 from upper5 landing checkpoint",
+      "status": "STOPPED",
+      "control_steps": 4155,
+      "error": "upper_B_rear_travel: B wrist envelope exceeded at tick 4155: [{'arm': 'left', 'force_N': 9.12618073523399, 'torque_Nm': 0.31396276134114615, 'wrench_world': [0.6412679915917686, -8.250431941081624, 3.8478985122656244, 0.3048294647770869, -0.014731645324200989, -0.07371968216639421]}]",
+      "complete": false
+    },
+    {
+      "name": "closed_loop_fusion_u5",
+      "kind": "U5-closed-loop",
+      "checkpoint": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3-innovation-2/scenes/w760_300mm_two_layer/validation/upper5_landing_checkpoint.json",
+      "checkpoint_sha256": "7933fd7ad5f0c3192a519d395c47a65aa814400165db2cdcdb697d8a64d79085",
+      "command": "/home/ubuntu2004/isaacsim-4.5.0/python.sh scenes/w760_300mm_two_layer/two_row_physx.py ../runs/innovation2-thesis-test-20261122/closed_loop_fusion_u5 --resume scenes/w760_300mm_two_layer/validation/upper5_landing_checkpoint.json --upper5-yaw-deg 0.0 --closed-loop-mode fusion --close-on-finish",
+      "note": "U5 closed-loop fusion from upper5 landing checkpoint",
+      "status": "STOPPED",
+      "control_steps": 13056,
+      "error": "upper_B_rear_travel: B wrist envelope exceeded at tick 13056: [{'arm': 'left', 'force_N': 9.017419526398397, 'torque_Nm': 0.2969681819366174, 'wrench_world': [-0.9466554573437315, -8.212125162212285, 3.6025961028558666, 0.2854078997345278, 0.012953704500552183, 0.08102242523880651]}]",
+      "complete": false
+    }
+  ]
+}
