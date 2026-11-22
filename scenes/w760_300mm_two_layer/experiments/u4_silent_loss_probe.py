@@ -35,7 +35,8 @@ def run_u4_silent_loss_probe():
     try:
         record(contact_monitor.phase, "STARTED", cube_id=current_task["cube_id"], source="post_rear_force_confirmed")
         center, orientation = cube.get_world_pose()
-        center = np.asarray(center, dtype=np.float32)
+        center = np.array(center, dtype=np.float32)
+        initial_x = float(center[0])
         center[0] -= .006
         cube.set_world_pose(center, orientation)
         cube.set_linear_velocity(np.zeros(3, dtype=np.float32))
@@ -52,6 +53,31 @@ def run_u4_silent_loss_probe():
         center, _ = cube.get_world_pose()
         info.update({"end_step": tick, "cube_position_m": np.asarray(center).tolist()})
         record(contact_monitor.phase, "COMPLETED", **info)
+        if U4_SIDE_RECOVERY_PROBE:
+            u4_contact_observer.U4_SILENT_LOSS_PROBE_ACTIVE = False
+            recovery = report["u4_side_recovery_probe"] = {
+                "start_step": info["start_step"], "unmask_step": tick,
+                "unmasked_dwell_steps": 90, "reload_observation_steps": 120,
+                "restored_x_m": initial_x + .00015,
+            }
+            record("upper_B_u4_reload", "UNMASKED_DWELL_STARTED", step=tick)
+            for _ in range(recovery["unmasked_dwell_steps"]):
+                step()
+                check_current_collision(contact_monitor.phase)
+            recovery["reload_command_step"] = tick
+            record(contact_monitor.phase, "RELOAD_COMMANDED", step=tick)
+            center, orientation = cube.get_world_pose()
+            center = np.array(center, dtype=np.float32)
+            center[0] = recovery["restored_x_m"]
+            cube.set_world_pose(center, orientation)
+            cube.set_linear_velocity(np.zeros(3, dtype=np.float32))
+            cube.set_angular_velocity(np.zeros(3, dtype=np.float32))
+            for _ in range(recovery["reload_observation_steps"]):
+                step()
+                check_current_collision(contact_monitor.phase)
+            recovery["end_step"] = tick
+            record(contact_monitor.phase, "COMPLETED", **recovery)
+            raise RuntimeError("U4 side-recovery experiment completed by request")
         if STOP_AFTER_U4_SILENT_LOSS:
             raise RuntimeError("U4 silent-loss probe completed by request")
     finally:
