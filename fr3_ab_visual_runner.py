@@ -774,12 +774,22 @@ def main():
                     seen_vision_frames.add(frame_id)
                     report["vision"]["unique_frames"] += 1
                     observation = vision_estimator.estimate(rgba.astype(np.uint8, copy=False))
-                    if (contact_monitor.phase in ("B2_push", "B2_push_seat", "B2_push_unload")
-                            and current_task.get("contact_target") in ("Cube_1", "Cube_2")
+                    try:
+                        task = current_task or {}
+                    except NameError:
+                        task = {}
+                    task_cube_id = task.get("cube_id")
+                    task_contact_target = task.get("contact_target")
+                    task_goal = task.get("goal_center_m") or [control_center[0]]
+                    task_goal_x = task_goal[0]
+                    neighbor_name = ("Cube_8" if task_cube_id == 10 else task_contact_target)
+                    neighbor_phase = (contact_monitor.phase in ("B2_push", "B2_push_seat", "B2_push_unload")
+                                      or (task_cube_id == 10
+                                          and contact_monitor.phase.startswith("upper_B")))
+                    if (neighbor_phase and neighbor_name is not None
                             and control_center is not None
-                            and abs(control_center[0] - current_task["goal_center_m"][0]) < .025
+                            and abs(control_center[0] - task_goal_x) < .025
                             and 0 <= receive_time - capture_time <= .20):
-                        neighbor_name = current_task["contact_target"]
                         neighbor_index = int(neighbor_name.removeprefix("Cube_")) - 1
                         active_id = vision_estimator.marker_id
                         try:
@@ -1032,6 +1042,18 @@ def main():
                         "cube_rotation_world": quat_to_rot_matrix(reference_orientation).tolist(),
                         "attachments": {side: grippers.is_closed(side) for side in robots},
                         "cube_contacts": reference_contacts,
+                    },
+                    auxiliary={
+                        "cube_id": current_task["cube_id"],
+                        "neighbors": {
+                            path: {
+                                "position_m": np.asarray(value[0], dtype=float).tolist(),
+                                "rotation_world": np.asarray(value[1], dtype=float).tolist(),
+                                "capture_time_s": float(value[2]),
+                                "received_time_s": float(world.current_time),
+                            }
+                            for path, value in live_neighbors.items()
+                        },
                     })
                 if status_label is not None and tick % 12 == 0:
                     status_label.text = (f"{contact_monitor.phase}: executing\n"
@@ -2529,6 +2551,12 @@ def main():
                 "cube_id": current_task["cube_id"], "source": "rear_RGB_marker_support_plane",
                 "neighbors": rows,
             })
+            for row in rows:
+                live_neighbors["/World/" + row["name"]] = (
+                    np.asarray(row["position_m"], dtype=float),
+                    np.asarray(row["rotation_world"], dtype=float),
+                    float(row["capture_time_s"]),
+                )
             return observed
 
         sequence = CONFIG.get("cube_sequence", [current_task])

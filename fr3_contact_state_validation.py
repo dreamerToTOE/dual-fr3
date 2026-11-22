@@ -6,6 +6,7 @@ import argparse
 import gzip
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -133,19 +134,37 @@ class ContactStateExperiment:
         (self.directory / "metadata.json").write_text(json.dumps(metadata, indent=2, allow_nan=False) + "\n")
         self.models = {mode: ContactStateEstimator(config, mode=mode) for mode in MODES}
         self.predictions = {mode: [] for mode in MODES}
+        self.u4_model = None
+        self.u4_predictions = []
+        self.u4_stream = None
         self.references = []
         self.inputs = []
         self.streams = {name: gzip.open(self.directory / f"{name}.jsonl.gz", "wt")
                         for name in ("sensor_inputs", "reference", "predictions")}
 
-    def append(self, *, physics_step, sensors, truth):
+    def append(self, *, physics_step, sensors, truth, auxiliary=None):
         # The recognizer receives only the explicitly constructed sensor boundary.
         outputs = {mode: model.update(**sensors) for mode, model in self.models.items()}
+        u4_output = None
+        if auxiliary and auxiliary.get("cube_id") == 10:
+            if self.u4_model is None:
+                experiments = Path(__file__).parent / "scenes" / "w760_300mm_two_layer" / "experiments"
+                sys.path.insert(0, str(experiments))
+                from u4_contact_observer import U4ContactObserver
+                self.u4_model = U4ContactObserver(self.config, handover=True)
+                self.u4_stream = gzip.open(self.directory / "u4_handover.jsonl.gz", "wt")
+            u4_output = self.u4_model.update(sensors, auxiliary.get("neighbors", {}))
+            self.u4_predictions.append(u4_output)
         reference = reference_state(truth, self.config)
         common = {"physics_step": physics_step, "time_s": sensors["time_s"]}
+        prediction_row = dict(outputs)
+        if u4_output is not None:
+            prediction_row["u4_handover"] = u4_output
         for name, row in (("sensor_inputs", sensors), ("reference", {**truth, **reference}),
-                          ("predictions", outputs)):
+                          ("predictions", prediction_row)):
             self.streams[name].write(json.dumps({**common, **row}, allow_nan=False) + "\n")
+        if self.u4_stream is not None and u4_output is not None:
+            self.u4_stream.write(json.dumps({**common, **u4_output}, allow_nan=False) + "\n")
         self.inputs.append(sensors)
         self.references.append(reference)
         for mode in MODES:
@@ -155,6 +174,8 @@ class ContactStateExperiment:
     def close(self, task_status="UNVERIFIED"):
         for stream in self.streams.values():
             stream.close()
+        if self.u4_stream is not None:
+            self.u4_stream.close()
         if not self.references:
             return {"status": "INCOMPLETE", "samples": 0}
         metrics = {mode: recognition_metrics(self.predictions[mode], self.references) for mode in MODES}
@@ -165,10 +186,22 @@ class ContactStateExperiment:
         for sensors in self.inputs:
             masked.append(model.update(**{**sensors, "camera": None}))
         metrics["fusion_camera_fully_unavailable"] = recognition_metrics(masked, self.references)
+        u4_summary = None
+        if self.u4_predictions:
+            from collections import Counter
+            u4_summary = {
+                "samples": len(self.u4_predictions),
+                "state_counts": dict(Counter(row["state"] for row in self.u4_predictions)),
+                "handover_active_samples": sum(row.get("handover_active", False) for row in self.u4_predictions),
+                "supported_view_samples": sum(row.get("supported_view_used", False) for row in self.u4_predictions),
+                "unknown_samples": sum(row["state"] == "UNKNOWN" for row in self.u4_predictions),
+                "stream": "u4_handover.jsonl.gz",
+            }
         summary = {
             "status": "COMPLETED_BASELINE_EVALUATION", "samples": len(self.references),
             "physical_task_status": task_status,
             "metrics": metrics,
+            "u4_handover": u4_summary,
             "input_boundary": ["causal RGB/ArUco observation", "wrist TCP six-axis feedback", "encoder FK/tool geometry"],
             "excluded_from_recognizer": ["task phase", "skill ID", "Cube truth", "PhysX contact report", "attachment state"],
             "reference_definition": "independent physical contacts/attachments plus 50 um wall adjacency; no wrist force or task phase",
