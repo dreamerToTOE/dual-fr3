@@ -6,6 +6,38 @@ from textwrap import indent
 PROBE = r'''
 U4_SILENT_LOSS_PROBE_ACTIVE = False
 
+def run_u4_weak_reload(recovery):
+    # Move only the side neighbor. Its current contact impulse feeds the fixture, not the observer.
+    neighbor = upper_bodies["8"]
+    origin, _ = neighbor.get_world_pose()
+    origin_x = float(origin[0])
+    active_center, _ = cube.get_world_pose()
+    target_x = float(active_center[0]) + .1502
+    recovery["weak_fixture"] = {"target_N": U4_WEAK_RELOAD_N, "initial_neighbor_x_m": origin_x,
+                                "near_step_limit_m": 4.e-6, "target_neighbor_x_m": target_x,
+                                "fixture": "Cube_8_external_x_force"}
+    exact_pair = {"/World/Cube_10", "/World/Cube_8"}
+    position, rotation = neighbor.get_world_pose()
+    position = np.array(position, dtype=np.float32)
+    position[0] = target_x
+    neighbor.set_world_pose(position, rotation)
+    neighbor.set_linear_velocity(np.zeros(3, dtype=np.float32))
+    neighbor.set_angular_velocity(np.zeros(3, dtype=np.float32))
+    for _ in range(recovery["reload_observation_steps"]):
+        pairs = contact_monitor.cube_contact_snapshot()["pairs"]
+        pair = next((p for p in pairs if {p["collider0"], p["collider1"]} == exact_pair), None)
+        gap = None if pair is None or not pair["current_separation_observed"] else pair["separation_m"]
+        components = (None if pair is None or not pair["current_step_observed"] else
+                      pair["normal_axis_impulse_abs_Ns"])
+        load = 0. if components is None else components[0] * 120.
+        neighbor._rigid_prim_view.apply_forces(
+            np.asarray([[-U4_WEAK_RELOAD_N, 0., 0.]], dtype=np.float32),
+            indices=np.asarray([0], dtype=np.int32),
+        )
+        step()
+        check_current_collision(contact_monitor.phase)
+    recovery["weak_fixture"]["final_neighbor_x_m"] = float(neighbor.get_world_pose()[0][0])
+
 def run_u4_silent_loss_probe():
     """Separate the active box from Cube 8 while preserving rear support."""
     import numpy as np
@@ -66,15 +98,20 @@ def run_u4_silent_loss_probe():
                 check_current_collision(contact_monitor.phase)
             recovery["reload_command_step"] = tick
             record(contact_monitor.phase, "RELOAD_COMMANDED", step=tick)
-            center, orientation = cube.get_world_pose()
-            center = np.array(center, dtype=np.float32)
-            center[0] = recovery["restored_x_m"]
-            cube.set_world_pose(center, orientation)
-            cube.set_linear_velocity(np.zeros(3, dtype=np.float32))
-            cube.set_angular_velocity(np.zeros(3, dtype=np.float32))
-            for _ in range(recovery["reload_observation_steps"]):
-                step()
-                check_current_collision(contact_monitor.phase)
+            if U4_WEAK_RELOAD_N is not None:
+                recovery.pop("restored_x_m")
+                recovery["reload_observation_steps"] = 420
+                run_u4_weak_reload(recovery)
+            else:
+                center, orientation = cube.get_world_pose()
+                center = np.array(center, dtype=np.float32)
+                center[0] = recovery["restored_x_m"]
+                cube.set_world_pose(center, orientation)
+                cube.set_linear_velocity(np.zeros(3, dtype=np.float32))
+                cube.set_angular_velocity(np.zeros(3, dtype=np.float32))
+                for _ in range(recovery["reload_observation_steps"]):
+                    step()
+                    check_current_collision(contact_monitor.phase)
             recovery["end_step"] = tick
             record(contact_monitor.phase, "COMPLETED", **recovery)
             raise RuntimeError("U4 side-recovery experiment completed by request")

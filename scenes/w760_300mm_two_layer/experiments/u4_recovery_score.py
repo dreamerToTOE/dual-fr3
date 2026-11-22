@@ -4,6 +4,7 @@ import argparse
 from collections import Counter
 import gzip
 import hashlib
+from itertools import groupby
 import json
 from pathlib import Path
 from statistics import median
@@ -74,6 +75,78 @@ def score(run):
     return summarize(rows, report, probe, hz), rows, streams + [report_path, run / "runner_snapshot.py"]
 
 
+def expected_s6(row):
+    return (row["state"] == "S6" and row["side_loaded"] is True and row["rear_loaded"] is True
+            and set(row["boundaries"]) == {SIDE, BACK})
+
+
+def contact_kind(row):
+    if row["side_masked"] or row["truth_rear"] is not True or row["truth_side"] is None:
+        return "unknown"
+    return "bearing" if row["truth_side"] else "off"
+
+
+def weak_reload_summary(rows, command_step, hz):
+    """Separate weak onsets after release from weak force during an existing contact."""
+    previous_off = 0
+    windows = []
+    s6_by_step = {row["step"]: expected_s6(row) for row in rows}
+    for kind, segment in groupby(rows, key=contact_kind):
+        segment = list(segment)
+        if kind != "bearing":
+            previous_off = len(segment) if kind == "off" else 0
+            continue
+
+        strong_before = False
+        counted_onset = False
+        for weak, block in groupby(segment, key=lambda row: .1 <= row["truth_side_N"] <= 1.):
+            block = list(block)
+            if not weak:
+                strong_before |= any(row["truth_side_N"] > 1. for row in block)
+                continue
+            start = block[0]["step"]
+            if start <= command_step or len(block) < 3:
+                continue
+            if strong_before:
+                kind_of_window = "weak_settling_after_strong_contact"
+            elif segment[0]["step"] <= command_step or previous_off < 3:
+                kind_of_window = "without_verified_off_precondition"
+            elif counted_onset:
+                kind_of_window = "same_contact_reenters_weak_range"
+            else:
+                kind_of_window = "weak_reload_onset"
+                counted_onset = True
+            forces = [row["truth_side_N"] for row in block]
+            window = {"kind": kind_of_window, "start_step": start, "end_step": block[-1]["step"],
+                      "steps": len(block), "side_force_N": {"min": min(forces), "median": median(forces),
+                                                           "max": max(forces)}}
+            if kind_of_window == "weak_reload_onset":
+                transition = next((row["step"] for row in block if s6_by_step[row["step"]]
+                                   and not s6_by_step.get(row["step"] - 1, False)), None)
+                recovery = next((row["step"] for row in block if s6_by_step[row["step"]]
+                                 and row["side_event"] == "side_load_recovered"), None)
+                window.update(s6_transition_step=transition,
+                              s6_delay_s=None if transition is None else (transition - start) / hz,
+                              recovered_event_step=recovery,
+                              recovered_event_delay_s=None if recovery is None else (recovery - start) / hz,
+                              correct_s6_ticks=sum(s6_by_step[row["step"]] for row in block))
+            windows.append(window)
+        previous_off = 0
+
+    onsets = [window for window in windows if window["kind"] == "weak_reload_onset"]
+    transition_hits = sum(window["s6_transition_step"] is not None for window in onsets)
+    event_hits = sum(window["recovered_event_step"] is not None for window in onsets)
+    strong_steps = [row["step"] for row in rows if row["step"] > command_step
+                    and contact_kind(row) == "bearing" and row["truth_side_N"] > 1.]
+    return {"side_force_range_N": [.1, 1.], "minimum_onset_ticks": 3, "minimum_prior_off_ticks": 3,
+            "independent_positive_trials": int(bool(onsets)), "positive_contact_episodes": len(onsets),
+            "s6_transition_hits": transition_hits, "s6_transition_misses": len(onsets) - transition_hits,
+            "recovered_event_hits": event_hits, "recovered_event_misses": len(onsets) - event_hits,
+            "independent_trials_with_recovered_event": int(bool(event_hits)),
+            "strong_contact_ticks": len(strong_steps), "first_strong_contact_step": next(iter(strong_steps), None),
+            "weak_windows": windows}
+
+
 def summarize(rows, report, probe, hz):
     loss = next((row for row in rows if row["side_event"] == "side_load_lost_silent"
                  and row["state"] == "S5" and row["side_loaded"] is False), None)
@@ -96,15 +169,12 @@ def summarize(rows, report, probe, hz):
     recoveries = [row for row in unmasked if row["side_event"] == "side_load_recovered"]
     s6 = next((row for row in reload_window if onset is not None and row["step"] >= onset
                and row["truth_side"] is True and row["truth_rear"] is True
-               and row["state"] == "S6" and row["side_loaded"] is True and row["rear_loaded"] is True
-               and set(row["boundaries"]) == {SIDE, BACK}), None)
+               and expected_s6(row)), None)
     recovery = next((row for row in recoveries if onset is not None and row["step"] >= onset
                      and row["truth_side"] is True and row["truth_rear"] is True
-                     and row["state"] == "S6" and row["side_loaded"] is True and row["rear_loaded"] is True
-                     and set(row["boundaries"]) == {SIDE, BACK}), None)
+                     and expected_s6(row)), None)
     s6_frames = [{**row, "both": (row["truth_side"] is True and row["truth_rear"] is True
-                                  and row["state"] == "S6" and row["side_loaded"] is True
-                                  and row["rear_loaded"] is True and set(row["boundaries"]) == {SIDE, BACK})}
+                                  and expected_s6(row))}
                  for row in reload_window]
     raw_evidence = []
     if recovery is not None:
@@ -115,10 +185,14 @@ def summarize(rows, report, probe, hz):
                 break
             raw_evidence.append(row)
     side_forces = [row["truth_side_N"] for row in joint_truth if row["both"]]
+    weak_reload = weak_reload_summary([row for row in rows if row["step"] > probe["unmask_step"]],
+                                      probe["reload_command_step"], hz)
+    weak_reload.update(known_off_ticks=len(negative), false_recovery_event_steps=false_events,
+                       false_s6_ticks=sum(row["false_s6"] for row in false_frames))
     return {"scene": report["scene_id"], "frequency_hz": hz, "status": report["status"],
             "error": report.get("error"), "loss_injection": report.get("u4_silent_loss_probe"), "probe": probe,
             "wrist_envelope": report.get("upper_b_wrist_watch"), "pre_perturbation_observation": rows[0],
-            "confirmation_of_side_loss": loss,
+            "confirmation_of_side_loss": loss, "weak_reload": weak_reload,
             "truth": {"side_pair": [ACTIVE, SIDE], "rear_pair": [ACTIVE, BACK],
                       "minimum_axis_impulse_Ns": MIN_IMPULSE_NS,
                       "both_loaded_after_command": truth_runs, "sustained_reload_start_step": onset,

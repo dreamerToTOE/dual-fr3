@@ -262,6 +262,8 @@ def main():
                         help="After U4 rear confirmation, apply a bounded physical side-loss perturbation")
     parser.add_argument("--u4-side-recovery-probe", action="store_true",
                         help="Run the U4 post-rear loss, unmasked dwell and reload experiment")
+    parser.add_argument("--u4-weak-reload-N", dest="u4_weak_reload_N", type=float,
+                        help="Reload from the unmasked U4 dwell using this side-force target (0.1–1 N)")
     parser.add_argument("--stop-after-u4-silent-loss", action="store_true",
                         help="Stop cleanly after the U4 silent-loss probe has been sampled")
     parser.add_argument("--closed-loop-mode", choices=("vision", "tactile", "fusion"),
@@ -282,7 +284,11 @@ def main():
     release = checkpoint.get("front_landed") or checkpoint.get("landed")
     if args.u4_side_probe and (front != 6 or upper != 4 or not release or release["cube_id"] != 10):
         parser.error("--u4-side-probe requires the upper-4 landing checkpoint")
-    silent_loss_probe = args.u4_silent_loss_probe or args.u4_side_recovery_probe
+    weak_reload = args.u4_weak_reload_N
+    if weak_reload is not None and not .1 <= weak_reload <= 1.:
+        parser.error("--u4-weak-reload-N must be between 0.1 and 1 N")
+    side_recovery_probe = args.u4_side_recovery_probe or weak_reload is not None
+    silent_loss_probe = args.u4_silent_loss_probe or side_recovery_probe
     if silent_loss_probe and (front != 6 or upper != 4 or not release or release["cube_id"] != 10):
         parser.error("The U4 loss and reload experiments require the upper-4 landing checkpoint")
     if args.stop_after_u4_silent_loss and not args.u4_silent_loss_probe:
@@ -393,7 +399,7 @@ def main():
                       "FRONT_IDS": FRONT_IDS, "START_FRONT": front, "START_SLOT": upper, "FIRST_ID": first_id,
                       "STOP_AFTER_FRONT": args.stop_after_front, "U4_SIDE_PROBE": args.u4_side_probe,
                       "U4_SILENT_LOSS_PROBE": silent_loss_probe,
-                      "U4_SIDE_RECOVERY_PROBE": args.u4_side_recovery_probe,
+                      "U4_SIDE_RECOVERY_PROBE": side_recovery_probe, "U4_WEAK_RELOAD_N": weak_reload,
                       "STOP_AFTER_U4_SILENT_LOSS": args.stop_after_u4_silent_loss,
                       "INITIAL_BOXES": saved, "RUNTIME_GUIDES": row_guide_paths(), "CHECKPOINT": checkpoint,
                       "RELEASE_CHECKPOINT": release, "UPPER5_EXPERIMENT": experiment,
