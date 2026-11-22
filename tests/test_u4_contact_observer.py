@@ -55,7 +55,7 @@ def test_handover_recovers_side_bearing_with_biased_optics_and_updates_on_loss()
     assert result["state"] == "S6" and result["rear_loaded"] is True
     assert untreated.update(front_sample(90), neighbor)["side_loaded"] is None
 
-    for tick, shear, expected in ((90, .5, None), (91, .5, None), (92, .5, False),
+    for tick, shear, expected in ((90, .5, True), (91, .5, True), (92, .5, False),
                                  (93, .0, None), (94, -.5, None), (95, -.5, None), (96, -.5, True)):
         row = front_sample(tick, lateral_force=shear)
         row["tcp_command_positions_m"] = {"right": [0., row["right_command_y_m"], .075]}
@@ -73,3 +73,29 @@ def test_projected_marker_pose_uses_its_own_exposure_and_delivery():
     assert observer.supported_pose(packet, .19) is None
     assert observer.supported_pose(packet, .20) == ([.002, .920, .075], 0.)
     assert observer.supported_pose(None, .36) is None
+
+
+def test_handover_bridges_only_a_bounded_missing_side_sample():
+    observer = U4ContactObserver(CONFIG, handover=True)
+    neighbor = {SIDE: {"position_m": [.142, .920, .075], "rotation_world": np.eye(3),
+                       "capture_time_s": 0., "received_time_s": 0.}}
+    for tick in range(90):
+        row = front_sample(tick, lateral_force=-.5)
+        row["tcp_command_positions_m"] = {"right": [0., row["right_command_y_m"], .075]}
+        if tick < 6:
+            row["cup_normals_world"]["left"] = [1., 0., 0.]
+            row["tcp_positions_m"]["left"] = [-.075, .920, .075]
+            row["left_wrench_world"] = [-4., 0., 0., 0., 0., 0.]
+        result = observer.update(row, neighbor)
+    assert result["side_loaded"] is True
+
+    row = front_sample(90, lateral_force=0.)
+    row["tcp_command_positions_m"] = {"right": [0., row["right_command_y_m"], .075]}
+    bridged = observer.update(row, neighbor)
+    assert bridged["side_loaded"] is True and bridged["side_hold_used"]
+
+    for tick in range(91, 116):
+        row = front_sample(tick, lateral_force=0.)
+        row["tcp_command_positions_m"] = {"right": [0., row["right_command_y_m"], .075]}
+        result = observer.update(row, neighbor)
+    assert result["side_loaded"] is None and not result["side_hold_used"]

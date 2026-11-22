@@ -1,0 +1,42 @@
+{
+  "title": "U4 S6 online hysteresis validation",
+  "scene": "W760_H300_rear5_front5_upper5_side_v1",
+  "method": "After rear load is independently confirmed by the command-response witness, retain a previously confirmed side load for at most 0.20 s while the marker remains in the side corridor. A continuous three-sample explicit side-loss clears the memory. A reload after a confirmed bearing is accepted immediately.",
+  "offline_replay": {
+    "source": "../runs/innovation2-u4-fix-20261122/U4_minus040_repeat/paired_commands.jsonl.gz",
+    "true_s6_samples": 195,
+    "s6_true_positive_samples": 155,
+    "s6_precision": 1.0,
+    "s6_recall": 0.7948717949,
+    "baseline_recall": 0.7025641026,
+    "s6_false_positive_samples": 0,
+    "note": "The remaining missed samples occur before rear response confirmation or after rear load leaves the valid window."
+  },
+  "online_main_runner": {
+    "run_dir": "../runs/innovation2-u4-main-validation-20261122-hysteresis-minus4",
+    "checkpoint": "../runs/innovation2-thesis-test-20261122/U4_03.json",
+    "single_isaac_instance": true,
+    "status": "PARTIAL_W760_UPPER_ROW",
+    "active_phase": "upper_row_complete",
+    "control_steps": 16702,
+    "error": null,
+    "u4_samples": 16702,
+    "rear_loaded_samples": 160,
+    "s6_samples": 159,
+    "s6_contiguous_runs": [{"start_step": 15437, "end_step": 15595, "samples": 159}],
+    "s6_entry_state": "S5",
+    "s6_hold_samples": 16,
+    "handover_active_samples": 5687,
+    "supported_view_samples": 13302,
+    "unexpected_physx_contacts": 0,
+    "state_counts": {"S0": 3116, "S1": 6791, "S5": 1776, "S6": 159, "UNKNOWN": 4860},
+    "previous_online_s6_samples": 137,
+    "previous_online_s6_contiguous": false,
+    "improvement": "S6 changed from 137 fragmented samples to 159 contiguous samples in the confirmed rear-load window."
+  },
+  "limitations": [
+    "The online stream does not expose an independent U4 S6 truth label, so online precision and recall are not claimed from this run.",
+    "The short memory does not cover a sustained silent loss. Such a period remains UNKNOWN until new evidence arrives.",
+    "The observer remains logging-only. It does not change the motion controller or stop policy."
+  ]
+}

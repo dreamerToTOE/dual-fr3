@@ -13,6 +13,7 @@ from seven_observer import SevenObserver
 
 SIDE = "/World/Cube_8"
 REAR = "/World/Environment/wall_back"
+SIDE_HOLD_S = .20
 
 
 class U4ContactObserver:
@@ -25,6 +26,8 @@ class U4ContactObserver:
         self.supported_view = None
         self.side_streak = deque(maxlen=3)
         self.confirmed_side = None
+        self.last_side_true_s = None
+        self.side_false_streak = 0
         self.window = deque()
         self.direct_side = False
         self.wall = False
@@ -129,10 +132,34 @@ class U4ContactObserver:
                 self.lateral_seen = True
             exchange = self.lateral_seen and forward and abs(left_compression) < FRONT_LOAD_N and visible
             bounds = set(result["boundaries"])
+            raw_side = side
+            side_hold_used = False
+            if raw_side is False:
+                self.side_false_streak += 1
+            else:
+                self.side_false_streak = 0
             if exchange and result["state"] in ("S1", "S5", "S6", "UNKNOWN"):
-                self.side_streak.append(side)
-                if len(self.side_streak) < self.side_streak.maxlen or any(value is not side for value in self.side_streak):
+                self.side_streak.append(raw_side)
+                confirmed_sample = (len(self.side_streak) == self.side_streak.maxlen
+                                     and all(value is raw_side for value in self.side_streak))
+                if raw_side is True and self.confirmed_side is True:
+                    # A reload after a confirmed bearing does not need to wait
+                    # for a second three-sample acquisition.
+                    side = True
+                elif not confirmed_sample:
                     side = None
+                # The right wrist side reaction is intermittent while the rear
+                # response is being established. Once the side boundary has
+                # been confirmed, bridge only this short, rear-contact window.
+                # Three consecutive explicit side=False samples or an expired
+                # window clears the evidence, so a sustained loss is not hidden.
+                if (raw_side in (None, False) and side is None and rear is True and in_corridor
+                        and self.confirmed_side is True
+                        and (raw_side is None or self.side_false_streak < 3)
+                        and self.last_side_true_s is not None
+                        and now - self.last_side_true_s <= SIDE_HOLD_S + 1.e-7):
+                    side = True
+                    side_hold_used = True
                 if rear is True:
                     bounds.add(REAR)
                 if side is True and in_corridor:
@@ -151,11 +178,20 @@ class U4ContactObserver:
                 if self.confirmed_side is not None and side_loaded != self.confirmed_side:
                     side_event = "side_load_recovered" if side_loaded else "side_load_lost"
                 self.confirmed_side = side_loaded
+                if raw_side is True:
+                    self.last_side_true_s = now
+                elif raw_side is False and side_loaded is False:
+                    self.last_side_true_s = None
+            elif self.last_side_true_s is not None and now - self.last_side_true_s > SIDE_HOLD_S:
+                self.last_side_true_s = None
             return {**result, "side_loaded": side_loaded,
                     "rear_loaded": True if REAR in bounds else rear, "side_gap_m": side_gap,
                     "rear_gap_m": rear_gap, "handover_active": bool(exchange),
                     "supported_view_used": supported is not None,
                     "side_event": side_event,
+                    "side_raw": raw_side,
+                    "side_false_streak": self.side_false_streak,
+                    "side_hold_used": bool(locals().get("side_hold_used", False)),
                     "wall_response": witnessed}
 
         boundaries = [path for path, label in ((SIDE, side), (REAR, rear)) if label is True]
