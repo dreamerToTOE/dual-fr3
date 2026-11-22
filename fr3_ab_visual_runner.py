@@ -1045,6 +1045,7 @@ def main():
                     },
                     auxiliary={
                         "cube_id": None if current_task is None else current_task.get("cube_id"),
+                        "right_command_y_m": float(tcp_fk("right", applied_targets["right"])[0][1]),
                         "neighbors": {
                             path: {
                                 "position_m": np.asarray(value[0], dtype=float).tolist(),

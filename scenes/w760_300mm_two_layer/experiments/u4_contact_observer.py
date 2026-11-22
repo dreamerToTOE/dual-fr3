@@ -53,7 +53,7 @@ class U4ContactObserver:
         lateral = n_left[0] > .95 and left_compression >= FRONT_LOAD_N
         y_tcp = sensor["tcp_positions_m"]["right"][1]
         command = sensor.get("right_command_y_m")
-        if not self.handover and forward and command is not None and math.isfinite(command):
+        if forward and command is not None and math.isfinite(command):
             if self.window and now - self.window[-1][0] > .013:
                 self.window.clear()
             self.window.append((now, (command, y_tcp, -right[1])))

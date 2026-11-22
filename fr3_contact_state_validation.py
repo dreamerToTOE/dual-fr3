@@ -153,7 +153,10 @@ class ContactStateExperiment:
                 from u4_contact_observer import U4ContactObserver
                 self.u4_model = U4ContactObserver(self.config, handover=True)
                 self.u4_stream = gzip.open(self.directory / "u4_handover.jsonl.gz", "wt")
-            u4_output = self.u4_model.update(sensors, auxiliary.get("neighbors", {}))
+            u4_sensors = dict(sensors)
+            if auxiliary.get("right_command_y_m") is not None:
+                u4_sensors["right_command_y_m"] = auxiliary["right_command_y_m"]
+            u4_output = self.u4_model.update(u4_sensors, auxiliary.get("neighbors", {}))
             self.u4_predictions.append(u4_output)
         reference = reference_state(truth, self.config)
         common = {"physics_step": physics_step, "time_s": sensors["time_s"]}

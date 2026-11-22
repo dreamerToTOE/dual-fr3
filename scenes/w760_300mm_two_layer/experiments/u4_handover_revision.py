@@ -31,7 +31,11 @@ def evaluate(path):
                     or sensor["time_s"] != physical["time_s"]):
                 raise ValueError(f"Unpaired sample at step {tick}")
             old = baseline.update(sensor, header["optical_neighbors"])
-            new = handover.update(sensor, header["optical_neighbors"])
+            u4_sensor = dict(sensor)
+            right_command = sensor.get("tcp_command_positions_m", {}).get("right")
+            if right_command is not None:
+                u4_sensor["right_command_y_m"] = right_command[1]
+            new = handover.update(u4_sensor, header["optical_neighbors"])
             truth = reference.update(physical)
             window = next((w for w, a, b in zip(WINDOWS, points, points[1:]) if a < tick <= b), "other")
             side, side_n = (load_at(physical["cube_contacts"], truth, SIDE, 0, hz)

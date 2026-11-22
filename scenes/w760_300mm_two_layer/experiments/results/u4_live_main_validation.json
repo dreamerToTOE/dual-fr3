@@ -1,0 +1,25 @@
+{
+  "run_dir": "../runs/innovation2-u4-main-validation-20261122-minus4",
+  "checkpoint": "../runs/innovation2-thesis-test-20261122/U4_03.json",
+  "status": "PARTIAL_W760_UPPER_ROW",
+  "active_phase": "upper_row_complete",
+  "control_steps": 16760,
+  "error": null,
+  "u4_handover": {
+    "samples": 16760,
+    "state_counts": {
+      "UNKNOWN": 4935,
+      "S0": 3037,
+      "S1": 7505,
+      "S5": 1146,
+      "S6": 137
+    },
+    "handover_active_samples": 5784,
+    "supported_view_samples": 13354,
+    "unknown_samples": 4935,
+    "stream": "u4_handover.jsonl.gz"
+  },
+  "u4_stream_sha256": "444de5cdf0519ae43a36e079ec567cc717432e939d266c6f6ba1e2bcfca57aef",
+  "single_isaac_instance": true,
+  "tests": "143 passed"
+}
