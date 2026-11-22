@@ -258,6 +258,8 @@ def main():
     parser.add_argument("--upper5-active-probe", action="store_true", help="Record the active rear-wall probing experiment")
     parser.add_argument("--u4-side-probe", choices=("early", "late", "weak", "near", "sham", "detached"),
                         help="Single U4 side pulse. Detached mode waits for wrist and encoder evidence of left-cup release")
+    parser.add_argument("--closed-loop-mode", choices=("vision", "tactile", "fusion"),
+                        help="Enable the optional closed-loop supervisor with one selected observer stream")
     parser.add_argument("--stop-after-front", type=int, choices=range(1, 6))
     parser.add_argument("--stop-after-upper-a", action="store_true",
                         help="Collect the next upper supply, lift and landing, ending after withdrawal")
@@ -340,6 +342,10 @@ def main():
         from experiments.upper5_active_probe import inject_terminal_resume
 
         source = inject_terminal_resume(source)
+    if args.closed_loop_mode is not None:
+        from experiments.closed_loop_inject import inject
+
+        source = inject(source, args.closed_loop_mode)
     runner = compile(source, str(snapshot), "exec")
     if args.check_only:
         print(f"Compiled. Measured starting boxes {len(saved)}, next supply Cube_{first_id}")
@@ -361,6 +367,8 @@ def main():
                       "STOP_AFTER_FRONT": args.stop_after_front, "U4_SIDE_PROBE": args.u4_side_probe,
                       "INITIAL_BOXES": saved, "RUNTIME_GUIDES": row_guide_paths(), "CHECKPOINT": checkpoint,
                       "RELEASE_CHECKPOINT": release, "UPPER5_EXPERIMENT": experiment,
+                      "CLOSED_LOOP_MODE": args.closed_loop_mode,
+                      "CLOSED_LOOP_OBSERVER": args.closed_loop_mode,
                       "SUPPORT_TOP_BEVEL_M": None, "UPPER_REST_OFFSET_M": None, "CUBE_CONTACT_OFFSET_M": None})
 
 
