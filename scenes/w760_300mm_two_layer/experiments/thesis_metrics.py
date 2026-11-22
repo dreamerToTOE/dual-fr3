@@ -174,7 +174,7 @@ def summarize(runs, seed=20261122):
             }
             result["modalities"][modality]["events"][state] = {
                 metric: mean_ci([run["events"][modality][state][metric] for run in runs], rng)
-                for metric in ("detection_rate", "median_delay_ms")
+                for metric in ("detection_rate", "median_delay_ms", "mean_delay_ms")
             }
     return result
 
