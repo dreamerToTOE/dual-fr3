@@ -24,6 +24,7 @@ class U4ContactObserver:
         self.lateral_seen = False
         self.supported_view = None
         self.side_streak = deque(maxlen=3)
+        self.confirmed_side = None
         self.window = deque()
         self.direct_side = False
         self.wall = False
@@ -144,10 +145,17 @@ class U4ContactObserver:
             else:
                 self.side_streak.clear()
                 side = None
-            return {**result, "side_loaded": (side if side is not None else True if SIDE in bounds else None),
+            side_loaded = side if side is not None else True if SIDE in bounds else None
+            side_event = None
+            if side_loaded is not None:
+                if self.confirmed_side is not None and side_loaded != self.confirmed_side:
+                    side_event = "side_load_recovered" if side_loaded else "side_load_lost"
+                self.confirmed_side = side_loaded
+            return {**result, "side_loaded": side_loaded,
                     "rear_loaded": True if REAR in bounds else rear, "side_gap_m": side_gap,
                     "rear_gap_m": rear_gap, "handover_active": bool(exchange),
                     "supported_view_used": supported is not None,
+                    "side_event": side_event,
                     "wall_response": witnessed}
 
         boundaries = [path for path, label in ((SIDE, side), (REAR, rear)) if label is True]
