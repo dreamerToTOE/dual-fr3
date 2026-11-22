@@ -8,7 +8,8 @@ from pathlib import Path
 
 
 CAMERA = ("frame_id", "status", "capture_time_s", "received_time_s", "position_m",
-          "cube_rotation_world", "reprojection_error_px")
+          "cube_rotation_world", "reprojection_error_px", "supported_position_m",
+          "supported_rotation_world", "supported_capture_time_s")
 SENSOR = ("time_s", "physics_step", "tcp_positions_m", "cup_normals_world",
           "left_wrench_world", "right_wrench_world")
 REFERENCE = ("time_s", "physics_step", "active_cube_id", "cube_position_m",

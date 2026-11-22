@@ -60,3 +60,5 @@
 低速推入的成对测试中，原始 D455 帧和 200 ms 多帧合成曝光各有 567 帧检出 ArUco。观测中位年龄由 100 ms 增至 200 ms。这个条件适用于本次仿真帧率与速度。
 
 [成对曝光统计](d455_exposure_replay.json)
+
+第 4 箱换臂判据修复使用支撑平面 RGB、换臂历史和当前带符号腕力确认，结果记录在 [u4_handover_revision.md](u4_handover_revision.md)。
