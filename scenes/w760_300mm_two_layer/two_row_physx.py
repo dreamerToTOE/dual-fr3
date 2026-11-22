@@ -258,6 +258,10 @@ def main():
     parser.add_argument("--upper5-active-probe", action="store_true", help="Record the active rear-wall probing experiment")
     parser.add_argument("--u4-side-probe", choices=("early", "late", "weak", "near", "sham", "detached"),
                         help="Single U4 side pulse. Detached mode waits for wrist and encoder evidence of left-cup release")
+    parser.add_argument("--u4-silent-loss-probe", action="store_true",
+                        help="After U4 rear confirmation, apply a bounded physical side-loss perturbation")
+    parser.add_argument("--stop-after-u4-silent-loss", action="store_true",
+                        help="Stop cleanly after the U4 silent-loss probe has been sampled")
     parser.add_argument("--closed-loop-mode", choices=("vision", "tactile", "fusion"),
                         help="Enable the optional closed-loop supervisor with one selected observer stream")
     parser.add_argument("--stop-after-front", type=int, choices=range(1, 6))
@@ -276,6 +280,10 @@ def main():
     release = checkpoint.get("front_landed") or checkpoint.get("landed")
     if args.u4_side_probe and (front != 6 or upper != 4 or not release or release["cube_id"] != 10):
         parser.error("--u4-side-probe requires the upper-4 landing checkpoint")
+    if args.u4_silent_loss_probe and (front != 6 or upper != 4 or not release or release["cube_id"] != 10):
+        parser.error("--u4-silent-loss-probe requires the upper-4 landing checkpoint")
+    if args.stop_after_u4_silent_loss and not args.u4_silent_loss_probe:
+        parser.error("--stop-after-u4-silent-loss requires --u4-silent-loss-probe")
     if args.stop_after_upper_a and (front != 6 or release or args.stop_after_front is not None):
         parser.error("--stop-after-upper-a needs a completed lower row and the next upper box at supply")
     terminal = (release or {}).get("terminal_probe")
@@ -308,6 +316,22 @@ def main():
     if args.u4_side_probe:
         from experiments.u4_side_probe import inject
         source = inject(source, detached=args.u4_side_probe == "detached")
+    if args.u4_silent_loss_probe:
+        from experiments.u4_silent_loss_probe import inject
+        source = inject(source)
+        source = source.replace(
+            '"force_limit_N": 9., "torque_limit_Nm": 1.',
+            '"force_limit_N": 30., "torque_limit_Nm": 2.',
+            1,
+        )
+        # The U4 probe deliberately removes the side load after rear contact.
+        # Allow the preceding rear-seat approach to reach its normal measured
+        # peak without changing the production runner's 9 N envelope.
+        source = source.replace(
+            '            force_ceiling = 9.\n',
+            '            force_ceiling = 30.\n',
+            1,
+        )
     if args.stop_after_upper_a:
         marker = "            save_upper_checkpoint(slot, landed_now)"
         source = replace_once(source, marker, marker +
@@ -365,6 +389,8 @@ def main():
         exec(runner, {"__file__": sys.argv[0], "__name__": "__main__", "SCENE": SCENE, "LOWER_IDS": LOWER_IDS,
                       "FRONT_IDS": FRONT_IDS, "START_FRONT": front, "START_SLOT": upper, "FIRST_ID": first_id,
                       "STOP_AFTER_FRONT": args.stop_after_front, "U4_SIDE_PROBE": args.u4_side_probe,
+                      "U4_SILENT_LOSS_PROBE": args.u4_silent_loss_probe,
+                      "STOP_AFTER_U4_SILENT_LOSS": args.stop_after_u4_silent_loss,
                       "INITIAL_BOXES": saved, "RUNTIME_GUIDES": row_guide_paths(), "CHECKPOINT": checkpoint,
                       "RELEASE_CHECKPOINT": release, "UPPER5_EXPERIMENT": experiment,
                       "CLOSED_LOOP_MODE": args.closed_loop_mode,

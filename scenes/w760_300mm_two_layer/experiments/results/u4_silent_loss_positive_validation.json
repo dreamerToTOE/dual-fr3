@@ -1,0 +1,58 @@
+{
+  "title": "U4 post-rear-confirmation silent side-loss positive",
+  "scene": "W760_H300_rear5_front5_upper5_side_v1",
+  "branch": "innovation-2-state-fusion",
+  "single_isaac_instance": true,
+  "checkpoint": "../runs/innovation2-u4-fix-20261122/U4_minus040_repeat/upper_landing_checkpoint.json",
+  "run_dir": "../runs/innovation2-u4-main-validation-20261123-silent-positive-minus4-pose6-envelope30",
+  "probe": {
+    "start_physics_step": 15460,
+    "end_physics_step": 15520,
+    "duration_steps": 60,
+    "physical_perturbation": "Cube_10 pose translated -6 mm along X after rear confirmation, Y/Z and orientation held",
+    "left_tcp_retreat_target_m": 0.004,
+    "side_sensor_dropout": true,
+    "right_arm_command_held": true,
+    "external_force_world_N": [0.0, 0.0, 0.0],
+    "experiment_only_wrist_envelope": {
+      "force_limit_N": 30.0,
+      "torque_limit_Nm": 2.0,
+      "reason": "allow the instantaneous contact re-build after the controlled pose perturbation"
+    }
+  },
+  "physx_truth": {
+    "side_pair": ["/World/Cube_10", "/World/Cube_8"],
+    "first_side_unloaded_step": 15461,
+    "first_side_unloaded_time_s": 128.85834005381912,
+    "side_separation_m": 0.0059994542971253395,
+    "side_normal_impulse_Ns": 0.0,
+    "rear_pair": ["/World/Cube_10", "/World/Environment/wall_back"],
+    "rear_loaded_at_first_side_unload": true,
+    "rear_impulse_Ns_at_first_side_unload": 0.07944749342277646,
+    "rear_loaded_through_probe": true,
+    "unexpected_physx_contacts": 0
+  },
+  "observer_result": {
+    "last_s6_before_probe_step": 15459,
+    "silent_loss_event": "side_load_lost_silent",
+    "event_step": 15494,
+    "event_time_s": 129.1333400681615,
+    "event_state": "S5",
+    "event_side_loaded": false,
+    "event_rear_loaded": true,
+    "silent_loss_streak": 12,
+    "left_retract_m": 0.0007635749109335362,
+    "right_tcp_motion_window_m": 0.000005909400062437513,
+    "side_gap_m": 0.004235300307699669,
+    "rear_gap_m": -0.00024129863080669944,
+    "detection_delay_from_physx_side_unload_s": 0.27500001434236765,
+    "detection_delay_from_probe_start_s": 0.2833333481103182
+  },
+  "runner": {
+    "status": "STOPPED",
+    "stop_reason": "U4 silent-loss probe completed by request",
+    "u4_probe_completed": true,
+    "u4_stream_samples": 15520
+  },
+  "interpretation": "The controlled positive separates Cube_10 from Cube_8 while the rear wall remains loaded. The observer remains in S6 immediately before the perturbation, accumulates 12 consecutive silent-loss samples, then switches to confirmed S5. The probe is an experiment-only physical pose perturbation plus side-sensor dropout, so it validates the silent-loss branch and latency rather than claiming an uncontrolled failure distribution."
+}

@@ -19,6 +19,7 @@ SILENT_LOSS_RETRACT_M = .0003
 SILENT_LOSS_RIGHT_MOTION_M = .00008
 SILENT_LOSS_WINDOW_S = .25
 SILENT_LOSS_CONFIRM_STEPS = 12
+U4_SILENT_LOSS_PROBE_ACTIVE = False
 
 
 class U4ContactObserver:
@@ -200,6 +201,15 @@ class U4ContactObserver:
             else:
                 self.side_streak.clear()
                 side = None
+            # The U4 positive probe deliberately removes the side sensor
+            # evidence after the rear wall has already been confirmed.  Keep
+            # the physical rear and encoder signals intact so the silent-loss
+            # branch is exercised without changing the production observer.
+            probe_side_dropout = bool(sensor.get("u4_silent_loss_probe_active", False)
+                                     or U4_SILENT_LOSS_PROBE_ACTIVE)
+            if probe_side_dropout:
+                raw_side = None
+                side = None
             side_loaded = side if side is not None else True if SIDE in bounds else None
             side_event = None
             if side_loaded is not None:
@@ -294,6 +304,7 @@ class U4ContactObserver:
                     "silent_loss_event": silent_loss_event,
                     "silent_loss_retract_m": self.silent_loss_retract_m,
                     "silent_loss_right_motion_m": self.silent_loss_right_motion_m,
+                    "u4_silent_loss_probe_active": probe_side_dropout,
                     "wall_response": witnessed}
 
         boundaries = [path for path, label in ((SIDE, side), (REAR, rear)) if label is True]
