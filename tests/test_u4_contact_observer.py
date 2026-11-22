@@ -99,3 +99,67 @@ def test_handover_bridges_only_a_bounded_missing_side_sample():
         row["tcp_command_positions_m"] = {"right": [0., row["right_command_y_m"], .075]}
         result = observer.update(row, neighbor)
     assert result["side_loaded"] is None and not result["side_hold_used"]
+
+
+def test_sustained_clear_only_overrides_after_rear_confirmation():
+    observer = U4ContactObserver(CONFIG, handover=True)
+    neighbor = {SIDE: {"position_m": [.142, .920, .075], "rotation_world": np.eye(3),
+                       "capture_time_s": 0., "received_time_s": 0.}}
+
+    class SustainedClear:
+        def update(self, sensor, passive):
+            return {"side_loaded": False, "sustained_applied": True,
+                    "sustained_score": -2., "sustained_reason": "consistent_force_motion"}
+
+    observer.sustained = SustainedClear()
+    for tick in range(90):
+        row = front_sample(tick, lateral_force=-.5)
+        row["tcp_command_positions_m"] = {"right": [0., row["right_command_y_m"], .075]}
+        if tick < 6:
+            row["cup_normals_world"]["left"] = [1., 0., 0.]
+            row["tcp_positions_m"]["left"] = [-.075, .920, .075]
+            row["left_wrench_world"] = [-4., 0., 0., 0., 0., 0.]
+        observer.update(row, neighbor)
+
+    for tick in range(90, 116):
+        row = front_sample(tick, lateral_force=0.)
+        row["tcp_command_positions_m"] = {"right": [0., row["right_command_y_m"], .075]}
+        result = observer.update(row, neighbor)
+    assert result["rear_loaded"] is True
+    assert result["sustained_applied"] is True
+    assert result["side_loaded"] is False and result["state"] == "S5"
+
+
+def test_silent_loss_uses_left_retraction_and_right_stillness_without_model_score():
+    observer = U4ContactObserver(CONFIG, handover=True)
+    neighbor = {SIDE: {"position_m": [.142, .920, .075], "rotation_world": np.eye(3),
+                       "capture_time_s": 0., "received_time_s": 0.}}
+
+    class NoScore:
+        def update(self, sensor, passive):
+            return {"side_loaded": None, "sustained_applied": False,
+                    "sustained_score": None, "sustained_reason": "no_supported_force_motion_window"}
+
+    observer.sustained = NoScore()
+    for tick in range(90):
+        row = front_sample(tick, lateral_force=-.5)
+        row["tcp_command_positions_m"] = {"right": [0., row["right_command_y_m"], .075]}
+        if tick < 6:
+            row["cup_normals_world"]["left"] = [1., 0., 0.]
+            row["tcp_positions_m"]["left"] = [-.075, .920, .075]
+            row["left_wrench_world"] = [-4., 0., 0., 0., 0., 0.]
+        observer.update(row, neighbor)
+
+    silent_event = None
+    for tick in range(90, 103):
+        row = front_sample(tick, lateral_force=0.)
+        row["tcp_command_positions_m"] = {"right": [0., row["right_command_y_m"], .075]}
+        row["cup_normals_world"]["left"] = [1., 0., 0.]
+        row["tcp_positions_m"]["left"] = [-.0754, .920, .075]
+        row["left_wrench_world"] = [0., 0., 0., 0., 0., 0.]
+        result = observer.update(row, neighbor)
+        silent_event = silent_event or result["silent_loss_event"]
+    assert result["rear_loaded"] is True
+    assert result["silent_loss_active"] is True
+    assert silent_event == "side_load_lost_silent"
+    assert result["side_loaded"] is False and result["state"] == "S5"

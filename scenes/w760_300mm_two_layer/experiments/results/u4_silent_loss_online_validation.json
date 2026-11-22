@@ -1,0 +1,42 @@
+{
+  "title": "U4 long silent side-loss online validation",
+  "scene": "W760_H300_rear5_front5_upper5_side_v1",
+  "method": {
+    "gate": "handover active and rear wall load already confirmed",
+    "left_force_limit_N": 0.15,
+    "left_retreat_min_m": 0.0003,
+    "right_motion_max_m": 0.00008,
+    "confirmation_steps": 12,
+    "result": "side_load_lost_silent changes the state to S5"
+  },
+  "historical_replay": {
+    "forward04_long_loss_steps": 54,
+    "forward04_rear_confirmed_during_loss": false,
+    "minus040_long_loss_rear_confirmed": false,
+    "silent_loss_events": 0,
+    "interpretation": "Existing long silent-loss examples occur before rear confirmation and are not S6 truth windows. The rear gate prevents those examples from becoming false S5 or S6 decisions."
+  },
+  "online_main_runner": {
+    "run_dir": "../runs/innovation2-u4-main-validation-20261122-silent-loss",
+    "checkpoint": "../runs/innovation2-u4-fix-20261122/U4_plus040_repeat/upper_landing_checkpoint.json",
+    "single_isaac_instance": true,
+    "probe": "u4-side-probe detached",
+    "u4_samples": 17628,
+    "u4_handover_active_samples": 6030,
+    "u4_supported_view_samples": 14210,
+    "rear_loaded_samples": 154,
+    "s6_samples": 154,
+    "s6_contiguous_runs": [{"start_step": 16366, "end_step": 16519, "samples": 154}],
+    "silent_loss_events": 0,
+    "sustained_model_diagnostic_samples": 244,
+    "unexpected_physx_contacts": 0,
+    "runner_status": "STOPPED",
+    "runner_error": "upper_B_rear_travel exceeded the existing left wrist safety envelope at 9.22 N and 0.311 Nm after U4 completion",
+    "u4_result": "U4 reached upper_slot_complete before the later Cube_11 stop"
+  },
+  "limitations": [
+    "This online run validates that the observer is live and that the S6 rear-confirmed window remains stable. It does not provide a positive online silent-loss event because the physical trial did not create rear-confirmed sustained loss.",
+    "The historical silent-loss positives remain pre-rear-confirmation cases. A separate controlled perturbation is needed to create a rear-confirmed silent-loss positive.",
+    "The motion controller and safety envelope were not changed."
+  ]
+}

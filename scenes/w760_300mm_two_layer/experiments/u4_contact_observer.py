@@ -14,6 +14,11 @@ from seven_observer import SevenObserver
 SIDE = "/World/Cube_8"
 REAR = "/World/Environment/wall_back"
 SIDE_HOLD_S = .20
+SILENT_LOSS_FORCE_N = .15
+SILENT_LOSS_RETRACT_M = .0003
+SILENT_LOSS_RIGHT_MOTION_M = .00008
+SILENT_LOSS_WINDOW_S = .25
+SILENT_LOSS_CONFIRM_STEPS = 12
 
 
 class U4ContactObserver:
@@ -28,6 +33,16 @@ class U4ContactObserver:
         self.confirmed_side = None
         self.last_side_true_s = None
         self.side_false_streak = 0
+        self.sustained = None
+        if handover:
+            from u4_sustained_observer import SustainedSideObserver
+            self.sustained = SustainedSideObserver()
+        self.tcp_motion_window = deque()
+        self.silent_loss_anchor_x = None
+        self.silent_loss_streak = 0
+        self.silent_loss_active = False
+        self.silent_loss_retract_m = None
+        self.silent_loss_right_motion_m = None
         self.window = deque()
         self.direct_side = False
         self.wall = False
@@ -55,6 +70,13 @@ class U4ContactObserver:
         left_compression = -left[:3] @ n_left
         lateral = n_left[0] > .95 and left_compression >= FRONT_LOAD_N
         y_tcp = sensor["tcp_positions_m"]["right"][1]
+        right_tcp = np.asarray(sensor["tcp_positions_m"]["right"], dtype=float)
+        if self.tcp_motion_window and now - self.tcp_motion_window[-1][0] > .014:
+            self.tcp_motion_window.clear()
+        self.tcp_motion_window.append((now, right_tcp.copy()))
+        while (len(self.tcp_motion_window) > 1
+               and self.tcp_motion_window[1][0] <= now - SILENT_LOSS_WINDOW_S + 1.e-7):
+            self.tcp_motion_window.popleft()
         command = sensor.get("right_command_y_m")
         if forward and command is not None and math.isfinite(command):
             if self.window and now - self.window[-1][0] > .013:
@@ -138,6 +160,12 @@ class U4ContactObserver:
                 self.side_false_streak += 1
             else:
                 self.side_false_streak = 0
+            if raw_side is True:
+                self.silent_loss_anchor_x = float(sensor["tcp_positions_m"]["left"][0])
+                self.silent_loss_streak = 0
+                self.silent_loss_active = False
+            elif self.silent_loss_anchor_x is None and self.confirmed_side is True:
+                self.silent_loss_anchor_x = float(sensor["tcp_positions_m"]["left"][0])
             if exchange and result["state"] in ("S1", "S5", "S6", "UNKNOWN"):
                 self.side_streak.append(raw_side)
                 confirmed_sample = (len(self.side_streak) == self.side_streak.maxlen
@@ -184,6 +212,66 @@ class U4ContactObserver:
                     self.last_side_true_s = None
             elif self.last_side_true_s is not None and now - self.last_side_true_s > SIDE_HOLD_S:
                 self.last_side_true_s = None
+            sustained_output = None
+            sustained_override = False
+            if self.sustained is not None:
+                sustained_output = self.sustained.update(
+                    sensor,
+                    {"side_loaded": side_loaded, "rear_loaded": True if REAR in bounds else rear,
+                     "boundaries": sorted(bounds), "state": result["state"]},
+                )
+                if (exchange and rear is True and side_loaded is None
+                        and sustained_output.get("sustained_applied")
+                        and sustained_output.get("side_loaded") is False):
+                    sustained_side = sustained_output["side_loaded"]
+                    previous_side = self.confirmed_side
+                    side_loaded = sustained_side
+                    if sustained_side:
+                        bounds.add(SIDE)
+                    else:
+                        bounds.discard(SIDE)
+                    result = {**result, "state": ("S1", "S5", "S6")[min(len(bounds), 2)],
+                              "boundaries": sorted(bounds)}
+                    if previous_side is not None and sustained_side != previous_side:
+                        side_event = "side_load_recovered" if sustained_side else "side_load_lost"
+                    self.confirmed_side = sustained_side
+                    sustained_override = True
+            silent_loss_event = None
+            left_tcp_x = float(sensor["tcp_positions_m"]["left"][0])
+            if (exchange and rear is True and raw_side is None
+                    and self.confirmed_side is True and in_corridor
+                    and left_compression < SILENT_LOSS_FORCE_N
+                    and self.silent_loss_anchor_x is not None):
+                self.silent_loss_retract_m = float(
+                    -n_left[0] * (left_tcp_x - self.silent_loss_anchor_x))
+                positions = np.asarray([item[1] for item in self.tcp_motion_window])
+                self.silent_loss_right_motion_m = float(
+                    np.max(np.linalg.norm(positions - positions[0], axis=1))) if len(positions) else None
+                if (self.silent_loss_retract_m >= SILENT_LOSS_RETRACT_M
+                        and self.silent_loss_right_motion_m is not None
+                        and self.silent_loss_right_motion_m <= SILENT_LOSS_RIGHT_MOTION_M):
+                    self.silent_loss_streak += 1
+                else:
+                    self.silent_loss_streak = 0
+            else:
+                self.silent_loss_streak = 0
+                if raw_side is not None or not exchange:
+                    self.silent_loss_retract_m = None
+                    self.silent_loss_right_motion_m = None
+            if (self.silent_loss_streak >= SILENT_LOSS_CONFIRM_STEPS
+                    and not self.silent_loss_active):
+                self.silent_loss_active = True
+                silent_loss_event = "side_load_lost_silent"
+            if (self.silent_loss_active and exchange and rear is True
+                    and raw_side is None):
+                bounds.discard(SIDE)
+                side_loaded = False
+                result = {**result, "state": "S5", "boundaries": sorted(bounds)}
+                if self.confirmed_side is not False:
+                    silent_loss_event = silent_loss_event or "side_load_lost_silent"
+                self.confirmed_side = False
+            if silent_loss_event is not None:
+                side_event = silent_loss_event
             return {**result, "side_loaded": side_loaded,
                     "rear_loaded": True if REAR in bounds else rear, "side_gap_m": side_gap,
                     "rear_gap_m": rear_gap, "handover_active": bool(exchange),
@@ -192,6 +280,20 @@ class U4ContactObserver:
                     "side_raw": raw_side,
                     "side_false_streak": self.side_false_streak,
                     "side_hold_used": bool(locals().get("side_hold_used", False)),
+                    "silent_loss_active": bool(self.silent_loss_active),
+                    "silent_loss_streak": self.silent_loss_streak,
+                    "sustained_side_loaded": (None if sustained_output is None
+                                               else sustained_output.get("side_loaded")),
+                    "sustained_applied": sustained_override,
+                    "sustained_model_applied": bool(sustained_output and
+                                                     sustained_output.get("sustained_applied")),
+                    "sustained_score": (None if sustained_output is None
+                                         else sustained_output.get("sustained_score")),
+                    "sustained_reason": (None if sustained_output is None
+                                          else sustained_output.get("sustained_reason")),
+                    "silent_loss_event": silent_loss_event,
+                    "silent_loss_retract_m": self.silent_loss_retract_m,
+                    "silent_loss_right_motion_m": self.silent_loss_right_motion_m,
                     "wall_response": witnessed}
 
         boundaries = [path for path, label in ((SIDE, side), (REAR, rear)) if label is True]
