@@ -34,7 +34,6 @@ def bearing(snapshot, boundary, axis, hz):
     if components is None or components[axis] < .9 * max(components):
         return None, None
     return components[axis] > MIN_IMPULSE_NS, components[axis] * hz
-    return False, 0.
 
 
 def read_stream(path):

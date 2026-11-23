@@ -1,0 +1,135 @@
+{
+  "experiment": "U4 independent low-resistance sliding support weak reload",
+  "scene": "W760_H300_rear5_front5_upper5_side_v1",
+  "support": "Cube_8 original support collisions filtered against Cube_15/Cube_14, independent pose-controlled sliding rail and visual sled",
+  "trial_count": 3,
+  "valid_weak_contact_trials": 1,
+  "trials": [
+    {
+      "source_result": "u4_pose_sled_010.json",
+      "source_run": "innovation2-u4-pose-sled-010-20261123",
+      "target_force_N": 0.1,
+      "fixture": "Cube_8_low_friction_compliant_pad_with_pose_controlled_sled",
+      "support_model": "independent_pose_controlled_prismatic_rail",
+      "rail_path": "/World/U4WeakSlideRail",
+      "sled_path": "/World/U4WeakSlideSled",
+      "filtered_support_paths": [
+        "/World/Cube_15",
+        "/World/Cube_14"
+      ],
+      "pad_size_m": [
+        0.001,
+        0.12,
+        0.12
+      ],
+      "mu_static": 0.005,
+      "mu_dynamic": 0.003,
+      "compliant_k_N_m": 1500.0,
+      "compliant_damping_Ns_m": 15.0,
+      "initial_neighbor_x_m": 0.3037481904029846,
+      "target_neighbor_x_m": 0.2976696869691213,
+      "final_neighbor_x_m": 0.2985590398311615,
+      "approach_displacement_m": -0.0060785034338632915,
+      "contact_position_frozen": true,
+      "frozen_neighbor_x_m": 0.2985575497150421,
+      "weak_windows": [],
+      "positive_contact_episodes": 0,
+      "s6_transition_hits": 0,
+      "recovered_event_hits": 0,
+      "strong_contact_ticks": 112,
+      "false_s6_ticks": 0,
+      "unexpected_contacts": 0,
+      "source_sha256": "64bb056e6d389a150867176beed3e0fb057b5d2d4eccdc3ba0b9ed25b84a62cb"
+    },
+    {
+      "source_result": "u4_pose_sled_035c.json",
+      "source_run": "innovation2-u4-pose-sled-035-20261123-c",
+      "target_force_N": 0.35,
+      "fixture": "Cube_8_low_friction_compliant_pad_with_pose_controlled_sled",
+      "support_model": "independent_pose_controlled_prismatic_rail",
+      "rail_path": "/World/U4WeakSlideRail",
+      "sled_path": "/World/U4WeakSlideSled",
+      "filtered_support_paths": [
+        "/World/Cube_15",
+        "/World/Cube_14"
+      ],
+      "pad_size_m": [
+        0.001,
+        0.12,
+        0.12
+      ],
+      "mu_static": 0.005,
+      "mu_dynamic": 0.003,
+      "compliant_k_N_m": 1500.0,
+      "compliant_damping_Ns_m": 15.0,
+      "initial_neighbor_x_m": 0.30377018451690674,
+      "target_neighbor_x_m": 0.29754577173391983,
+      "final_neighbor_x_m": 0.2985835075378418,
+      "approach_displacement_m": -0.00622441278298691,
+      "contact_position_frozen": true,
+      "frozen_neighbor_x_m": 0.2985832989215851,
+      "weak_windows": [
+        {
+          "kind": "weak_reload_onset",
+          "start_step": 17191,
+          "end_step": 17502,
+          "steps": 312,
+          "side_force_N": {
+            "min": 0.21149355947273293,
+            "median": 0.47558740479871436,
+            "max": 0.9204903524367426
+          },
+          "s6_transition_step": null,
+          "s6_delay_s": null,
+          "recovered_event_step": null,
+          "recovered_event_delay_s": null,
+          "correct_s6_ticks": 0
+        }
+      ],
+      "positive_contact_episodes": 1,
+      "s6_transition_hits": 0,
+      "recovered_event_hits": 0,
+      "strong_contact_ticks": 0,
+      "false_s6_ticks": 0,
+      "unexpected_contacts": 0,
+      "source_sha256": "a31ad6ed482aec98e3d6512a3446da6f92bdec1aa2a820a0d6b01855a710b27e"
+    },
+    {
+      "source_result": "u4_pose_sled_070.json",
+      "source_run": "innovation2-u4-pose-sled-070-20261123",
+      "target_force_N": 0.7,
+      "fixture": "Cube_8_low_friction_compliant_pad_with_pose_controlled_sled",
+      "support_model": "independent_pose_controlled_prismatic_rail",
+      "rail_path": "/World/U4WeakSlideRail",
+      "sled_path": "/World/U4WeakSlideSled",
+      "filtered_support_paths": [
+        "/World/Cube_15",
+        "/World/Cube_14"
+      ],
+      "pad_size_m": [
+        0.001,
+        0.12,
+        0.12
+      ],
+      "mu_static": 0.005,
+      "mu_dynamic": 0.003,
+      "compliant_k_N_m": 1500.0,
+      "compliant_damping_Ns_m": 15.0,
+      "initial_neighbor_x_m": 0.3037445843219757,
+      "target_neighbor_x_m": 0.29724755874474845,
+      "final_neighbor_x_m": 0.2985507845878601,
+      "approach_displacement_m": -0.006497025577227256,
+      "contact_position_frozen": true,
+      "frozen_neighbor_x_m": 0.2985498309135437,
+      "weak_windows": [],
+      "positive_contact_episodes": 0,
+      "s6_transition_hits": 0,
+      "recovered_event_hits": 0,
+      "strong_contact_ticks": 344,
+      "false_s6_ticks": 0,
+      "unexpected_contacts": 0,
+      "source_sha256": "70e62613b383eae7c1eb3c362830b8281ef2515b76d101e60ed73f7012614e3c"
+    }
+  ],
+  "conclusion": "0.35 N produced one valid weak-contact episode lasting 312 ticks with 0.211\u20130.920 N and median 0.476 N. 0.1 N and 0.7 N reached strong contact before entering any valid weak-reload onset, so they are not counted as positive weak trials. No false S6 was observed."
+}
