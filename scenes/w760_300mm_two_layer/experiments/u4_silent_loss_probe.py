@@ -17,10 +17,11 @@ def run_u4_weak_reload(recovery):
                                 "near_step_limit_m": 4.e-6, "target_neighbor_x_m": target_x,
                                 "fixture": "Cube_8_external_x_force"}
     exact_pair = {"/World/Cube_10", "/World/Cube_8"}
-    position, rotation = neighbor.get_world_pose()
-    position = np.array(position, dtype=np.float32)
-    position[0] = target_x
-    neighbor.set_world_pose(position, rotation)
+    spring_k_N_m = 100.0
+    spring_d_Ns_m = 15.0
+    recovery["weak_fixture"].update({"fixture": "Cube_8_damped_spring",
+                                      "spring_k_N_m": spring_k_N_m,
+                                      "spring_damping_Ns_m": spring_d_Ns_m})
     neighbor.set_linear_velocity(np.zeros(3, dtype=np.float32))
     neighbor.set_angular_velocity(np.zeros(3, dtype=np.float32))
     for _ in range(recovery["reload_observation_steps"]):
@@ -30,8 +31,13 @@ def run_u4_weak_reload(recovery):
         components = (None if pair is None or not pair["current_step_observed"] else
                       pair["normal_axis_impulse_abs_Ns"])
         load = 0. if components is None else components[0] * 120.
+        position, _ = neighbor.get_world_pose()
+        velocity = neighbor.get_linear_velocity()
+        spring_force = float(np.clip(spring_k_N_m * (target_x - float(position[0]))
+                                     - spring_d_Ns_m * float(velocity[0]),
+                                     -U4_WEAK_RELOAD_N, U4_WEAK_RELOAD_N))
         neighbor._rigid_prim_view.apply_forces(
-            np.asarray([[-U4_WEAK_RELOAD_N, 0., 0.]], dtype=np.float32),
+            np.asarray([[spring_force, 0., 0.]], dtype=np.float32),
             indices=np.asarray([0], dtype=np.int32),
         )
         step()

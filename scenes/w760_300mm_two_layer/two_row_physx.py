@@ -405,7 +405,8 @@ def main():
                       "RELEASE_CHECKPOINT": release, "UPPER5_EXPERIMENT": experiment,
                       "CLOSED_LOOP_MODE": args.closed_loop_mode,
                       "CLOSED_LOOP_OBSERVER": args.closed_loop_mode,
-                      "SUPPORT_TOP_BEVEL_M": None, "UPPER_REST_OFFSET_M": None, "CUBE_CONTACT_OFFSET_M": None})
+                      "SUPPORT_TOP_BEVEL_M": None,
+                      "UPPER_REST_OFFSET_M": None, "CUBE_CONTACT_OFFSET_M": None})
 
 
 if __name__ == "__main__":
