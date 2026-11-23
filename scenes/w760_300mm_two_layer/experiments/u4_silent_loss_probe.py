@@ -8,38 +8,106 @@ U4_SILENT_LOSS_PROBE_ACTIVE = False
 
 def run_u4_weak_reload(recovery):
     # Move only the side neighbor. Its current contact impulse feeds the fixture, not the observer.
+    # The fixture deliberately changes only this experiment.  It gives the
+    # neighbour a thin, visible low-friction pad and a low-friction body
+    # material, so a bounded sub-newton drive can test whether the 6 mm release
+    # gap can close without hiding the contact from PhysX.
+    from pxr import Gf, PhysxSchema, Sdf, UsdGeom, UsdPhysics, UsdShade
+
     neighbor = upper_bodies["8"]
     origin, _ = neighbor.get_world_pose()
+    origin = [float(value) for value in origin]
     origin_x = float(origin[0])
     active_center, _ = cube.get_world_pose()
     target_x = float(active_center[0]) + .1502
-    recovery["weak_fixture"] = {"target_N": U4_WEAK_RELOAD_N, "initial_neighbor_x_m": origin_x,
-                                "near_step_limit_m": 4.e-6, "target_neighbor_x_m": target_x,
-                                "fixture": "Cube_8_external_x_force"}
-    exact_pair = {"/World/Cube_10", "/World/Cube_8"}
-    spring_k_N_m = 100.0
-    spring_d_Ns_m = 15.0
-    recovery["weak_fixture"].update({"fixture": "Cube_8_damped_spring",
-                                      "spring_k_N_m": spring_k_N_m,
-                                      "spring_damping_Ns_m": spring_d_Ns_m})
+    cube_size_m = float(CONFIG["cube_size_m"])
+    pad_thickness_m = .001
+    pad_size_m = (.001, .120, .120)
+    low_friction = .005
+    body_material = UsdShade.Material.Define(stage, "/World/U4WeakSideLowFrictionBodyMaterial")
+    body_api = UsdPhysics.MaterialAPI.Apply(body_material.GetPrim())
+    body_api.CreateStaticFrictionAttr().Set(low_friction)
+    body_api.CreateDynamicFrictionAttr().Set(.003)
+    body_api.CreateRestitutionAttr().Set(0.0)
+    body_physx = PhysxSchema.PhysxMaterialAPI.Apply(body_material.GetPrim())
+    body_physx.CreateFrictionCombineModeAttr().Set("min")
+    body_physx.CreateRestitutionCombineModeAttr().Set("min")
+    body_physx.CreateDampingCombineModeAttr().Set("average")
+    body_physx.CreateCompliantContactStiffnessAttr().Set(0.0)
+    pad_material = UsdShade.Material.Define(stage, "/World/U4WeakSideCompliantMaterial")
+    pad_api = UsdPhysics.MaterialAPI.Apply(pad_material.GetPrim())
+    pad_api.CreateStaticFrictionAttr().Set(low_friction)
+    pad_api.CreateDynamicFrictionAttr().Set(.003)
+    pad_api.CreateRestitutionAttr().Set(0.0)
+    pad_physx = PhysxSchema.PhysxMaterialAPI.Apply(pad_material.GetPrim())
+    pad_physx.CreateFrictionCombineModeAttr().Set("min")
+    pad_physx.CreateRestitutionCombineModeAttr().Set("min")
+    pad_physx.CreateDampingCombineModeAttr().Set("average")
+    pad_physx.CreateCompliantContactStiffnessAttr().Set(1500.0)
+    pad_physx.CreateCompliantContactDampingAttr().Set(15.0)
+    pad_physx.CreateCompliantContactAccelerationSpringAttr().Set(False)
+    UsdShade.MaterialBindingAPI.Apply(stage.GetPrimAtPath("/World/Cube_8")).Bind(
+        body_material, UsdShade.Tokens.strongerThanDescendants, "physics")
+    support_paths = [path for path in ("/World/Cube_15", "/World/Cube_14")
+                     if stage.GetPrimAtPath(path).IsValid()]
+    for support_path in support_paths:
+        UsdShade.MaterialBindingAPI.Apply(stage.GetPrimAtPath(support_path)).Bind(
+            body_material, UsdShade.Tokens.strongerThanDescendants, "physics")
+
+    pad_path = "/World/Cube_8/U4WeakSideCompliantPad"
+    pad = UsdGeom.Cube.Define(stage, pad_path)
+    pad.CreateSizeAttr(1.0)
+    pad_xform = UsdGeom.Xformable(pad.GetPrim())
+    pad_xform.AddTranslateOp().Set(Gf.Vec3d(-.5 - pad_thickness_m / (cube_size_m * 2.), 0.0, 0.0))
+    pad_xform.AddScaleOp().Set(Gf.Vec3f(*(size / cube_size_m for size in pad_size_m)))
+    pad.CreateDisplayColorAttr([Gf.Vec3f(.12, .35, .65)])
+    UsdPhysics.CollisionAPI.Apply(pad.GetPrim())
+    PhysxSchema.PhysxCollisionAPI.Apply(pad.GetPrim()).CreateRestOffsetAttr().Set(0.0)
+    UsdShade.MaterialBindingAPI.Apply(pad.GetPrim()).Bind(
+        pad_material, UsdShade.Tokens.strongerThanDescendants, "physics")
+    step()
+    check_current_collision(contact_monitor.phase)
+
+    recovery["weak_fixture"] = {
+        "target_N": U4_WEAK_RELOAD_N, "initial_neighbor_x_m": origin_x,
+        "near_step_limit_m": 4.e-6, "target_neighbor_x_m": target_x,
+        "fixture": "Cube_8_low_friction_compliant_pad_with_transX_drive",
+        "pad_path": pad_path, "pad_size_m": list(pad_size_m),
+        "pad_thickness_m": pad_thickness_m, "static_friction": low_friction,
+        "dynamic_friction": .003, "restitution": 0.0,
+        "low_friction_support_paths": support_paths,
+        "compliant_contact_stiffness_N_m": 1500.0,
+        "compliant_contact_damping_Ns_m": 15.0,
+    }
+    # PhysX reports the body-to-world transX displacement with the opposite
+    # sign for this body0/world frame convention.  A positive drive target
+    # therefore moves Cube_8 toward Cube_10 (world -X).
+    drive_target_m = origin_x - target_x
+    joint = UsdPhysics.Joint.Define(stage, "/World/U4WeakSideDrive")
+    joint.CreateBody0Rel().SetTargets([Sdf.Path("/World/Cube_8")])
+    joint.CreateLocalPos0Attr().Set(Gf.Vec3f(0.0, 0.0, 0.0))
+    joint.CreateLocalPos1Attr().Set(Gf.Vec3f(*origin))
+    joint.CreateLocalRot0Attr().Set(Gf.Quatf(1.0, Gf.Vec3f(0.0)))
+    joint.CreateLocalRot1Attr().Set(Gf.Quatf(1.0, Gf.Vec3f(0.0)))
+    joint.CreateCollisionEnabledAttr().Set(True)
+    for axis in ("transY", "transZ", "rotX", "rotY", "rotZ"):
+        limit = UsdPhysics.LimitAPI.Apply(joint.GetPrim(), axis)
+        limit.CreateLowAttr().Set(1.e-6)
+        limit.CreateHighAttr().Set(-1.e-6)
+    drive = UsdPhysics.DriveAPI.Apply(joint.GetPrim(), "transX")
+    drive.CreateTypeAttr().Set("force")
+    drive.CreateStiffnessAttr().Set(100.0)
+    drive.CreateDampingAttr().Set(15.0)
+    drive.CreateMaxForceAttr().Set(float(U4_WEAK_RELOAD_N))
+    drive.CreateTargetPositionAttr().Set(float(drive_target_m))
+    drive.CreateTargetVelocityAttr().Set(0.0)
+    recovery["weak_fixture"].update({"fixture": "Cube_8_low_friction_compliant_pad_with_transX_drive",
+                                      "drive_target_position_m": drive_target_m,
+                                      "drive_stiffness_N_m": 100.0,
+                                      "drive_damping_Ns_m": 15.0})
     neighbor.set_linear_velocity(np.zeros(3, dtype=np.float32))
     neighbor.set_angular_velocity(np.zeros(3, dtype=np.float32))
     for _ in range(recovery["reload_observation_steps"]):
-        pairs = contact_monitor.cube_contact_snapshot()["pairs"]
-        pair = next((p for p in pairs if {p["collider0"], p["collider1"]} == exact_pair), None)
-        gap = None if pair is None or not pair["current_separation_observed"] else pair["separation_m"]
-        components = (None if pair is None or not pair["current_step_observed"] else
-                      pair["normal_axis_impulse_abs_Ns"])
-        load = 0. if components is None else components[0] * 120.
-        position, _ = neighbor.get_world_pose()
-        velocity = neighbor.get_linear_velocity()
-        spring_force = float(np.clip(spring_k_N_m * (target_x - float(position[0]))
-                                     - spring_d_Ns_m * float(velocity[0]),
-                                     -U4_WEAK_RELOAD_N, U4_WEAK_RELOAD_N))
-        neighbor._rigid_prim_view.apply_forces(
-            np.asarray([[spring_force, 0., 0.]], dtype=np.float32),
-            indices=np.asarray([0], dtype=np.int32),
-        )
         step()
         check_current_collision(contact_monitor.phase)
     recovery["weak_fixture"]["final_neighbor_x_m"] = float(neighbor.get_world_pose()[0][0])

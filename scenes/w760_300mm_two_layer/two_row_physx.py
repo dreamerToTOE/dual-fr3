@@ -252,6 +252,7 @@ def main():
     parser.add_argument("--resume", type=Path)
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--close-on-finish", action="store_true")
+    parser.add_argument("--headless", action="store_true", help="Run the single Isaac Sim experiment without a viewport")
     parser.add_argument("--upper5-yaw-deg", type=float, help="Add world-Z yaw to the measured upper-5 landing pose")
     parser.add_argument("--upper5-z-unload", action="store_true", help="Test vertical force feedback during the upper-5 straight push")
     parser.add_argument("--upper5-blur-ms", type=float, help="Also detect ArUco on a causal D455 exposure composite")
@@ -393,6 +394,8 @@ def main():
         sys.path.insert(0, str(REPO))
         sys.argv = [str(REPO / "fr3_ab_visual_runner.py"), "--five-cube-row", "--output-dir", str(output),
                     "--collision-workers", "3"]
+        if args.headless:
+            sys.argv.append("--headless")
         if args.close_on_finish:
             sys.argv.append("--close-on-finish")
         exec(runner, {"__file__": sys.argv[0], "__name__": "__main__", "SCENE": SCENE, "LOWER_IDS": LOWER_IDS,

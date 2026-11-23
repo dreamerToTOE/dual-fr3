@@ -1,0 +1,142 @@
+{
+  "experiment": "U4 weak side reload with low-friction compliant pad",
+  "scene": "W760_H300_rear5_front5_upper5_side_v1",
+  "created_utc": "2026-11-23",
+  "fixture_material": {
+    "static_friction": 0.005,
+    "dynamic_friction": 0.003,
+    "pad_compliance_stiffness_N_m": 1500.0,
+    "pad_compliance_damping_Ns_m": 15.0
+  },
+  "trial_count": 4,
+  "valid_weak_contact_trials": 0,
+  "trials": [
+    {
+      "source_result": "u4_weak_reload_low_friction_pad_035.json",
+      "source_run": "innovation2-u4-low-friction-pad-035-20261123-b",
+      "target_force_N": 0.35,
+      "fixture": "Cube_8_low_friction_compliant_pad_with_spring_damper",
+      "mu_static": 0.02,
+      "mu_dynamic": 0.02,
+      "pad_size_m": [
+        0.004,
+        0.128,
+        0.128
+      ],
+      "pad_thickness_m": 0.004,
+      "compliant_contact_stiffness_N_m": 1500.0,
+      "compliant_contact_damping_Ns_m": 15.0,
+      "low_friction_support_paths": [],
+      "drive_target_position_m": null,
+      "initial_neighbor_x_m": 0.3038305640220642,
+      "final_neighbor_x_m": 0.30398592352867126,
+      "target_neighbor_x_m": 0.2970658596277237,
+      "approach_displacement_m": 0.00015535950660705566,
+      "residual_to_target_m": 0.006920063900947571,
+      "positive_contact_episodes": 0,
+      "s6_transition_hits": 0,
+      "recovered_event_hits": 0,
+      "false_s6_ticks": 0,
+      "weak_windows": [],
+      "unexpected_contact_count": 0,
+      "source_sha256": "54a5f273e568c5224734bd52cb115a5de699258d87bdf7d6fad3f0c094f7175a"
+    },
+    {
+      "source_result": "u4_weak_reload_low_friction_drive_070c.json",
+      "source_run": "innovation2-u4-low-friction-pad-drive-070-20261123-c",
+      "target_force_N": 0.7,
+      "fixture": "Cube_8_low_friction_compliant_pad_with_transX_drive",
+      "mu_static": 0.005,
+      "mu_dynamic": 0.003,
+      "pad_size_m": [
+        0.001,
+        0.12,
+        0.12
+      ],
+      "pad_thickness_m": 0.001,
+      "compliant_contact_stiffness_N_m": 1500.0,
+      "compliant_contact_damping_Ns_m": 15.0,
+      "low_friction_support_paths": [],
+      "drive_target_position_m": 0.006796488571166992,
+      "initial_neighbor_x_m": 0.30375534296035767,
+      "final_neighbor_x_m": 0.30298635363578796,
+      "target_neighbor_x_m": 0.2969588543891907,
+      "approach_displacement_m": -0.0007689893245697021,
+      "residual_to_target_m": 0.00602749924659729,
+      "positive_contact_episodes": 0,
+      "s6_transition_hits": 0,
+      "recovered_event_hits": 0,
+      "false_s6_ticks": 0,
+      "weak_windows": [],
+      "unexpected_contact_count": 0,
+      "source_sha256": "52c69c2fb3920754ecdd43eb8308c6e4b46a61d5509c6e77048f34c8a1b2487b"
+    },
+    {
+      "source_result": "u4_weak_reload_low_friction_drive_070d.json",
+      "source_run": "innovation2-u4-low-friction-pad-drive-070-20261123-d",
+      "target_force_N": 0.7,
+      "fixture": "Cube_8_low_friction_compliant_pad_with_transX_drive",
+      "mu_static": 0.005,
+      "mu_dynamic": 0.003,
+      "pad_size_m": [
+        0.001,
+        0.12,
+        0.12
+      ],
+      "pad_thickness_m": 0.001,
+      "compliant_contact_stiffness_N_m": 1500.0,
+      "compliant_contact_damping_Ns_m": 15.0,
+      "low_friction_support_paths": [
+        "/World/Cube_15",
+        "/World/Cube_14"
+      ],
+      "drive_target_position_m": 0.006781423497200012,
+      "initial_neighbor_x_m": 0.3037917912006378,
+      "final_neighbor_x_m": 0.3030751943588257,
+      "target_neighbor_x_m": 0.2970103677034378,
+      "approach_displacement_m": -0.0007165968418121338,
+      "residual_to_target_m": 0.006064826655387878,
+      "positive_contact_episodes": 0,
+      "s6_transition_hits": 0,
+      "recovered_event_hits": 0,
+      "false_s6_ticks": 0,
+      "weak_windows": [],
+      "unexpected_contact_count": 0,
+      "source_sha256": "93911e0c2f4cbad416cf9f14aafc233d3783770a81112a85bfdb520b87fc9b87"
+    },
+    {
+      "source_result": "u4_weak_reload_low_friction_drive_100.json",
+      "source_run": "innovation2-u4-low-friction-pad-drive-100-20261123",
+      "target_force_N": 1.0,
+      "fixture": "Cube_8_low_friction_compliant_pad_with_transX_drive",
+      "mu_static": 0.005,
+      "mu_dynamic": 0.003,
+      "pad_size_m": [
+        0.001,
+        0.12,
+        0.12
+      ],
+      "pad_thickness_m": 0.001,
+      "compliant_contact_stiffness_N_m": 1500.0,
+      "compliant_contact_damping_Ns_m": 15.0,
+      "low_friction_support_paths": [
+        "/World/Cube_15",
+        "/World/Cube_14"
+      ],
+      "drive_target_position_m": 0.006790364193916321,
+      "initial_neighbor_x_m": 0.30375906825065613,
+      "final_neighbor_x_m": 0.30303534865379333,
+      "target_neighbor_x_m": 0.2969687040567398,
+      "approach_displacement_m": -0.000723719596862793,
+      "residual_to_target_m": 0.006066644597053528,
+      "positive_contact_episodes": 0,
+      "s6_transition_hits": 0,
+      "recovered_event_hits": 0,
+      "false_s6_ticks": 0,
+      "weak_windows": [],
+      "unexpected_contact_count": 0,
+      "source_sha256": "d96b6abfa529ef8911be04f5fd6def0b140a4e27ae357e0163aa89b50e0c2863"
+    }
+  ],
+  "conclusion": "No trial established a >=3-tick 0.1-1.0 N side contact after the unmasked dwell. The fixture reduced displacement resistance but the supported Cube_8 stopped 0.72-0.99 mm short of the target, so S5-to-S6 recovery was not scored as a positive weak-contact episode."
+}

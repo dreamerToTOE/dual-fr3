@@ -17,17 +17,23 @@ from seven_replay import BACK
 def bearing(snapshot, boundary, axis, hz):
     if not snapshot["valid"]:
         return None, None
+    matches = []
     for pair in snapshot["pairs"]:
-        if {pair["collider0"], pair["collider1"]} == {ACTIVE, boundary}:
-            impulse = pair["normal_impulse_Ns"]
-            if not pair["current_step_observed"] or impulse is None:
-                return None, None
-            components = pair.get("normal_axis_impulse_abs_Ns")
-            if impulse <= MIN_IMPULSE_NS:
-                return False, 0. if components is None else components[axis] * hz
-            if components is None or components[axis] < .9 * max(components):
-                return None, None
-            return components[axis] > MIN_IMPULSE_NS, components[axis] * hz
+        paths = (pair["collider0"], pair["collider1"])
+        boundary_match = any(path == boundary or path.startswith(boundary + "/") for path in paths)
+        if ACTIVE in paths and boundary_match:
+            if pair["current_step_observed"] and pair["normal_impulse_Ns"] is not None:
+                matches.append(pair)
+    if not matches:
+        return None, None
+    pair = max(matches, key=lambda value: value.get("normal_impulse_Ns") or 0.0)
+    impulse = pair["normal_impulse_Ns"]
+    components = pair.get("normal_axis_impulse_abs_Ns")
+    if impulse <= MIN_IMPULSE_NS:
+        return False, 0. if components is None else components[axis] * hz
+    if components is None or components[axis] < .9 * max(components):
+        return None, None
+    return components[axis] > MIN_IMPULSE_NS, components[axis] * hz
     return False, 0.
 
 
