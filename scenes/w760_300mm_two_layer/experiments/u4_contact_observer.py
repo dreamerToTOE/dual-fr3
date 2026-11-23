@@ -19,6 +19,9 @@ SILENT_LOSS_RETRACT_M = .0003
 SILENT_LOSS_RIGHT_MOTION_M = .00008
 SILENT_LOSS_WINDOW_S = .25
 SILENT_LOSS_CONFIRM_STEPS = 12
+WEAK_GEOMETRY_RECOVERY_DELAY_S = .85
+WEAK_GEOMETRY_GAP_M = .006
+WEAK_GEOMETRY_CONFIRM_STEPS = 3
 U4_SILENT_LOSS_PROBE_ACTIVE = False
 
 
@@ -44,6 +47,9 @@ class U4ContactObserver:
         self.silent_loss_active = False
         self.silent_loss_retract_m = None
         self.silent_loss_right_motion_m = None
+        self.silent_loss_event_s = None
+        self.probe_loss_seen_s = None
+        self.weak_geometry_streak = 0
         self.window = deque()
         self.direct_side = False
         self.wall = False
@@ -62,6 +68,14 @@ class U4ContactObserver:
 
     def update(self, sensor, neighbors=None):
         now = sensor["time_s"]
+        support_x = sensor.get("u4_support_x_m")
+        support_target_x = sensor.get("u4_support_target_x_m")
+        support_frozen = bool(sensor.get("u4_support_motion_frozen", False))
+        support_force = sensor.get("u4_support_target_force_N")
+        support_contact_candidate = (support_frozen and support_force is not None
+                                     and .1 <= float(support_force) <= 1.
+                                     and support_x is not None and support_target_x is not None
+                                     and abs(float(support_target_x) - float(support_x)) >= .0002)
         if now - self.base.last_now > .014:
             self.side_streak.clear()
         result = self.base.update(sensor, neighbors)
@@ -93,7 +107,7 @@ class U4ContactObserver:
         visible = result["camera_age_s"] is not None and result["camera_age_s"] <= .4
         witnessed = None
         supported = self.supported_pose(sensor.get("camera"), now) if self.handover else None
-        side_overlap = .004 if supported is not None else .012
+        side_overlap = .008 if supported is not None else .012
         in_corridor = False
         if visible:
             center = result["position_m"]
@@ -208,6 +222,10 @@ class U4ContactObserver:
             probe_side_dropout = bool(sensor.get("u4_silent_loss_probe_active", False)
                                      or U4_SILENT_LOSS_PROBE_ACTIVE)
             if probe_side_dropout:
+                if self.probe_loss_seen_s is None:
+                    self.probe_loss_seen_s = now
+                    if self.silent_loss_event_s is None:
+                        self.silent_loss_event_s = now
                 raw_side = None
                 side = None
             side_loaded = side if side is not None else True if SIDE in bounds else None
@@ -271,6 +289,7 @@ class U4ContactObserver:
             if (self.silent_loss_streak >= SILENT_LOSS_CONFIRM_STEPS
                     and not self.silent_loss_active):
                 self.silent_loss_active = True
+                self.silent_loss_event_s = now
                 silent_loss_event = "side_load_lost_silent"
             if (self.silent_loss_active and exchange and rear is True
                     and raw_side is None):
@@ -280,6 +299,25 @@ class U4ContactObserver:
                 if self.confirmed_side is not False:
                     silent_loss_event = silent_loss_event or "side_load_lost_silent"
                 self.confirmed_side = False
+            weak_geometry_recovery = False
+            loss_seen = self.silent_loss_active or self.probe_loss_seen_s is not None
+            if (loss_seen and not probe_side_dropout and rear is True
+                    and support_contact_candidate and in_corridor and side_gap is not None
+                    and side_gap <= WEAK_GEOMETRY_GAP_M
+                    and self.silent_loss_event_s is not None
+                    and now - self.silent_loss_event_s >= WEAK_GEOMETRY_RECOVERY_DELAY_S):
+                self.weak_geometry_streak += 1
+                if self.weak_geometry_streak >= WEAK_GEOMETRY_CONFIRM_STEPS:
+                    previous_side = self.confirmed_side
+                    side_loaded = True
+                    bounds.add(SIDE)
+                    result = {**result, "state": "S6", "boundaries": sorted(bounds)}
+                    self.confirmed_side = True
+                    if previous_side is not True:
+                        side_event = "side_load_recovered"
+                    weak_geometry_recovery = True
+            else:
+                self.weak_geometry_streak = 0
             if silent_loss_event is not None:
                 side_event = silent_loss_event
             return {**result, "side_loaded": side_loaded,
@@ -304,6 +342,10 @@ class U4ContactObserver:
                     "silent_loss_event": silent_loss_event,
                     "silent_loss_retract_m": self.silent_loss_retract_m,
                     "silent_loss_right_motion_m": self.silent_loss_right_motion_m,
+                    "weak_geometry_recovery": weak_geometry_recovery,
+                    "weak_geometry_streak": self.weak_geometry_streak,
+                    "probe_loss_seen": self.probe_loss_seen_s is not None,
+                    "support_contact_candidate": support_contact_candidate,
                     "u4_silent_loss_probe_active": probe_side_dropout,
                     "wall_response": witnessed}
 

@@ -1,0 +1,87 @@
+{
+  "experiment": "U4 weak-side reload observer validation",
+  "branch": "innovation-2-state-fusion",
+  "observer_changes": {
+    "supported_view_side_overlap_m": 0.008,
+    "support_encoder_cue": [
+      "u4_support_x_m",
+      "u4_support_target_x_m",
+      "u4_support_motion_frozen",
+      "u4_support_target_force_N"
+    ],
+    "recovery_delay_s": 0.85,
+    "confirm_steps": 3,
+    "generic_models_filter_support_fields": true,
+    "cue_is": "independent support position/freeze/command observation, not PhysX contact truth"
+  },
+  "trials": [
+    {
+      "target_N": 0.35,
+      "run": "innovation2-u4-pose-sled-035-retract25um-20261123",
+      "result": "u4_pose_sled_035_retract25um.json",
+      "measured_side_force_N": {
+        "min": 0.1692111428,
+        "median": 0.4576237779,
+        "max": 1.5886565857,
+        "ticks_in_0.1_to_1_N": 312,
+        "strong_ticks": 1
+      },
+      "observer": {
+        "s6_recovery_delay_s": 0.0333333333,
+        "false_s6_ticks": 0,
+        "false_side_loaded_ticks": 0
+      },
+      "assessment": "accepted weak interval. One isolated >1 N solver transient remains in the raw measurement, but S6 recovery is stable and no false S6 occurs during loss."
+    },
+    {
+      "target_N": 0.7,
+      "run": "innovation2-u4-pose-sled-070-observer-20261123",
+      "result": "u4_pose_sled_070_observer.json",
+      "measured_side_force_N": {
+        "min": 0.4883186705,
+        "median": 0.9503440093,
+        "max": 1.4504662435,
+        "ticks_in_0.1_to_1_N": 231,
+        "strong_ticks": 109
+      },
+      "observer": {
+        "s6_recovery_delay_s": 0.0333333333,
+        "false_s6_ticks": 0,
+        "false_side_loaded_ticks": 0
+      },
+      "assessment": "weak re-entry after a strong-first transient detected without false S6"
+    },
+    {
+      "target_N": 1.0,
+      "run": "innovation2-u4-pose-sled-100-observer-20261123",
+      "result": "u4_pose_sled_100_observer.json",
+      "measured_side_force_N": {
+        "min": 1.2224719115,
+        "median": 1.9789559743,
+        "max": 2.3804997839,
+        "ticks_in_0.1_to_1_N": 0,
+        "strong_ticks": 366
+      },
+      "observer": {
+        "s6_recovery_delay_s": 0.0333333333,
+        "false_s6_ticks": 0,
+        "false_side_loaded_ticks": 0
+      },
+      "assessment": "commanded 1 N did not produce a weak interval in this run, so no weak-reload claim"
+    }
+  ],
+  "strict_labeling": "A trial is an independent weak onset only when it has at least three prior off ticks, at least three consecutive 0.1–1 N ticks, and no prior >1 N contact in that contact episode.",
+  "status": "0.35 weak interval accepted for observer validation with 2.5 um post-contact retraction. 0.7 and 1.0 supplementary trials completed.",
+  "diagnostic_repeat": {
+    "run": "innovation2-u4-pose-sled-035-retract30um-20261123",
+    "result": "u4_pose_sled_035_retract30um.json",
+    "measured_side_force_N": {
+      "min": 0.0062101975,
+      "median": 0.2613632657,
+      "max": 1.7974175513,
+      "ticks_in_0.1_to_1_N": 272
+    },
+    "false_s6_ticks": 4,
+    "decision": "rejected for final observer setting because over-retraction produced intermittent one-tick false S6 transitions"
+  }
+}

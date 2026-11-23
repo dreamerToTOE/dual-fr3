@@ -5,8 +5,14 @@ from textwrap import indent
 
 PROBE = r'''
 U4_SILENT_LOSS_PROBE_ACTIVE = False
+U4_SUPPORT_X_M = None
+U4_SUPPORT_TARGET_X_M = None
+U4_SUPPORT_MOTION_FROZEN = False
+U4_SUPPORT_TARGET_FORCE_N = None
 
 def run_u4_weak_reload(recovery):
+    global U4_SUPPORT_X_M, U4_SUPPORT_TARGET_X_M
+    global U4_SUPPORT_MOTION_FROZEN, U4_SUPPORT_TARGET_FORCE_N
     # Move only the side neighbor. Its current contact impulse feeds the fixture, not the observer.
     # The fixture deliberately changes only this experiment.  It gives the
     # neighbour a thin, visible low-friction pad and a low-friction body
@@ -25,6 +31,10 @@ def run_u4_weak_reload(recovery):
     compliant_stiffness_N_m = 1500.0
     target_x = (float(active_center[0]) + cube_size_m + pad_thickness_m
                 - float(U4_WEAK_RELOAD_N) / compliant_stiffness_N_m)
+    U4_SUPPORT_X_M = origin_x
+    U4_SUPPORT_TARGET_X_M = target_x
+    U4_SUPPORT_MOTION_FROZEN = False
+    U4_SUPPORT_TARGET_FORCE_N = float(U4_WEAK_RELOAD_N)
     low_friction = .005
     body_material = UsdShade.Material.Define(stage, "/World/U4WeakSideLowFrictionBodyMaterial")
     body_api = UsdPhysics.MaterialAPI.Apply(body_material.GetPrim())
@@ -118,6 +128,7 @@ def run_u4_weak_reload(recovery):
     neighbor.set_angular_velocity(np.zeros(3, dtype=np.float32))
     contact_frozen = False
     frozen_x = None
+    contact_retract_m = 2.5e-6
     for reload_index in range(recovery["reload_observation_steps"]):
         alpha = min(1.0, (reload_index + 1) / float(recovery["reload_observation_steps"]))
         smooth = alpha * alpha * (3.0 - 2.0 * alpha)
@@ -129,6 +140,8 @@ def run_u4_weak_reload(recovery):
         neighbor.set_angular_velocity(np.zeros(3, dtype=np.float32))
         step()
         check_current_collision(contact_monitor.phase)
+        U4_SUPPORT_X_M = float(position[0])
+        U4_SUPPORT_MOTION_FROZEN = bool(contact_frozen)
         if not contact_frozen:
             snapshot = contact_monitor.cube_contact_snapshot()
             pad_touch = any(
@@ -141,10 +154,17 @@ def run_u4_weak_reload(recovery):
                 for pair in snapshot["pairs"])
             if pad_touch:
                 contact_frozen = True
-                frozen_x = float(position[0])
-    recovery["weak_fixture"].update({"contact_position_frozen": contact_frozen,
-                                      "frozen_neighbor_x_m": frozen_x})
+                # The first pose sample can leave a few micrometres of solver
+                # penetration.  Retract along +X before holding the support
+                # so the resulting normal impulse stays in the intended
+                # sub-newton range.
+                frozen_x = float(position[0]) + contact_retract_m
     recovery["weak_fixture"]["final_neighbor_x_m"] = float(neighbor.get_world_pose()[0][0])
+    U4_SUPPORT_X_M = float(recovery["weak_fixture"]["final_neighbor_x_m"])
+    U4_SUPPORT_MOTION_FROZEN = bool(contact_frozen)
+    recovery["weak_fixture"].update({"contact_position_frozen": contact_frozen,
+                                      "frozen_neighbor_x_m": frozen_x,
+                                      "contact_retract_m": contact_retract_m})
 
 def run_u4_silent_loss_probe():
     """Separate the active box from Cube 8 while preserving rear support."""
@@ -240,8 +260,19 @@ def inject(source):
     # mirror it into the observer module only during this experiment.
     source = source.replace(
         'from __future__ import annotations\n',
-        'from __future__ import annotations\n\nU4_SILENT_LOSS_PROBE_ACTIVE = False\n',
+        'from __future__ import annotations\n\nU4_SILENT_LOSS_PROBE_ACTIVE = False\nU4_SUPPORT_X_M = None\nU4_SUPPORT_TARGET_X_M = None\nU4_SUPPORT_MOTION_FROZEN = False\nU4_SUPPORT_TARGET_FORCE_N = None\n',
         1,
+    )
+
+    source = replace_once(
+        source,
+        '                        "camera": latest_camera_observation,\n                    },\n',
+        '                        "camera": latest_camera_observation,\n'
+        '                        "u4_support_x_m": U4_SUPPORT_X_M,\n'
+        '                        "u4_support_target_x_m": U4_SUPPORT_TARGET_X_M,\n'
+        '                        "u4_support_motion_frozen": U4_SUPPORT_MOTION_FROZEN,\n'
+        '                        "u4_support_target_force_N": U4_SUPPORT_TARGET_FORCE_N,\n'
+        '                    },\n',
     )
 
     source = replace_once(

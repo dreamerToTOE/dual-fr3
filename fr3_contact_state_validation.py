@@ -144,7 +144,9 @@ class ContactStateExperiment:
 
     def append(self, *, physics_step, sensors, truth, auxiliary=None):
         # The recognizer receives only the explicitly constructed sensor boundary.
-        outputs = {mode: model.update(**sensors) for mode, model in self.models.items()}
+        generic_sensors = {key: value for key, value in sensors.items()
+                           if not key.startswith("u4_support_")}
+        outputs = {mode: model.update(**generic_sensors) for mode, model in self.models.items()}
         u4_output = None
         if auxiliary and auxiliary.get("cube_id") == 10:
             if self.u4_model is None:
@@ -187,7 +189,9 @@ class ContactStateExperiment:
         model = ContactStateEstimator(self.config, mode="fusion")
         masked = []
         for sensors in self.inputs:
-            masked.append(model.update(**{**sensors, "camera": None}))
+            generic_sensors = {key: value for key, value in sensors.items()
+                               if not key.startswith("u4_support_")}
+            masked.append(model.update(**{**generic_sensors, "camera": None}))
         metrics["fusion_camera_fully_unavailable"] = recognition_metrics(masked, self.references)
         u4_summary = None
         if self.u4_predictions:
