@@ -1,0 +1,59 @@
+{
+  "run_dir": "../runs/innovation2-u4-main-validation-20261124-frozen-observer",
+  "single_isaac_instance": true,
+  "observer_commit": "943a9e9",
+  "runner_status": "RUNNING",
+  "ab_status": "UNVERIFIED",
+  "error": null,
+  "task_status": null,
+  "completed_u4_online": true,
+  "continued_into_cube11_A": true,
+  "stopped_by_user_after_u4": true,
+  "phases": [
+    {
+      "phase": "upper_B_rear",
+      "status": "RUNNING",
+      "cube_id": 10
+    },
+    {
+      "phase": "upper_B_rear",
+      "status": "FORCE_CONFIRMED",
+      "cube_id": 10
+    },
+    {
+      "phase": "A_approach",
+      "status": "RUNNING",
+      "cube_id": 11
+    },
+    {
+      "phase": "A_lift_and_align",
+      "status": "RUNNING",
+      "cube_id": 11
+    },
+    {
+      "phase": "A_lift_and_align",
+      "status": "CLEAR_PHYSX_EXECUTION",
+      "cube_id": 11
+    },
+    {
+      "phase": "A_support_transfer",
+      "status": "VERTICAL_WRIST_LOAD_CONFIRMATION",
+      "cube_id": 11
+    },
+    {
+      "phase": "upper_support_confirmed",
+      "status": "FORCE_TRANSFERRED",
+      "cube_id": 11
+    },
+    {
+      "phase": "upper_release",
+      "status": "OPENING_BOTH_SIDE_GRIPPERS",
+      "cube_id": 11
+    },
+    {
+      "phase": "A_withdraw_laterally",
+      "status": "RUNNING",
+      "cube_id": 11
+    }
+  ]
+}
