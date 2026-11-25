@@ -26,11 +26,11 @@ def extract(run, clip, output, allow_incomplete=False):
     report = json.loads((run / "runner_report.json").read_text())
     config = report["scene_parameters"]
     hz = report["simulation_clock"]["control_hz"]
-    cube_id = {"a": 7, "u4": 10, "u5": 11}[clip]
+    cube_id = {"a": 7, "s0": 7, "u4": 10, "u5": 11}[clip]
     events = [e for e in report["phases"] if e.get("cube_id") == cube_id]
-    end_phase = "upper_slot_complete" if clip != "a" else "upper_A_capture"
+    end_phase = {"a": "upper_A_capture", "s0": "s0_approach_capture"}.get(clip, "upper_slot_complete")
     endings = [e for e in events if e["phase"] == end_phase]
-    if not endings and not (allow_incomplete and clip == "u4" and report["status"] == "STOPPED"):
+    if not endings and not (allow_incomplete and clip in ("u4", "s0") and report["status"] == "STOPPED"):
         raise ValueError(f"No {end_phase} for cube {cube_id}: inspect capture end before scoring.")
     end = round(endings[-1]["sim_time_s"] * hz) if endings else report["simulation_clock"]["control_steps"]
     poses = report["upper_row"]
@@ -53,6 +53,9 @@ def extract(run, clip, output, allow_incomplete=False):
                                           "received_time_s": min(arrivals)})
     raw, truth = (run / "contact_states" / (name + ".jsonl.gz") for name in ("sensor_inputs", "reference"))
     paths = [raw, truth, run / "runner_report.json"]
+    optical_capture = run / "s0_camera.jsonl"
+    if clip == "s0":
+        paths.append(optical_capture)
     blur_path = run / "vision/blurred_camera.jsonl"
     blur = {}
     if blur_path.exists():
@@ -69,6 +72,10 @@ def extract(run, clip, output, allow_incomplete=False):
                                                 for e in events if e["sim_time_s"] <= end / hz + 1e-7],
               "source_sha256": {str(p.relative_to(run)): hashlib.sha256(p.read_bytes()).hexdigest()
                                 for p in paths}}
+    if clip == "s0":
+        header["optical_capture"] = report["s0_optical_capture"]
+        with optical_capture.open() as stream:
+            header["camera_packets"] = list(map(json.loads, stream))
     output.parent.mkdir(parents=True, exist_ok=True)
     if not endings:
         header["incomplete_run"] = {"status": report["status"], "reason": report.get("error")}
@@ -109,8 +116,9 @@ def extract(run, clip, output, allow_incomplete=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("run", type=Path)
-    parser.add_argument("case", choices=("a", "u4", "u5"))
+    parser.add_argument("case", choices=("a", "s0", "u4", "u5"))
     parser.add_argument("output", type=Path)
-    parser.add_argument("--allow-incomplete", action="store_true", help="Keep an interrupted U4 contact trial through its last physical step")
+    parser.add_argument("--allow-incomplete", action="store_true",
+                        help="Keep a stopped U4 or S0 contact trial through its last recorded physics step")
     args = parser.parse_args()
     extract(args.run, args.case, args.output, args.allow_incomplete)

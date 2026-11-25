@@ -272,6 +272,12 @@ def main():
     parser.add_argument("--stop-after-front", type=int, choices=range(1, 6))
     parser.add_argument("--stop-after-upper-a", action="store_true",
                         help="Collect the next upper supply, lift and landing, ending after withdrawal")
+    parser.add_argument("--s0-supply-yaw-deg", type=float,
+                        help="Collect D455 depth and supply RGB during upper-1 approach, given initial Cube yaw")
+    parser.add_argument("--s0-short-range", action="store_true",
+                        help="Add a passive simulated short-range comparison to the S0 approach capture")
+    parser.add_argument("--s0-light-touch", action="store_true",
+                        help="Hold a low-force touch instead of closing the cups in the S0 capture")
     args = parser.parse_args()
     checkpoint = {}
     if args.resume:
@@ -296,6 +302,14 @@ def main():
         parser.error("--stop-after-u4-silent-loss requires --u4-silent-loss-probe")
     if args.stop_after_upper_a and (front != 6 or release or args.stop_after_front is not None):
         parser.error("--stop-after-upper-a needs a completed lower row and the next upper box at supply")
+    if args.s0_supply_yaw_deg is not None:
+        if (front != 6 or upper != 1 or release or args.stop_after_upper_a
+                or not math.isfinite(args.s0_supply_yaw_deg)):
+            parser.error("--s0-supply-yaw-deg needs the upper-1 supply checkpoint and a finite yaw")
+    if args.s0_short_range and args.s0_supply_yaw_deg is None:
+        parser.error("--s0-short-range requires --s0-supply-yaw-deg")
+    if args.s0_light_touch and args.s0_supply_yaw_deg is None:
+        parser.error("--s0-light-touch requires --s0-supply-yaw-deg")
     terminal = (release or {}).get("terminal_probe")
     if terminal is not None and (front != 6 or upper != 5 or args.upper5_yaw_deg not in (None, 0.)):
         parser.error("A terminal probe checkpoint requires upper slot 5 with its measured orientation")
@@ -347,6 +361,10 @@ def main():
         source = replace_once(source, marker, marker +
                               '\n            record("upper_A_capture", "LANDED_RELEASED_RETRACTED", cube_id=task_id)'
                               '\n            break')
+    if args.s0_supply_yaw_deg is not None:
+        from experiments.s0_optical_capture import inject
+
+        source = inject(source, args.s0_supply_yaw_deg, args.s0_short_range, args.s0_light_touch)
     if experiment is not None:
         source = replace_once(source, '        report["upper_row"] = {',
                               '        report["upper5_experiment"] = UPPER5_EXPERIMENT\n'

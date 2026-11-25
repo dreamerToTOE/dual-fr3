@@ -15,11 +15,14 @@ SIDES = ("left", "right")
 
 
 class SevenObserver:
-    def __init__(self, config, mode, delay_ms=0, *, revised=False):
+    def __init__(self, config, mode, delay_ms=0, *, revised=False, separation_margin_m=.005):
         if mode not in MODES or not math.isfinite(delay_ms) or delay_ms < 0:
             raise ValueError("Invalid observation mode or delivery delay")
         self.mode = mode
         self.revised = revised
+        if not math.isfinite(separation_margin_m) or separation_margin_m <= 0.:
+            raise ValueError("Cup separation margin must be positive and finite")
+        self.separation_margin_m = separation_margin_m
         self.delay = delay_ms / 1000.
         self.half = config["cube_size_m"] / 2.
         self.weight = config["physics"]["cube_mass_kg"] * abs(config["physics"]["gravity_m_s2"][2])
@@ -260,7 +263,7 @@ class SevenObserver:
                 if not loaded[i] and separation[i] > .025:
                     hands[s] = "separated"
                     retreat_complete[s] = True
-                elif (self.revised and use_force and not loaded[i] and face_gap[i] >= .005 and
+                elif (self.revised and use_force and not loaded[i] and face_gap[i] >= self.separation_margin_m and
                       self.history[0][0] <= now - .05 and all(row[i] for row in quiet)):
                     hands[s] = "separated"
         state, hits = "UNKNOWN", {}

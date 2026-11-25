@@ -6,7 +6,7 @@
 
 六次独立测试的逐状态指标、三组观测线对照、置信区间和配对数据可从仓库复算。[独立测试报告](thesis_metrics.md) · [评分清单](thesis_test_manifest.json)
 
-S0 的补充调研复核了上料控制与状态识别使用的相机信号，提出用箱底承托和吸盘间隙共同判断。 [S0 观测方法](s0_observation_review.md)
+S0 补充实验在同一次接近上对照 D455 深度、供料相机和虚拟短距测距。 [S0 对照结果与数据](s0_optical_approach_20261125/README.md) · [S0 观测方法调研](s0_observation_review.md)
 
 最近一轮主运行器复验记录了上层第 4 箱的在线 S5/S6 识别、双臂同步撤离和第 5 箱直推就位。[2026-11-25 在线复验](online_acceptance_20261125/README.md)
 

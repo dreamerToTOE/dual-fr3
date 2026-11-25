@@ -1,0 +1,2517 @@
+{
+  "trials": {
+    "nominal": {
+      "paired_clip": "nominal.jsonl.gz",
+      "capture_end": {
+        "phase": "s0_approach_capture",
+        "status": "SEALED_BEFORE_LIFT",
+        "sim_time_s": 36.541666666666664,
+        "wall_elapsed_s": 116.8816985909998,
+        "cube_position_m": [
+          4.1280685536548845e-07,
+          -0.30000069737434387,
+          0.7869999408721924
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          4.395825214942306e-07,
+          3.4579403518364416e-07,
+          -2.5516121695545735e-06
+        ],
+        "cube_id": 7
+      },
+      "unexpected_physx_contacts": 0,
+      "methods": {
+        "d455_depth_5mm": {
+          "source": "s0_d455_20261125_nominal",
+          "steps": 4385,
+          "capture": {
+            "depth_source": "distance_to_image_plane",
+            "render_camera": "/World/D455/CalibratedColorCamera",
+            "aligned_rgb_and_depth": true,
+            "supply_yaw_deg": 0.0
+          },
+          "incomplete_run": null,
+          "weak_touch_longest_ticks": 1,
+          "alternate_camera_steps": 510,
+          "alternate_camera_frames": 510,
+          "alternate_separation_margin_mm": 5.0,
+          "short_range_steps_with_return": 0,
+          "short_range_added_confirmations": 0,
+          "paired_pose_error": {
+            "rear_rgb": {
+              "paired_frames": 510,
+              "status_counts": {
+                "no_frame": 1,
+                "detected": 510,
+                "marker_not_visible": 36
+              },
+              "median_xy_error_mm": 42.39623162237103,
+              "median_signed_z_error_mm": -40.10756548115574,
+              "median_abs_z_error_mm": 40.10756548115574,
+              "p95_abs_z_error_mm": 55.68777451512433
+            },
+            "d455_depth": {
+              "paired_frames": 510,
+              "status_counts": {
+                "detected": 510,
+                "marker_not_visible": 36
+              },
+              "median_xy_error_mm": 1.4328863012850332,
+              "median_signed_z_error_mm": 0.4970981038674993,
+              "median_abs_z_error_mm": 0.4970981038674993,
+              "p95_abs_z_error_mm": 0.4971573428689313
+            },
+            "supply_plane_height_m": 0.712
+          },
+          "scores": {
+            "rear_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 1008,
+                  "truth": 3867,
+                  "predicted": 1008,
+                  "precision": 1.0,
+                  "recall": 0.26066718386346005,
+                  "f1": 0.4135384615384616,
+                  "unknown": 2859
+                },
+                "S1": {
+                  "tp": 107,
+                  "truth": 494,
+                  "predicted": 107,
+                  "precision": 1.0,
+                  "recall": 0.2165991902834008,
+                  "f1": 0.35607321131447583,
+                  "unknown": 387
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1047,
+                "recognized_as_s0": 24
+              },
+              "native_touch": {
+                "steps": 518,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 1,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3870,
+              "first_s1_confirmed_step": 3870,
+              "s1_confirmation_delay_s": 0.0
+            },
+            "d455_depth": {
+              "by_state": {
+                "S0": {
+                  "tp": 2015,
+                  "truth": 3867,
+                  "predicted": 2015,
+                  "precision": 1.0,
+                  "recall": 0.5210757693302301,
+                  "f1": 0.685141108466508,
+                  "unknown": 1852
+                },
+                "S1": {
+                  "tp": 249,
+                  "truth": 494,
+                  "predicted": 249,
+                  "precision": 1.0,
+                  "recall": 0.5040485829959515,
+                  "f1": 0.6702557200538358,
+                  "unknown": 245
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1047,
+                "recognized_as_s0": 0
+              },
+              "native_touch": {
+                "steps": 518,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 1,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3870,
+              "first_s1_confirmed_step": 3870,
+              "s1_confirmation_delay_s": 0.0
+            }
+          }
+        },
+        "d455_depth_1.5mm": {
+          "source": "s0_d455_20261125_nominal",
+          "steps": 4385,
+          "capture": {
+            "depth_source": "distance_to_image_plane",
+            "render_camera": "/World/D455/CalibratedColorCamera",
+            "aligned_rgb_and_depth": true,
+            "supply_yaw_deg": 0.0
+          },
+          "incomplete_run": null,
+          "weak_touch_longest_ticks": 1,
+          "alternate_camera_steps": 510,
+          "alternate_camera_frames": 510,
+          "alternate_separation_margin_mm": 1.5,
+          "short_range_steps_with_return": 0,
+          "short_range_added_confirmations": 0,
+          "paired_pose_error": {
+            "rear_rgb": {
+              "paired_frames": 510,
+              "status_counts": {
+                "no_frame": 1,
+                "detected": 510,
+                "marker_not_visible": 36
+              },
+              "median_xy_error_mm": 42.39623162237103,
+              "median_signed_z_error_mm": -40.10756548115574,
+              "median_abs_z_error_mm": 40.10756548115574,
+              "p95_abs_z_error_mm": 55.68777451512433
+            },
+            "d455_depth": {
+              "paired_frames": 510,
+              "status_counts": {
+                "detected": 510,
+                "marker_not_visible": 36
+              },
+              "median_xy_error_mm": 1.4328863012850332,
+              "median_signed_z_error_mm": 0.4970981038674993,
+              "median_abs_z_error_mm": 0.4970981038674993,
+              "p95_abs_z_error_mm": 0.4971573428689313
+            },
+            "supply_plane_height_m": 0.712
+          },
+          "scores": {
+            "rear_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 1008,
+                  "truth": 3867,
+                  "predicted": 1008,
+                  "precision": 1.0,
+                  "recall": 0.26066718386346005,
+                  "f1": 0.4135384615384616,
+                  "unknown": 2859
+                },
+                "S1": {
+                  "tp": 107,
+                  "truth": 494,
+                  "predicted": 107,
+                  "precision": 1.0,
+                  "recall": 0.2165991902834008,
+                  "f1": 0.35607321131447583,
+                  "unknown": 387
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1047,
+                "recognized_as_s0": 24
+              },
+              "native_touch": {
+                "steps": 518,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 1,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3870,
+              "first_s1_confirmed_step": 3870,
+              "s1_confirmation_delay_s": 0.0
+            },
+            "d455_depth": {
+              "by_state": {
+                "S0": {
+                  "tp": 2800,
+                  "truth": 3867,
+                  "predicted": 2800,
+                  "precision": 1.0,
+                  "recall": 0.7240755107318335,
+                  "f1": 0.839958002099895,
+                  "unknown": 1067
+                },
+                "S1": {
+                  "tp": 249,
+                  "truth": 494,
+                  "predicted": 249,
+                  "precision": 1.0,
+                  "recall": 0.5040485829959515,
+                  "f1": 0.6702557200538358,
+                  "unknown": 245
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1047,
+                "recognized_as_s0": 243
+              },
+              "native_touch": {
+                "steps": 518,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 1,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3870,
+              "first_s1_confirmed_step": 3870,
+              "s1_confirmation_delay_s": 0.0
+            }
+          }
+        },
+        "supply_rgb_5mm": {
+          "source": "s0_d455_20261125_nominal",
+          "steps": 4385,
+          "capture": {
+            "depth_source": "distance_to_image_plane",
+            "render_camera": "/World/D455/CalibratedColorCamera",
+            "aligned_rgb_and_depth": true,
+            "supply_yaw_deg": 0.0
+          },
+          "incomplete_run": null,
+          "weak_touch_longest_ticks": 1,
+          "alternate_camera_steps": 4362,
+          "alternate_camera_frames": 543,
+          "alternate_separation_margin_mm": 5.0,
+          "short_range_steps_with_return": 0,
+          "short_range_added_confirmations": 0,
+          "paired_pose_error": {
+            "rear_rgb": {
+              "paired_frames": 510,
+              "status_counts": {
+                "no_frame": 1,
+                "detected": 510,
+                "marker_not_visible": 36
+              },
+              "median_xy_error_mm": 42.39623162237103,
+              "median_signed_z_error_mm": -40.10756548115574,
+              "median_abs_z_error_mm": 40.10756548115574,
+              "p95_abs_z_error_mm": 55.68777451512433
+            },
+            "supply_rgb": {
+              "paired_frames": 543,
+              "status_counts": {
+                "detected": 543,
+                "no_planar_pose": 3
+              },
+              "median_xy_error_mm": 0.6360057048439332,
+              "median_signed_z_error_mm": -4.768372363628259e-07,
+              "median_abs_z_error_mm": 4.768372363628259e-07,
+              "p95_abs_z_error_mm": 5.91278075390278e-05
+            },
+            "supply_plane_height_m": 0.712
+          },
+          "scores": {
+            "rear_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 1008,
+                  "truth": 3867,
+                  "predicted": 1008,
+                  "precision": 1.0,
+                  "recall": 0.26066718386346005,
+                  "f1": 0.4135384615384616,
+                  "unknown": 2859
+                },
+                "S1": {
+                  "tp": 107,
+                  "truth": 494,
+                  "predicted": 107,
+                  "precision": 1.0,
+                  "recall": 0.2165991902834008,
+                  "f1": 0.35607321131447583,
+                  "unknown": 387
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1047,
+                "recognized_as_s0": 24
+              },
+              "native_touch": {
+                "steps": 518,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 1,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3870,
+              "first_s1_confirmed_step": 3870,
+              "s1_confirmation_delay_s": 0.0
+            },
+            "supply_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 2755,
+                  "truth": 3867,
+                  "predicted": 2755,
+                  "precision": 1.0,
+                  "recall": 0.7124385828807861,
+                  "f1": 0.8320749018423438,
+                  "unknown": 1112
+                },
+                "S1": {
+                  "tp": 249,
+                  "truth": 494,
+                  "predicted": 249,
+                  "precision": 1.0,
+                  "recall": 0.5040485829959515,
+                  "f1": 0.6702557200538358,
+                  "unknown": 245
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1047,
+                "recognized_as_s0": 0
+              },
+              "native_touch": {
+                "steps": 518,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 1,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3870,
+              "first_s1_confirmed_step": 3870,
+              "s1_confirmation_delay_s": 0.0
+            }
+          }
+        },
+        "supply_rgb_1.5mm": {
+          "source": "s0_d455_20261125_nominal",
+          "steps": 4385,
+          "capture": {
+            "depth_source": "distance_to_image_plane",
+            "render_camera": "/World/D455/CalibratedColorCamera",
+            "aligned_rgb_and_depth": true,
+            "supply_yaw_deg": 0.0
+          },
+          "incomplete_run": null,
+          "weak_touch_longest_ticks": 1,
+          "alternate_camera_steps": 4362,
+          "alternate_camera_frames": 543,
+          "alternate_separation_margin_mm": 1.5,
+          "short_range_steps_with_return": 0,
+          "short_range_added_confirmations": 0,
+          "paired_pose_error": {
+            "rear_rgb": {
+              "paired_frames": 510,
+              "status_counts": {
+                "no_frame": 1,
+                "detected": 510,
+                "marker_not_visible": 36
+              },
+              "median_xy_error_mm": 42.39623162237103,
+              "median_signed_z_error_mm": -40.10756548115574,
+              "median_abs_z_error_mm": 40.10756548115574,
+              "p95_abs_z_error_mm": 55.68777451512433
+            },
+            "supply_rgb": {
+              "paired_frames": 543,
+              "status_counts": {
+                "detected": 543,
+                "no_planar_pose": 3
+              },
+              "median_xy_error_mm": 0.6360057048439332,
+              "median_signed_z_error_mm": -4.768372363628259e-07,
+              "median_abs_z_error_mm": 4.768372363628259e-07,
+              "p95_abs_z_error_mm": 5.91278075390278e-05
+            },
+            "supply_plane_height_m": 0.712
+          },
+          "scores": {
+            "rear_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 1008,
+                  "truth": 3867,
+                  "predicted": 1008,
+                  "precision": 1.0,
+                  "recall": 0.26066718386346005,
+                  "f1": 0.4135384615384616,
+                  "unknown": 2859
+                },
+                "S1": {
+                  "tp": 107,
+                  "truth": 494,
+                  "predicted": 107,
+                  "precision": 1.0,
+                  "recall": 0.2165991902834008,
+                  "f1": 0.35607321131447583,
+                  "unknown": 387
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1047,
+                "recognized_as_s0": 24
+              },
+              "native_touch": {
+                "steps": 518,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 1,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3870,
+              "first_s1_confirmed_step": 3870,
+              "s1_confirmation_delay_s": 0.0
+            },
+            "supply_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 3608,
+                  "truth": 3867,
+                  "predicted": 3608,
+                  "precision": 1.0,
+                  "recall": 0.9330230152573054,
+                  "f1": 0.9653511705685619,
+                  "unknown": 259
+                },
+                "S1": {
+                  "tp": 249,
+                  "truth": 494,
+                  "predicted": 249,
+                  "precision": 1.0,
+                  "recall": 0.5040485829959515,
+                  "f1": 0.6702557200538358,
+                  "unknown": 245
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1047,
+                "recognized_as_s0": 811
+              },
+              "native_touch": {
+                "steps": 518,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 1,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3870,
+              "first_s1_confirmed_step": 3870,
+              "s1_confirmation_delay_s": 0.0
+            }
+          }
+        }
+      }
+    },
+    "yaw_plus": {
+      "paired_clip": "yaw_plus.jsonl.gz",
+      "capture_end": {
+        "phase": "s0_approach_capture",
+        "status": "SEALED_BEFORE_LIFT",
+        "sim_time_s": 36.358333333333334,
+        "wall_elapsed_s": 122.30914971099992,
+        "cube_position_m": [
+          5.631337671729852e-07,
+          -0.30000072717666626,
+          0.7869998812675476
+        ],
+        "cube_orientation_wxyz": [
+          0.9999786019325256,
+          6.006254125168198e-07,
+          5.080672735857661e-07,
+          0.006539724767208099
+        ],
+        "cube_id": 7
+      },
+      "unexpected_physx_contacts": 0,
+      "methods": {
+        "d455_depth_5mm": {
+          "source": "s0_d455_20261125_yaw_plus",
+          "steps": 4363,
+          "capture": {
+            "depth_source": "distance_to_image_plane",
+            "render_camera": "/World/D455/CalibratedColorCamera",
+            "aligned_rgb_and_depth": true,
+            "supply_yaw_deg": 0.75
+          },
+          "incomplete_run": null,
+          "weak_touch_longest_ticks": 0,
+          "alternate_camera_steps": 508,
+          "alternate_camera_frames": 508,
+          "alternate_separation_margin_mm": 5.0,
+          "short_range_steps_with_return": 0,
+          "short_range_added_confirmations": 0,
+          "paired_pose_error": {
+            "rear_rgb": {
+              "paired_frames": 508,
+              "status_counts": {
+                "no_frame": 1,
+                "detected": 508,
+                "marker_not_visible": 35
+              },
+              "median_xy_error_mm": 25.54279548902253,
+              "median_signed_z_error_mm": -25.34345688487832,
+              "median_abs_z_error_mm": 26.395763036080155,
+              "p95_abs_z_error_mm": 64.77264004189234
+            },
+            "d455_depth": {
+              "paired_frames": 508,
+              "status_counts": {
+                "detected": 508,
+                "marker_not_visible": 35
+              },
+              "median_xy_error_mm": 1.433794859238193,
+              "median_signed_z_error_mm": 0.4971183438335913,
+              "median_abs_z_error_mm": 0.4971183438335913,
+              "p95_abs_z_error_mm": 0.49719807221836887
+            },
+            "supply_plane_height_m": 0.712
+          },
+          "scores": {
+            "rear_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 1620,
+                  "truth": 3888,
+                  "predicted": 1620,
+                  "precision": 1.0,
+                  "recall": 0.4166666666666667,
+                  "f1": 0.5882352941176471,
+                  "unknown": 2268
+                },
+                "S1": {
+                  "tp": 191,
+                  "truth": 451,
+                  "predicted": 191,
+                  "precision": 1.0,
+                  "recall": 0.42350332594235035,
+                  "f1": 0.5950155763239875,
+                  "unknown": 260
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 23,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 23
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 0
+              },
+              "native_touch": {
+                "steps": 475,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3891,
+              "first_s1_confirmed_step": 3891,
+              "s1_confirmation_delay_s": 0.0
+            },
+            "d455_depth": {
+              "by_state": {
+                "S0": {
+                  "tp": 1993,
+                  "truth": 3888,
+                  "predicted": 1993,
+                  "precision": 1.0,
+                  "recall": 0.5126028806584362,
+                  "f1": 0.6777758884543444,
+                  "unknown": 1895
+                },
+                "S1": {
+                  "tp": 205,
+                  "truth": 451,
+                  "predicted": 205,
+                  "precision": 1.0,
+                  "recall": 0.45454545454545453,
+                  "f1": 0.625,
+                  "unknown": 246
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 23,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 23
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 0
+              },
+              "native_touch": {
+                "steps": 475,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3891,
+              "first_s1_confirmed_step": 3891,
+              "s1_confirmation_delay_s": 0.0
+            }
+          }
+        },
+        "d455_depth_1.5mm": {
+          "source": "s0_d455_20261125_yaw_plus",
+          "steps": 4363,
+          "capture": {
+            "depth_source": "distance_to_image_plane",
+            "render_camera": "/World/D455/CalibratedColorCamera",
+            "aligned_rgb_and_depth": true,
+            "supply_yaw_deg": 0.75
+          },
+          "incomplete_run": null,
+          "weak_touch_longest_ticks": 0,
+          "alternate_camera_steps": 508,
+          "alternate_camera_frames": 508,
+          "alternate_separation_margin_mm": 1.5,
+          "short_range_steps_with_return": 0,
+          "short_range_added_confirmations": 0,
+          "paired_pose_error": {
+            "rear_rgb": {
+              "paired_frames": 508,
+              "status_counts": {
+                "no_frame": 1,
+                "detected": 508,
+                "marker_not_visible": 35
+              },
+              "median_xy_error_mm": 25.54279548902253,
+              "median_signed_z_error_mm": -25.34345688487832,
+              "median_abs_z_error_mm": 26.395763036080155,
+              "p95_abs_z_error_mm": 64.77264004189234
+            },
+            "d455_depth": {
+              "paired_frames": 508,
+              "status_counts": {
+                "detected": 508,
+                "marker_not_visible": 35
+              },
+              "median_xy_error_mm": 1.433794859238193,
+              "median_signed_z_error_mm": 0.4971183438335913,
+              "median_abs_z_error_mm": 0.4971183438335913,
+              "p95_abs_z_error_mm": 0.49719807221836887
+            },
+            "supply_plane_height_m": 0.712
+          },
+          "scores": {
+            "rear_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 1620,
+                  "truth": 3888,
+                  "predicted": 1620,
+                  "precision": 1.0,
+                  "recall": 0.4166666666666667,
+                  "f1": 0.5882352941176471,
+                  "unknown": 2268
+                },
+                "S1": {
+                  "tp": 191,
+                  "truth": 451,
+                  "predicted": 191,
+                  "precision": 1.0,
+                  "recall": 0.42350332594235035,
+                  "f1": 0.5950155763239875,
+                  "unknown": 260
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 23,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 23
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 0
+              },
+              "native_touch": {
+                "steps": 475,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3891,
+              "first_s1_confirmed_step": 3891,
+              "s1_confirmation_delay_s": 0.0
+            },
+            "d455_depth": {
+              "by_state": {
+                "S0": {
+                  "tp": 2721,
+                  "truth": 3888,
+                  "predicted": 2721,
+                  "precision": 1.0,
+                  "recall": 0.6998456790123457,
+                  "f1": 0.8234226055379029,
+                  "unknown": 1167
+                },
+                "S1": {
+                  "tp": 205,
+                  "truth": 451,
+                  "predicted": 205,
+                  "precision": 1.0,
+                  "recall": 0.45454545454545453,
+                  "f1": 0.625,
+                  "unknown": 246
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 23,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 23
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 158
+              },
+              "native_touch": {
+                "steps": 475,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3891,
+              "first_s1_confirmed_step": 3891,
+              "s1_confirmation_delay_s": 0.0
+            }
+          }
+        },
+        "supply_rgb_5mm": {
+          "source": "s0_d455_20261125_yaw_plus",
+          "steps": 4363,
+          "capture": {
+            "depth_source": "distance_to_image_plane",
+            "render_camera": "/World/D455/CalibratedColorCamera",
+            "aligned_rgb_and_depth": true,
+            "supply_yaw_deg": 0.75
+          },
+          "incomplete_run": null,
+          "weak_touch_longest_ticks": 0,
+          "alternate_camera_steps": 4340,
+          "alternate_camera_frames": 542,
+          "alternate_separation_margin_mm": 5.0,
+          "short_range_steps_with_return": 0,
+          "short_range_added_confirmations": 0,
+          "paired_pose_error": {
+            "rear_rgb": {
+              "paired_frames": 508,
+              "status_counts": {
+                "no_frame": 1,
+                "detected": 508,
+                "marker_not_visible": 35
+              },
+              "median_xy_error_mm": 25.54279548902253,
+              "median_signed_z_error_mm": -25.34345688487832,
+              "median_abs_z_error_mm": 26.395763036080155,
+              "p95_abs_z_error_mm": 64.77264004189234
+            },
+            "supply_rgb": {
+              "paired_frames": 542,
+              "status_counts": {
+                "detected": 542,
+                "no_planar_pose": 1
+              },
+              "median_xy_error_mm": 0.7538007351561917,
+              "median_signed_z_error_mm": -4.768372363628259e-07,
+              "median_abs_z_error_mm": 4.768372363628259e-07,
+              "p95_abs_z_error_mm": 5.91278075390278e-05
+            },
+            "supply_plane_height_m": 0.712
+          },
+          "scores": {
+            "rear_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 1620,
+                  "truth": 3888,
+                  "predicted": 1620,
+                  "precision": 1.0,
+                  "recall": 0.4166666666666667,
+                  "f1": 0.5882352941176471,
+                  "unknown": 2268
+                },
+                "S1": {
+                  "tp": 191,
+                  "truth": 451,
+                  "predicted": 191,
+                  "precision": 1.0,
+                  "recall": 0.42350332594235035,
+                  "f1": 0.5950155763239875,
+                  "unknown": 260
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 23,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 23
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 0
+              },
+              "native_touch": {
+                "steps": 475,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3891,
+              "first_s1_confirmed_step": 3891,
+              "s1_confirmation_delay_s": 0.0
+            },
+            "supply_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 2735,
+                  "truth": 3888,
+                  "predicted": 2735,
+                  "precision": 1.0,
+                  "recall": 0.7034465020576132,
+                  "f1": 0.8259097085912728,
+                  "unknown": 1153
+                },
+                "S1": {
+                  "tp": 205,
+                  "truth": 451,
+                  "predicted": 205,
+                  "precision": 1.0,
+                  "recall": 0.45454545454545453,
+                  "f1": 0.625,
+                  "unknown": 246
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 23,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 23
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 0
+              },
+              "native_touch": {
+                "steps": 475,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3891,
+              "first_s1_confirmed_step": 3891,
+              "s1_confirmation_delay_s": 0.0
+            }
+          }
+        },
+        "supply_rgb_1.5mm": {
+          "source": "s0_d455_20261125_yaw_plus",
+          "steps": 4363,
+          "capture": {
+            "depth_source": "distance_to_image_plane",
+            "render_camera": "/World/D455/CalibratedColorCamera",
+            "aligned_rgb_and_depth": true,
+            "supply_yaw_deg": 0.75
+          },
+          "incomplete_run": null,
+          "weak_touch_longest_ticks": 0,
+          "alternate_camera_steps": 4340,
+          "alternate_camera_frames": 542,
+          "alternate_separation_margin_mm": 1.5,
+          "short_range_steps_with_return": 0,
+          "short_range_added_confirmations": 0,
+          "paired_pose_error": {
+            "rear_rgb": {
+              "paired_frames": 508,
+              "status_counts": {
+                "no_frame": 1,
+                "detected": 508,
+                "marker_not_visible": 35
+              },
+              "median_xy_error_mm": 25.54279548902253,
+              "median_signed_z_error_mm": -25.34345688487832,
+              "median_abs_z_error_mm": 26.395763036080155,
+              "p95_abs_z_error_mm": 64.77264004189234
+            },
+            "supply_rgb": {
+              "paired_frames": 542,
+              "status_counts": {
+                "detected": 542,
+                "no_planar_pose": 1
+              },
+              "median_xy_error_mm": 0.7538007351561917,
+              "median_signed_z_error_mm": -4.768372363628259e-07,
+              "median_abs_z_error_mm": 4.768372363628259e-07,
+              "p95_abs_z_error_mm": 5.91278075390278e-05
+            },
+            "supply_plane_height_m": 0.712
+          },
+          "scores": {
+            "rear_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 1620,
+                  "truth": 3888,
+                  "predicted": 1620,
+                  "precision": 1.0,
+                  "recall": 0.4166666666666667,
+                  "f1": 0.5882352941176471,
+                  "unknown": 2268
+                },
+                "S1": {
+                  "tp": 191,
+                  "truth": 451,
+                  "predicted": 191,
+                  "precision": 1.0,
+                  "recall": 0.42350332594235035,
+                  "f1": 0.5950155763239875,
+                  "unknown": 260
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 23,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 23
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 0
+              },
+              "native_touch": {
+                "steps": 475,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3891,
+              "first_s1_confirmed_step": 3891,
+              "s1_confirmation_delay_s": 0.0
+            },
+            "supply_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 3570,
+                  "truth": 3888,
+                  "predicted": 3570,
+                  "precision": 1.0,
+                  "recall": 0.9182098765432098,
+                  "f1": 0.9573612228479484,
+                  "unknown": 318
+                },
+                "S1": {
+                  "tp": 205,
+                  "truth": 451,
+                  "predicted": 205,
+                  "precision": 1.0,
+                  "recall": 0.45454545454545453,
+                  "f1": 0.625,
+                  "unknown": 246
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 23,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 23
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 751
+              },
+              "native_touch": {
+                "steps": 475,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 3891,
+              "first_s1_confirmed_step": 3891,
+              "s1_confirmation_delay_s": 0.0
+            }
+          }
+        }
+      }
+    },
+    "yaw_minus": {
+      "paired_clip": "yaw_minus.jsonl.gz",
+      "capture_end": {
+        "phase": "s0_approach_capture",
+        "status": "SEALED_BEFORE_LIFT",
+        "sim_time_s": 38.59166666666667,
+        "wall_elapsed_s": 147.76033482999992,
+        "cube_position_m": [
+          4.7570310357514245e-07,
+          -0.30000096559524536,
+          0.7870000004768372
+        ],
+        "cube_orientation_wxyz": [
+          0.9999786019325256,
+          7.988100492184458e-07,
+          3.646597690476483e-07,
+          -0.0065442402847111225
+        ],
+        "cube_id": 7
+      },
+      "unexpected_physx_contacts": 0,
+      "methods": {
+        "d455_depth_5mm": {
+          "source": "s0_d455_20261125_yaw_minus",
+          "steps": 4631,
+          "capture": {
+            "depth_source": "distance_to_image_plane",
+            "render_camera": "/World/D455/CalibratedColorCamera",
+            "aligned_rgb_and_depth": true,
+            "supply_yaw_deg": -0.75,
+            "short_range": {
+              "source": "single-beam simulated range",
+              "range_from_lip_m": 0.05,
+              "quantization_m": 0.0005,
+              "timestamp": "encoder sampling step"
+            }
+          },
+          "incomplete_run": null,
+          "weak_touch_longest_ticks": 0,
+          "alternate_camera_steps": 556,
+          "alternate_camera_frames": 556,
+          "alternate_separation_margin_mm": 5.0,
+          "short_range_steps_with_return": 0,
+          "short_range_added_confirmations": 0,
+          "paired_pose_error": {
+            "rear_rgb": {
+              "paired_frames": 556,
+              "status_counts": {
+                "no_frame": 1,
+                "detected": 556,
+                "marker_not_visible": 20
+              },
+              "median_xy_error_mm": 45.618129420790744,
+              "median_signed_z_error_mm": -42.91160109031067,
+              "median_abs_z_error_mm": 42.91160109031067,
+              "p95_abs_z_error_mm": 62.27206984727832
+            },
+            "d455_depth": {
+              "paired_frames": 556,
+              "status_counts": {
+                "detected": 556,
+                "marker_not_visible": 20
+              },
+              "median_xy_error_mm": 2.285096069490962,
+              "median_signed_z_error_mm": 0.4971150692167914,
+              "median_abs_z_error_mm": 0.4971150692167914,
+              "p95_abs_z_error_mm": 0.49722650580166783
+            },
+            "supply_plane_height_m": 0.712
+          },
+          "scores": {
+            "rear_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 856,
+                  "truth": 4062,
+                  "predicted": 856,
+                  "precision": 1.0,
+                  "recall": 0.21073362875430823,
+                  "f1": 0.3481089873932493,
+                  "unknown": 3206
+                },
+                "S1": {
+                  "tp": 77,
+                  "truth": 545,
+                  "predicted": 77,
+                  "precision": 1.0,
+                  "recall": 0.14128440366972478,
+                  "f1": 0.24758842443729906,
+                  "unknown": 468
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 40
+              },
+              "native_touch": {
+                "steps": 569,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 4065,
+              "first_s1_confirmed_step": 4138,
+              "s1_confirmation_delay_s": 0.6083333333333333
+            },
+            "d455_depth": {
+              "by_state": {
+                "S0": {
+                  "tp": 2354,
+                  "truth": 4062,
+                  "predicted": 2354,
+                  "precision": 1.0,
+                  "recall": 0.5795174790743476,
+                  "f1": 0.733790523690773,
+                  "unknown": 1708
+                },
+                "S1": {
+                  "tp": 310,
+                  "truth": 545,
+                  "predicted": 310,
+                  "precision": 1.0,
+                  "recall": 0.5688073394495413,
+                  "f1": 0.7251461988304093,
+                  "unknown": 235
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 0
+              },
+              "native_touch": {
+                "steps": 569,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 4065,
+              "first_s1_confirmed_step": 4065,
+              "s1_confirmation_delay_s": 0.0
+            }
+          }
+        },
+        "d455_depth_1.5mm": {
+          "source": "s0_d455_20261125_yaw_minus",
+          "steps": 4631,
+          "capture": {
+            "depth_source": "distance_to_image_plane",
+            "render_camera": "/World/D455/CalibratedColorCamera",
+            "aligned_rgb_and_depth": true,
+            "supply_yaw_deg": -0.75,
+            "short_range": {
+              "source": "single-beam simulated range",
+              "range_from_lip_m": 0.05,
+              "quantization_m": 0.0005,
+              "timestamp": "encoder sampling step"
+            }
+          },
+          "incomplete_run": null,
+          "weak_touch_longest_ticks": 0,
+          "alternate_camera_steps": 556,
+          "alternate_camera_frames": 556,
+          "alternate_separation_margin_mm": 1.5,
+          "short_range_steps_with_return": 0,
+          "short_range_added_confirmations": 0,
+          "paired_pose_error": {
+            "rear_rgb": {
+              "paired_frames": 556,
+              "status_counts": {
+                "no_frame": 1,
+                "detected": 556,
+                "marker_not_visible": 20
+              },
+              "median_xy_error_mm": 45.618129420790744,
+              "median_signed_z_error_mm": -42.91160109031067,
+              "median_abs_z_error_mm": 42.91160109031067,
+              "p95_abs_z_error_mm": 62.27206984727832
+            },
+            "d455_depth": {
+              "paired_frames": 556,
+              "status_counts": {
+                "detected": 556,
+                "marker_not_visible": 20
+              },
+              "median_xy_error_mm": 2.285096069490962,
+              "median_signed_z_error_mm": 0.4971150692167914,
+              "median_abs_z_error_mm": 0.4971150692167914,
+              "p95_abs_z_error_mm": 0.49722650580166783
+            },
+            "supply_plane_height_m": 0.712
+          },
+          "scores": {
+            "rear_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 856,
+                  "truth": 4062,
+                  "predicted": 856,
+                  "precision": 1.0,
+                  "recall": 0.21073362875430823,
+                  "f1": 0.3481089873932493,
+                  "unknown": 3206
+                },
+                "S1": {
+                  "tp": 77,
+                  "truth": 545,
+                  "predicted": 77,
+                  "precision": 1.0,
+                  "recall": 0.14128440366972478,
+                  "f1": 0.24758842443729906,
+                  "unknown": 468
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 40
+              },
+              "native_touch": {
+                "steps": 569,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 4065,
+              "first_s1_confirmed_step": 4138,
+              "s1_confirmation_delay_s": 0.6083333333333333
+            },
+            "d455_depth": {
+              "by_state": {
+                "S0": {
+                  "tp": 2966,
+                  "truth": 4062,
+                  "predicted": 2966,
+                  "precision": 1.0,
+                  "recall": 0.7301821762678483,
+                  "f1": 0.8440523619806487,
+                  "unknown": 1096
+                },
+                "S1": {
+                  "tp": 310,
+                  "truth": 545,
+                  "predicted": 310,
+                  "precision": 1.0,
+                  "recall": 0.5688073394495413,
+                  "f1": 0.7251461988304093,
+                  "unknown": 235
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 93
+              },
+              "native_touch": {
+                "steps": 569,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 4065,
+              "first_s1_confirmed_step": 4065,
+              "s1_confirmation_delay_s": 0.0
+            }
+          }
+        },
+        "supply_rgb_5mm": {
+          "source": "s0_d455_20261125_yaw_minus",
+          "steps": 4631,
+          "capture": {
+            "depth_source": "distance_to_image_plane",
+            "render_camera": "/World/D455/CalibratedColorCamera",
+            "aligned_rgb_and_depth": true,
+            "supply_yaw_deg": -0.75,
+            "short_range": {
+              "source": "single-beam simulated range",
+              "range_from_lip_m": 0.05,
+              "quantization_m": 0.0005,
+              "timestamp": "encoder sampling step"
+            }
+          },
+          "incomplete_run": null,
+          "weak_touch_longest_ticks": 0,
+          "alternate_camera_steps": 4608,
+          "alternate_camera_frames": 576,
+          "alternate_separation_margin_mm": 5.0,
+          "short_range_steps_with_return": 0,
+          "short_range_added_confirmations": 0,
+          "paired_pose_error": {
+            "rear_rgb": {
+              "paired_frames": 556,
+              "status_counts": {
+                "no_frame": 1,
+                "detected": 556,
+                "marker_not_visible": 20
+              },
+              "median_xy_error_mm": 45.618129420790744,
+              "median_signed_z_error_mm": -42.91160109031067,
+              "median_abs_z_error_mm": 42.91160109031067,
+              "p95_abs_z_error_mm": 62.27206984727832
+            },
+            "supply_rgb": {
+              "paired_frames": 576,
+              "status_counts": {
+                "detected": 576
+              },
+              "median_xy_error_mm": 0.8490150428668854,
+              "median_signed_z_error_mm": -4.768372363628259e-07,
+              "median_abs_z_error_mm": 4.768372363628259e-07,
+              "p95_abs_z_error_mm": 5.91278075390278e-05
+            },
+            "supply_plane_height_m": 0.712
+          },
+          "scores": {
+            "rear_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 856,
+                  "truth": 4062,
+                  "predicted": 856,
+                  "precision": 1.0,
+                  "recall": 0.21073362875430823,
+                  "f1": 0.3481089873932493,
+                  "unknown": 3206
+                },
+                "S1": {
+                  "tp": 77,
+                  "truth": 545,
+                  "predicted": 77,
+                  "precision": 1.0,
+                  "recall": 0.14128440366972478,
+                  "f1": 0.24758842443729906,
+                  "unknown": 468
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 40
+              },
+              "native_touch": {
+                "steps": 569,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 4065,
+              "first_s1_confirmed_step": 4138,
+              "s1_confirmation_delay_s": 0.6083333333333333
+            },
+            "supply_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 2992,
+                  "truth": 4062,
+                  "predicted": 2992,
+                  "precision": 1.0,
+                  "recall": 0.7365829640571148,
+                  "f1": 0.8483130138928268,
+                  "unknown": 1070
+                },
+                "S1": {
+                  "tp": 310,
+                  "truth": 545,
+                  "predicted": 310,
+                  "precision": 1.0,
+                  "recall": 0.5688073394495413,
+                  "f1": 0.7251461988304093,
+                  "unknown": 235
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 0
+              },
+              "native_touch": {
+                "steps": 569,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 4065,
+              "first_s1_confirmed_step": 4065,
+              "s1_confirmation_delay_s": 0.0
+            }
+          }
+        },
+        "supply_rgb_1.5mm": {
+          "source": "s0_d455_20261125_yaw_minus",
+          "steps": 4631,
+          "capture": {
+            "depth_source": "distance_to_image_plane",
+            "render_camera": "/World/D455/CalibratedColorCamera",
+            "aligned_rgb_and_depth": true,
+            "supply_yaw_deg": -0.75,
+            "short_range": {
+              "source": "single-beam simulated range",
+              "range_from_lip_m": 0.05,
+              "quantization_m": 0.0005,
+              "timestamp": "encoder sampling step"
+            }
+          },
+          "incomplete_run": null,
+          "weak_touch_longest_ticks": 0,
+          "alternate_camera_steps": 4608,
+          "alternate_camera_frames": 576,
+          "alternate_separation_margin_mm": 1.5,
+          "short_range_steps_with_return": 0,
+          "short_range_added_confirmations": 0,
+          "paired_pose_error": {
+            "rear_rgb": {
+              "paired_frames": 556,
+              "status_counts": {
+                "no_frame": 1,
+                "detected": 556,
+                "marker_not_visible": 20
+              },
+              "median_xy_error_mm": 45.618129420790744,
+              "median_signed_z_error_mm": -42.91160109031067,
+              "median_abs_z_error_mm": 42.91160109031067,
+              "p95_abs_z_error_mm": 62.27206984727832
+            },
+            "supply_rgb": {
+              "paired_frames": 576,
+              "status_counts": {
+                "detected": 576
+              },
+              "median_xy_error_mm": 0.8490150428668854,
+              "median_signed_z_error_mm": -4.768372363628259e-07,
+              "median_abs_z_error_mm": 4.768372363628259e-07,
+              "p95_abs_z_error_mm": 5.91278075390278e-05
+            },
+            "supply_plane_height_m": 0.712
+          },
+          "scores": {
+            "rear_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 856,
+                  "truth": 4062,
+                  "predicted": 856,
+                  "precision": 1.0,
+                  "recall": 0.21073362875430823,
+                  "f1": 0.3481089873932493,
+                  "unknown": 3206
+                },
+                "S1": {
+                  "tp": 77,
+                  "truth": 545,
+                  "predicted": 77,
+                  "precision": 1.0,
+                  "recall": 0.14128440366972478,
+                  "f1": 0.24758842443729906,
+                  "unknown": 468
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 40
+              },
+              "native_touch": {
+                "steps": 569,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 4065,
+              "first_s1_confirmed_step": 4138,
+              "s1_confirmation_delay_s": 0.6083333333333333
+            },
+            "supply_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 3827,
+                  "truth": 4062,
+                  "predicted": 3827,
+                  "precision": 1.0,
+                  "recall": 0.9421467257508617,
+                  "f1": 0.9702116871593357,
+                  "unknown": 235
+                },
+                "S1": {
+                  "tp": 310,
+                  "truth": 545,
+                  "predicted": 310,
+                  "precision": 1.0,
+                  "recall": 0.5688073394495413,
+                  "f1": 0.7251461988304093,
+                  "unknown": 235
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 834
+              },
+              "native_touch": {
+                "steps": 569,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 4065,
+              "first_s1_confirmed_step": 4065,
+              "s1_confirmation_delay_s": 0.0
+            }
+          }
+        },
+        "short_range_1.5mm": {
+          "source": "s0_d455_20261125_yaw_minus",
+          "steps": 4631,
+          "capture": {
+            "depth_source": "distance_to_image_plane",
+            "render_camera": "/World/D455/CalibratedColorCamera",
+            "aligned_rgb_and_depth": true,
+            "supply_yaw_deg": -0.75,
+            "short_range": {
+              "source": "single-beam simulated range",
+              "range_from_lip_m": 0.05,
+              "quantization_m": 0.0005,
+              "timestamp": "encoder sampling step"
+            }
+          },
+          "incomplete_run": null,
+          "weak_touch_longest_ticks": 0,
+          "alternate_camera_steps": 4608,
+          "alternate_camera_frames": 576,
+          "alternate_separation_margin_mm": 1.5,
+          "short_range_steps_with_return": 2731,
+          "short_range_added_confirmations": 65,
+          "paired_pose_error": {
+            "rear_rgb": {
+              "paired_frames": 556,
+              "status_counts": {
+                "no_frame": 1,
+                "detected": 556,
+                "marker_not_visible": 20
+              },
+              "median_xy_error_mm": 45.618129420790744,
+              "median_signed_z_error_mm": -42.91160109031067,
+              "median_abs_z_error_mm": 42.91160109031067,
+              "p95_abs_z_error_mm": 62.27206984727832
+            },
+            "supply_rgb": {
+              "paired_frames": 576,
+              "status_counts": {
+                "detected": 576
+              },
+              "median_xy_error_mm": 0.8490150428668854,
+              "median_signed_z_error_mm": -4.768372363628259e-07,
+              "median_abs_z_error_mm": 4.768372363628259e-07,
+              "p95_abs_z_error_mm": 5.91278075390278e-05
+            },
+            "supply_plane_height_m": 0.712
+          },
+          "scores": {
+            "rear_rgb": {
+              "by_state": {
+                "S0": {
+                  "tp": 856,
+                  "truth": 4062,
+                  "predicted": 856,
+                  "precision": 1.0,
+                  "recall": 0.21073362875430823,
+                  "f1": 0.3481089873932493,
+                  "unknown": 3206
+                },
+                "S1": {
+                  "tp": 77,
+                  "truth": 545,
+                  "predicted": 77,
+                  "precision": 1.0,
+                  "recall": 0.14128440366972478,
+                  "f1": 0.24758842443729906,
+                  "unknown": 468
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 40
+              },
+              "native_touch": {
+                "steps": 569,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 4065,
+              "first_s1_confirmed_step": 4138,
+              "s1_confirmation_delay_s": 0.6083333333333333
+            },
+            "short_range": {
+              "by_state": {
+                "S0": {
+                  "tp": 3892,
+                  "truth": 4062,
+                  "predicted": 3892,
+                  "precision": 1.0,
+                  "recall": 0.9581486952240276,
+                  "f1": 0.9786271058586874,
+                  "unknown": 170
+                },
+                "S1": {
+                  "tp": 310,
+                  "truth": 545,
+                  "predicted": 310,
+                  "precision": 1.0,
+                  "recall": 0.5688073394495413,
+                  "f1": 0.7251461988304093,
+                  "unknown": 235
+                },
+                "S2": {
+                  "tp": 0,
+                  "truth": 24,
+                  "predicted": 0,
+                  "precision": null,
+                  "recall": 0.0,
+                  "f1": null,
+                  "unknown": 24
+                }
+              },
+              "s0_near_cup": {
+                "steps": 1046,
+                "recognized_as_s0": 899
+              },
+              "native_touch": {
+                "steps": 569,
+                "recognized_as_s0": 0
+              },
+              "native_weak_touch": {
+                "steps": 0,
+                "recognized_as_s0": 0
+              },
+              "first_s1_physx_step": 4065,
+              "first_s1_confirmed_step": 4065,
+              "s1_confirmation_delay_s": 0.0
+            }
+          }
+        }
+      }
+    }
+  },
+  "aggregate": {
+    "rear_rgb": {
+      "S0": {
+        "truth": 11817,
+        "tp": 3484,
+        "predicted": 3484,
+        "unknown": 8333,
+        "recognition_rate": 0.2948294829482948,
+        "precision": 1.0
+      },
+      "S1": {
+        "truth": 1490,
+        "tp": 375,
+        "predicted": 375,
+        "unknown": 1115,
+        "recognition_rate": 0.2516778523489933,
+        "precision": 1.0
+      },
+      "s0_near_cup": {
+        "steps": 3139,
+        "recognized_as_s0": 64
+      },
+      "native_touch": {
+        "steps": 1562,
+        "recognized_as_s0": 0
+      },
+      "native_weak_touch": {
+        "steps": 1,
+        "recognized_as_s0": 0
+      },
+      "number_of_runs": 3
+    },
+    "d455_depth_5mm": {
+      "S0": {
+        "truth": 11817,
+        "tp": 6362,
+        "predicted": 6362,
+        "unknown": 5455,
+        "recognition_rate": 0.5383769146145384,
+        "precision": 1.0
+      },
+      "S1": {
+        "truth": 1490,
+        "tp": 764,
+        "predicted": 764,
+        "unknown": 726,
+        "recognition_rate": 0.512751677852349,
+        "precision": 1.0
+      },
+      "s0_near_cup": {
+        "steps": 3139,
+        "recognized_as_s0": 0
+      },
+      "native_touch": {
+        "steps": 1562,
+        "recognized_as_s0": 0
+      },
+      "native_weak_touch": {
+        "steps": 1,
+        "recognized_as_s0": 0
+      },
+      "number_of_runs": 3
+    },
+    "d455_depth_1.5mm": {
+      "S0": {
+        "truth": 11817,
+        "tp": 8487,
+        "predicted": 8487,
+        "unknown": 3330,
+        "recognition_rate": 0.7182025894897182,
+        "precision": 1.0
+      },
+      "S1": {
+        "truth": 1490,
+        "tp": 764,
+        "predicted": 764,
+        "unknown": 726,
+        "recognition_rate": 0.512751677852349,
+        "precision": 1.0
+      },
+      "s0_near_cup": {
+        "steps": 3139,
+        "recognized_as_s0": 494
+      },
+      "native_touch": {
+        "steps": 1562,
+        "recognized_as_s0": 0
+      },
+      "native_weak_touch": {
+        "steps": 1,
+        "recognized_as_s0": 0
+      },
+      "number_of_runs": 3
+    },
+    "supply_rgb_5mm": {
+      "S0": {
+        "truth": 11817,
+        "tp": 8482,
+        "predicted": 8482,
+        "unknown": 3335,
+        "recognition_rate": 0.7177794702547178,
+        "precision": 1.0
+      },
+      "S1": {
+        "truth": 1490,
+        "tp": 764,
+        "predicted": 764,
+        "unknown": 726,
+        "recognition_rate": 0.512751677852349,
+        "precision": 1.0
+      },
+      "s0_near_cup": {
+        "steps": 3139,
+        "recognized_as_s0": 0
+      },
+      "native_touch": {
+        "steps": 1562,
+        "recognized_as_s0": 0
+      },
+      "native_weak_touch": {
+        "steps": 1,
+        "recognized_as_s0": 0
+      },
+      "number_of_runs": 3
+    },
+    "supply_rgb_1.5mm": {
+      "S0": {
+        "truth": 11817,
+        "tp": 11005,
+        "predicted": 11005,
+        "unknown": 812,
+        "recognition_rate": 0.9312854362359313,
+        "precision": 1.0
+      },
+      "S1": {
+        "truth": 1490,
+        "tp": 764,
+        "predicted": 764,
+        "unknown": 726,
+        "recognition_rate": 0.512751677852349,
+        "precision": 1.0
+      },
+      "s0_near_cup": {
+        "steps": 3139,
+        "recognized_as_s0": 2396
+      },
+      "native_touch": {
+        "steps": 1562,
+        "recognized_as_s0": 0
+      },
+      "native_weak_touch": {
+        "steps": 1,
+        "recognized_as_s0": 0
+      },
+      "number_of_runs": 3
+    },
+    "short_range_1.5mm": {
+      "S0": {
+        "truth": 4062,
+        "tp": 3892,
+        "predicted": 3892,
+        "unknown": 170,
+        "recognition_rate": 0.9581486952240276,
+        "precision": 1.0
+      },
+      "S1": {
+        "truth": 545,
+        "tp": 310,
+        "predicted": 310,
+        "unknown": 235,
+        "recognition_rate": 0.5688073394495413,
+        "precision": 1.0
+      },
+      "s0_near_cup": {
+        "steps": 1046,
+        "recognized_as_s0": 899
+      },
+      "native_touch": {
+        "steps": 569,
+        "recognized_as_s0": 0
+      },
+      "native_weak_touch": {
+        "steps": 0,
+        "recognized_as_s0": 0
+      },
+      "number_of_runs": 1
+    }
+  },
+  "light_touch_trial": {
+    "paired_clip": "light_touch.jsonl.gz",
+    "unexpected_physx_contacts": 0,
+    "methods": {
+      "d455_depth_1.5mm": {
+        "source": "s0_d455_20261125_light_touch",
+        "steps": 7321,
+        "capture": {
+          "depth_source": "distance_to_image_plane",
+          "render_camera": "/World/D455/CalibratedColorCamera",
+          "aligned_rgb_and_depth": true,
+          "supply_yaw_deg": -0.75,
+          "light_touch": true,
+          "short_range": {
+            "source": "single-beam simulated range",
+            "range_from_lip_m": 0.05,
+            "quantization_m": 0.0005,
+            "timestamp": "encoder sampling step"
+          }
+        },
+        "incomplete_run": {
+          "status": "STOPPED",
+          "reason": "A tactile preload did not stabilize on both tools"
+        },
+        "weak_touch_longest_ticks": 127,
+        "alternate_camera_steps": 892,
+        "alternate_camera_frames": 892,
+        "alternate_separation_margin_mm": 1.5,
+        "short_range_steps_with_return": 0,
+        "short_range_added_confirmations": 0,
+        "paired_pose_error": {
+          "rear_rgb": {
+            "paired_frames": 892,
+            "status_counts": {
+              "no_frame": 1,
+              "detected": 892,
+              "marker_not_visible": 20
+            },
+            "median_xy_error_mm": 42.325014387332004,
+            "median_signed_z_error_mm": -39.753055493207015,
+            "median_abs_z_error_mm": 39.843572905036375,
+            "p95_abs_z_error_mm": 58.022093281850296
+          },
+          "d455_depth": {
+            "paired_frames": 892,
+            "status_counts": {
+              "detected": 892,
+              "marker_not_visible": 20
+            },
+            "median_xy_error_mm": 2.305138589484888,
+            "median_signed_z_error_mm": 0.49711028233911936,
+            "median_abs_z_error_mm": 0.49711028233911936,
+            "p95_abs_z_error_mm": 0.49722841652312666
+          },
+          "supply_plane_height_m": 0.712
+        },
+        "scores": {
+          "rear_rgb": {
+            "by_state": {
+              "S0": {
+                "tp": 834,
+                "truth": 4183,
+                "predicted": 896,
+                "precision": 0.9308035714285714,
+                "recall": 0.19937843652880707,
+                "f1": 0.3284111045481393,
+                "unknown": 3349
+              },
+              "S1": {
+                "tp": 54,
+                "truth": 3092,
+                "predicted": 54,
+                "precision": 1.0,
+                "recall": 0.017464424320827943,
+                "f1": 0.034329307056579786,
+                "unknown": 2976
+              },
+              "S2": {
+                "tp": 0,
+                "truth": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null,
+                "unknown": 0
+              }
+            },
+            "s0_near_cup": {
+              "steps": 1167,
+              "recognized_as_s0": 66
+            },
+            "native_touch": {
+              "steps": 3138,
+              "recognized_as_s0": 62
+            },
+            "native_weak_touch": {
+              "steps": 2731,
+              "recognized_as_s0": 53
+            },
+            "first_s1_physx_step": 4065,
+            "first_s1_confirmed_step": 4374,
+            "s1_confirmation_delay_s": 2.575
+          },
+          "d455_depth": {
+            "by_state": {
+              "S0": {
+                "tp": 2965,
+                "truth": 4183,
+                "predicted": 2965,
+                "precision": 1.0,
+                "recall": 0.7088214200334688,
+                "f1": 0.8296026860660325,
+                "unknown": 1218
+              },
+              "S1": {
+                "tp": 168,
+                "truth": 3092,
+                "predicted": 168,
+                "precision": 1.0,
+                "recall": 0.054333764553686936,
+                "f1": 0.10306748466257669,
+                "unknown": 2924
+              },
+              "S2": {
+                "tp": 0,
+                "truth": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null,
+                "unknown": 0
+              }
+            },
+            "s0_near_cup": {
+              "steps": 1167,
+              "recognized_as_s0": 92
+            },
+            "native_touch": {
+              "steps": 3138,
+              "recognized_as_s0": 0
+            },
+            "native_weak_touch": {
+              "steps": 2731,
+              "recognized_as_s0": 0
+            },
+            "first_s1_physx_step": 4065,
+            "first_s1_confirmed_step": 4065,
+            "s1_confirmation_delay_s": 0.0
+          }
+        }
+      },
+      "supply_rgb_1.5mm": {
+        "source": "s0_d455_20261125_light_touch",
+        "steps": 7321,
+        "capture": {
+          "depth_source": "distance_to_image_plane",
+          "render_camera": "/World/D455/CalibratedColorCamera",
+          "aligned_rgb_and_depth": true,
+          "supply_yaw_deg": -0.75,
+          "light_touch": true,
+          "short_range": {
+            "source": "single-beam simulated range",
+            "range_from_lip_m": 0.05,
+            "quantization_m": 0.0005,
+            "timestamp": "encoder sampling step"
+          }
+        },
+        "incomplete_run": {
+          "status": "STOPPED",
+          "reason": "A tactile preload did not stabilize on both tools"
+        },
+        "weak_touch_longest_ticks": 127,
+        "alternate_camera_steps": 7290,
+        "alternate_camera_frames": 912,
+        "alternate_separation_margin_mm": 1.5,
+        "short_range_steps_with_return": 0,
+        "short_range_added_confirmations": 0,
+        "paired_pose_error": {
+          "rear_rgb": {
+            "paired_frames": 892,
+            "status_counts": {
+              "no_frame": 1,
+              "detected": 892,
+              "marker_not_visible": 20
+            },
+            "median_xy_error_mm": 42.325014387332004,
+            "median_signed_z_error_mm": -39.753055493207015,
+            "median_abs_z_error_mm": 39.843572905036375,
+            "p95_abs_z_error_mm": 58.022093281850296
+          },
+          "supply_rgb": {
+            "paired_frames": 912,
+            "status_counts": {
+              "detected": 912
+            },
+            "median_xy_error_mm": 0.8586041686238479,
+            "median_signed_z_error_mm": -4.768372363628259e-07,
+            "median_abs_z_error_mm": 4.768372363628259e-07,
+            "p95_abs_z_error_mm": 6.008148201175345e-05
+          },
+          "supply_plane_height_m": 0.712
+        },
+        "scores": {
+          "rear_rgb": {
+            "by_state": {
+              "S0": {
+                "tp": 834,
+                "truth": 4183,
+                "predicted": 896,
+                "precision": 0.9308035714285714,
+                "recall": 0.19937843652880707,
+                "f1": 0.3284111045481393,
+                "unknown": 3349
+              },
+              "S1": {
+                "tp": 54,
+                "truth": 3092,
+                "predicted": 54,
+                "precision": 1.0,
+                "recall": 0.017464424320827943,
+                "f1": 0.034329307056579786,
+                "unknown": 2976
+              },
+              "S2": {
+                "tp": 0,
+                "truth": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null,
+                "unknown": 0
+              }
+            },
+            "s0_near_cup": {
+              "steps": 1167,
+              "recognized_as_s0": 66
+            },
+            "native_touch": {
+              "steps": 3138,
+              "recognized_as_s0": 62
+            },
+            "native_weak_touch": {
+              "steps": 2731,
+              "recognized_as_s0": 53
+            },
+            "first_s1_physx_step": 4065,
+            "first_s1_confirmed_step": 4374,
+            "s1_confirmation_delay_s": 2.575
+          },
+          "supply_rgb": {
+            "by_state": {
+              "S0": {
+                "tp": 3816,
+                "truth": 4183,
+                "predicted": 3816,
+                "precision": 1.0,
+                "recall": 0.9122639254123834,
+                "f1": 0.9541192649081135,
+                "unknown": 367
+              },
+              "S1": {
+                "tp": 168,
+                "truth": 3092,
+                "predicted": 168,
+                "precision": 1.0,
+                "recall": 0.054333764553686936,
+                "f1": 0.10306748466257669,
+                "unknown": 2924
+              },
+              "S2": {
+                "tp": 0,
+                "truth": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null,
+                "unknown": 0
+              }
+            },
+            "s0_near_cup": {
+              "steps": 1167,
+              "recognized_as_s0": 831
+            },
+            "native_touch": {
+              "steps": 3138,
+              "recognized_as_s0": 0
+            },
+            "native_weak_touch": {
+              "steps": 2731,
+              "recognized_as_s0": 0
+            },
+            "first_s1_physx_step": 4065,
+            "first_s1_confirmed_step": 4065,
+            "s1_confirmation_delay_s": 0.0
+          }
+        }
+      },
+      "short_range_1.5mm": {
+        "source": "s0_d455_20261125_light_touch",
+        "steps": 7321,
+        "capture": {
+          "depth_source": "distance_to_image_plane",
+          "render_camera": "/World/D455/CalibratedColorCamera",
+          "aligned_rgb_and_depth": true,
+          "supply_yaw_deg": -0.75,
+          "light_touch": true,
+          "short_range": {
+            "source": "single-beam simulated range",
+            "range_from_lip_m": 0.05,
+            "quantization_m": 0.0005,
+            "timestamp": "encoder sampling step"
+          }
+        },
+        "incomplete_run": {
+          "status": "STOPPED",
+          "reason": "A tactile preload did not stabilize on both tools"
+        },
+        "weak_touch_longest_ticks": 127,
+        "alternate_camera_steps": 7290,
+        "alternate_camera_frames": 912,
+        "alternate_separation_margin_mm": 1.5,
+        "short_range_steps_with_return": 5421,
+        "short_range_added_confirmations": 69,
+        "paired_pose_error": {
+          "rear_rgb": {
+            "paired_frames": 892,
+            "status_counts": {
+              "no_frame": 1,
+              "detected": 892,
+              "marker_not_visible": 20
+            },
+            "median_xy_error_mm": 42.325014387332004,
+            "median_signed_z_error_mm": -39.753055493207015,
+            "median_abs_z_error_mm": 39.843572905036375,
+            "p95_abs_z_error_mm": 58.022093281850296
+          },
+          "supply_rgb": {
+            "paired_frames": 912,
+            "status_counts": {
+              "detected": 912
+            },
+            "median_xy_error_mm": 0.8586041686238479,
+            "median_signed_z_error_mm": -4.768372363628259e-07,
+            "median_abs_z_error_mm": 4.768372363628259e-07,
+            "p95_abs_z_error_mm": 6.008148201175345e-05
+          },
+          "supply_plane_height_m": 0.712
+        },
+        "scores": {
+          "rear_rgb": {
+            "by_state": {
+              "S0": {
+                "tp": 834,
+                "truth": 4183,
+                "predicted": 896,
+                "precision": 0.9308035714285714,
+                "recall": 0.19937843652880707,
+                "f1": 0.3284111045481393,
+                "unknown": 3349
+              },
+              "S1": {
+                "tp": 54,
+                "truth": 3092,
+                "predicted": 54,
+                "precision": 1.0,
+                "recall": 0.017464424320827943,
+                "f1": 0.034329307056579786,
+                "unknown": 2976
+              },
+              "S2": {
+                "tp": 0,
+                "truth": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null,
+                "unknown": 0
+              }
+            },
+            "s0_near_cup": {
+              "steps": 1167,
+              "recognized_as_s0": 66
+            },
+            "native_touch": {
+              "steps": 3138,
+              "recognized_as_s0": 62
+            },
+            "native_weak_touch": {
+              "steps": 2731,
+              "recognized_as_s0": 53
+            },
+            "first_s1_physx_step": 4065,
+            "first_s1_confirmed_step": 4374,
+            "s1_confirmation_delay_s": 2.575
+          },
+          "short_range": {
+            "by_state": {
+              "S0": {
+                "tp": 3885,
+                "truth": 4183,
+                "predicted": 3885,
+                "precision": 1.0,
+                "recall": 0.9287592636863495,
+                "f1": 0.9630639563708479,
+                "unknown": 298
+              },
+              "S1": {
+                "tp": 168,
+                "truth": 3092,
+                "predicted": 168,
+                "precision": 1.0,
+                "recall": 0.054333764553686936,
+                "f1": 0.10306748466257669,
+                "unknown": 2924
+              },
+              "S2": {
+                "tp": 0,
+                "truth": 0,
+                "predicted": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null,
+                "unknown": 0
+              }
+            },
+            "s0_near_cup": {
+              "steps": 1167,
+              "recognized_as_s0": 900
+            },
+            "native_touch": {
+              "steps": 3138,
+              "recognized_as_s0": 0
+            },
+            "native_weak_touch": {
+              "steps": 2731,
+              "recognized_as_s0": 0
+            },
+            "first_s1_physx_step": 4065,
+            "first_s1_confirmed_step": 4065,
+            "s1_confirmation_delay_s": 0.0
+          }
+        }
+      }
+    }
+  }
+}
