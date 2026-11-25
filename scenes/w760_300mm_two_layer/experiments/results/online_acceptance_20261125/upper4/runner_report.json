@@ -1,0 +1,5507 @@
+{
+  "scene_id": "W760_H300_rear5_front5_upper5_side_v1",
+  "status": "PARTIAL_W760_UPPER_ROW",
+  "ab_status": "ONLY_RECORDED_SLOTS_SIMULATED",
+  "scene_parameters": {
+    "scene_id": "W760_H300_rear5_front5_upper5_side_v1",
+    "meters_per_unit": 1.0,
+    "cube_size_m": 0.15,
+    "floor_top_m": 0.712,
+    "supply_cube_center_m": [
+      0.0,
+      -0.3,
+      0.787
+    ],
+    "goal_cube_centers_m": [
+      [
+        -0.305,
+        1.076,
+        0.7869999999999999
+      ],
+      [
+        0.305,
+        1.076,
+        0.7869999999999999
+      ],
+      [
+        -0.155,
+        1.076,
+        0.7869999999999999
+      ],
+      [
+        0.155,
+        1.076,
+        0.7869999999999999
+      ],
+      [
+        0.0,
+        1.076,
+        0.7869999999999999
+      ]
+    ],
+    "static_boxes": [
+      [
+        "table",
+        [
+          0.0,
+          0.6,
+          0.675
+        ],
+        [
+          1.36,
+          2.4,
+          0.05
+        ]
+      ],
+      [
+        "floor",
+        [
+          0.0,
+          0.7145,
+          0.706
+        ],
+        [
+          0.784,
+          0.921,
+          0.012
+        ]
+      ],
+      [
+        "wall_front",
+        [
+          0.0,
+          0.272,
+          0.862
+        ],
+        [
+          0.76,
+          0.012,
+          0.3
+        ]
+      ],
+      [
+        "wall_back",
+        [
+          0.0,
+          1.157,
+          0.862
+        ],
+        [
+          0.76,
+          0.012,
+          0.3
+        ]
+      ],
+      [
+        "wall_left",
+        [
+          -0.386,
+          0.7145,
+          0.862
+        ],
+        [
+          0.012,
+          0.897,
+          0.3
+        ]
+      ],
+      [
+        "wall_right",
+        [
+          0.386,
+          0.7145,
+          0.862
+        ],
+        [
+          0.012,
+          0.897,
+          0.3
+        ]
+      ],
+      [
+        "supply",
+        [
+          0.0,
+          -0.31,
+          0.706
+        ],
+        [
+          0.21,
+          0.19,
+          0.012
+        ]
+      ]
+    ],
+    "fr3": {
+      "asset": "Robots/Franka/FR3/fr3.usd",
+      "contact_drive_gain_scale": 0.003,
+      "bases": {
+        "left": [
+          -0.6,
+          0.2,
+          0.745,
+          0.0
+        ],
+        "right": [
+          0.6,
+          0.2,
+          0.745,
+          3.141592653589793
+        ]
+      },
+      "official_start_q_rad": [
+        0.0,
+        -0.7853981633974483,
+        0.0,
+        -2.356194490192345,
+        0.0,
+        1.5707963267948966,
+        0.7853981633974483
+      ]
+    },
+    "side_suction_tool": {
+      "mount_link": "fr3_link8",
+      "vertical_drop_m": 0.08,
+      "lateral_standoff_m": 0.13,
+      "tcp_side_offset_m": 0.155,
+      "cup_radius_m": 0.01,
+      "cup_length_m": 0.01
+    },
+    "wrist_force_sensors": {
+      "left": {
+        "mass_kg": 0.3,
+        "center_of_mass_m": [
+          0.0,
+          -0.06,
+          0.055
+        ],
+        "diagonal_inertia_kg_m2": [
+          0.0015,
+          0.0007,
+          0.0012
+        ]
+      },
+      "right": {
+        "mass_kg": 0.3,
+        "center_of_mass_m": [
+          0.0,
+          0.06,
+          0.055
+        ],
+        "diagonal_inertia_kg_m2": [
+          0.0015,
+          0.0007,
+          0.0012
+        ]
+      }
+    },
+    "rails": {
+      "axis": "Y",
+      "travel_limits_m": [
+        -0.22,
+        1.5
+      ],
+      "beam_size_m": [
+        0.15,
+        2.35,
+        0.025
+      ],
+      "beam_local_center_m": [
+        0.0,
+        0.425,
+        0.0
+      ],
+      "carriage_size_m": [
+        0.2,
+        0.18,
+        0.02
+      ]
+    },
+    "vision": {
+      "camera_model": "Intel RealSense D455",
+      "camera_asset": "Isaac/Sensors/Intel/RealSense/rsd455.usd",
+      "camera_root_path": "/World/D455",
+      "camera_path": "/World/D455/RSD455/Camera_OmniVision_OV9782_Color",
+      "depth_camera_path": "/World/D455/RSD455/Camera_Pseudo_Depth",
+      "camera_position_m": [
+        0.0,
+        1.35,
+        2.45
+      ],
+      "camera_look_at_m": [
+        0.0,
+        0.83,
+        0.87
+      ],
+      "supply_camera_position_m": [
+        0.0,
+        -0.55,
+        1.53
+      ],
+      "supply_camera_look_at_m": [
+        0.0,
+        -0.3,
+        0.85
+      ],
+      "resolution": [
+        1280,
+        960
+      ],
+      "frequency_hz": 15,
+      "aruco_dictionary": "DICT_4X4_50",
+      "aruco_marker_id": 23,
+      "aruco_marker_size_m": 0.105,
+      "aruco_marker_face": "top",
+      "mount": {
+        "enabled": true,
+        "base_center_m": [
+          0.0,
+          1.42,
+          0.715
+        ],
+        "base_size_m": [
+          0.34,
+          0.28,
+          0.03
+        ],
+        "pole_size_m": [
+          0.05,
+          0.05,
+          1.7200000000000002
+        ],
+        "housing_size_m": [
+          0.18,
+          0.1,
+          0.1
+        ]
+      }
+    },
+    "task": {
+      "scope": "five_cube_supply_A_B1_alternating_B2_row",
+      "phase_A": {
+        "goal": "双臂从供料位中心吸附，抬高越过前墙，放到前墙内 landing 位",
+        "landing_center_m": [
+          0.0,
+          0.736,
+          0.787
+        ],
+        "lift_center_m": [
+          0.0,
+          -0.3,
+          1.107
+        ],
+        "over_front_center_m": [
+          0.0,
+          0.4,
+          1.107
+        ]
+      },
+      "phase_B1": {
+        "goal": "左臂从 cube 前侧面中心沿 +Y 推到后墙",
+        "target_center_m": [
+          0.0,
+          1.076,
+          0.787
+        ],
+        "direction_world": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "active_arm": "left"
+      },
+      "phase_B2": {
+        "goal": "左臂持续沿 +Y 压向后墙，右臂沿 -X 推到左墙",
+        "target_center_m": [
+          -0.305,
+          1.076,
+          0.7869999999999999
+        ],
+        "direction_world": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "active_arm": "right",
+        "support_arm": "left",
+        "back_wall_contact_required": true,
+        "rail_assist": {
+          "base_y_m": 0.8,
+          "tcp_orientation_wxyz": [
+            0.0,
+            0.7071067811865476,
+            -0.7071067811865476,
+            0.0
+          ],
+          "path_samples": 42
+        }
+      },
+      "phase_B_exit": {
+        "goal": "确认释放且 cube 静止后再回撤双臂"
+      }
+    },
+    "physics": {
+      "articulation_solver_position_iterations": 44,
+      "articulation_solver_velocity_iterations": 4,
+      "cube_mass_kg": 1.25,
+      "gravity_m_s2": [
+        0.0,
+        0.0,
+        -9.81
+      ],
+      "settle_speed_threshold_m_s": 0.01,
+      "settle_hold_s": 0.25
+    },
+    "scope": "five_cube_supply_A_B1_alternating_B2_row",
+    "dynamic_validation": false,
+    "ab_runtime": "fr3_ab_visual_runner.py --five-cube-row",
+    "cube_sequence": [
+      {
+        "cube_id": 1,
+        "marker_id": 23,
+        "landing_x_m": 0.0,
+        "active_contact_height_m": 0.02,
+        "approach_standoff_m": 0.03,
+        "goal_center_m": [
+          -0.305,
+          1.076,
+          0.7869999999999999
+        ],
+        "support_side": "left",
+        "push_side": "right",
+        "push_direction": -1,
+        "contact_target": "wall_left"
+      },
+      {
+        "cube_id": 2,
+        "marker_id": 24,
+        "landing_x_m": 0.005,
+        "active_contact_height_m": 0.02,
+        "approach_standoff_m": 0.007,
+        "goal_center_m": [
+          0.305,
+          1.076,
+          0.7869999999999999
+        ],
+        "support_side": "right",
+        "push_side": "left",
+        "push_direction": 1,
+        "contact_target": "wall_right"
+      },
+      {
+        "cube_id": 3,
+        "marker_id": 25,
+        "landing_x_m": -0.005,
+        "active_contact_height_m": 0.02,
+        "approach_standoff_m": 0.007,
+        "goal_center_m": [
+          -0.155,
+          1.076,
+          0.7869999999999999
+        ],
+        "support_side": "left",
+        "push_side": "right",
+        "push_direction": -1,
+        "contact_target": "Cube_1"
+      },
+      {
+        "cube_id": 4,
+        "marker_id": 26,
+        "landing_x_m": 0.105,
+        "active_contact_height_m": 0.02,
+        "approach_standoff_m": 0.012,
+        "goal_center_m": [
+          0.155,
+          1.076,
+          0.7869999999999999
+        ],
+        "support_side": "right",
+        "push_side": "left",
+        "push_direction": 1,
+        "contact_target": "Cube_2",
+        "staging_offset_from_rear_m": 0.106,
+        "staged_side_travel_m": 0.05,
+        "staged_transit_z_m": 1.05,
+        "staged_precontact_q": [
+          -0.506065403,
+          0.623183439,
+          0.751382602,
+          -2.31063709,
+          -0.906093171,
+          2.610848972,
+          2.546909565
+        ]
+      },
+      {
+        "cube_id": 5,
+        "marker_id": 27,
+        "landing_x_m": 0.0,
+        "active_contact_height_m": 0.02,
+        "approach_standoff_m": 0.007,
+        "goal_center_m": [
+          0.0,
+          1.076,
+          0.7869999999999999
+        ],
+        "support_side": "left",
+        "push_side": null,
+        "push_direction": 0,
+        "contact_target": null
+      },
+      {
+        "cube_id": 6,
+        "marker_id": 28
+      },
+      {
+        "cube_id": 7,
+        "marker_id": 29
+      },
+      {
+        "cube_id": 8,
+        "marker_id": 30
+      },
+      {
+        "cube_id": 9,
+        "marker_id": 31
+      },
+      {
+        "cube_id": 10,
+        "marker_id": 32
+      },
+      {
+        "cube_id": 11,
+        "marker_id": 33
+      },
+      {
+        "cube_id": 12,
+        "marker_id": 34
+      },
+      {
+        "cube_id": 13,
+        "marker_id": 35
+      },
+      {
+        "cube_id": 14,
+        "marker_id": 36
+      },
+      {
+        "cube_id": 15,
+        "marker_id": 37
+      }
+    ],
+    "row_colors_rgb": [
+      [
+        0.95,
+        0.36,
+        0.08
+      ],
+      [
+        0.22,
+        0.63,
+        0.93
+      ],
+      [
+        0.93,
+        0.74,
+        0.13
+      ],
+      [
+        0.39,
+        0.74,
+        0.29
+      ],
+      [
+        0.67,
+        0.4,
+        0.88
+      ],
+      [
+        0.53,
+        0.43,
+        0.72
+      ],
+      [
+        0.89,
+        0.47,
+        0.27
+      ],
+      [
+        0.36,
+        0.66,
+        0.83
+      ],
+      [
+        0.92,
+        0.76,
+        0.4
+      ],
+      [
+        0.5,
+        0.72,
+        0.45
+      ],
+      [
+        0.78,
+        0.6,
+        0.82
+      ],
+      [
+        0.95,
+        0.36,
+        0.08
+      ],
+      [
+        0.93,
+        0.74,
+        0.13
+      ],
+      [
+        0.39,
+        0.74,
+        0.29
+      ],
+      [
+        0.22,
+        0.63,
+        0.93
+      ]
+    ]
+  },
+  "source_sha256": {
+    "fr3_ab_dynamic_smoke.py": "b6c61576772304507b42739ff899baa97f779d110314aa70c65499a675f34852",
+    "fr3_ab_ik_preflight.py": "8b88411d1268384ca2e80b4958e143cc7a80c2385b9ee6cd54f6ee790702862e",
+    "fr3_ab_preflight.py": "2d480d216df8c2d97e4d58eb55dec71a017d4b3b0ad88fbc79211e60ae69116b",
+    "fr3_ab_visual_runner.py": "7b8ef06c13e5540be2291ab93bc9fa34e33b623fbea6df0f42f43717e7ec75b6",
+    "fr3_b2_collision_plan.py": "01dd7742daa3092d68bc5c079609ee96f88f802428a265306ee716c791156d2e",
+    "fr3_bilateral_b2.py": "5c80935203369933951868689dc32a5bcc7971c7688d51f8177e860455a94296",
+    "fr3_collision.py": "a311533cc68fab4d54a48a925909a5806a7e33f854aac8ad8662085c4b74d6a0",
+    "fr3_contact_control.py": "8074ed81365a96c0347baee31530dadb159d4ba19cc950f885903c928d176d84",
+    "fr3_contact_monitor.py": "b77f2865803bedcc3b4babb16d2422c50a1d8150f870d5e1463c0a526334a424",
+    "fr3_contact_state.py": "8a1d823675f03a629e4a862f8c6a45929d8811427c7c643664da4b782309b1c8",
+    "fr3_contact_state_validation.py": "b510f896d2e38f615dfa109eb3f30143dfa93b7f197fb70c54b307aecb49eef0",
+    "fr3_cube_supply.py": "4a7da8b53488daeefcec78956d428d871b37059c323297a67253aa784f3dabc7",
+    "fr3_five_cube_row.py": "5d23c9c18e1f34b182d213beedb2a516b57f1b0b8931ef5c4ce2f5fe5c6c0ff7",
+    "fr3_four_wall_preview.py": "87ac55fe3a67404440145d7fb8c298ffab2b638b658f1c0f88103f272049d910",
+    "fr3_parallel_collision.py": "1f2b39c6b6e4af6e8d6b4e2bea08ce1ba07dbd3a4648b1d9dcc1d834cac69f85",
+    "fr3_row_acceptance.py": "aa088c657f20167cf59486e60a91566cb6f66e57ff77ae3389030675cac16e9a",
+    "fr3_surface_gripper.py": "07f80df5005d2182fa37410a6ad63b946d5a8693cf0c00847672caf3c7d1339b",
+    "fr3_trajectory.py": "76ecbb56c63e76a897e9389b4874d2d257e59bea34c28c8f41ac3725e09ecb08",
+    "fr3_vision.py": "b961b3f66d96571f98c15b390f6e61330fd5d2cc5065561b7cb9845ac552a5b3",
+    "fr3_vision_comparison.py": "1492bc35fc36ff686de8917f37d6c3206d13911c29b5b756b3f57d523a9b8636",
+    "fr3_wrench.py": "57c69d49a56f404aadb76b0b6e65ab97b9a0ecb2b0066b8adca47e0f56b20758",
+    "fr3_wrist_ft.py": "058cace4d398f0c21fff86c0b945b5018ec32096d1effb2177206afd8a03fc5c",
+    "fr3_wrist_ft_analysis.py": "846415a08a5d5306f466172420e00b6d9a804d5653640fd497375eaf293da702",
+    "fr3_contact_skills.json": "6b84d30df63b92250c68c2bcbded2cb859a581c3c13521861e92104e98d3d655",
+    "fr3_four_wall_scene_config.json": "53bccaba12c78e028e6d0e625cd974f588587cf91e55f064c43a1b5487a61770"
+  },
+  "scope": "W760 300mm walls, measured lower rear row, five sequential lower front boxes, five upper rear boxes",
+  "upper_layer_side_only": true,
+  "visual_mode": false,
+  "checkpoint": {
+    "restored_lower_ids": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "lower_front_slot_order": [
+      12,
+      15,
+      13,
+      14,
+      6
+    ],
+    "starting_slot": 4,
+    "fixture_upper_slots": []
+  },
+  "attachment_model": "Isaac_Sim_Surface_Gripper",
+  "attachment_parameters": {
+    "ray_standoff_m": 0.002,
+    "ray_range_m": 0.003,
+    "simulated_pressure_difference_Pa": 80000.0,
+    "cup_radius_m": 0.01,
+    "cup_count": 4,
+    "cup_center_half_span_m": 0.024,
+    "bend_angle_deg": 5.0,
+    "bend_stiffness_Nm_per_rad": 30.0,
+    "bend_damping_Nms_per_rad": 3.0,
+    "payload_gravity_enabled": true,
+    "aggregate_normal_capacity_N": 100.5309649148734,
+    "force_limit_N": 30.0,
+    "torque_limit_Nm": 2.4127431579569616,
+    "model_scope": "Four-cup pressure-area capacity; scalar torque uses the weak bending lever. Resultant force is additionally capped at the 30 N arm acceptance limit. Isotropic D6 shear and pressure difference are uncalibrated simulation assumptions."
+  },
+  "surface_gripper_validated": false,
+  "collision_safety_validated": false,
+  "proxy_robot_collisions_disabled": false,
+  "robot_collisions_enabled": true,
+  "stock_gripper_bodies_removed": true,
+  "full_arm_planning_check": "official_Lula_spheres_and_full_tool_OBBs",
+  "unintended_physx_contact_guard": true,
+  "gravity_compensation": true,
+  "b2_right_body_collision_disabled_for_contact": false,
+  "phases": [
+    {
+      "phase": "upper_seam_entry_checkpoint",
+      "status": "GROUNDED_POSE_RESTORED",
+      "sim_time_s": 1.2,
+      "wall_elapsed_s": 19.73223501299799,
+      "cube_position_m": [
+        0.14006192982196808,
+        1.0094431638717651,
+        0.9369998574256897
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -2.3124666626017643e-08,
+        1.036766335005268e-07,
+        -1.6982917827590427e-07
+      ],
+      "cube_id": 10,
+      "slot": 4,
+      "source": {
+        "slot": 4,
+        "cube_id": 10,
+        "completed_transport": 1,
+        "source_run": "two_row_visible_20261120_195300",
+        "source_archive": "two_row_visible_20261120_195300",
+        "source_step": 9988,
+        "source_phase": "upper_B_seam_transport",
+        "source": "Native same-tick grounded box pose with open cups at actual post-transfer settled event; no arm pose or force reset.",
+        "source_event": {
+          "phase": "upper_B_seam_transport",
+          "status": "SETTLED_ON_LOWER_SUPPORT",
+          "sim_time_s": 83.23333333333333,
+          "wall_elapsed_s": 305.5094749689961,
+          "cube_position_m": [
+            0.14006169140338898,
+            1.009442687034607,
+            0.9369997978210449
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -4.326526692466359e-08,
+            1.0037334163826017e-07,
+            0.00023086862347554415
+          ],
+          "cube_id": 10,
+          "arms": [
+            "left",
+            "right"
+          ],
+          "seam_center_x_m": 0.1293030873377459,
+          "lift_height_m": 0.01,
+          "rear_clearance_m": 0.0,
+          "end_center_x_m": 0.1413030873377459,
+          "max_vertical_balance_offset_per_arm_m": 0.00045,
+          "support_positive_frames": 60,
+          "support_load_fraction": 0.9999761169173227,
+          "support_samples": 60,
+          "settle_ticks": 60
+        },
+        "source_input": {
+          "path": "two_row_visible_20261120_194821/upper_landing_checkpoint.json",
+          "sha256": "a24f6a40ccaffb2b769fb5e22fd79bdb97b586a19db0ce84d832ec21ecb522f3"
+        },
+        "original_landing": {
+          "cube_id": 10,
+          "position_m": [
+            0.049926888197660446,
+            1.0095937252044678,
+            0.9369999170303345
+          ],
+          "orientation_wxyz": [
+            1.0,
+            -7.042379124300169e-09,
+            9.3310710269634e-08,
+            8.81758242030628e-05
+          ]
+        },
+        "original_landing_m": [
+          0.049926888197660446,
+          1.0095937252044678,
+          0.9369999170303345
+        ],
+        "original_landing_position_m": [
+          0.049926888197660446,
+          1.0095937252044678,
+          0.9369999170303345
+        ],
+        "original_landing_checkpoint": {
+          "path": "two_row_visible_20261120_191904/upper_u4_released_checkpoint.json",
+          "sha256": "62897771ba1d4f202726cffa1e06a55917a88167eca29bce9145ddd24e04e4c5"
+        },
+        "prior_landing_chain": [
+          {
+            "path": "two_row_visible_20261120_194821/upper_landing_checkpoint.json",
+            "sha256": "a24f6a40ccaffb2b769fb5e22fd79bdb97b586a19db0ce84d832ec21ecb522f3"
+          },
+          {
+            "path": "two_row_visible_20261120_194129/upper_landing_checkpoint.json",
+            "sha256": "880a84ecbe07e249393cb341d564f86195672ef4dad0519841f7ae9f52215488"
+          },
+          {
+            "path": "two_row_visible_20261120_191904/upper_u4_released_checkpoint.json",
+            "sha256": "62897771ba1d4f202726cffa1e06a55917a88167eca29bce9145ddd24e04e4c5"
+          }
+        ],
+        "previous_seam_entry_pose": [
+          0.04992714896798134,
+          1.0095933675765991,
+          0.9370000958442688
+        ],
+        "sources_sha256": {
+          "upper_landing_checkpoint.json": "484695e1d14638df7bbad0fc96495a5803d2a8008cfa8f07d5eed3b22b98b00b",
+          "immutable_settled_event_canonical_json": "8d3669f720a2677e231f1ed3f95b1127f74110040ccdfe6efafad71fd954915f"
+        },
+        "stream_prefix_sha256_uncompressed_inclusive": {
+          "contact_states/reference.jsonl.gz": "af788928167b719b153b744f0c65c6def88a5f1720f348c2cfefd58120de6f68",
+          "wrench.jsonl.gz": "62cae18a44b4640233d8bb9d17b5a8ed933dda764ce89c348bb1524360710148"
+        },
+        "next_maneuver": "Scene-initialize grounded box and reacquire fresh active pose, deck support, side/forward contact and rear preload before continuing beyond completed transfer.",
+        "grounded_evidence": {
+          "window": [
+            9959,
+            9988
+          ],
+          "reattained_RGB": {
+            "phase": "upper_b4_seam_settled_pose",
+            "source": "rear_rgb",
+            "frame_count": 3,
+            "position_m": [
+              0.14096760619956797,
+              1.00901829616375,
+              0.9369999999999999
+            ],
+            "yaw_deg": -0.04512858871746726
+          },
+          "opened_grippers": {
+            "left": false,
+            "right": false
+          },
+          "both_open_frames": 30,
+          "settled_window_samples": 60,
+          "settled_window_loaded_samples": 60,
+          "settled_support_fraction": 0.9999761169173227,
+          "lower_load_N_range": [
+            12.247288276823165,
+            12.275331522008177
+          ],
+          "source_lower_load_N": {
+            "/World/Cube_14": 4.10237909294689,
+            "/World/Cube_4": 4.892564920735698,
+            "/World/Cube_5": 3.2651116029501406
+          },
+          "rear_wall_loaded_frames_above_0.01N": 0,
+          "source_velocity_m_s": [
+            5.0067901611328125e-06,
+            -5.7220458984375e-06,
+            -4.291534423828125e-06
+          ],
+          "source_angular_velocity_rad_s": [
+            -9.913474540303862e-06,
+            2.102191124305028e-06,
+            2.4675624036742426e-05
+          ],
+          "lower_pose_provenance": "Measured passive transforms from this attempt at previous checkpoint; same-tick passive body transforms not recorded. Confirm current rest and support after restoration."
+        }
+      }
+    },
+    {
+      "phase": "upper_B_strategy",
+      "status": "SELECTED",
+      "sim_time_s": 1.9,
+      "wall_elapsed_s": 20.805889134004246,
+      "cube_position_m": [
+        0.1400618851184845,
+        1.0094430446624756,
+        0.9369999766349792
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -1.9448373578256906e-08,
+        9.689044588867546e-08,
+        -3.9477595237258356e-07
+      ],
+      "cube_id": 10,
+      "contact_order": "side_then_rear"
+    },
+    {
+      "phase": "upper_B_rail",
+      "status": "RUNNING",
+      "sim_time_s": 1.9,
+      "wall_elapsed_s": 20.813951181000448,
+      "cube_position_m": [
+        0.1400618851184845,
+        1.0094430446624756,
+        0.9369999766349792
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -1.9448373578256906e-08,
+        9.689044588867546e-08,
+        -3.9477595237258356e-07
+      ],
+      "cube_id": 10,
+      "arm": "left",
+      "rail_y_m": 0.6
+    },
+    {
+      "phase": "upper_B_rail",
+      "status": "RUNNING",
+      "sim_time_s": 8.566666666666666,
+      "wall_elapsed_s": 34.65114041599736,
+      "cube_position_m": [
+        0.14006203413009644,
+        1.0094430446624756,
+        0.937000036239624
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -1.6248664280738012e-07,
+        2.215471965882898e-07,
+        2.350318908383997e-07
+      ],
+      "cube_id": 10,
+      "arm": "right",
+      "rail_y_m": 0.6
+    },
+    {
+      "phase": "upper_B_front_approach",
+      "status": "RUNNING",
+      "sim_time_s": 15.433333333333334,
+      "wall_elapsed_s": 48.288363087005564,
+      "cube_position_m": [
+        0.14006184041500092,
+        1.0094430446624756,
+        0.9370000958442688
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -3.930797376483497e-08,
+        -5.172520545215775e-08,
+        1.0737909406088875e-07
+      ],
+      "cube_id": 10,
+      "arm": "right"
+    },
+    {
+      "phase": "upper_B_front_touch",
+      "status": "TACTILE_APPROACH",
+      "sim_time_s": 20.091666666666665,
+      "wall_elapsed_s": 62.86097203299869,
+      "cube_position_m": [
+        0.14006194472312927,
+        1.009442925453186,
+        0.9369999170303345
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -2.486282468794343e-08,
+        3.1479693518576823e-08,
+        -1.436347645267233e-07
+      ],
+      "cube_id": 10
+    },
+    {
+      "phase": "upper_B_side_high",
+      "status": "RUNNING",
+      "sim_time_s": 35.775,
+      "wall_elapsed_s": 108.83312589699926,
+      "cube_position_m": [
+        0.14006179571151733,
+        1.009442687034607,
+        0.9369999170303345
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        1.8140086410767253e-07,
+        1.8381123823019152e-07,
+        -2.3950244099069096e-07
+      ],
+      "cube_id": 10,
+      "arm": "left"
+    },
+    {
+      "phase": "upper_B_side_descent",
+      "status": "RUNNING",
+      "sim_time_s": 41.483333333333334,
+      "wall_elapsed_s": 131.50340349100588,
+      "cube_position_m": [
+        0.14006184041500092,
+        1.0094430446624756,
+        0.9369998574256897
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -7.408036708511645e-07,
+        2.548605380070512e-07,
+        -1.8690807337407023e-06
+      ],
+      "cube_id": 10
+    },
+    {
+      "phase": "upper_B_side_standoff",
+      "status": "RUNNING",
+      "sim_time_s": 45.483333333333334,
+      "wall_elapsed_s": 144.26902669100673,
+      "cube_position_m": [
+        0.14006175100803375,
+        1.0094423294067383,
+        0.9369999170303345
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -1.4988978591645719e-07,
+        -2.531216836132444e-08,
+        -2.325057494090288e-06
+      ],
+      "cube_id": 10
+    },
+    {
+      "phase": "upper_B_side_drive",
+      "status": "COMPLIANT",
+      "sim_time_s": 47.483333333333334,
+      "wall_elapsed_s": 150.67731193600048,
+      "cube_position_m": [
+        0.14006192982196808,
+        1.0094430446624756,
+        0.9369998574256897
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -8.062757501647866e-07,
+        3.0370074455277063e-07,
+        -1.2466282441891963e-06
+      ],
+      "cube_id": 10,
+      "arm": "left",
+      "relative_stiffness": 0.35
+    },
+    {
+      "phase": "upper_B_side_touch",
+      "status": "TACTILE_APPROACH",
+      "sim_time_s": 47.483333333333334,
+      "wall_elapsed_s": 150.68653919099597,
+      "cube_position_m": [
+        0.14006192982196808,
+        1.0094430446624756,
+        0.9369998574256897
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -8.062757501647866e-07,
+        3.0370074455277063e-07,
+        -1.2466282441891963e-06
+      ],
+      "cube_id": 10
+    },
+    {
+      "phase": "upper_B_side",
+      "status": "RUNNING",
+      "sim_time_s": 57.21666666666667,
+      "wall_elapsed_s": 181.83709581699804,
+      "cube_position_m": [
+        0.14006280899047852,
+        1.0094443559646606,
+        0.9370000958442688
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -1.501430574535334e-06,
+        1.2281531098778942e-06,
+        -3.0949101983424043e-06
+      ],
+      "cube_id": 10,
+      "arm": "left",
+      "contact_target": "/World/Cube_8",
+      "estimated_start_gap_m": 0.012956761549089507
+    },
+    {
+      "phase": "upper_B_seam_pacing",
+      "status": "COMPLETED",
+      "sim_time_s": 68.36666666666666,
+      "wall_elapsed_s": 232.38233146500716,
+      "cube_position_m": [
+        0.14957159757614136,
+        1.0099061727523804,
+        0.937000036239624
+      ],
+      "cube_orientation_wxyz": [
+        0.9999993443489075,
+        -5.2611080718634184e-06,
+        7.413098501274362e-06,
+        -0.0011721606133505702
+      ],
+      "cube_id": 10,
+      "held_or_unloaded_ticks": 0,
+      "motion_phase": "upper_B_side",
+      "peak_axial_lead_m": 0.0013172162318246528,
+      "peak_downward_load_N": 0.636128388446042
+    },
+    {
+      "phase": "upper_B_side",
+      "status": "FORCE_CONFIRMED",
+      "sim_time_s": 86.90833333333333,
+      "wall_elapsed_s": 314.9279414150078,
+      "cube_position_m": [
+        0.15258298814296722,
+        1.010035514831543,
+        0.9370004534721375
+      ],
+      "cube_orientation_wxyz": [
+        0.9999987483024597,
+        -4.162498498772038e-06,
+        4.356716544862138e-06,
+        -0.001592544256709516
+      ],
+      "cube_id": 10,
+      "arm": "left",
+      "contact_target": "/World/Cube_8",
+      "held_samples": 30,
+      "normal_force_N": 6.805606838151755,
+      "normal_force_samples_N": [
+        6.737416403920769,
+        6.941451228300427,
+        6.919803655787811,
+        7.187752473407825,
+        7.071093989706755,
+        6.525571476986776,
+        5.757981897475881,
+        5.972376819694361,
+        6.504559850638098,
+        6.697118026359362,
+        6.667683485926148,
+        7.091081661660672,
+        6.860249164001944,
+        6.555141036857797,
+        6.897490144444339,
+        6.734679973465643,
+        7.094650835955957,
+        6.953094362175197,
+        6.9588024039070415,
+        6.698644179581732,
+        7.172404016093203,
+        7.092760022878329,
+        7.044267937301978,
+        7.143028933074605,
+        7.092528643466775,
+        7.090609127422376,
+        6.924962439749415,
+        7.090356570784369,
+        6.657123908601254,
+        6.033520474925803
+      ],
+      "estimated_gap_m": 0.0007101884286688787,
+      "witnessed_target_contact_ticks": 30,
+      "sliding_baseline_N": 4.142947738922346,
+      "force_threshold_N": 4.742947738922346
+    },
+    {
+      "phase": "upper_B_u4_front_retouch",
+      "status": "TACTILE_APPROACH",
+      "sim_time_s": 86.90833333333333,
+      "wall_elapsed_s": 314.93802322700503,
+      "cube_position_m": [
+        0.15258298814296722,
+        1.010035514831543,
+        0.9370004534721375
+      ],
+      "cube_orientation_wxyz": [
+        0.9999987483024597,
+        -4.162498498772038e-06,
+        4.356716544862138e-06,
+        -0.001592544256709516
+      ],
+      "cube_id": 10
+    },
+    {
+      "phase": "upper_B_u4_side_clear",
+      "status": "RUNNING",
+      "sim_time_s": 86.98333333333333,
+      "wall_elapsed_s": 315.1818751670071,
+      "cube_position_m": [
+        0.15258343517780304,
+        1.0100363492965698,
+        0.9370003342628479
+      ],
+      "cube_orientation_wxyz": [
+        0.9999987483024597,
+        -4.386143245938001e-06,
+        4.823692961508641e-06,
+        -0.0015958377625793219
+      ],
+      "cube_id": 10
+    },
+    {
+      "phase": "upper_B_rear",
+      "status": "RUNNING",
+      "sim_time_s": 87.98333333333333,
+      "wall_elapsed_s": 318.38636225799564,
+      "cube_position_m": [
+        0.15258139371871948,
+        1.010035753250122,
+        0.9369997978210449
+      ],
+      "cube_orientation_wxyz": [
+        0.9999987483024597,
+        -1.0476377383383806e-06,
+        6.811191610722744e-08,
+        -0.001590267289429903
+      ],
+      "cube_id": 10,
+      "arm": "right",
+      "contact_target": "/World/Environment/wall_back",
+      "estimated_start_gap_m": 0.06580525395896272,
+      "control": "rear_contact_admittance",
+      "neighbor_side_slope_x_per_y": 0.016710138585649608
+    },
+    {
+      "phase": "upper_B_rear",
+      "status": "FORCE_CONFIRMED",
+      "sim_time_s": 123.275,
+      "wall_elapsed_s": 464.423101250999,
+      "cube_position_m": [
+        0.1527722030878067,
+        1.075783133506775,
+        0.9369993209838867
+      ],
+      "cube_orientation_wxyz": [
+        0.9999989867210388,
+        -5.974436589895049e-06,
+        4.6714885115761717e-07,
+        -0.001445253612473607
+      ],
+      "cube_id": 10,
+      "arm": "right",
+      "contact_target": "/World/Environment/wall_back",
+      "held_samples": 30,
+      "normal_force_N": 7.015225862447483,
+      "normal_force_samples_N": [
+        6.55686630214113,
+        6.7297175641102776,
+        6.655177314449517,
+        6.768020463566133,
+        6.815781847502338,
+        6.924558764720686,
+        6.8297255613073755,
+        7.008458627253206,
+        6.963026337344206,
+        6.961071482939455,
+        7.095898112593813,
+        7.035177322126248,
+        7.083799831296777,
+        7.022278983328752,
+        7.04210892635851,
+        7.2557582459106005,
+        7.11248004161345,
+        6.978862855640343,
+        7.148928816799567,
+        7.137692744178057,
+        7.063479813013837,
+        7.239977842344257,
+        7.114665966596744,
+        7.150629892501763,
+        7.097273136339678,
+        7.110221904776826,
+        6.968733537132144,
+        7.201054330008353,
+        7.223932488768287,
+        7.161416816762143
+      ],
+      "estimated_gap_m": -0.0008346318296289235,
+      "witnessed_target_contact_ticks": 30,
+      "sliding_baseline_N": 6.520255276967206,
+      "force_threshold_N": 6.870255276967206
+    },
+    {
+      "phase": "upper_B_withdraw",
+      "status": "RUNNING",
+      "sim_time_s": 123.375,
+      "wall_elapsed_s": 464.74415951699484,
+      "cube_position_m": [
+        0.1527722179889679,
+        1.0757830142974854,
+        0.9369992613792419
+      ],
+      "cube_orientation_wxyz": [
+        0.9999989867210388,
+        -6.0978368310316e-06,
+        3.7450422496476676e-07,
+        -0.001445728586986661
+      ],
+      "cube_id": 10,
+      "arms": [
+        "left",
+        "right"
+      ]
+    },
+    {
+      "phase": "upper_B_withdraw",
+      "status": "COMPLETED",
+      "sim_time_s": 126.38333333333334,
+      "wall_elapsed_s": 474.9827570570051,
+      "cube_position_m": [
+        0.15277138352394104,
+        1.0757770538330078,
+        0.9369998574256897
+      ],
+      "cube_orientation_wxyz": [
+        0.9999989867210388,
+        -4.929962642563623e-07,
+        2.9521800115617225e-08,
+        -0.0014571332139894366
+      ],
+      "cube_id": 10,
+      "arms": [
+        "left",
+        "right"
+      ]
+    },
+    {
+      "phase": "upper_B_park",
+      "status": "RUNNING",
+      "sim_time_s": 126.38333333333334,
+      "wall_elapsed_s": 474.99391088300035,
+      "cube_position_m": [
+        0.15277138352394104,
+        1.0757770538330078,
+        0.9369998574256897
+      ],
+      "cube_orientation_wxyz": [
+        0.9999989867210388,
+        -4.929962642563623e-07,
+        2.9521800115617225e-08,
+        -0.0014571332139894366
+      ],
+      "cube_id": 10,
+      "arms": [
+        "left",
+        "right"
+      ]
+    },
+    {
+      "phase": "upper_B_park",
+      "status": "ARM_TARGET",
+      "sim_time_s": 126.38333333333334,
+      "wall_elapsed_s": 475.004556993008,
+      "cube_position_m": [
+        0.15277138352394104,
+        1.0757770538330078,
+        0.9369998574256897
+      ],
+      "cube_orientation_wxyz": [
+        0.9999989867210388,
+        -4.929962642563623e-07,
+        2.9521800115617225e-08,
+        -0.0014571332139894366
+      ],
+      "cube_id": 10,
+      "arm": "left"
+    },
+    {
+      "phase": "upper_B_park",
+      "status": "ARM_TARGET",
+      "sim_time_s": 132.325,
+      "wall_elapsed_s": 496.3328946919937,
+      "cube_position_m": [
+        0.15277118980884552,
+        1.0757780075073242,
+        0.9369999766349792
+      ],
+      "cube_orientation_wxyz": [
+        0.9999989867210388,
+        -2.9300562687240017e-07,
+        -6.373233674139556e-08,
+        -0.0014568413607776165
+      ],
+      "cube_id": 10,
+      "arm": "right"
+    },
+    {
+      "phase": "upper_B_release",
+      "status": "TOOLS_PARKED",
+      "sim_time_s": 137.475,
+      "wall_elapsed_s": 513.5410136440041,
+      "cube_position_m": [
+        0.15277089178562164,
+        1.0757766962051392,
+        0.9369998574256897
+      ],
+      "cube_orientation_wxyz": [
+        0.9999989867210388,
+        -5.603449437785457e-08,
+        -3.3258362464039237e-07,
+        -0.0014565385645255446
+      ],
+      "cube_id": 10
+    },
+    {
+      "phase": "upper_slot_complete",
+      "status": "SEATED_STABLE",
+      "sim_time_s": 138.175,
+      "wall_elapsed_s": 514.8809577079955,
+      "cube_position_m": [
+        0.15277089178562164,
+        1.0757771730422974,
+        0.9369999170303345
+      ],
+      "cube_orientation_wxyz": [
+        0.9999989867210388,
+        -7.614208641371079e-08,
+        -3.1675958211963007e-07,
+        -0.0014567470643669367
+      ],
+      "cube_id": 10,
+      "slot": 4
+    },
+    {
+      "phase": "upper_row_complete",
+      "status": "PARTIAL_W760_UPPER_ROW",
+      "sim_time_s": 138.175,
+      "wall_elapsed_s": 514.8951761210046,
+      "cube_position_m": [
+        0.15277089178562164,
+        1.0757771730422974,
+        0.9369999170303345
+      ],
+      "cube_orientation_wxyz": [
+        0.9999989867210388,
+        -7.614208641371079e-08,
+        -3.1675958211963007e-07,
+        -0.0014567470643669367
+      ],
+      "cube_id": 10
+    }
+  ],
+  "control_input_boundary": {
+    "target_sources": [
+      "fresh RGB ArUco on calibrated support planes",
+      "same-step joint encoders and flange-to-TCP calibration",
+      "wrist F/T confirmed contact and encoder propagation"
+    ],
+    "cube_truth": "reference publisher, event logs and stopped-state diagnostics only",
+    "pose_loss": "fresh observation required at phase transitions; missing detections stop acquisition"
+  },
+  "remaining_model_assumptions": [
+    "Known Cube dimensions and surveyed static wall/support geometry",
+    "Planar yaw-only resting pose on a calibrated support plane",
+    "One breakable central vacuum constraint represents each four-cup array",
+    "Last observed yaw propagates through occlusion; force and FK alone do not measure slip yaw",
+    "Ideal joint encoders and noiseless simulated wrist wrench",
+    "Simulator model gravity compensation and commanded rail base motion",
+    "Physical contact callbacks provide independent collision safety stops"
+  ],
+  "vision": {
+    "camera_model": "Intel RealSense D455",
+    "camera_asset": "Isaac/Sensors/Intel/RealSense/rsd455.usd",
+    "depth_camera_path": "/World/D455/RSD455/Camera_Pseudo_Depth",
+    "camera_path": "/World/D455/CalibratedColorCamera",
+    "camera_position_m": [
+      0.0,
+      1.35,
+      2.45
+    ],
+    "camera_look_at_m": [
+      0.0,
+      0.83,
+      0.87
+    ],
+    "resolution": [
+      1280,
+      960
+    ],
+    "aruco_dictionary": "DICT_4X4_50",
+    "aruco_marker_id": 23,
+    "aruco_marker_face": "top",
+    "samples": 2072,
+    "detections": 2070,
+    "misses": 2,
+    "last_detection": {
+      "physics_step": 16576,
+      "capture_time_s": 138.15000720508397,
+      "received_physics_step": 16576,
+      "frame_id": 2175,
+      "pixel_center": [
+        572.3273010253906,
+        561.7705535888672
+      ],
+      "cube_position_estimate_m": [
+        0.15925369029190148,
+        1.0666632333259523,
+        0.9058388358182493
+      ],
+      "cube_position_actual_m": [
+        0.15277190506458282,
+        1.0757768154144287,
+        0.9370001554489136
+      ],
+      "position_error_m": 0.03310738224838846,
+      "reprojection_error_px": 0.0645351482711345
+    },
+    "detection_log": [
+      {
+        "physics_step": 16424,
+        "capture_time_s": 136.88334047235548,
+        "received_physics_step": 16424,
+        "frame_id": 2153,
+        "pixel_center": [
+          572.3341522216797,
+          561.7174987792969
+        ],
+        "cube_position_estimate_m": [
+          0.15984878594498295,
+          1.065989128826729,
+          0.9065760040665153
+        ],
+        "cube_position_actual_m": [
+          0.1527710109949112,
+          1.0757765769958496,
+          0.9369998574256897
+        ],
+        "position_error_m": 0.03273377297421786,
+        "reprojection_error_px": 0.10865222327099584
+      },
+      {
+        "physics_step": 16432,
+        "capture_time_s": 136.9500071424991,
+        "received_physics_step": 16432,
+        "frame_id": 2154,
+        "pixel_center": [
+          572.3339691162109,
+          561.7169189453125
+        ],
+        "cube_position_estimate_m": [
+          0.15982719760999128,
+          1.0656904937558789,
+          0.9065881913377902
+        ],
+        "cube_position_actual_m": [
+          0.1527712047100067,
+          1.075777292251587,
+          0.9369999170303345
+        ],
+        "position_error_m": 0.03280859032778163,
+        "reprojection_error_px": 0.1113232920187968
+      },
+      {
+        "physics_step": 16440,
+        "capture_time_s": 137.0166738126427,
+        "received_physics_step": 16440,
+        "frame_id": 2155,
+        "pixel_center": [
+          572.3331298828125,
+          561.7361907958984
+        ],
+        "cube_position_estimate_m": [
+          0.15987499248723686,
+          1.066089523848655,
+          0.9067786293731047
+        ],
+        "cube_position_actual_m": [
+          0.15277311205863953,
+          1.0757784843444824,
+          0.9370001554489136
+        ],
+        "position_error_m": 0.03252158205657581,
+        "reprojection_error_px": 0.09684741970457349
+      },
+      {
+        "physics_step": 16448,
+        "capture_time_s": 137.0833404827863,
+        "received_physics_step": 16448,
+        "frame_id": 2156,
+        "pixel_center": [
+          572.3299255371094,
+          561.7156066894531
+        ],
+        "cube_position_estimate_m": [
+          0.15986694193551132,
+          1.0658881051724514,
+          0.9069394605184918
+        ],
+        "cube_position_actual_m": [
+          0.1527717560529709,
+          1.0757777690887451,
+          0.9369999170303345
+        ],
+        "position_error_m": 0.032431129502153114,
+        "reprojection_error_px": 0.10714179818599624
+      },
+      {
+        "physics_step": 16456,
+        "capture_time_s": 137.1500071529299,
+        "received_physics_step": 16456,
+        "frame_id": 2157,
+        "pixel_center": [
+          572.3284759521484,
+          561.7226104736328
+        ],
+        "cube_position_estimate_m": [
+          0.15990041301421218,
+          1.0657797846344153,
+          0.90688238263915
+        ],
+        "cube_position_actual_m": [
+          0.15277062356472015,
+          1.0757765769958496,
+          0.9369998574256897
+        ],
+        "position_error_m": 0.032524330010464085,
+        "reprojection_error_px": 0.10015384414005477
+      },
+      {
+        "physics_step": 16464,
+        "capture_time_s": 137.2166738230735,
+        "received_physics_step": 16464,
+        "frame_id": 2158,
+        "pixel_center": [
+          572.3317718505859,
+          561.7129669189453
+        ],
+        "cube_position_estimate_m": [
+          0.16017869787989017,
+          1.0653155899347366,
+          0.9059901233839452
+        ],
+        "cube_position_actual_m": [
+          0.15277180075645447,
+          1.0757766962051392,
+          0.9369999766349792
+        ],
+        "position_error_m": 0.03355455063100204,
+        "reprojection_error_px": 0.10089973007089709
+      },
+      {
+        "physics_step": 16472,
+        "capture_time_s": 137.2833404932171,
+        "received_physics_step": 16472,
+        "frame_id": 2159,
+        "pixel_center": [
+          572.3146667480469,
+          561.7173309326172
+        ],
+        "cube_position_estimate_m": [
+          0.15982626219121362,
+          1.0651324003745464,
+          0.9061344535242265
+        ],
+        "cube_position_actual_m": [
+          0.15277180075645447,
+          1.0757770538330078,
+          0.9370001554489136
+        ],
+        "position_error_m": 0.03340307813194572,
+        "reprojection_error_px": 0.11219077008866685
+      },
+      {
+        "physics_step": 16480,
+        "capture_time_s": 137.35000716336071,
+        "received_physics_step": 16480,
+        "frame_id": 2160,
+        "pixel_center": [
+          572.3168792724609,
+          561.7360229492188
+        ],
+        "cube_position_estimate_m": [
+          0.15977248471207933,
+          1.0655233544319607,
+          0.9063072899049602
+        ],
+        "cube_position_actual_m": [
+          0.1527707874774933,
+          1.0757769346237183,
+          0.9369999766349792
+        ],
+        "position_error_m": 0.033108921601597036,
+        "reprojection_error_px": 0.09975133120986768
+      },
+      {
+        "physics_step": 16488,
+        "capture_time_s": 137.41667383350432,
+        "received_physics_step": 16488,
+        "frame_id": 2161,
+        "pixel_center": [
+          572.3148803710938,
+          561.7244567871094
+        ],
+        "cube_position_estimate_m": [
+          0.15986221863797379,
+          1.065300213715519,
+          0.9064122526768305
+        ],
+        "cube_position_actual_m": [
+          0.15277104079723358,
+          1.0757766962051392,
+          0.9369997978210449
+        ],
+        "position_error_m": 0.03310044420357046,
+        "reprojection_error_px": 0.10548996441559247
+      },
+      {
+        "physics_step": 16496,
+        "capture_time_s": 137.48334050364792,
+        "received_physics_step": 16496,
+        "frame_id": 2162,
+        "pixel_center": [
+          572.3171234130859,
+          561.736572265625
+        ],
+        "cube_position_estimate_m": [
+          0.1597846871979335,
+          1.0648497702478201,
+          0.9058470960857711
+        ],
+        "cube_position_actual_m": [
+          0.1527712345123291,
+          1.0757776498794556,
+          0.937000036239624
+        ],
+        "position_error_m": 0.0337507444665487,
+        "reprojection_error_px": 0.10487719757700073
+      },
+      {
+        "physics_step": 16504,
+        "capture_time_s": 137.55000717379153,
+        "received_physics_step": 16504,
+        "frame_id": 2163,
+        "pixel_center": [
+          572.3239898681641,
+          561.7171020507812
+        ],
+        "cube_position_estimate_m": [
+          0.15991258610231138,
+          1.065885854717451,
+          0.9058607478882185
+        ],
+        "cube_position_actual_m": [
+          0.15277114510536194,
+          1.075777530670166,
+          0.9369999766349792
+        ],
+        "position_error_m": 0.033443938159396294,
+        "reprojection_error_px": 0.10348897788287342
+      },
+      {
+        "physics_step": 16512,
+        "capture_time_s": 137.61667384393513,
+        "received_physics_step": 16512,
+        "frame_id": 2165,
+        "pixel_center": [
+          572.3245849609375,
+          561.7059936523438
+        ],
+        "cube_position_estimate_m": [
+          0.1597770864700108,
+          1.065597961108197,
+          0.9060771822471914
+        ],
+        "cube_position_actual_m": [
+          0.15277187526226044,
+          1.07577645778656,
+          0.9369998574256897
+        ],
+        "position_error_m": 0.03329994923256727,
+        "reprojection_error_px": 0.11321296273272237
+      },
+      {
+        "physics_step": 16520,
+        "capture_time_s": 137.68334051407874,
+        "received_physics_step": 16520,
+        "frame_id": 2167,
+        "pixel_center": [
+          572.3224945068359,
+          561.7010650634766
+        ],
+        "cube_position_estimate_m": [
+          0.15979811212902456,
+          1.064697202836576,
+          0.9046412393224379
+        ],
+        "cube_position_actual_m": [
+          0.15277114510536194,
+          1.0757765769958496,
+          0.9369998574256897
+        ],
+        "position_error_m": 0.03491720153255294,
+        "reprojection_error_px": 0.10931882218324641
+      },
+      {
+        "physics_step": 16528,
+        "capture_time_s": 137.75000718422234,
+        "received_physics_step": 16528,
+        "frame_id": 2169,
+        "pixel_center": [
+          572.3267669677734,
+          561.7418670654297
+        ],
+        "cube_position_estimate_m": [
+          0.1596132001613723,
+          1.065686224277444,
+          0.9052569375325548
+        ],
+        "cube_position_actual_m": [
+          0.15277154743671417,
+          1.0757768154144287,
+          0.9369999766349792
+        ],
+        "position_error_m": 0.03400365822902978,
+        "reprojection_error_px": 0.0738736519702207
+      },
+      {
+        "physics_step": 16536,
+        "capture_time_s": 137.81667385436594,
+        "received_physics_step": 16536,
+        "frame_id": 2170,
+        "pixel_center": [
+          572.3281402587891,
+          561.7396087646484
+        ],
+        "cube_position_estimate_m": [
+          0.15966643545079512,
+          1.0658346475928806,
+          0.9054136782631963
+        ],
+        "cube_position_actual_m": [
+          0.15277083218097687,
+          1.0757768154144287,
+          0.9369999170303345
+        ],
+        "position_error_m": 0.03382434810755733,
+        "reprojection_error_px": 0.07227011717410156
+      },
+      {
+        "physics_step": 16544,
+        "capture_time_s": 137.88334052450955,
+        "received_physics_step": 16544,
+        "frame_id": 2171,
+        "pixel_center": [
+          572.3202514648438,
+          561.7541351318359
+        ],
+        "cube_position_estimate_m": [
+          0.15942290404518222,
+          1.0658265389797905,
+          0.9057084919439986
+        ],
+        "cube_position_actual_m": [
+          0.15277099609375,
+          1.0757768154144287,
+          0.9369999766349792
+        ],
+        "position_error_m": 0.0335024311757508,
+        "reprojection_error_px": 0.07326910696435987
+      },
+      {
+        "physics_step": 16552,
+        "capture_time_s": 137.95000719465315,
+        "received_physics_step": 16552,
+        "frame_id": 2172,
+        "pixel_center": [
+          572.3105163574219,
+          561.7704467773438
+        ],
+        "cube_position_estimate_m": [
+          0.15925947456528272,
+          1.0676770247808685,
+          0.9064233608438866
+        ],
+        "cube_position_actual_m": [
+          0.1527715027332306,
+          1.0757771730422974,
+          0.9369997978210449
+        ],
+        "position_error_m": 0.03228969926414249,
+        "reprojection_error_px": 0.04348849266898588
+      },
+      {
+        "physics_step": 16560,
+        "capture_time_s": 138.01667386479676,
+        "received_physics_step": 16560,
+        "frame_id": 2173,
+        "pixel_center": [
+          572.3153228759766,
+          561.7542114257812
+        ],
+        "cube_position_estimate_m": [
+          0.1593397928497548,
+          1.0670278550365198,
+          0.9060672348656122
+        ],
+        "cube_position_actual_m": [
+          0.15277138352394104,
+          1.0757771730422974,
+          0.937000036239624
+        ],
+        "position_error_m": 0.03281055878039456,
+        "reprojection_error_px": 0.05908236045470917
+      },
+      {
+        "physics_step": 16568,
+        "capture_time_s": 138.08334053494036,
+        "received_physics_step": 16568,
+        "frame_id": 2174,
+        "pixel_center": [
+          572.3341217041016,
+          561.7631530761719
+        ],
+        "cube_position_estimate_m": [
+          0.1592707567554839,
+          1.0664521910082922,
+          0.9055449040469058
+        ],
+        "cube_position_actual_m": [
+          0.1527724415063858,
+          1.0757771730422974,
+          0.9369999766349792
+        ],
+        "position_error_m": 0.03344555250750313,
+        "reprojection_error_px": 0.06723125293321833
+      },
+      {
+        "physics_step": 16576,
+        "capture_time_s": 138.15000720508397,
+        "received_physics_step": 16576,
+        "frame_id": 2175,
+        "pixel_center": [
+          572.3273010253906,
+          561.7705535888672
+        ],
+        "cube_position_estimate_m": [
+          0.15925369029190148,
+          1.0666632333259523,
+          0.9058388358182493
+        ],
+        "cube_position_actual_m": [
+          0.15277190506458282,
+          1.0757768154144287,
+          0.9370001554489136
+        ],
+        "position_error_m": 0.03310738224838846,
+        "reprojection_error_px": 0.0645351482711345
+      }
+    ],
+    "camera_mode": "d455_calibrated_pinhole_fallback",
+    "d455_color_prim": "/World/D455/RSD455/Camera_OmniVision_OV9782_Color",
+    "d455_color_prim_renderable": false,
+    "fallback_reason": "Isaac Sim 4.5 D455 USD color prim carries unsupported cameraProjectionType metadata; capture uses a pinhole camera with the D455 color intrinsics",
+    "sampling_mode": "sync_sensor",
+    "comparison_directory": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3-innovation-2/runs/post_audit_u4_online_20261125/vision",
+    "camera_uses_cube_truth": false,
+    "unique_frames": 2070,
+    "duplicate_frames": 0,
+    "supported_pose_filter": {
+      "type": "causal_planar_median",
+      "distinct_frames": 3,
+      "timestamp": "middle optical exposure"
+    },
+    "comparison_summary": {
+      "metadata": {
+        "scene_id": "W760_H300_rear5_front5_upper5_side_v1",
+        "camera_model": "Intel RealSense D455",
+        "execution_mode": "headless",
+        "simulation_time_origin_s": 0.01666666753590107,
+        "camera_mode": "d455_calibrated_pinhole_fallback",
+        "camera_matrix": [
+          [
+            634.0862426757812,
+            0.0,
+            640.0
+          ],
+          [
+            0.0,
+            634.0862426757812,
+            480.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "camera_to_world_ros": [
+          [
+            -1.0,
+            1.2092042552096367e-16,
+            -1.9386818008545582e-17,
+            -4.73444257247972e-24
+          ],
+          [
+            1.209204255209637e-16,
+            0.9498788243557859,
+            -0.31261834914255754,
+            1.35000003710576
+          ],
+          [
+            -1.9386818008545585e-17,
+            -0.31261834914255754,
+            -0.9498788243557859,
+            2.450000155643522
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "resolution": [
+          1280,
+          960
+        ],
+        "frequency_hz": 15,
+        "aruco_dictionary": "DICT_4X4_50",
+        "aruco_marker_id": 23,
+        "aruco_marker_size_m": 0.105,
+        "cube_size_m": 0.15,
+        "marker_surface_offset_m": 0.0085,
+        "ground_truth_source": "Isaac Sim PhysX Cube.get_world_pose at exposure time",
+        "camera_source": "RGB + ArUco + solvePnP + fixed camera calibration only",
+        "camera_uses_cube_truth": false,
+        "control_state_source": "RGB, encoder FK and wrist F/T",
+        "pairing": "nearest 120 Hz reference within half a physics step; duplicate images excluded",
+        "distortion": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "hardware_calibration_validated": false
+      },
+      "units": {
+        "positions": "m",
+        "errors": "m",
+        "detection_rate": "fraction"
+      },
+      "overall": {
+        "attempts": 2072,
+        "camera_detections": 2070,
+        "matched": 2070,
+        "misses": 2,
+        "unpaired": 0,
+        "detection_rate": 0.999034749034749,
+        "status_counts": {
+          "no_frame": 2,
+          "detected": 2070
+        },
+        "xyz_bias_m": [
+          0.0049709660329191885,
+          -0.009661017979708125,
+          -0.030901664231322575
+        ],
+        "xyz_mae_m": [
+          0.0049709660329191885,
+          0.009661017979708125,
+          0.030901664231322575
+        ],
+        "euclidean_mean_m": 0.03286544174893091,
+        "euclidean_median_m": 0.03291824716334211,
+        "euclidean_rmse_m": 0.033095630894059896,
+        "euclidean_p95_m": 0.0379960774921425,
+        "euclidean_max_m": 0.06320727152472945
+      },
+      "by_phase": {
+        "initialization": {
+          "attempts": 18,
+          "camera_detections": 16,
+          "matched": 16,
+          "misses": 2,
+          "unpaired": 0,
+          "detection_rate": 0.8888888888888888,
+          "status_counts": {
+            "no_frame": 2,
+            "detected": 16
+          },
+          "xyz_bias_m": [
+            0.006911990870478123,
+            -0.012952921605093384,
+            -0.04294232157080918
+          ],
+          "xyz_mae_m": [
+            0.006911990870478123,
+            0.012952921605093384,
+            0.04294232157080918
+          ],
+          "euclidean_mean_m": 0.04542688858361581,
+          "euclidean_median_m": 0.04518302956263021,
+          "euclidean_rmse_m": 0.04586262086330368,
+          "euclidean_p95_m": 0.05374610412415969,
+          "euclidean_max_m": 0.06320727152472945
+        },
+        "upper_seam_entry_checkpoint": {
+          "attempts": 10,
+          "camera_detections": 10,
+          "matched": 10,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 10
+          },
+          "xyz_bias_m": [
+            0.00482311456036707,
+            -0.011061708223813938,
+            -0.035961208393605004
+          ],
+          "xyz_mae_m": [
+            0.00482311456036707,
+            0.011061708223813938,
+            0.035961208393605004
+          ],
+          "euclidean_mean_m": 0.03793564502211365,
+          "euclidean_median_m": 0.037823046639867505,
+          "euclidean_rmse_m": 0.03793893749028898,
+          "euclidean_p95_m": 0.038764003392822544,
+          "euclidean_max_m": 0.03885630006787664
+        },
+        "upper_B_rail": {
+          "attempts": 203,
+          "camera_detections": 203,
+          "matched": 203,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 203
+          },
+          "xyz_bias_m": [
+            0.00450188864218955,
+            -0.011947845485735884,
+            -0.03475335043337401
+          ],
+          "xyz_mae_m": [
+            0.00450188864218955,
+            0.011947845485735884,
+            0.03475335043337401
+          ],
+          "euclidean_mean_m": 0.03702847245964651,
+          "euclidean_median_m": 0.037028740612455736,
+          "euclidean_rmse_m": 0.03703732388908477,
+          "euclidean_p95_m": 0.038328487689963726,
+          "euclidean_max_m": 0.03881380102898698
+        },
+        "upper_B_front_approach_transit": {
+          "attempts": 70,
+          "camera_detections": 70,
+          "matched": 70,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 70
+          },
+          "xyz_bias_m": [
+            0.004305776980251534,
+            -0.011203863701158837,
+            -0.03368378484550883
+          ],
+          "xyz_mae_m": [
+            0.004305776980251534,
+            0.011203863701158837,
+            0.03368378484550883
+          ],
+          "euclidean_mean_m": 0.03576189876395826,
+          "euclidean_median_m": 0.036203327877835215,
+          "euclidean_rmse_m": 0.03579108929779049,
+          "euclidean_p95_m": 0.03730272221141459,
+          "euclidean_max_m": 0.03765441036868548
+        },
+        "upper_B_front_touch": {
+          "attempts": 235,
+          "camera_detections": 235,
+          "matched": 235,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 235
+          },
+          "xyz_bias_m": [
+            0.0035023986806728287,
+            -0.010305442290918555,
+            -0.03146590400463858
+          ],
+          "xyz_mae_m": [
+            0.0035023986806728287,
+            0.010305442290918555,
+            0.03146590400463858
+          ],
+          "euclidean_mean_m": 0.03330339017055782,
+          "euclidean_median_m": 0.03344308258505775,
+          "euclidean_rmse_m": 0.033328733430630544,
+          "euclidean_p95_m": 0.035160742178259256,
+          "euclidean_max_m": 0.035970668513676515
+        },
+        "upper_B_side_high_transit": {
+          "attempts": 86,
+          "camera_detections": 86,
+          "matched": 86,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 86
+          },
+          "xyz_bias_m": [
+            0.0031639958557339214,
+            -0.010438993745247248,
+            -0.03083379520844332
+          ],
+          "xyz_mae_m": [
+            0.0031639958557339214,
+            0.010438993745247248,
+            0.03083379520844332
+          ],
+          "euclidean_mean_m": 0.03271234052393552,
+          "euclidean_median_m": 0.03268582624181997,
+          "euclidean_rmse_m": 0.03271825813347717,
+          "euclidean_p95_m": 0.033718613774681,
+          "euclidean_max_m": 0.034522447637387786
+        },
+        "upper_B_side_descent": {
+          "attempts": 60,
+          "camera_detections": 60,
+          "matched": 60,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 60
+          },
+          "xyz_bias_m": [
+            0.0026522456474038863,
+            -0.010937330722038324,
+            -0.030627570037742746
+          ],
+          "xyz_mae_m": [
+            0.0026522456474038863,
+            0.010937330722038324,
+            0.030627570037742746
+          ],
+          "euclidean_mean_m": 0.03263611005095942,
+          "euclidean_median_m": 0.032768533009600656,
+          "euclidean_rmse_m": 0.03265065242071394,
+          "euclidean_p95_m": 0.03393994467741646,
+          "euclidean_max_m": 0.035133604525761065
+        },
+        "upper_B_side_standoff": {
+          "attempts": 30,
+          "camera_detections": 30,
+          "matched": 30,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 30
+          },
+          "xyz_bias_m": [
+            0.0032444268704267154,
+            -0.010840513514277113,
+            -0.030864047722137637
+          ],
+          "xyz_mae_m": [
+            0.0032444268704267154,
+            0.010840513514277113,
+            0.030864047722137637
+          ],
+          "euclidean_mean_m": 0.032877409288383286,
+          "euclidean_median_m": 0.03293032092175222,
+          "euclidean_rmse_m": 0.032884714867104356,
+          "euclidean_p95_m": 0.034123991824874515,
+          "euclidean_max_m": 0.03426823267927245
+        },
+        "upper_B_side_touch": {
+          "attempts": 146,
+          "camera_detections": 146,
+          "matched": 146,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 146
+          },
+          "xyz_bias_m": [
+            0.00330664506567185,
+            -0.010002063823962907,
+            -0.030533128521617
+          ],
+          "xyz_mae_m": [
+            0.00330664506567185,
+            0.010002063823962907,
+            0.030533128521617
+          ],
+          "euclidean_mean_m": 0.032309258263578354,
+          "euclidean_median_m": 0.032388796803613604,
+          "euclidean_rmse_m": 0.03233083151075454,
+          "euclidean_p95_m": 0.0343097928748196,
+          "euclidean_max_m": 0.03491844792498384
+        },
+        "upper_B_side_travel": {
+          "attempts": 167,
+          "camera_detections": 167,
+          "matched": 167,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 167
+          },
+          "xyz_bias_m": [
+            0.004101757019965206,
+            -0.010741646664588173,
+            -0.03034957060550025
+          ],
+          "xyz_mae_m": [
+            0.004101757019965206,
+            0.010741646664588173,
+            0.03034957060550025
+          ],
+          "euclidean_mean_m": 0.032883218293457556,
+          "euclidean_median_m": 0.032535066916130895,
+          "euclidean_rmse_m": 0.03313466550989764,
+          "euclidean_p95_m": 0.03811596451465159,
+          "euclidean_max_m": 0.0522344596108817
+        },
+        "upper_B_seam_pacing": {
+          "attempts": 278,
+          "camera_detections": 278,
+          "matched": 278,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 278
+          },
+          "xyz_bias_m": [
+            0.004190575928458299,
+            -0.008443865702962553,
+            -0.027507442756457844
+          ],
+          "xyz_mae_m": [
+            0.004190575928458299,
+            0.008443865702962553,
+            0.027507442756457844
+          ],
+          "euclidean_mean_m": 0.029104418415414512,
+          "euclidean_median_m": 0.02966011419202224,
+          "euclidean_rmse_m": 0.029335232155460696,
+          "euclidean_p95_m": 0.03414232333879243,
+          "euclidean_max_m": 0.03618383082714968
+        },
+        "upper_B_u4_front_retouch": {
+          "attempts": 1,
+          "camera_detections": 1,
+          "matched": 1,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 1
+          },
+          "xyz_bias_m": [
+            0.004953479993313165,
+            -0.008630147364645957,
+            -0.026676959080836782
+          ],
+          "xyz_mae_m": [
+            0.004953479993313165,
+            0.008630147364645957,
+            0.026676959080836782
+          ],
+          "euclidean_mean_m": 0.02847238229197373,
+          "euclidean_median_m": 0.02847238229197373,
+          "euclidean_rmse_m": 0.02847238229197373,
+          "euclidean_p95_m": 0.02847238229197373,
+          "euclidean_max_m": 0.02847238229197373
+        },
+        "upper_B_u4_side_clear": {
+          "attempts": 15,
+          "camera_detections": 15,
+          "matched": 15,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 15
+          },
+          "xyz_bias_m": [
+            0.004884626617863854,
+            -0.008164413542523279,
+            -0.02598382800995957
+          ],
+          "xyz_mae_m": [
+            0.004884626617863854,
+            0.008164413542523279,
+            0.02598382800995957
+          ],
+          "euclidean_mean_m": 0.0276720495650437,
+          "euclidean_median_m": 0.02769883833879305,
+          "euclidean_rmse_m": 0.027675510397706823,
+          "euclidean_p95_m": 0.028243405484980402,
+          "euclidean_max_m": 0.0284438870501621
+        },
+        "upper_B_rear_travel": {
+          "attempts": 530,
+          "camera_detections": 530,
+          "matched": 530,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 530
+          },
+          "xyz_bias_m": [
+            0.006500939665180982,
+            -0.0076833223339673705,
+            -0.030079895577678917
+          ],
+          "xyz_mae_m": [
+            0.006500939665180982,
+            0.0076833223339673705,
+            0.030079895577678917
+          ],
+          "euclidean_mean_m": 0.03176738687266327,
+          "euclidean_median_m": 0.0316726252036464,
+          "euclidean_rmse_m": 0.03205851622431436,
+          "euclidean_p95_m": 0.03852491638524905,
+          "euclidean_max_m": 0.047516906771799094
+        },
+        "upper_B_release_dwell": {
+          "attempts": 1,
+          "camera_detections": 1,
+          "matched": 1,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 1
+          },
+          "xyz_bias_m": [
+            0.008954371350823193,
+            -0.00806877807610884,
+            -0.032333029302998306
+          ],
+          "xyz_mae_m": [
+            0.008954371350823193,
+            0.00806877807610884,
+            0.032333029302998306
+          ],
+          "euclidean_mean_m": 0.034506676597993106,
+          "euclidean_median_m": 0.034506676597993106,
+          "euclidean_rmse_m": 0.034506676597993106,
+          "euclidean_p95_m": 0.034506676597993106,
+          "euclidean_max_m": 0.034506676597993106
+        },
+        "upper_B_withdraw_transit": {
+          "attempts": 45,
+          "camera_detections": 45,
+          "matched": 45,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 45
+          },
+          "xyz_bias_m": [
+            0.008598038489253845,
+            -0.010952850070798575,
+            -0.03371041008713478
+          ],
+          "xyz_mae_m": [
+            0.008598038489253845,
+            0.010952850070798575,
+            0.03371041008713478
+          ],
+          "euclidean_mean_m": 0.03651083845811709,
+          "euclidean_median_m": 0.03645608468815334,
+          "euclidean_rmse_m": 0.036558955029683905,
+          "euclidean_p95_m": 0.03985656286310076,
+          "euclidean_max_m": 0.041311725589291456
+        },
+        "upper_B_park_transit": {
+          "attempts": 167,
+          "camera_detections": 167,
+          "matched": 167,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 167
+          },
+          "xyz_bias_m": [
+            0.0074504433958344045,
+            -0.010584412216371844,
+            -0.0317524527803014
+          ],
+          "xyz_mae_m": [
+            0.0074504433958344045,
+            0.010584412216371844,
+            0.0317524527803014
+          ],
+          "euclidean_mean_m": 0.03430558860712148,
+          "euclidean_median_m": 0.034249217883963935,
+          "euclidean_rmse_m": 0.03433543508415512,
+          "euclidean_p95_m": 0.03744506106985522,
+          "euclidean_max_m": 0.03889414648721016
+        },
+        "upper_B_release": {
+          "attempts": 10,
+          "camera_detections": 10,
+          "matched": 10,
+          "misses": 0,
+          "unpaired": 0,
+          "detection_rate": 1.0,
+          "status_counts": {
+            "detected": 10
+          },
+          "xyz_bias_m": [
+            0.006759926480855366,
+            -0.009642061257321078,
+            -0.0313166915158962
+          ],
+          "xyz_mae_m": [
+            0.006759926480855366,
+            0.009642061257321078,
+            0.0313166915158962
+          ],
+          "euclidean_mean_m": 0.033464471923728305,
+          "euclidean_median_m": 0.03344474533344971,
+          "euclidean_rmse_m": 0.033471187552630025,
+          "euclidean_p95_m": 0.034506107045967516,
+          "euclidean_max_m": 0.03491720153255294
+        }
+      },
+      "by_stage": {
+        "Setup": {
+          "attempts": 2072,
+          "camera_detections": 2070,
+          "matched": 2070,
+          "misses": 2,
+          "unpaired": 0,
+          "detection_rate": 0.999034749034749,
+          "status_counts": {
+            "no_frame": 2,
+            "detected": 2070
+          },
+          "xyz_bias_m": [
+            0.0049709660329191885,
+            -0.009661017979708125,
+            -0.030901664231322575
+          ],
+          "xyz_mae_m": [
+            0.0049709660329191885,
+            0.009661017979708125,
+            0.030901664231322575
+          ],
+          "euclidean_mean_m": 0.03286544174893091,
+          "euclidean_median_m": 0.03291824716334211,
+          "euclidean_rmse_m": 0.033095630894059896,
+          "euclidean_p95_m": 0.0379960774921425,
+          "euclidean_max_m": 0.06320727152472945
+        }
+      }
+    }
+  },
+  "physx_stabilization_enabled": false,
+  "playback": {
+    "start_s": 0.0,
+    "end_s": 3600.0,
+    "playing": true,
+    "mode": "application-commanded physics clock"
+  },
+  "physics_solver": {
+    "scene_type": "TGS",
+    "requested_articulation_iterations": {
+      "position": 44,
+      "velocity": 4
+    },
+    "arms": {
+      "left": {
+        "original_asset": {
+          "position": 32,
+          "velocity": 16
+        },
+        "actual": {
+          "position": 44,
+          "velocity": 4
+        }
+      },
+      "right": {
+        "original_asset": {
+          "position": 32,
+          "velocity": 16
+        },
+        "actual": {
+          "position": 44,
+          "velocity": 4
+        }
+      }
+    },
+    "cube_default_iterations": {
+      "position": 16,
+      "velocity": 1
+    },
+    "reason": "PhysX5.3+ TGS compatibility: official32/16 excess velocity iterations become44/4."
+  },
+  "joint_drive_model": {
+    "contact_gain_scale": 0.003,
+    "free_space_gain_scale": 1.0,
+    "drive_types": {
+      "left": [
+        "force",
+        "force",
+        "force",
+        "force",
+        "force",
+        "force",
+        "force"
+      ],
+      "right": [
+        "force",
+        "force",
+        "force",
+        "force",
+        "force",
+        "force",
+        "force"
+      ]
+    },
+    "scope": "seven arm joints with original effort limits retained",
+    "hardware_calibrated": false,
+    "assumption": "uncalibrated simulation contact compliance with original gains for A transport"
+  },
+  "path_validation_timing": [
+    {
+      "phase": "upper_B_front_approach_transit",
+      "status": "CLEAR",
+      "workers": 3,
+      "samples_checked": 559,
+      "wall_s": 1.0827465939946705,
+      "control_steps": 0,
+      "render_updates": 0,
+      "max_render_gap_s": null
+    },
+    {
+      "phase": "upper_B_side_high_transit",
+      "status": "CLEAR",
+      "workers": 3,
+      "samples_checked": 685,
+      "wall_s": 1.969438337997417,
+      "control_steps": 0,
+      "render_updates": 0,
+      "max_render_gap_s": null
+    },
+    {
+      "phase": "upper_B_side_travel",
+      "status": "CLEAR",
+      "workers": 3,
+      "samples_checked": 813,
+      "wall_s": 1.7600811010051984,
+      "control_steps": 0,
+      "render_updates": 0,
+      "max_render_gap_s": null
+    },
+    {
+      "phase": "upper_B_withdraw_transit",
+      "status": "CLEAR",
+      "workers": 3,
+      "samples_checked": 361,
+      "wall_s": 0.8016975770005956,
+      "control_steps": 0,
+      "render_updates": 0,
+      "max_render_gap_s": null
+    },
+    {
+      "phase": "upper_B_park_transit",
+      "status": "BLOCKED",
+      "workers": 3,
+      "samples_checked": 4,
+      "wall_s": 1.4180088089924539,
+      "control_steps": 0,
+      "render_updates": 0,
+      "max_render_gap_s": null
+    },
+    {
+      "phase": "upper_B_park_transit",
+      "status": "CLEAR",
+      "workers": 3,
+      "samples_checked": 713,
+      "wall_s": 1.4447068750014296,
+      "control_steps": 0,
+      "render_updates": 0,
+      "max_render_gap_s": null
+    },
+    {
+      "phase": "upper_B_park_transit",
+      "status": "CLEAR",
+      "workers": 3,
+      "samples_checked": 618,
+      "wall_s": 1.2396615340112476,
+      "control_steps": 0,
+      "render_updates": 0,
+      "max_render_gap_s": null
+    }
+  ],
+  "trajectory_cache": {
+    "loaded": false,
+    "path": "validation/fr3_trajectory_cache.json",
+    "used_phases": [],
+    "used_rail_transfers": 0,
+    "fallback_reason": "legacy trajectory targets predate sensor-based localization"
+  },
+  "execution_wall_s": {
+    "pace_sleep": 0.0,
+    "world_physics": 147.9286662722734,
+    "all_render": 22.86363063925819,
+    "step_render": 22.761630581211648,
+    "step_total": 290.4628315937589,
+    "wrist_sensor": 33.228178713834495,
+    "recognition_and_reference": 32.003967339449446
+  },
+  "simulation_clock": {
+    "control_hz": 120,
+    "render_hz": 30,
+    "render_count": 2084,
+    "uncommanded_physics_steps": 0,
+    "control_steps": 16581,
+    "physics_steps": 16581
+  },
+  "target_observations": [
+    {
+      "phase": "upper_landing_pose",
+      "source": "rear_rgb",
+      "frame_count": 3,
+      "position_m": [
+        0.14128209359781352,
+        1.0085443825945575,
+        0.9369999999999999
+      ],
+      "yaw_deg": 0.09398855179761396
+    },
+    {
+      "phase": "upper_b4_front_pose",
+      "source": "rear_rgb",
+      "frame_count": 3,
+      "position_m": [
+        0.14134417687433398,
+        1.0084601578705945,
+        0.9369999999999999
+      ],
+      "yaw_deg": -0.19475977840964165
+    },
+    {
+      "phase": "upper_B_front_touch",
+      "source": "encoder_fk_and_wrist_force",
+      "force_N": 0.33720913406543124,
+      "search_m": 0.009329999999999705
+    },
+    {
+      "phase": "upper_B_side_touch",
+      "source": "encoder_fk_and_wrist_force",
+      "force_N": 1.467590007812585,
+      "search_m": 0.005809999999999847
+    },
+    {
+      "phase": "upper_B_u4_front_retouch",
+      "source": "encoder_fk_and_wrist_force",
+      "force_N": 0.44083329849205344,
+      "search_m": 5e-06
+    },
+    {
+      "phase": "upper_final_pose",
+      "source": "rear_rgb",
+      "frame_count": 3,
+      "position_m": [
+        0.1540904994408112,
+        1.0747984366165282,
+        0.9369999999999999
+      ],
+      "yaw_deg": -0.4800897622030903
+    }
+  ],
+  "front_row": {
+    "completed": [
+      {
+        "target_m": [
+          -0.305,
+          0.9251711694810867,
+          0.7869999999999999
+        ],
+        "observed_position_m": [
+          -0.30287381721455275,
+          0.924471939213998,
+          0.7869999999999999
+        ],
+        "observed_yaw_deg": 0.0132334159049176,
+        "start_position_m": [
+          0.0011410060487054442,
+          0.7344025323026168,
+          0.7869999999999999
+        ],
+        "contacts": {
+          "side_seat": {
+            "phase": "front_B_side_seat",
+            "status": "NATIVE_CONTACT_CONFIRMED",
+            "sim_time_s": 109.85,
+            "wall_elapsed_s": 320.46834596200097,
+            "cube_position_m": [
+              -0.3044556677341461,
+              0.899036169052124,
+              0.7870000004768372
+            ],
+            "cube_orientation_wxyz": [
+              0.9999933838844299,
+              -1.661895453253237e-06,
+              -2.437496732454747e-06,
+              0.0036406624130904675
+            ],
+            "cube_id": 12,
+            "loaded_ticks": 24,
+            "ticks": 24,
+            "contact_paths": [
+              "/World/Environment/wall_left"
+            ],
+            "median_floor_N": 13.538637980818748,
+            "median_wrist_normal_N": 7.695472904730638
+          },
+          "rear_seat": {
+            "loaded_ticks": 24,
+            "ticks": 24,
+            "contact_paths": [
+              "/World/Cube_1"
+            ],
+            "median_floor_N": 10.584892518818378,
+            "median_wrist_normal_N": 7.214530697593016
+          },
+          "final_side_geometry": {
+            "rgb_signed_gap_m": 0.0021088622851495042,
+            "limit_m": 0.004
+          }
+        },
+        "slot": 1,
+        "cube_id": 12,
+        "physical_final_m": [
+          -0.3037961721420288,
+          0.925964891910553,
+          0.7869998812675476
+        ],
+        "rgb_final_m": [
+          -0.3027297160632311,
+          0.9246106071525186,
+          0.7869999999999999
+        ],
+        "yaw_pitch_roll_deg": [
+          -0.02675390385385497,
+          1.650379977214125e-06,
+          1.3284026383344855e-05
+        ],
+        "floor_support": {
+          "positive_steps": 60,
+          "median_contact_impulse_Ns": 0.10177585668861866,
+          "samples": 60
+        },
+        "max_rear_shift_m": 4.815297976809971e-07
+      },
+      {
+        "target_m": [
+          0.305,
+          0.9251728740060028,
+          0.7869999999999999
+        ],
+        "observed_position_m": [
+          0.3059625081267645,
+          0.9246733861544524,
+          0.7869999999999999
+        ],
+        "observed_yaw_deg": -0.15239077419696417,
+        "start_position_m": [
+          0.046984179747003196,
+          0.734746146442482,
+          0.7869999999999999
+        ],
+        "contacts": {
+          "side_seat": {
+            "loaded_ticks": 24,
+            "ticks": 24,
+            "contact_paths": [
+              "/World/Environment/wall_right"
+            ],
+            "median_floor_N": 11.804994279518723,
+            "median_wrist_normal_N": 7.413742818925055
+          },
+          "rear_seat": {
+            "loaded_ticks": 24,
+            "ticks": 24,
+            "contact_paths": [
+              "/World/Cube_2"
+            ],
+            "median_floor_N": 13.359303418546915,
+            "median_wrist_normal_N": 7.490718743129443
+          },
+          "final_side_geometry": {
+            "rgb_signed_gap_m": -0.001161721669391963,
+            "limit_m": 0.004
+          }
+        },
+        "slot": 2,
+        "cube_id": 15,
+        "physical_final_m": [
+          0.30478766560554504,
+          0.9259477853775024,
+          0.7869998812675476
+        ],
+        "rgb_final_m": [
+          0.3059646789530766,
+          0.9246486106697971,
+          0.7869999999999999
+        ],
+        "yaw_pitch_roll_deg": [
+          0.039921320167117934,
+          -6.20659956861222e-06,
+          2.946290928944765e-05
+        ],
+        "floor_support": {
+          "positive_steps": 60,
+          "median_contact_impulse_Ns": 0.10327444598078728,
+          "samples": 60
+        },
+        "max_rear_shift_m": 9.582770408660303e-07
+      },
+      {
+        "target_m": [
+          -0.1526564240696674,
+          0.9250846726062691,
+          0.7869999999999999
+        ],
+        "observed_position_m": [
+          -0.14963923348818572,
+          0.9245232429029246,
+          0.7869999999999999
+        ],
+        "observed_yaw_deg": -0.04333486952134119,
+        "start_position_m": [
+          -0.028229276770385062,
+          0.7344666343650492,
+          0.7869999999999999
+        ],
+        "contacts": {
+          "lateral_alignment": {
+            "rgb_side_gap_m": 0.002237590712785703,
+            "yaw_deg": 0.0812444016981928,
+            "target_x_m": -0.15158764850119963
+          },
+          "rear_seat": {
+            "loaded_ticks": 24,
+            "ticks": 24,
+            "contact_paths": [
+              "/World/Cube_3"
+            ],
+            "median_floor_N": 12.651981739327312,
+            "median_wrist_normal_N": 6.635367409015165
+          },
+          "final_side_geometry": {
+            "rgb_signed_gap_m": 0.0029604868269978435,
+            "limit_m": 0.004
+          }
+        },
+        "slot": 3,
+        "cube_id": 13,
+        "physical_final_m": [
+          -0.15093807876110077,
+          0.9258597493171692,
+          0.7869999408721924
+        ],
+        "rgb_final_m": [
+          -0.1496877009675151,
+          0.9244737461544399,
+          0.7869999999999999
+        ],
+        "yaw_pitch_roll_deg": [
+          -0.10689528918827605,
+          -2.5717402832246313e-07,
+          -2.2152194920939092e-06
+        ],
+        "floor_support": {
+          "positive_steps": 60,
+          "median_contact_impulse_Ns": 0.10234444867819548,
+          "samples": 60
+        },
+        "max_rear_shift_m": 1.4364072522255898e-06
+      },
+      {
+        "target_m": [
+          0.15600216376175347,
+          0.9252461489734936,
+          0.7869999999999999
+        ],
+        "observed_position_m": [
+          0.1542746452833169,
+          0.9245778364046318,
+          0.7869999999999999
+        ],
+        "observed_yaw_deg": 0.19680614670051025,
+        "start_position_m": [
+          0.10774438861160228,
+          0.7331610797082287,
+          0.7869999999999999
+        ],
+        "contacts": {
+          "lateral_alignment": {
+            "rgb_side_gap_m": 0.0010549677309174277,
+            "yaw_deg": 0.18679488115627552,
+            "target_x_m": 0.1533209833626387
+          },
+          "rear_seat": {
+            "loaded_ticks": 24,
+            "ticks": 24,
+            "contact_paths": [
+              "/World/Cube_4"
+            ],
+            "median_floor_N": 14.67640574555844,
+            "median_wrist_normal_N": 6.726997594100533
+          },
+          "final_side_geometry": {
+            "rgb_signed_gap_m": 0.0014703427900899957,
+            "limit_m": 0.004
+          }
+        },
+        "slot": 4,
+        "cube_id": 14,
+        "physical_final_m": [
+          0.15291814506053925,
+          0.925957441329956,
+          0.7869998812675476
+        ],
+        "rgb_final_m": [
+          0.15415152941923718,
+          0.924503739767621,
+          0.7869999999999999
+        ],
+        "yaw_pitch_roll_deg": [
+          0.003991909144843577,
+          2.3674079140466907e-06,
+          -4.100301682917397e-06
+        ],
+        "floor_support": {
+          "positive_steps": 60,
+          "median_contact_impulse_Ns": 0.10219040140509605,
+          "samples": 60
+        },
+        "max_rear_shift_m": 1.6754710042295097e-06
+      },
+      {
+        "target_m": [
+          0.0022801530731382177,
+          0.9246034186106127,
+          0.7869999999999999
+        ],
+        "observed_position_m": [
+          0.00305659723009258,
+          0.9243934254314901,
+          0.7869999999999999
+        ],
+        "observed_yaw_deg": 0.13332672685853889,
+        "start_position_m": [
+          0.0026467005526771645,
+          0.7330652758406175,
+          0.7869999999999999
+        ],
+        "contacts": {
+          "first_rear": {
+            "loaded_ticks": 24,
+            "ticks": 24,
+            "contact_paths": [
+              "/World/Cube_5"
+            ],
+            "median_floor_N": 12.214473467320204,
+            "median_wrist_normal_N": 7.34440174705936
+          },
+          "rear_seat": {
+            "loaded_ticks": 24,
+            "ticks": 24,
+            "contact_paths": [
+              "/World/Cube_5"
+            ],
+            "median_floor_N": 11.521356292068958,
+            "median_wrist_normal_N": 2.648429984273572
+          }
+        },
+        "slot": 5,
+        "cube_id": 6,
+        "physical_final_m": [
+          0.0017423570388928056,
+          0.925929069519043,
+          0.7870001196861267
+        ],
+        "rgb_final_m": [
+          0.00302438801738923,
+          0.9244459938528291,
+          0.7869999999999999
+        ],
+        "yaw_pitch_roll_deg": [
+          -0.04067242743612602,
+          -2.7343504923132578e-06,
+          7.58492802007035e-05
+        ],
+        "floor_support": {
+          "positive_steps": 60,
+          "median_contact_impulse_Ns": 0.1032116087153554,
+          "samples": 60
+        },
+        "max_rear_shift_m": 1.9111283856433717e-06
+      }
+    ],
+    "rear_initial": [
+      {
+        "cube_id": 1,
+        "position_m": [
+          -0.30497896671295166,
+          1.0759997367858887,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          6.16471567127519e-08,
+          -4.3848562114590095e-08,
+          -1.3682199551112717e-07
+        ]
+      },
+      {
+        "cube_id": 2,
+        "position_m": [
+          0.3049226999282837,
+          1.0759998559951782,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -7.452020867049214e-08,
+          3.3231962959234806e-08,
+          -2.623066031048893e-08
+        ]
+      },
+      {
+        "cube_id": 3,
+        "position_m": [
+          -0.154978945851326,
+          1.0759997367858887,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -9.910400677881626e-08,
+          8.001421036851752e-08,
+          1.714653024009749e-07
+        ]
+      },
+      {
+        "cube_id": 4,
+        "position_m": [
+          0.15361864864826202,
+          1.0759646892547607,
+          0.7870000004768372
+        ],
+        "orientation_wxyz": [
+          1.0,
+          2.1024128216140525e-08,
+          -1.885756439889974e-09,
+          -5.165431193887571e-09
+        ]
+      },
+      {
+        "cube_id": 5,
+        "position_m": [
+          -0.00040960931801237166,
+          1.0759308338165283,
+          0.7869999408721924
+        ],
+        "orientation_wxyz": [
+          0.9999999403953552,
+          -5.467952135518317e-08,
+          4.468351022524075e-08,
+          -0.0003452338569331914
+        ]
+      }
+    ],
+    "input_checkpoint": {
+      "path": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3-innovation-2/runs/post_audit_u4_online_20261125_input.json",
+      "sha256": "1f44307d9a6a31c675d1b9f9984fc5c5289935cdb5892c0457e4dc28f45d6c26"
+    }
+  },
+  "upper_row": {
+    "initial_lower_poses": [
+      {
+        "cube_id": 1,
+        "position_m": [
+          -0.30497944355010986,
+          1.0759998559951782,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -9.07810857597724e-08,
+          7.61383134317839e-08,
+          -2.055416103985408e-08
+        ]
+      },
+      {
+        "cube_id": 2,
+        "position_m": [
+          0.30492347478866577,
+          1.0759998559951782,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -5.6126147285340267e-08,
+          3.807356208085366e-08,
+          -1.1127889720796702e-08
+        ]
+      },
+      {
+        "cube_id": 3,
+        "position_m": [
+          -0.15497887134552002,
+          1.0759996175765991,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -2.0626734453799145e-07,
+          1.621978995558493e-08,
+          -1.3920827157676285e-08
+        ]
+      },
+      {
+        "cube_id": 4,
+        "position_m": [
+          0.15361864864826202,
+          1.0759625434875488,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -4.957404087235773e-08,
+          5.562058547070592e-08,
+          -7.560434944764438e-09
+        ]
+      },
+      {
+        "cube_id": 5,
+        "position_m": [
+          -0.0004233355284668505,
+          1.0759567022323608,
+          0.7869999408721924
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -6.188714252175487e-08,
+          4.074019699373821e-08,
+          -0.0002108751068590209
+        ]
+      },
+      {
+        "cube_id": 6,
+        "position_m": [
+          0.0017448572907596827,
+          0.9259272813796997,
+          0.7869999408721924
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -2.3896634004927364e-08,
+          4.0733571182727246e-08,
+          -1.5441857613041066e-05
+        ]
+      },
+      {
+        "cube_id": 12,
+        "position_m": [
+          -0.30379578471183777,
+          0.925963819026947,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -3.854535890468469e-08,
+          2.1671256789090876e-08,
+          -9.10162896161637e-08
+        ]
+      },
+      {
+        "cube_id": 13,
+        "position_m": [
+          -0.1509380340576172,
+          0.9258595705032349,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          0.9999996423721313,
+          -5.256485380300546e-08,
+          3.4103873502999704e-08,
+          -0.0008456513751298189
+        ]
+      },
+      {
+        "cube_id": 14,
+        "position_m": [
+          0.15291810035705566,
+          0.9259572625160217,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -3.6545753090422295e-08,
+          3.299656725630484e-08,
+          1.1447315984014494e-08
+        ]
+      },
+      {
+        "cube_id": 15,
+        "position_m": [
+          0.30478790402412415,
+          0.9259472489356995,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -4.524297736452354e-08,
+          2.518211239532775e-08,
+          4.791222973921094e-09
+        ]
+      }
+    ],
+    "restored_lower_poses_at_start": [
+      {
+        "cube_id": 1,
+        "position_m": [
+          -0.30497950315475464,
+          1.0759998559951782,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          2.972212165275323e-08,
+          -2.2000387289722312e-08,
+          2.9729922967902667e-09
+        ]
+      },
+      {
+        "cube_id": 2,
+        "position_m": [
+          0.3049237132072449,
+          1.0759999752044678,
+          0.7870000004768372
+        ],
+        "orientation_wxyz": [
+          1.0,
+          2.9486932362488005e-07,
+          -2.0757676466587327e-08,
+          3.002037729515905e-08
+        ]
+      },
+      {
+        "cube_id": 3,
+        "position_m": [
+          -0.1549779772758484,
+          1.0759998559951782,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          1.0666357752597833e-07,
+          9.911242671023501e-08,
+          -2.1770004465793136e-08
+        ]
+      },
+      {
+        "cube_id": 4,
+        "position_m": [
+          0.15361949801445007,
+          1.075964331626892,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -1.611057314221398e-07,
+          1.2260467485702975e-07,
+          9.122733501953917e-08
+        ]
+      },
+      {
+        "cube_id": 5,
+        "position_m": [
+          -0.0004225896846037358,
+          1.0759570598602295,
+          0.7869999408721924
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -4.346498272411736e-08,
+          2.4736314330198184e-08,
+          1.1789042986265486e-07
+        ]
+      },
+      {
+        "cube_id": 6,
+        "position_m": [
+          0.0017454915214329958,
+          0.9259269833564758,
+          0.7869999408721924
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -4.408292042512585e-08,
+          5.439799366513398e-08,
+          -7.43953805226738e-08
+        ]
+      },
+      {
+        "cube_id": 12,
+        "position_m": [
+          -0.3037952482700348,
+          0.925963819026947,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -6.183609713161786e-08,
+          4.439313272541767e-08,
+          -1.9358476777142641e-07
+        ]
+      },
+      {
+        "cube_id": 13,
+        "position_m": [
+          -0.15096406638622284,
+          0.925794243812561,
+          0.7870000600814819
+        ],
+        "orientation_wxyz": [
+          0.9999995231628418,
+          -8.294290410049143e-08,
+          -6.255510243136087e-08,
+          -0.0009765933500602841
+        ]
+      },
+      {
+        "cube_id": 14,
+        "position_m": [
+          0.15291845798492432,
+          0.9259568452835083,
+          0.7869997620582581
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -1.7240061822576536e-07,
+          1.395452926544749e-07,
+          7.735913953865747e-08
+        ]
+      },
+      {
+        "cube_id": 15,
+        "position_m": [
+          0.30478814244270325,
+          0.9259469509124756,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -6.531192298098176e-08,
+          1.1932213794807467e-07,
+          -1.0139181938484398e-07
+        ]
+      }
+    ],
+    "input_checkpoint": {
+      "path": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3-innovation-2/runs/post_audit_u4_online_20261125_input.json",
+      "sha256": "1f44307d9a6a31c675d1b9f9984fc5c5289935cdb5892c0457e4dc28f45d6c26"
+    },
+    "initial_upper_poses": [
+      {
+        "cube_id": 7,
+        "position_m": [
+          -0.3044620752334595,
+          1.075446605682373,
+          0.9369999170303345
+        ],
+        "orientation_wxyz": [
+          0.9999935626983643,
+          -3.245000357310346e-08,
+          5.251836299180468e-08,
+          -0.003588444087654352
+        ]
+      },
+      {
+        "cube_id": 8,
+        "position_m": [
+          0.30370914936065674,
+          1.0747108459472656,
+          0.9369999170303345
+        ],
+        "orientation_wxyz": [
+          0.9999624490737915,
+          1.2299769025503338e-07,
+          5.6973409101601646e-08,
+          -0.00866630021482706
+        ]
+      },
+      {
+        "cube_id": 9,
+        "position_m": [
+          -0.15445058047771454,
+          1.0754708051681519,
+          0.9369998574256897
+        ],
+        "orientation_wxyz": [
+          0.9999937415122986,
+          -4.0179341453949746e-07,
+          8.442992083246281e-08,
+          -0.003538677003234625
+        ]
+      }
+    ],
+    "completed_slots": [
+      {
+        "slot": 1,
+        "cube_id": 7,
+        "target_m": [
+          -0.305,
+          1.076,
+          0.9369999999999999
+        ],
+        "rgb_final_m": [
+          -0.30332386323297506,
+          1.0742901489514391,
+          0.9369999999999999
+        ],
+        "physical_final_m": [
+          -0.30444809794425964,
+          1.0754474401474,
+          0.9369997978210449
+        ],
+        "yaw_pitch_roll_deg": [
+          -0.4226209381591591,
+          -9.174329769364964e-05,
+          -8.72080868109223e-06
+        ],
+        "support": {
+          "positive_steps": 60,
+          "median_contact_impulse_Ns": 0.10228851602426327,
+          "samples": 60
+        },
+        "max_lower_shift_m": 6.471069158158899e-07
+      },
+      {
+        "slot": 2,
+        "cube_id": 8,
+        "target_m": [
+          0.305,
+          1.076,
+          0.9369999999999999
+        ],
+        "rgb_final_m": [
+          0.30474121420390776,
+          1.0737239007398065,
+          0.9369999999999999
+        ],
+        "physical_final_m": [
+          0.30370765924453735,
+          1.0747100114822388,
+          0.9369999766349792
+        ],
+        "yaw_pitch_roll_deg": [
+          -0.9941639250857406,
+          9.98166350569046e-07,
+          3.291513293191675e-07
+        ],
+        "support": {
+          "positive_steps": 60,
+          "median_contact_impulse_Ns": 0.10222984154987513,
+          "samples": 60
+        },
+        "max_lower_shift_m": 8.086540431508502e-07
+      },
+      {
+        "slot": 3,
+        "cube_id": 9,
+        "target_m": [
+          -0.15239470977508335,
+          1.076,
+          0.9369999999999999
+        ],
+        "rgb_final_m": [
+          -0.15341386837329216,
+          1.0742877712292325,
+          0.9369999999999999
+        ],
+        "physical_final_m": [
+          -0.154451385140419,
+          1.075471043586731,
+          0.9369997978210449
+        ],
+        "yaw_pitch_roll_deg": [
+          -0.4054266541728282,
+          1.6765499729775437e-05,
+          -1.4944214580530116e-05
+        ],
+        "support": {
+          "positive_steps": 60,
+          "median_contact_impulse_Ns": 0.10645638072972334,
+          "samples": 60
+        },
+        "max_lower_shift_m": 7.031711922481163e-05
+      },
+      {
+        "slot": 4,
+        "cube_id": 10,
+        "target_m": [
+          0.1534022560508776,
+          1.076,
+          0.9369999999999999
+        ],
+        "rgb_final_m": [
+          0.1540904994408112,
+          1.0747984366165282,
+          0.9369999999999999
+        ],
+        "physical_final_m": [
+          0.15277089178562164,
+          1.0757771730422974,
+          0.9369999170303345
+        ],
+        "yaw_pitch_roll_deg": [
+          -0.16693096828087953,
+          -3.6285223635069036e-05,
+          -8.778107671345104e-06
+        ],
+        "support": {
+          "positive_steps": 60,
+          "median_contact_impulse_Ns": 0.10218897212449654,
+          "samples": 60
+        },
+        "max_lower_shift_m": 7.045536427749862e-05
+      }
+    ],
+    "final_lower_poses": [
+      {
+        "cube_id": 1,
+        "position_m": [
+          -0.30497947335243225,
+          1.0759997367858887,
+          0.7870000004768372
+        ],
+        "orientation_wxyz": [
+          1.0,
+          6.210632363945479e-08,
+          -2.1603880906440054e-09,
+          9.65810613706708e-08
+        ]
+      },
+      {
+        "cube_id": 2,
+        "position_m": [
+          0.30492377281188965,
+          1.0759998559951782,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          2.5523505087221565e-07,
+          -5.2263628980142585e-09,
+          1.934167670469833e-08
+        ]
+      },
+      {
+        "cube_id": 3,
+        "position_m": [
+          -0.15497799217700958,
+          1.0760000944137573,
+          0.7869999408721924
+        ],
+        "orientation_wxyz": [
+          1.0,
+          3.345275345623122e-08,
+          2.0780840159773106e-08,
+          9.53665413305771e-09
+        ]
+      },
+      {
+        "cube_id": 4,
+        "position_m": [
+          0.15361915528774261,
+          1.0759642124176025,
+          0.7870000004768372
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -1.9786403626653737e-08,
+          -2.738082969244715e-07,
+          -7.795952683409269e-08
+        ]
+      },
+      {
+        "cube_id": 5,
+        "position_m": [
+          -0.0004226533346809447,
+          1.0759562253952026,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -4.6903871009362774e-08,
+          1.664700377546069e-08,
+          -3.0186370736373647e-08
+        ]
+      },
+      {
+        "cube_id": 6,
+        "position_m": [
+          0.0017454240005463362,
+          0.9259270429611206,
+          0.7869999408721924
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -2.891846229147177e-08,
+          3.3753075001641264e-08,
+          -7.373419919076696e-08
+        ]
+      },
+      {
+        "cube_id": 12,
+        "position_m": [
+          -0.30379533767700195,
+          0.9259639978408813,
+          0.7869999408721924
+        ],
+        "orientation_wxyz": [
+          1.0,
+          -1.838230048178957e-07,
+          9.458462102429621e-08,
+          -6.087392989684304e-08
+        ]
+      },
+      {
+        "cube_id": 13,
+        "position_m": [
+          -0.15096412599086761,
+          0.9257941246032715,
+          0.7869999408721924
+        ],
+        "orientation_wxyz": [
+          0.9999995231628418,
+          -9.373511034027615e-08,
+          -2.7710738592645612e-08,
+          -0.0009764670394361019
+        ]
+      },
+      {
+        "cube_id": 14,
+        "position_m": [
+          0.15291835367679596,
+          0.9259565472602844,
+          0.7870001792907715
+        ],
+        "orientation_wxyz": [
+          1.0,
+          1.2306958296903758e-07,
+          1.455782716597298e-09,
+          -9.375717979764886e-09
+        ]
+      },
+      {
+        "cube_id": 15,
+        "position_m": [
+          0.3047882318496704,
+          0.925946831703186,
+          0.7869998812675476
+        ],
+        "orientation_wxyz": [
+          1.0,
+          1.0574975561894462e-08,
+          -1.6696505511504256e-08,
+          -3.059587072584691e-08
+        ]
+      }
+    ],
+    "final_upper_poses": [
+      {
+        "cube_id": 7,
+        "position_m": [
+          -0.30446183681488037,
+          1.0754468441009521,
+          0.9369999170303345
+        ],
+        "orientation_wxyz": [
+          0.9999935626983643,
+          -8.634582826516635e-08,
+          5.680735171154083e-08,
+          -0.0035889619030058384
+        ]
+      },
+      {
+        "cube_id": 8,
+        "position_m": [
+          0.3037775456905365,
+          1.0747196674346924,
+          0.9369999766349792
+        ],
+        "orientation_wxyz": [
+          0.9999662041664124,
+          1.3828575617935712e-07,
+          1.7159658582954762e-08,
+          -0.008217841386795044
+        ]
+      },
+      {
+        "cube_id": 9,
+        "position_m": [
+          -0.15445058047771454,
+          1.0754706859588623,
+          0.9369999170303345
+        ],
+        "orientation_wxyz": [
+          0.9999937415122986,
+          -3.86653681516691e-07,
+          7.42020560551282e-08,
+          -0.003538865828886628
+        ]
+      },
+      {
+        "cube_id": 10,
+        "position_m": [
+          0.15277089178562164,
+          1.0757771730422974,
+          0.9369999170303345
+        ],
+        "orientation_wxyz": [
+          0.9999989867210388,
+          -7.614208641371079e-08,
+          -3.1675958211963007e-07,
+          -0.0014567470643669367
+        ]
+      }
+    ]
+  },
+  "neighbor_observation_attempts": [
+    {
+      "cube_id": 10,
+      "started_s": 1.0166667196899652,
+      "ended_s": 1.216666730120778,
+      "required_names": [
+        "Cube_7",
+        "Cube_8",
+        "Cube_9"
+      ],
+      "available_names": [
+        "Cube_6",
+        "Cube_7",
+        "Cube_8",
+        "Cube_9"
+      ],
+      "missing_names": [
+        "Cube_1",
+        "Cube_2",
+        "Cube_3",
+        "Cube_4",
+        "Cube_5"
+      ],
+      "required_marker_ids": [
+        29,
+        30,
+        31
+      ],
+      "missing_marker_ids": [
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "available_pose_ages_s": {
+        "Cube_6": 0.06666667014360428,
+        "Cube_7": 0.06666667014360428,
+        "Cube_8": 0.06666667014360428,
+        "Cube_9": 0.06666667014360428
+      },
+      "raw_exposures_by_name": {
+        "Cube_1": [],
+        "Cube_2": [],
+        "Cube_3": [],
+        "Cube_4": [],
+        "Cube_5": [
+          {
+            "frame_id": 111,
+            "capture_time_s": 1.216666730120778,
+            "position_m": [
+              0.001112854436757911,
+              1.075860832026023,
+              0.7869999999999999
+            ],
+            "yaw_rad": -0.003595362891076009
+          }
+        ],
+        "Cube_6": [
+          {
+            "frame_id": 107,
+            "capture_time_s": 1.0833333898335695,
+            "position_m": [
+              0.003011478659294487,
+              0.9251032372883152,
+              0.7869999999999999
+            ],
+            "yaw_rad": 0.008046359358256868
+          },
+          {
+            "frame_id": 109,
+            "capture_time_s": 1.1500000599771738,
+            "position_m": [
+              0.003061326957800781,
+              0.925052017636748,
+              0.7869999999999999
+            ],
+            "yaw_rad": 0.00746949165594858
+          },
+          {
+            "frame_id": 111,
+            "capture_time_s": 1.216666730120778,
+            "position_m": [
+              0.0030491628911876456,
+              0.9251237948053419,
+              0.7869999999999999
+            ],
+            "yaw_rad": 0.006334012324876301
+          }
+        ],
+        "Cube_7": [
+          {
+            "frame_id": 107,
+            "capture_time_s": 1.0833333898335695,
+            "position_m": [
+              -0.3033761318658663,
+              1.0742259939711238,
+              0.9369999999999999
+            ],
+            "yaw_rad": -0.01196753912166841
+          },
+          {
+            "frame_id": 109,
+            "capture_time_s": 1.1500000599771738,
+            "position_m": [
+              -0.30337247658410577,
+              1.0741357843239119,
+              0.9369999999999999
+            ],
+            "yaw_rad": -0.011958160622750362
+          },
+          {
+            "frame_id": 111,
+            "capture_time_s": 1.216666730120778,
+            "position_m": [
+              -0.303371771451233,
+              1.074190858752622,
+              0.9369999999999999
+            ],
+            "yaw_rad": -0.012876348412288572
+          }
+        ],
+        "Cube_8": [
+          {
+            "frame_id": 107,
+            "capture_time_s": 1.0833333898335695,
+            "position_m": [
+              0.3046658118036415,
+              1.073547024573184,
+              0.9369999999999999
+            ],
+            "yaw_rad": -0.018581330604585528
+          },
+          {
+            "frame_id": 109,
+            "capture_time_s": 1.1500000599771738,
+            "position_m": [
+              0.30463002893134217,
+              1.0735802147767224,
+              0.9369999999999999
+            ],
+            "yaw_rad": -0.01666234767164911
+          },
+          {
+            "frame_id": 111,
+            "capture_time_s": 1.216666730120778,
+            "position_m": [
+              0.30464487262320683,
+              1.0736097693592508,
+              0.9369999999999999
+            ],
+            "yaw_rad": -0.016708583529237382
+          }
+        ],
+        "Cube_9": [
+          {
+            "frame_id": 107,
+            "capture_time_s": 1.0833333898335695,
+            "position_m": [
+              -0.1535199230322135,
+              1.0743527768859549,
+              0.9369999999999999
+            ],
+            "yaw_rad": -0.011350315397951158
+          },
+          {
+            "frame_id": 109,
+            "capture_time_s": 1.1500000599771738,
+            "position_m": [
+              -0.15354810237968533,
+              1.0742503361970548,
+              0.9369999999999999
+            ],
+            "yaw_rad": -0.012910480114296184
+          },
+          {
+            "frame_id": 111,
+            "capture_time_s": 1.216666730120778,
+            "position_m": [
+              -0.1535855055800722,
+              1.0742918389881573,
+              0.9369999999999999
+            ],
+            "yaw_rad": -0.009973314358200917
+          }
+        ]
+      }
+    }
+  ],
+  "neighbor_observations": [
+    {
+      "cube_id": 10,
+      "source": "rear_RGB_marker_support_plane",
+      "neighbors": [
+        {
+          "name": "Cube_6",
+          "position_m": [
+            0.0030491628911876456,
+            0.9251032372883152,
+            0.7869999999999999
+          ],
+          "rotation_world": [
+            [
+              0.9999721034769045,
+              -0.007469422198203907,
+              0.0
+            ],
+            [
+              0.007469422198203907,
+              0.9999721034769045,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "capture_time_s": 1.1500000599771738,
+          "filter": "PlanarPoseMedian_three_unique_exposures",
+          "exposure_window": [
+            {
+              "frame_id": 107,
+              "capture_time_s": 1.0833333898335695,
+              "position_m": [
+                0.003011478659294487,
+                0.9251032372883152,
+                0.7869999999999999
+              ],
+              "yaw_rad": 0.008046359358256868
+            },
+            {
+              "frame_id": 109,
+              "capture_time_s": 1.1500000599771738,
+              "position_m": [
+                0.003061326957800781,
+                0.925052017636748,
+                0.7869999999999999
+              ],
+              "yaw_rad": 0.00746949165594858
+            },
+            {
+              "frame_id": 111,
+              "capture_time_s": 1.216666730120778,
+              "position_m": [
+                0.0030491628911876456,
+                0.9251237948053419,
+                0.7869999999999999
+              ],
+              "yaw_rad": 0.006334012324876301
+            }
+          ],
+          "within_window_position_std_m": [
+            2.1220845919673685e-05,
+            3.018098397688386e-05,
+            0.0
+          ],
+          "within_window_yaw_std_rad": 0.0007113541093487376,
+          "uncertainty_note": "Window repeatability only; absolute marker bias is not measured here."
+        },
+        {
+          "name": "Cube_7",
+          "position_m": [
+            -0.30337247658410577,
+            1.074190858752622,
+            0.9369999999999999
+          ],
+          "rotation_world": [
+            [
+              0.9999283898583707,
+              0.011967253454580797,
+              0.0
+            ],
+            [
+              -0.011967253454580797,
+              0.9999283898583707,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "capture_time_s": 1.1500000599771738,
+          "filter": "PlanarPoseMedian_three_unique_exposures",
+          "exposure_window": [
+            {
+              "frame_id": 107,
+              "capture_time_s": 1.0833333898335695,
+              "position_m": [
+                -0.3033761318658663,
+                1.0742259939711238,
+                0.9369999999999999
+              ],
+              "yaw_rad": -0.01196753912166841
+            },
+            {
+              "frame_id": 109,
+              "capture_time_s": 1.1500000599771738,
+              "position_m": [
+                -0.30337247658410577,
+                1.0741357843239119,
+                0.9369999999999999
+              ],
+              "yaw_rad": -0.011958160622750362
+            },
+            {
+              "frame_id": 111,
+              "capture_time_s": 1.216666730120778,
+              "position_m": [
+                -0.303371771451233,
+                1.074190858752622,
+                0.9369999999999999
+              ],
+              "yaw_rad": -0.012876348412288572
+            }
+          ],
+          "within_window_position_std_m": [
+            1.9111227907416977e-06,
+            3.7126595329775396e-05,
+            0.0
+          ],
+          "within_window_yaw_std_rad": 0.00043064436214384876,
+          "uncertainty_note": "Window repeatability only; absolute marker bias is not measured here."
+        },
+        {
+          "name": "Cube_8",
+          "position_m": [
+            0.30464487262320683,
+            1.0735802147767224,
+            0.9369999999999999
+          ],
+          "rotation_world": [
+            [
+              0.9998604148656791,
+              0.01670780609871061,
+              0.0
+            ],
+            [
+              -0.01670780609871061,
+              0.9998604148656791,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "capture_time_s": 1.1500000599771738,
+          "filter": "PlanarPoseMedian_three_unique_exposures",
+          "exposure_window": [
+            {
+              "frame_id": 107,
+              "capture_time_s": 1.0833333898335695,
+              "position_m": [
+                0.3046658118036415,
+                1.073547024573184,
+                0.9369999999999999
+              ],
+              "yaw_rad": -0.018581330604585528
+            },
+            {
+              "frame_id": 109,
+              "capture_time_s": 1.1500000599771738,
+              "position_m": [
+                0.30463002893134217,
+                1.0735802147767224,
+                0.9369999999999999
+              ],
+              "yaw_rad": -0.01666234767164911
+            },
+            {
+              "frame_id": 111,
+              "capture_time_s": 1.216666730120778,
+              "position_m": [
+                0.30464487262320683,
+                1.0736097693592508,
+                0.9369999999999999
+              ],
+              "yaw_rad": -0.016708583529237382
+            }
+          ],
+          "within_window_position_std_m": [
+            1.4678776876984075e-05,
+            2.562978115379308e-05,
+            0.0
+          ],
+          "within_window_yaw_std_rad": 0.000893918642808991,
+          "uncertainty_note": "Window repeatability only; absolute marker bias is not measured here."
+        },
+        {
+          "name": "Cube_9",
+          "position_m": [
+            -0.15354810237968533,
+            1.0742918389881573,
+            0.9369999999999999
+          ],
+          "rotation_world": [
+            [
+              0.9999355858617256,
+              0.011350071689976097,
+              0.0
+            ],
+            [
+              -0.011350071689976097,
+              0.9999355858617256,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0
+            ]
+          ],
+          "capture_time_s": 1.1500000599771738,
+          "filter": "PlanarPoseMedian_three_unique_exposures",
+          "exposure_window": [
+            {
+              "frame_id": 107,
+              "capture_time_s": 1.0833333898335695,
+              "position_m": [
+                -0.1535199230322135,
+                1.0743527768859549,
+                0.9369999999999999
+              ],
+              "yaw_rad": -0.011350315397951158
+            },
+            {
+              "frame_id": 109,
+              "capture_time_s": 1.1500000599771738,
+              "position_m": [
+                -0.15354810237968533,
+                1.0742503361970548,
+                0.9369999999999999
+              ],
+              "yaw_rad": -0.012910480114296184
+            },
+            {
+              "frame_id": 111,
+              "capture_time_s": 1.216666730120778,
+              "position_m": [
+                -0.1535855055800722,
+                1.0742918389881573,
+                0.9369999999999999
+              ],
+              "yaw_rad": -0.009973314358200917
+            }
+          ],
+          "within_window_position_std_m": [
+            2.686208729945937e-05,
+            4.2071372953339867e-05,
+            0.0
+          ],
+          "within_window_yaw_std_rad": 0.0011998698301797332,
+          "uncertainty_note": "Window repeatability only; absolute marker bias is not measured here."
+        }
+      ]
+    }
+  ],
+  "active_phase": "upper_row_complete",
+  "control_pose": {
+    "position_m": [
+      0.15415508711087222,
+      1.0757217937443573,
+      0.9369999999999999
+    ],
+    "rotation_world": [
+      [
+        0.999943329555326,
+        0.010646016992692105,
+        0.0
+      ],
+      [
+        -0.010646016992692105,
+        0.999943329555326,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "source": "RGB_support_plane",
+    "visual_age_s": 14.275000744499266,
+    "yaw_during_occlusion": "last valid camera estimate"
+  },
+  "empty_rail_checks": [
+    {
+      "cube_id": 10,
+      "side": "left",
+      "samples": 800,
+      "collision_workers": 3,
+      "cache_replay": false,
+      "planning_wall_s": 1.7156720500061056
+    },
+    {
+      "cube_id": 10,
+      "side": "right",
+      "samples": 800,
+      "collision_workers": 3,
+      "cache_replay": false,
+      "planning_wall_s": 1.5537832020054338
+    }
+  ],
+  "upper_b_wrist_watch": {
+    "force_limit_N": 10.0,
+    "torque_limit_Nm": 1.0,
+    "seam_rear_clearance_limit_N": 20.0,
+    "peak_force_N": {
+      "physics_step": 10384,
+      "time_s": 86.55000451393425,
+      "cube_id": 10,
+      "phase": "upper_B_seam_pacing",
+      "arm": "left",
+      "value": 8.125866308943454
+    },
+    "peak_torque_Nm": {
+      "physics_step": 10384,
+      "time_s": 86.55000451393425,
+      "cube_id": 10,
+      "phase": "upper_B_seam_pacing",
+      "arm": "left",
+      "value": 0.35123254300346685
+    }
+  },
+  "rail_collision_checked_samples": 800,
+  "trajectory_plans": [
+    {
+      "phase": "upper_B_front_approach_transit",
+      "arm": [
+        "right"
+      ],
+      "samples": 559,
+      "duration_s": 4.64707109726563,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 559,
+        "issues": []
+      },
+      "source": "online_planner"
+    },
+    {
+      "phase": "upper_B_side_high_transit",
+      "arm": [
+        "left"
+      ],
+      "samples": 685,
+      "duration_s": 5.694735817853512,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 685,
+        "issues": []
+      },
+      "source": "online_planner"
+    },
+    {
+      "phase": "upper_B_side_travel",
+      "arm": [
+        "left",
+        "right"
+      ],
+      "samples": 813,
+      "duration_s": 6.766666666666667,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 813,
+        "issues": []
+      },
+      "source": "Cartesian_quintic_with_force_overlay"
+    },
+    {
+      "phase": "upper_B_withdraw_transit",
+      "arm": [
+        "right",
+        "left"
+      ],
+      "samples": 361,
+      "duration_s": 3.0,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 361,
+        "issues": []
+      },
+      "source": "online_planner"
+    },
+    {
+      "phase": "upper_B_park_transit",
+      "arm": [
+        "left"
+      ],
+      "samples": 713,
+      "duration_s": 5.9291936400557415,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 713,
+        "issues": []
+      },
+      "source": "online_planner"
+    },
+    {
+      "phase": "upper_B_park_transit",
+      "arm": [
+        "right"
+      ],
+      "samples": 618,
+      "duration_s": 5.139590704736624,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 618,
+        "issues": []
+      },
+      "source": "online_planner"
+    }
+  ],
+  "joint_drive_mode_events": [
+    {
+      "physics_step": 2411,
+      "time_s": 20.10833438206464,
+      "mode": "contact",
+      "gain_scale": 0.003,
+      "zero_velocity_command": true,
+      "arms": {
+        "left": {
+          "stiffness": [
+            10313.240234375,
+            10313.240234375,
+            10313.240234375,
+            10313.240234375,
+            10313.240234375,
+            10313.240234375,
+            10313.240234375
+          ],
+          "damping": [
+            1031.3240966796875,
+            1031.3240966796875,
+            1031.3240966796875,
+            1031.3240966796875,
+            1031.3240966796875,
+            1031.3240966796875,
+            1031.3240966796875
+          ],
+          "effort_limits": [
+            87.0,
+            87.0,
+            87.0,
+            87.0,
+            12.0,
+            12.0,
+            12.0
+          ],
+          "rebased_joint_positions_rad": [
+            -5.4650881042839217e-11,
+            -0.7853981852531433,
+            -6.638034306255536e-12,
+            -2.356194496154785,
+            -1.5798190533544698e-10,
+            1.5707963705062866,
+            0.7853981852531433
+          ]
+        },
+        "right": {
+          "stiffness": [
+            10313.240234375,
+            10313.240234375,
+            10313.240234375,
+            10313.240234375,
+            10313.240234375,
+            10313.240234375,
+            10313.240234375
+          ],
+          "damping": [
+            1031.3240966796875,
+            1031.3240966796875,
+            1031.3240966796875,
+            1031.3240966796875,
+            1031.3240966796875,
+            1031.3240966796875,
+            1031.3240966796875
+          ],
+          "effort_limits": [
+            87.0,
+            87.0,
+            87.0,
+            87.0,
+            12.0,
+            12.0,
+            12.0
+          ],
+          "rebased_joint_positions_rad": [
+            0.3661343455314636,
+            0.10100918263196945,
+            -0.7141760587692261,
+            -2.423250198364258,
+            0.11198630183935165,
+            2.4962544441223145,
+            -0.43030068278312683
+          ]
+        }
+      }
+    },
+    {
+      "physics_step": 15166,
+      "time_s": 126.40000659227371,
+      "mode": "free_space",
+      "gain_scale": 1.0,
+      "zero_velocity_command": true,
+      "arms": {
+        "left": {
+          "stiffness": [
+            3437746.75,
+            3437746.75,
+            3437746.75,
+            3437746.75,
+            3437746.75,
+            3437746.75,
+            3437746.75
+          ],
+          "damping": [
+            343774.6875,
+            343774.6875,
+            343774.6875,
+            343774.6875,
+            343774.6875,
+            343774.6875,
+            343774.6875
+          ],
+          "effort_limits": [
+            87.0,
+            87.0,
+            87.0,
+            87.0,
+            12.0,
+            12.0,
+            12.0
+          ],
+          "rebased_joint_positions_rad": [
+            0.3719056248664856,
+            0.3898422420024872,
+            0.3131760060787201,
+            -1.9367954730987549,
+            -0.15811075270175934,
+            2.303112506866455,
+            2.3451831340789795
+          ]
+        },
+        "right": {
+          "stiffness": [
+            3437746.75,
+            3437746.75,
+            3437746.75,
+            3437746.75,
+            3437746.75,
+            3437746.75,
+            3437746.75
+          ],
+          "damping": [
+            343774.6875,
+            343774.6875,
+            343774.6875,
+            343774.6875,
+            343774.6875,
+            343774.6875,
+            343774.6875
+          ],
+          "effort_limits": [
+            87.0,
+            87.0,
+            87.0,
+            87.0,
+            12.0,
+            12.0,
+            12.0
+          ],
+          "rebased_joint_positions_rad": [
+            0.2988545298576355,
+            0.13005892932415009,
+            -0.7520037293434143,
+            -2.397162437438965,
+            0.14797177910804749,
+            2.486276388168335,
+            -0.5638260245323181
+          ]
+        }
+      }
+    }
+  ],
+  "u4_rear_contact_admittance": {
+    "max_lead_m": 0.00245,
+    "travel_m": 0.06595235730487747,
+    "peak_force_N": 7.8014002350154685,
+    "peak_torque_Nm": 0.3039893670721783,
+    "commanded_minus_measured_lead_m": 0.0010471674563883315,
+    "peak_lead_m": 0.002449999999999952,
+    "side_relief_m": -0.00011666959282275054,
+    "vertical_relief_m": 0.00010390879039287883,
+    "force_target_N": 6.6,
+    "estimated_rear_gap_m": -0.0008345356659012759
+  },
+  "contact_state_recognition": {
+    "status": "COMPLETED_BASELINE_EVALUATION",
+    "samples": 16581,
+    "physical_task_status": "PARTIAL_W760_UPPER_ROW",
+    "metrics": {
+      "fusion": {
+        "samples": 16581,
+        "reference_known_samples": 9534,
+        "reference_unknown_samples": 7047,
+        "accuracy_including_abstention_as_error": 0.3907069435703797,
+        "decision_coverage": 0.3907069435703797,
+        "accuracy_on_decided_samples": 1.0,
+        "macro_f1": 0.38126919140225185,
+        "prediction_counts": {
+          "UNKNOWN": 10328,
+          "NO_TOOL_CONTACT": 3725,
+          "INCONSISTENT": 2528
+        },
+        "predictions_on_unknown_reference": {
+          "UNKNOWN": 7047
+        },
+        "stable_contact_events": [
+          {
+            "state": "NO_TOOL_CONTACT",
+            "reference_start_sample": 0,
+            "duration_s": 35.6,
+            "recognition_delay_s": 0.20833333333333334
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 6859,
+            "duration_s": 0.825,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7018,
+            "duration_s": 0.35833333333333334,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7228,
+            "duration_s": 0.275,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7307,
+            "duration_s": 0.2833333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7425,
+            "duration_s": 0.25833333333333336,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7547,
+            "duration_s": 0.55,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7712,
+            "duration_s": 0.475,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7798,
+            "duration_s": 0.2916666666666667,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7840,
+            "duration_s": 0.6333333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 8022,
+            "duration_s": 0.4,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 8113,
+            "duration_s": 6.358333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 8877,
+            "duration_s": 13.233333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "NO_TOOL_CONTACT",
+            "reference_start_sample": 14809,
+            "duration_s": 14.766666666666667,
+            "recognition_delay_s": 2.725
+          }
+        ],
+        "stable_event_definition": "physical reference constant for >=0.25 s; accuracy still uses every sample",
+        "stable_event_misses": 12,
+        "recognition_delay_p95_s": 2.5991666666666666,
+        "by_state": {
+          "BILATERAL_SUSPENDED": {
+            "reference_samples": 3489,
+            "predicted_samples": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "NO_TOOL_CONTACT": {
+            "reference_samples": 6045,
+            "predicted_samples": 3725,
+            "precision": 1.0,
+            "recall": 0.6162117452440034,
+            "f1": 0.7625383828045037
+          }
+        },
+        "confusion_matrix": {
+          "BILATERAL_SUSPENDED": {
+            "UNKNOWN": 961,
+            "INCONSISTENT": 2528
+          },
+          "NO_TOOL_CONTACT": {
+            "UNKNOWN": 2320,
+            "NO_TOOL_CONTACT": 3725
+          }
+        }
+      },
+      "vision_only": {
+        "samples": 16581,
+        "reference_known_samples": 9534,
+        "reference_unknown_samples": 7047,
+        "accuracy_including_abstention_as_error": 0.3930144745122719,
+        "decision_coverage": 0.3930144745122719,
+        "accuracy_on_decided_samples": 1.0,
+        "macro_f1": 0.3826593137254902,
+        "prediction_counts": {
+          "UNKNOWN": 12834,
+          "NO_TOOL_CONTACT": 3747
+        },
+        "predictions_on_unknown_reference": {
+          "UNKNOWN": 7047
+        },
+        "stable_contact_events": [
+          {
+            "state": "NO_TOOL_CONTACT",
+            "reference_start_sample": 0,
+            "duration_s": 35.6,
+            "recognition_delay_s": 0.20833333333333334
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 6859,
+            "duration_s": 0.825,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7018,
+            "duration_s": 0.35833333333333334,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7228,
+            "duration_s": 0.275,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7307,
+            "duration_s": 0.2833333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7425,
+            "duration_s": 0.25833333333333336,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7547,
+            "duration_s": 0.55,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7712,
+            "duration_s": 0.475,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7798,
+            "duration_s": 0.2916666666666667,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7840,
+            "duration_s": 0.6333333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 8022,
+            "duration_s": 0.4,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 8113,
+            "duration_s": 6.358333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 8877,
+            "duration_s": 13.233333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "NO_TOOL_CONTACT",
+            "reference_start_sample": 14809,
+            "duration_s": 14.766666666666667,
+            "recognition_delay_s": 2.725
+          }
+        ],
+        "stable_event_definition": "physical reference constant for >=0.25 s; accuracy still uses every sample",
+        "stable_event_misses": 12,
+        "recognition_delay_p95_s": 2.5991666666666666,
+        "by_state": {
+          "BILATERAL_SUSPENDED": {
+            "reference_samples": 3489,
+            "predicted_samples": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "NO_TOOL_CONTACT": {
+            "reference_samples": 6045,
+            "predicted_samples": 3747,
+            "precision": 1.0,
+            "recall": 0.6198511166253102,
+            "f1": 0.7653186274509804
+          }
+        },
+        "confusion_matrix": {
+          "BILATERAL_SUSPENDED": {
+            "UNKNOWN": 3489
+          },
+          "NO_TOOL_CONTACT": {
+            "UNKNOWN": 2298,
+            "NO_TOOL_CONTACT": 3747
+          }
+        }
+      },
+      "force_only": {
+        "samples": 16581,
+        "reference_known_samples": 9534,
+        "reference_unknown_samples": 7047,
+        "accuracy_including_abstention_as_error": 0.0,
+        "decision_coverage": 0.0,
+        "accuracy_on_decided_samples": null,
+        "macro_f1": 0.0,
+        "prediction_counts": {
+          "UNKNOWN": 14053,
+          "INCONSISTENT": 2528
+        },
+        "predictions_on_unknown_reference": {
+          "UNKNOWN": 7047
+        },
+        "stable_contact_events": [
+          {
+            "state": "NO_TOOL_CONTACT",
+            "reference_start_sample": 0,
+            "duration_s": 35.6,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 6859,
+            "duration_s": 0.825,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7018,
+            "duration_s": 0.35833333333333334,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7228,
+            "duration_s": 0.275,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7307,
+            "duration_s": 0.2833333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7425,
+            "duration_s": 0.25833333333333336,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7547,
+            "duration_s": 0.55,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7712,
+            "duration_s": 0.475,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7798,
+            "duration_s": 0.2916666666666667,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7840,
+            "duration_s": 0.6333333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 8022,
+            "duration_s": 0.4,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 8113,
+            "duration_s": 6.358333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 8877,
+            "duration_s": 13.233333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "NO_TOOL_CONTACT",
+            "reference_start_sample": 14809,
+            "duration_s": 14.766666666666667,
+            "recognition_delay_s": null
+          }
+        ],
+        "stable_event_definition": "physical reference constant for >=0.25 s; accuracy still uses every sample",
+        "stable_event_misses": 14,
+        "recognition_delay_p95_s": null,
+        "by_state": {
+          "BILATERAL_SUSPENDED": {
+            "reference_samples": 3489,
+            "predicted_samples": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "NO_TOOL_CONTACT": {
+            "reference_samples": 6045,
+            "predicted_samples": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          }
+        },
+        "confusion_matrix": {
+          "BILATERAL_SUSPENDED": {
+            "UNKNOWN": 961,
+            "INCONSISTENT": 2528
+          },
+          "NO_TOOL_CONTACT": {
+            "UNKNOWN": 6045
+          }
+        }
+      },
+      "fusion_camera_fully_unavailable": {
+        "samples": 16581,
+        "reference_known_samples": 9534,
+        "reference_unknown_samples": 7047,
+        "accuracy_including_abstention_as_error": 0.0,
+        "decision_coverage": 0.0,
+        "accuracy_on_decided_samples": null,
+        "macro_f1": 0.0,
+        "prediction_counts": {
+          "UNKNOWN": 14053,
+          "INCONSISTENT": 2528
+        },
+        "predictions_on_unknown_reference": {
+          "UNKNOWN": 7047
+        },
+        "stable_contact_events": [
+          {
+            "state": "NO_TOOL_CONTACT",
+            "reference_start_sample": 0,
+            "duration_s": 35.6,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 6859,
+            "duration_s": 0.825,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7018,
+            "duration_s": 0.35833333333333334,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7228,
+            "duration_s": 0.275,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7307,
+            "duration_s": 0.2833333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7425,
+            "duration_s": 0.25833333333333336,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7547,
+            "duration_s": 0.55,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7712,
+            "duration_s": 0.475,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7798,
+            "duration_s": 0.2916666666666667,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 7840,
+            "duration_s": 0.6333333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 8022,
+            "duration_s": 0.4,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 8113,
+            "duration_s": 6.358333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "BILATERAL_SUSPENDED",
+            "reference_start_sample": 8877,
+            "duration_s": 13.233333333333333,
+            "recognition_delay_s": null
+          },
+          {
+            "state": "NO_TOOL_CONTACT",
+            "reference_start_sample": 14809,
+            "duration_s": 14.766666666666667,
+            "recognition_delay_s": null
+          }
+        ],
+        "stable_event_definition": "physical reference constant for >=0.25 s; accuracy still uses every sample",
+        "stable_event_misses": 14,
+        "recognition_delay_p95_s": null,
+        "by_state": {
+          "BILATERAL_SUSPENDED": {
+            "reference_samples": 3489,
+            "predicted_samples": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          },
+          "NO_TOOL_CONTACT": {
+            "reference_samples": 6045,
+            "predicted_samples": 0,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0
+          }
+        },
+        "confusion_matrix": {
+          "BILATERAL_SUSPENDED": {
+            "UNKNOWN": 961,
+            "INCONSISTENT": 2528
+          },
+          "NO_TOOL_CONTACT": {
+            "UNKNOWN": 6045
+          }
+        }
+      }
+    },
+    "u4_handover": {
+      "samples": 16581,
+      "state_counts": {
+        "UNKNOWN": 4816,
+        "S0": 3794,
+        "S1": 6051,
+        "S5": 1831,
+        "S6": 89
+      },
+      "handover_active_samples": 4333,
+      "supported_view_samples": 12390,
+      "unknown_samples": 4816,
+      "stream": "u4_handover.jsonl.gz"
+    },
+    "input_boundary": [
+      "causal RGB/ArUco observation",
+      "wrist TCP six-axis feedback",
+      "encoder FK/tool geometry"
+    ],
+    "excluded_from_recognizer": [
+      "task phase",
+      "skill ID",
+      "Cube truth",
+      "PhysX contact report",
+      "attachment state"
+    ],
+    "reference_definition": "independent physical contacts/attachments plus 50 um wall adjacency; no wrist force or task phase",
+    "control": "observer only; skill recommendations do not change robot commands",
+    "limitations": [
+      "Single normal proxy-contact task is a baseline, not research-grade generalization evidence.",
+      "Unloaded geometric contact can be unobservable; UNKNOWN counts against accuracy/coverage.",
+      "Camera outage is sensor replay, not a simulated physical disconnection."
+    ]
+  },
+  "wrist_force_sensors": {
+    "samples": 16581,
+    "frequency_hz": 120,
+    "directory": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3-innovation-2/runs/post_audit_u4_online_20261125",
+    "finite_wrenches_only": true,
+    "wrench_origins": [
+      "sensor",
+      "TCP"
+    ],
+    "dynamic_compensation": false,
+    "sensor_noise_added": false
+  },
+  "physx_contacts": {
+    "reporter_count": 20,
+    "cube_reporter_count": 14,
+    "contact_count": 68648,
+    "unexpected_contact_count": 0,
+    "minimum_separation_m": -1.970681978491484e-06,
+    "minimum_separation_by_pair_m": {
+      "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c2": -1.970681978491484e-06,
+      "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c2": 5.680695176124573e-05,
+      "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c1": -1.5310987464545178e-06,
+      "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c1": 6.0666498029604554e-05,
+      "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r1_c1": -1.6845061736603384e-06,
+      "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r2_c1": 1.4379620552062988e-06,
+      "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r1_c2": -1.0887516737057013e-06,
+      "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r2_c2": 5.799916834803298e-05,
+      "/World/Cube_9 <-> /World/left_fr3/ABSideTool/vertical": 0.003820026759058237
+    },
+    "minimum_separation_by_phase_pair": {
+      "upper_B_front_touch": {
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": -4.696934752246307e-07,
+          "physics_step_index": 4295
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 5.883350968360901e-05,
+          "physics_step_index": 4276
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": 0.0002269744873046875,
+          "physics_step_index": 4295
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 0.0002862699329853058,
+          "physics_step_index": 4295
+        }
+      },
+      "upper_B_side_high_transit": {
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": -1.2388853747324902e-06,
+          "physics_step_index": 4534
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 5.898997187614441e-05,
+          "physics_step_index": 4534
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": 0.0002212338149547577,
+          "physics_step_index": 4945
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 0.00028122588992118835,
+          "physics_step_index": 4947
+        }
+      },
+      "upper_B_side_descent": {
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": -9.002146157399693e-07,
+          "physics_step_index": 5002
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 5.9429556131362915e-05,
+          "physics_step_index": 5002
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": 0.00022003427147865295,
+          "physics_step_index": 5419
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 0.00028005242347717285,
+          "physics_step_index": 5419
+        }
+      },
+      "upper_B_side_standoff": {
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": -7.888097002251016e-07,
+          "physics_step_index": 5699
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 5.955249071121216e-05,
+          "physics_step_index": 5699
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": 0.000219687819480896,
+          "physics_step_index": 5699
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 0.00027978792786598206,
+          "physics_step_index": 5699
+        }
+      },
+      "upper_B_side_touch": {
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": -1.3169562862458406e-06,
+          "physics_step_index": 5964
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 5.9019774198532104e-05,
+          "physics_step_index": 5964
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": 0.00021815672516822815,
+          "physics_step_index": 6748
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 0.00027824193239212036,
+          "physics_step_index": 6748
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": -2.1983727549468313e-07,
+          "physics_step_index": 6868
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 1.4379620552062988e-06,
+          "physics_step_index": 6864
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": 0.00016126036643981934,
+          "physics_step_index": 6868
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 0.00016343966126441956,
+          "physics_step_index": 6864
+        }
+      },
+      "upper_B_side_travel": {
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": -1.4652717936769477e-06,
+          "physics_step_index": 7343
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 5.680695176124573e-05,
+          "physics_step_index": 6943
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": 4.237176472088322e-05,
+          "physics_step_index": 8153
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 0.0001006841630442068,
+          "physics_step_index": 8153
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": -6.650373620686878e-07,
+          "physics_step_index": 7004
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 2.562999725341797e-06,
+          "physics_step_index": 6869
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": -8.30739281809656e-07,
+          "physics_step_index": 7620
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 5.799916834803298e-05,
+          "physics_step_index": 7041
+        },
+        "/World/Cube_9 <-> /World/left_fr3/ABSideTool/vertical": {
+          "separation_m": 0.00426009064540267,
+          "physics_step_index": 8169
+        }
+      },
+      "upper_B_seam_pacing": {
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": -1.2313342949710204e-06,
+          "physics_step_index": 8701
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 5.827220229548402e-05,
+          "physics_step_index": 8587
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": 6.634775490965694e-05,
+          "physics_step_index": 10427
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 0.00012556898582261056,
+          "physics_step_index": 10427
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": -1.6845061736603384e-06,
+          "physics_step_index": 10388
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 5.6107139243977144e-05,
+          "physics_step_index": 10030
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": -1.0887516737057013e-06,
+          "physics_step_index": 8960
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 5.8259982324671e-05,
+          "physics_step_index": 8958
+        }
+      },
+      "upper_B_u4_front_retouch": {
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": -2.980216891046439e-07,
+          "physics_step_index": 10440
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 5.897164737689309e-05,
+          "physics_step_index": 10437
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": 6.565857620444149e-05,
+          "physics_step_index": 10440
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 0.00012501393212005496,
+          "physics_step_index": 10440
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": -1.3709137647310854e-06,
+          "physics_step_index": 10440
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 6.264107651077211e-05,
+          "physics_step_index": 10440
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": 1.8108734366251156e-05,
+          "physics_step_index": 10440
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 8.212070679292083e-05,
+          "physics_step_index": 10440
+        }
+      },
+      "upper_B_u4_side_clear": {
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": -8.829011335365067e-07,
+          "physics_step_index": 10476
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 5.900889300392009e-05,
+          "physics_step_index": 10476
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": 6.566974479937926e-05,
+          "physics_step_index": 10476
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 0.0001251145004061982,
+          "physics_step_index": 10445
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": -1.3299354577611666e-06,
+          "physics_step_index": 10445
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 4.48415448772721e-05,
+          "physics_step_index": 10469
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": 1.7911283066496253e-05,
+          "physics_step_index": 10445
+        },
+        "/World/Cube_10 <-> /World/left_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 7.949437713250518e-05,
+          "physics_step_index": 10462
+        },
+        "/World/Cube_9 <-> /World/left_fr3/ABSideTool/vertical": {
+          "separation_m": 0.003997721243649721,
+          "physics_step_index": 10560
+        }
+      },
+      "upper_B_rear_travel": {
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": -1.970681978491484e-06,
+          "physics_step_index": 11326
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 5.967572724330239e-05,
+          "physics_step_index": 10561
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": -1.5310987464545178e-06,
+          "physics_step_index": 14754
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 6.0666498029604554e-05,
+          "physics_step_index": 11705
+        },
+        "/World/Cube_9 <-> /World/left_fr3/ABSideTool/vertical": {
+          "separation_m": 0.00394198764115572,
+          "physics_step_index": 10614
+        }
+      },
+      "upper_B_release_dwell": {
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": 1.9595106550696073e-06,
+          "physics_step_index": 14796
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 7.250935595948249e-05,
+          "physics_step_index": 14799
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": -7.860383561819617e-07,
+          "physics_step_index": 14799
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 6.96892966516316e-05,
+          "physics_step_index": 14799
+        },
+        "/World/Cube_9 <-> /World/left_fr3/ABSideTool/vertical": {
+          "separation_m": 0.003960771951824427,
+          "physics_step_index": 14798
+        }
+      },
+      "upper_B_withdraw_transit": {
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c2": {
+          "separation_m": 2.5592853489797562e-06,
+          "physics_step_index": 14808
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c2": {
+          "separation_m": 7.316128176171333e-05,
+          "physics_step_index": 14808
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r1_c1": {
+          "separation_m": -6.444779501180165e-07,
+          "physics_step_index": 14808
+        },
+        "/World/Cube_10 <-> /World/right_fr3/ABSideTool/cup_r2_c1": {
+          "separation_m": 6.997987657086924e-05,
+          "physics_step_index": 14808
+        },
+        "/World/Cube_9 <-> /World/left_fr3/ABSideTool/vertical": {
+          "separation_m": 0.003820026759058237,
+          "physics_step_index": 14991
+        }
+      },
+      "upper_B_park_transit": {
+        "/World/Cube_9 <-> /World/left_fr3/ABSideTool/vertical": {
+          "separation_m": 0.004090979695320129,
+          "physics_step_index": 15172
+        }
+      }
+    },
+    "first_collision": null
+  }
+}

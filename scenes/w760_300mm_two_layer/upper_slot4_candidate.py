@@ -173,10 +173,10 @@ def build(source):
                                                         force_paced_samples if force_paced_lateral or slot4_boundary else None,
                                            adjust_targets=relieve_downward_load if force_paced_lateral or slot4_boundary else None)''')
     source = replace_once(source, '''                outer_wall_probe = target in (rear_target, side_target)
-                rear_probe = slot in (1, 2) and axis == 1 and target == rear_target
+                rear_probe = slot in (1, 2, 3) and axis == 1 and target == rear_target
                 sliding_load = deque(maxlen=120)
 ''', '''                witnessed_boundary = target in (rear_target, side_target)
-                rear_probe = slot in (1, 2) and axis == 1 and target == rear_target
+                rear_probe = slot in (1, 2, 3) and axis == 1 and target == rear_target
 ''')
     source = replace_once(source, '                    if outer_wall_probe:', '                    if witnessed_boundary:')
     source = replace_once(source, '''                        if near > .0007:

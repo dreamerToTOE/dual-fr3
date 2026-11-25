@@ -95,7 +95,9 @@
             checker.set_other_cubes(observed_neighbors)
             result = run_front_b(front_slot, observed_neighbors)
             step(60)
-            final_rgb, _ = observe_resting_cube("front_final_pose", vision_camera, vision_estimator, SUPPORT_TOP)
+            # run_front_b.finish() already performed the final RGB pose check.
+            # Reusing that observation avoids a second camera settle cycle here.
+            final_rgb = np.asarray(result["observed_position_m"], dtype=float)
             final, rotation = cube.get_world_pose()
             target = np.asarray(result["target_m"])
             angles = Rotation.from_quat(np.roll(rotation, -1)).as_euler("zyx", degrees=True)

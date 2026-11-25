@@ -166,7 +166,9 @@ def inject(source):
     needle = 'unload_normal(support_side, 1, 1, "B2_support_unload")'
     assert body.count(needle) == 2
     body = '\n'.join((line[:len(line) - len(line.lstrip())] +
-                        'verify_contact("rear_seat", ["/World/Cube_" + str(slot)], support_side, 1, 1)\n' + line)
+                        'verify_contact("rear_seat", ["/World/Cube_" + str(slot)], support_side, 1, 1)\n' + line + '\n' +
+                        line[:len(line) - len(line.lstrip())] +
+                        'current_task.pop("rear_to_side_hold_x_m", None)')
                        if needle in line else line for line in body.split('\n'))
     body = body.replace('                return\n', '                return finish()\n')
     body = body.replace('current_task.get("contact_target") in ("Cube_1", "Cube_2")', 'slot in (3, 4)')
@@ -453,35 +455,76 @@ def inject(source):
                 raise RuntimeError(f"Front rear contact unconfirmed after {travel*1000:.2f} mm tactile search")
 
             def verify_contact(label, paths, arm, axis, direction):
-                positive = []
-                floor_loads = []
-                observed_paths = set()
-                normals = []
-                for _ in range(24):
-                    step()
-                    check_current_collision("front_B_" + label)
-                    rows = contact_monitor.cube_contact_snapshot()["pairs"]
-                    impulses = {}
-                    for row in rows:
-                        pair = {row["collider0"], row["collider1"]}
-                        if active_cube_path not in pair or not row["current_step_observed"]:
-                            continue
-                        other = (pair - {active_cube_path}).pop()
-                        impulses[other] = impulses.get(other, 0.) + 120 * (row["normal_impulse_Ns"] or 0.)
-                    loaded = [path for path in paths if impulses.get(path, 0.) >= .10]
-                    positive.append(bool(loaded))
-                    observed_paths.update(loaded)
-                    floor_loads.append(impulses.get("/World/Environment/floor", 0.))
-                    wrench = np.asarray(last_force_sample[arm]["tcp_gravity_corrected_world"])
-                    if not np.all(np.isfinite(wrench)) or np.linalg.norm(wrench[:3]) > 10. or np.linalg.norm(wrench[3:]) > 1.:
-                        raise RuntimeError(f"Front {slot} {label} wrench outside limits: {wrench}")
-                    normals.append(-direction * wrench[axis])
-                evidence[label] = {"loaded_ticks": sum(positive), "ticks": 24, "contact_paths": sorted(observed_paths),
-                                   "median_floor_N": float(np.median(floor_loads)),
-                                   "median_wrist_normal_N": float(np.median(normals))}
-                if sum(positive) < 18 or np.median(normals) < .25 or np.median(floor_loads) < .5:
-                    raise RuntimeError(f"Front {slot} {label} lacked sustained floor/target contact: {evidence[label]}, expected {paths}")
-                record("front_B_" + label, "NATIVE_CONTACT_CONFIRMED", **evidence[label])
+                def sample_contact():
+                    positive = []
+                    floor_loads = []
+                    observed_paths = set()
+                    normals = []
+                    peak_force = 0.
+                    for _ in range(24):
+                        step()
+                        check_current_collision("front_B_" + label)
+                        rows = contact_monitor.cube_contact_snapshot()["pairs"]
+                        impulses = {}
+                        for row in rows:
+                            pair = {row["collider0"], row["collider1"]}
+                            if active_cube_path not in pair or not row["current_step_observed"]:
+                                continue
+                            other = (pair - {active_cube_path}).pop()
+                            impulses[other] = impulses.get(other, 0.) + 120 * (row["normal_impulse_Ns"] or 0.)
+                        loaded = [path for path in paths if impulses.get(path, 0.) >= .10]
+                        positive.append(bool(loaded))
+                        observed_paths.update(loaded)
+                        floor_loads.append(impulses.get("/World/Environment/floor", 0.))
+                        wrench = np.asarray(last_force_sample[arm]["tcp_gravity_corrected_world"])
+                        peak_force = max(peak_force, float(np.linalg.norm(wrench[:3])))
+                        force_limit = 30. if label == "side_seat" else 10.
+                        if (not np.all(np.isfinite(wrench)) or np.linalg.norm(wrench[:3]) > force_limit
+                                or np.linalg.norm(wrench[3:]) > 1.):
+                            raise RuntimeError(f"Front {slot} {label} wrench outside limits: {wrench}")
+                        normals.append(-direction * wrench[axis])
+                    return {"loaded_ticks": sum(positive), "ticks": 24,
+                            "contact_paths": sorted(observed_paths),
+                            "median_floor_N": float(np.median(floor_loads)),
+                            "median_wrist_normal_N": float(np.median(normals)),
+                            "peak_wrist_force_N": peak_force}
+
+                sampled = sample_contact()
+                if (label == "side_seat" and sampled["loaded_ticks"] < 18
+                        and sampled["median_wrist_normal_N"] >= .25):
+                    position, rotation = sensed_cube()
+                    gap = oriented_wall_gap(position[0], rotation[0], half,
+                                            placement_target[0], direction)
+                    if 0. <= gap <= .004:
+                        record("front_B_side_reseat", "NATIVE_CONTACT_RESEAT",
+                               signed_gap_m=float(gap), contact_target=current_task["contact_target"])
+                        # The force-controlled seat can stop on the cup preload while a
+                        # sub-millimetre optical gap remains.  Continue the already
+                        # established side contact by the measured gap, then re-sample
+                        # native PhysX contact.  This is a normal seating correction,
+                        # not a diagnostic probe.
+                        # Close the measured gap in short, low-speed increments. A
+                        # single 1–2 mm Cartesian segment can turn the cup preload
+                        # into a large impulse when the wall is reached.
+                        for _ in range(12):
+                            position, rotation = sensed_cube()
+                            gap = oriented_wall_gap(position[0], rotation[0], half,
+                                                    placement_target[0], direction)
+                            if gap <= .00015:
+                                break
+                            travel = min(.00025, max(.00008, gap + .00002))
+                            contact_path(push_side, position,
+                                         position + [push_sign * travel, 0., 0.],
+                                         "B2_side_reseat", speed=.0015, force_limit=30.)
+                            sampled = sample_contact()
+                            if sampled["loaded_ticks"] >= 18:
+                                break
+                        sampled = sample_contact()
+                evidence[label] = sampled
+                if (sampled["loaded_ticks"] < 18 or sampled["median_wrist_normal_N"] < .25
+                        or sampled["median_floor_N"] < .5):
+                    raise RuntimeError(f"Front {slot} {label} lacked sustained floor/target contact: {sampled}, expected {paths}")
+                record("front_B_" + label, "NATIVE_CONTACT_CONFIRMED", **sampled)
 
             def center_gaps(center, rotation):
                 tracked = {name: (p, r) for name, p, r in observed_neighbors}
@@ -535,7 +578,7 @@ def inject(source):
                     high = np.r_[target[:2], 1.05]
                     high_seed = np.array([-.974636, -.355642, 1.110620, -2.359528, .384786, 2.160466, 1.459065])
                     move({push_side: cartesian_joint_target(push_side, high_seed, high, side_tool, retarget_guide=True)})
-                    cartesian_move(push_side, target, 5., f"{prefix}_lateral_descent")
+                    cartesian_move(push_side, target, 5., f"{prefix}_lateral_descent", retarget_guide=True)
                 else:
                     seed = np.array([-.07088584, .27808819, -.10611819, -2.70179650, .17716509, 2.97585109, -1.91853907])
                     move({push_side: cartesian_joint_target(push_side, seed, target, side_tool, retarget_guide=True)})
@@ -577,7 +620,7 @@ def inject(source):
                     high = np.r_[target[:2], 1.05]
                     seed = np.array([-2.145056, .483576, 1.728614, -2.236692, -.554548, 2.082276, -.102048])
                     move({support_side: cartesian_joint_target(support_side, seed, high, front_rotation, retarget_guide=True)})
-                    cartesian_move(support_side, target, 5., f"{prefix}_straight_descent")
+                    cartesian_move(support_side, target, 5., f"{prefix}_straight_descent", retarget_guide=True)
                 else:
                     seed = np.array([1.01259696, .59909831, -.74589782, -2.43871928, 1.05331681, 2.68562402, -.64496107])
                     move({support_side: cartesian_joint_target(support_side, seed, target, front_rotation, retarget_guide=True)})

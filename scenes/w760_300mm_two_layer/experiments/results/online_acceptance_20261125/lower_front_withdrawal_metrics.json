@@ -1,0 +1,76 @@
+[
+  {
+    "first_collision": null,
+    "unexpected_contact_count": 0,
+    "cube_withdrawal": {
+      "12": {
+        "phase": "B2_support_retreat",
+        "samples": 360,
+        "peak_force_N": {
+          "left": 0.2215236700750446,
+          "right": 1.7883286759486016e-06
+        },
+        "peak_torque_Nm": {
+          "left": 0.008532677068539034,
+          "right": 1.1300485082103996e-07
+        }
+      },
+      "15": {
+        "phase": "B2_support_retreat",
+        "samples": 360,
+        "peak_force_N": {
+          "left": 4.442317548998484e-06,
+          "right": 0.10337657202581826
+        },
+        "peak_torque_Nm": {
+          "left": 4.33729987693883e-07,
+          "right": 0.004327963434146125
+        }
+      },
+      "13": {
+        "phase": "front_3_left_retreat",
+        "samples": 360,
+        "peak_force_N": {
+          "left": 0.10108602698951688,
+          "right": 9.478815793050825e-07
+        },
+        "peak_torque_Nm": {
+          "left": 0.0041337751295289086,
+          "right": 9.471177409016299e-08
+        }
+      }
+    },
+    "run_report": "lower_front_report_1.json"
+  },
+  {
+    "first_collision": null,
+    "unexpected_contact_count": 0,
+    "cube_withdrawal": {
+      "14": {
+        "phase": "front_4_right_retreat",
+        "samples": 360,
+        "peak_force_N": {
+          "left": 1.0559011167732159e-06,
+          "right": 0.05824971981054058
+        },
+        "peak_torque_Nm": {
+          "left": 1.1053913230687205e-07,
+          "right": 0.0024141409435400737
+        }
+      },
+      "6": {
+        "phase": "B2_support_retreat",
+        "samples": 360,
+        "peak_force_N": {
+          "left": 0.08652104807424543,
+          "right": 5.863329451389263e-07
+        },
+        "peak_torque_Nm": {
+          "left": 0.0034706462895159845,
+          "right": 6.674210242221128e-08
+        }
+      }
+    },
+    "run_report": "lower_front_report_2.json"
+  }
+]

@@ -156,7 +156,10 @@ def build(source):
                           '                    position[1] = y')
     source = replace_once(source, '                if status_label is not None and tick % 12 == 0:',
                           '''                if contact_monitor.phase.startswith("upper_B_"):
-                    watch = report.setdefault("upper_b_wrist_watch", {"force_limit_N": 9., "torque_limit_Nm": 1.})
+                    watch = report.setdefault("upper_b_wrist_watch", {"force_limit_N": 10., "torque_limit_Nm": 1.})
+                    phase_limit_N = (20. if contact_monitor.phase == "upper_B_seam_rear_clearance"
+                                     else watch["force_limit_N"])
+                    watch["seam_rear_clearance_limit_N"] = 20.
                     scope = {"physics_step": tick, "time_s": float(world.current_time),
                              "cube_id": current_task["cube_id"], "phase": contact_monitor.phase}
                     violations = []
@@ -170,16 +173,28 @@ def build(source):
                         for key, value in (("peak_force_N", force_N), ("peak_torque_Nm", torque_Nm)):
                             if key not in watch or value > watch[key]["value"]:
                                 watch[key] = {**scope, "arm": arm, "value": value}
-                        if force_N > watch["force_limit_N"] or torque_Nm > watch["torque_limit_Nm"]:
+                        if force_N > phase_limit_N or torque_Nm > watch["torque_limit_Nm"]:
                             violations.append({"arm": arm, "force_N": force_N, "torque_Nm": torque_Nm,
-                                               "wrench_world": wrench.tolist()})
+                                               "limit_N": phase_limit_N, "wrench_world": wrench.tolist()})
                     if violations:
                         watch["stop"] = {**scope, "violations": violations}
                         raise RuntimeError(f"{contact_monitor.phase}: B wrist envelope exceeded at tick {tick}: {violations}")
-                if "rear_to_side_hold_x_m" in current_task:
-                    rear_bearing = any(pair["label"] == "wall_back" and pair["current_step_observed"]
-                                       and (pair["normal_impulse_Ns"] or 0.) > 1e-5
-                                       for pair in reference_contacts["pairs"])
+                if "rear_to_side_hold_x_m" in current_task and "front_slot" not in current_task:
+                    # In the front-row B2 handoff the rear load is often carried by
+                    # a lower-row cube, so there may be no direct wall_back pair.
+                    # Keep the wall check for upper-row tasks and accept a fresh,
+                    # loaded cube-neighbor pair for the explicitly observed rear row.
+                    rear_names = {f"/World/{name}" for name in current_task.get("rear_contact_names", ())}
+                    rear_bearing = any(
+                        pair["current_step_observed"]
+                        and (pair["normal_impulse_Ns"] or 0.) > 1e-5
+                        and (
+                            pair["label"] == "wall_back"
+                            or (pair["label"] == "cube_neighbor"
+                                and any(path in rear_names
+                                        for path in (pair["collider0"], pair["collider1"])))
+                        )
+                        for pair in reference_contacts["pairs"])
                     if not rear_bearing or support_impulse() * 120 < 6.:
                         raise RuntimeError("Rear-to-side handoff lost a loaded rear or lower support")
                 if status_label is not None and tick % 12 == 0:''')

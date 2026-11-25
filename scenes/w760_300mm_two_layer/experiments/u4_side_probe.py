@@ -81,44 +81,43 @@ def run_u4_side_probe(detach_gate=None):
 
 
 DETACHED_UNLOAD = """
-if slot == 4 and axis == 0 and side == "left":
-    from experiments.u4_side_probe import detached_ready
+from experiments.u4_side_probe import detached_ready
 
-    unload_start = tick
-    before_x = last_force_sample["left"]["tcp_position_m"][0]
+unload_start = tick
+before_x = last_force_sample["left"]["tcp_position_m"][0]
 
-    def after_unload_step():
-        if "u4_side_probe" in report:
-            return
-        left = last_force_sample["left"]
-        retreat_m = before_x - left["tcp_position_m"][0]
-        force_x_N = left["tcp_gravity_corrected_world"][0]
-        if detached_ready(tick - unload_start, retreat_m, force_x_N):
-            run_u4_side_probe({"step": tick, "left_retreat_m": retreat_m, "left_force_x_N": force_x_N})
+def after_unload_step():
+    if "u4_side_probe" in report:
+        return
+    left = last_force_sample["left"]
+    retreat_m = before_x - left["tcp_position_m"][0]
+    force_x_N = left["tcp_gravity_corrected_world"][0]
+    if detached_ready(tick - unload_start, retreat_m, force_x_N):
+        run_u4_side_probe({"step": tick, "left_retreat_m": retreat_m, "left_force_x_N": force_x_N})
 
-    cartesian_move(side, position + .003 * outward, 1.5, phase + "_unload", after_step=after_unload_step)
-    if "u4_side_probe" not in report:
-        record("upper_B_u4_side_probe", "DETACH_NOT_CONFIRMED")
-else:
-    cartesian_move(side, position + .003 * outward, 1.5, phase + "_unload")
+cartesian_move(push_side, side_clear, 1.0, "upper_B_side_unload", after_step=after_unload_step)
+if "u4_side_probe" not in report:
+    record("upper_B_u4_side_probe", "DETACH_NOT_CONFIRMED")
 """
 
 
 def inject(source, *, detached=False):
     from source_hooks import replace_once
 
-    marker = "            def withdraw(side, axis, sign):"
+    marker = "            def withdraw_both():"
     source = replace_once(source, marker, indent(PROBE.strip(), "            ") + "\n\n" + marker)
-    unload = '                cartesian_move(side, position + .003 * outward, 1.5, phase + "_unload")'
+    unload = '                    cartesian_move(push_side, side_clear, 1.0, "upper_B_side_unload")'
     if detached:
-        source = replace_once(source, unload, indent(DETACHED_UNLOAD.strip(), "                "))
-        source = replace_once(source, "def cartesian_move(side, destination, duration, phase):",
-                              "def cartesian_move(side, destination, duration, phase, *, after_step=None):")
+        source = replace_once(source, unload, indent(DETACHED_UNLOAD.strip(), "                    "))
+        source = replace_once(source, "def cartesian_move(side, destination, duration, phase, *, retarget_guide=False):",
+                              "def cartesian_move(side, destination, duration, phase, *, retarget_guide=False, after_step=None):")
         marker = "                check_current_collision(phase)\n\n        def align_contact_plane"
         return replace_once(source, marker, "                check_current_collision(phase)\n"
                             "                if after_step is not None:\n"
                             "                    after_step()\n\n        def align_contact_plane")
-    source = replace_once(source, unload, unload + '\n                if slot == 4 and axis == 0 and U4_SIDE_PROBE in ("early", "sham"):\n                    run_u4_side_probe()')
+    source = replace_once(source, unload, unload +
+                          '\n                    if U4_SIDE_PROBE in ("early", "sham"):\n'
+                          '                        run_u4_side_probe()')
     marker = "                    for _ in range(travel_ticks):\n                        normal = force(side, 1, 1)"
     return replace_once(source, marker, '''                    from experiments.u4_side_probe import near_rear
                     recent_right = deque(maxlen=61)

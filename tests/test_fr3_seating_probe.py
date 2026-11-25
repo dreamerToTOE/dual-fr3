@@ -19,6 +19,7 @@ def run_probe(forces, gaps, contact_target="Cube_1", *, follow_side="left", prob
     index, events, commands = 0, [], []
     env = {"np": np, "half": .075, "B2_CONTROLLER_PARAMETERS": parameters,
            "oriented_wall_gap": oriented_wall_gap,
+           "left_hold": None,
            "applied_targets": {"left": np.zeros(3), "right": np.zeros(3)},
            "tcp_fk": lambda side, q: (np.zeros(3), np.eye(3)),
            "cartesian_joint_target": lambda side, seed, target, rotation: target.copy(),

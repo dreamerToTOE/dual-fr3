@@ -79,6 +79,19 @@ def cruise_progress(t, duration, ramp_s):
 
 
 def inject(source):
+    source = replace_once(source, '            guides_start = {side: tcp_fk(side, guide_q[side][0])[0] for side in robots}',
+                          '''            guides_start = {side: tcp_fk(side, guide_q[side][0])[0] for side in robots}
+            if not carrying:
+                # The release pose differs slightly from the guide in orientation as well as position.
+                release_rotation_offsets = {
+                    side: Rotation.from_matrix(actual_tool[side][1] @ tcp_fk(side, guide_q[side][0])[1].T).as_rotvec()
+                    for side in robots}
+'''.rstrip())
+    source = replace_once(source,
+                          '                                target = guided_tcp + (1. - u[index]) * (measured_tcp - guides_start[side])',
+                          '''                                target = guided_tcp + (1. - u[index]) * (measured_tcp - guides_start[side])
+                                rotation = (Rotation.from_rotvec((1. - u[index]) * release_rotation_offsets[side])
+                                            .as_matrix() @ rotation)''')
     source = replace_once(source, '            if not replay_rail:\n                try:\n                    for base in bases:',
                           '''            rail_check_started = time.perf_counter()
             use_pool = (not replay_rail and parallel_validator is not None and count >= 120
@@ -111,7 +124,10 @@ def inject(source):
                 joint_slope = max(np.max(np.abs(np.diff(q, axis=0))) for q in guide_q.values()) * (count - 1)
                 load_slope = np.max(np.linalg.norm(np.diff(centers, axis=0), axis=1)) * (count - 1)
                 duration = 8. + max(rail_slope / .025, joint_slope / .30, load_slope / .06)
-            for _ in range(3):
+            # Retain the measured slow withdrawal used for upper slot 2.
+            if not carrying and current_task.get("slot") == 2:
+                duration = max(duration, 25.0)
+            for _ in range(10):
                 frames = max(120,''')
     source = replace_once(source, '                u = (10 - 15 * t + 6 * t * t) * t ** 3',
                           '                u = cruise_progress(t, duration, 8.) if cruise else (10 - 15 * t + 6 * t * t) * t ** 3')

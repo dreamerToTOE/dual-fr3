@@ -1,0 +1,1061 @@
+{
+  "run": "/home/ubuntu2004/Documents/Codex/2026-11-15/new-chat/work/dual-fr3-innovation-2/runs/post_audit_u4_online_20261125",
+  "status": "PARTIAL_W760_UPPER_ROW",
+  "stop_reason": null,
+  "completed_upper_slots": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "first_unexpected_physx_contact": null,
+  "unexpected_physx_contact_count": 0,
+  "wrist_watch": {
+    "force_limit_N": 10.0,
+    "torque_limit_Nm": 1.0,
+    "seam_rear_clearance_limit_N": 20.0,
+    "peak_force_N": {
+      "physics_step": 10384,
+      "time_s": 86.55000451393425,
+      "cube_id": 10,
+      "phase": "upper_B_seam_pacing",
+      "arm": "left",
+      "value": 8.125866308943454
+    },
+    "peak_torque_Nm": {
+      "physics_step": 10384,
+      "time_s": 86.55000451393425,
+      "cube_id": 10,
+      "phase": "upper_B_seam_pacing",
+      "arm": "left",
+      "value": 0.35123254300346685
+    }
+  },
+  "withdrawals": {
+    "10": {
+      "completed": true,
+      "start_step": 14805,
+      "end_step": 15166,
+      "arms": [
+        "left",
+        "right"
+      ],
+      "resultant_force_peak_N": {
+        "left": 0.00416041184142237,
+        "right": 0.14032428508313657
+      },
+      "resultant_torque_peak_Nm": {
+        "left": 0.0001756393547650485,
+        "right": 0.005554195687335299
+      },
+      "samples": 361,
+      "measured_joint_motion_overlap_ticks": 350,
+      "release_dwell_peak_N": {
+        "left": 4.016685672209666e-06,
+        "right": 7.2099860028658425
+      },
+      "wrench_ticks_above_10_N": {
+        "left": 0,
+        "right": 0
+      },
+      "planned_duration_s": 3.0,
+      "simultaneous_joint_command_intervals": 360,
+      "total_joint_command_intervals": 360,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 361,
+        "issues": []
+      },
+      "cube_movement_preceding_0p25s_mm": 0.0004842304232499576,
+      "cube_movement_during_withdrawal_mm": 0.006996900495110377
+    }
+  },
+  "u4_online_contact_verification": {
+    "metrics": {
+      "all_u4_before_withdrawal": {
+        "ticks": 7940,
+        "model_scores": {
+          "u4_handover": {
+            "totals": {
+              "S5": {
+                "true": 3404,
+                "predicted_on_known": 1831,
+                "tp": 1693,
+                "tp_exact_objects": 1693,
+                "unknown_on_true": 298,
+                "precision": 0.9246313489896232,
+                "recall": 0.4973560517038778,
+                "f1": 0.6468003820439351,
+                "false_positive_rate": 0.03042328042328042
+              },
+              "S6": {
+                "true": 138,
+                "predicted_on_known": 89,
+                "tp": 89,
+                "tp_exact_objects": 89,
+                "unknown_on_true": 0,
+                "precision": 1.0,
+                "recall": 0.644927536231884,
+                "f1": 0.7841409691629956,
+                "false_positive_rate": 0.0
+              }
+            },
+            "known_truth": 7940,
+            "coverage_on_known": 0.6835012594458438,
+            "confusion": {
+              "S1": {
+                "UNKNOWN": 2215,
+                "S1": 2057,
+                "S5": 126
+              },
+              "S5": {
+                "UNKNOWN": 298,
+                "S1": 1413,
+                "S5": 1693
+              },
+              "S6": {
+                "S5": 12,
+                "S1": 37,
+                "S6": 89
+              }
+            }
+          },
+          "passive_fusion": {
+            "totals": {
+              "S5": {
+                "true": 3404,
+                "predicted_on_known": 1044,
+                "tp": 805,
+                "tp_exact_objects": 397,
+                "unknown_on_true": 132,
+                "precision": 0.7710727969348659,
+                "recall": 0.23648648648648649,
+                "f1": 0.3619604316546763,
+                "false_positive_rate": 0.05268959435626102
+              },
+              "S6": {
+                "true": 138,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": 0.0
+              }
+            },
+            "known_truth": 7940,
+            "coverage_on_known": 0.7046599496221663,
+            "confusion": {
+              "S1": {
+                "UNKNOWN": 2213,
+                "S1": 2084,
+                "S5": 101
+              },
+              "S5": {
+                "UNKNOWN": 132,
+                "S1": 2467,
+                "S5": 805
+              },
+              "S6": {
+                "S5": 138
+              }
+            }
+          },
+          "fusion_without_u4_handoff_logic": {
+            "totals": {
+              "S5": {
+                "true": 3404,
+                "predicted_on_known": 27,
+                "tp": 27,
+                "tp_exact_objects": 27,
+                "unknown_on_true": 417,
+                "precision": 1.0,
+                "recall": 0.007931844888366627,
+                "f1": 0.015738851646750218,
+                "false_positive_rate": 0.0
+              },
+              "S6": {
+                "true": 138,
+                "predicted_on_known": 89,
+                "tp": 89,
+                "tp_exact_objects": 89,
+                "unknown_on_true": 0,
+                "precision": 1.0,
+                "recall": 0.644927536231884,
+                "f1": 0.7841409691629956,
+                "false_positive_rate": 0.0
+              }
+            },
+            "known_truth": 7940,
+            "coverage_on_known": 0.6683879093198992,
+            "confusion": {
+              "S1": {
+                "UNKNOWN": 2216,
+                "S1": 2182
+              },
+              "S5": {
+                "UNKNOWN": 417,
+                "S1": 2960,
+                "S5": 27
+              },
+              "S6": {
+                "S1": 49,
+                "S6": 89
+              }
+            }
+          },
+          "vision_and_encoders": {
+            "totals": {
+              "S5": {
+                "true": 3404,
+                "predicted_on_known": 1816,
+                "tp": 36,
+                "tp_exact_objects": 36,
+                "unknown_on_true": 2735,
+                "precision": 0.019823788546255508,
+                "recall": 0.010575793184488837,
+                "f1": 0.013793103448275862,
+                "false_positive_rate": 0.3924162257495591
+              },
+              "S6": {
+                "true": 138,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 114,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": 0.0
+              }
+            },
+            "known_truth": 7940,
+            "coverage_on_known": 0.42619647355163726,
+            "confusion": {
+              "S1": {
+                "UNKNOWN": 1707,
+                "S1": 911,
+                "S5": 1780
+              },
+              "S5": {
+                "S5": 36,
+                "S1": 633,
+                "UNKNOWN": 2735
+              },
+              "S6": {
+                "UNKNOWN": 114,
+                "S1": 24
+              }
+            }
+          },
+          "wrist_and_encoders": {
+            "totals": {
+              "S5": {
+                "true": 3404,
+                "predicted_on_known": 125,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 316,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": 0.02755731922398589
+              },
+              "S6": {
+                "true": 138,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": 0.0
+              }
+            },
+            "known_truth": 7940,
+            "coverage_on_known": 0.6812342569269522,
+            "confusion": {
+              "S1": {
+                "UNKNOWN": 2215,
+                "S1": 2183
+              },
+              "S5": {
+                "UNKNOWN": 316,
+                "S1": 3088
+              },
+              "S6": {
+                "S1": 13,
+                "S5": 125
+              }
+            }
+          }
+        }
+      },
+      "rear_push": {
+        "ticks": 4235,
+        "model_scores": {
+          "u4_handover": {
+            "totals": {
+              "S5": {
+                "true": 3001,
+                "predicted_on_known": 1797,
+                "tp": 1666,
+                "tp_exact_objects": 1666,
+                "unknown_on_true": 0,
+                "precision": 0.9271007234279355,
+                "recall": 0.5551482839053649,
+                "f1": 0.6944560233430596,
+                "false_positive_rate": 0.10615883306320907
+              },
+              "S6": {
+                "true": 126,
+                "predicted_on_known": 77,
+                "tp": 77,
+                "tp_exact_objects": 77,
+                "unknown_on_true": 0,
+                "precision": 1.0,
+                "recall": 0.6111111111111112,
+                "f1": 0.7586206896551724,
+                "false_positive_rate": 0.0
+              }
+            },
+            "known_truth": 4235,
+            "coverage_on_known": 1.0,
+            "confusion": {
+              "S1": {
+                "S1": 989,
+                "S5": 119
+              },
+              "S5": {
+                "S1": 1335,
+                "S5": 1666
+              },
+              "S6": {
+                "S5": 12,
+                "S1": 37,
+                "S6": 77
+              }
+            }
+          },
+          "passive_fusion": {
+            "totals": {
+              "S5": {
+                "true": 3001,
+                "predicted_on_known": 640,
+                "tp": 416,
+                "tp_exact_objects": 8,
+                "unknown_on_true": 119,
+                "precision": 0.65,
+                "recall": 0.13862045984671775,
+                "f1": 0.22850865146937654,
+                "false_positive_rate": 0.18152350081037277
+              },
+              "S6": {
+                "true": 126,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": 0.0
+              }
+            },
+            "known_truth": 4235,
+            "coverage_on_known": 0.9716646989374262,
+            "confusion": {
+              "S1": {
+                "S1": 1009,
+                "UNKNOWN": 1,
+                "S5": 98
+              },
+              "S5": {
+                "S1": 2466,
+                "UNKNOWN": 119,
+                "S5": 416
+              },
+              "S6": {
+                "S5": 126
+              }
+            }
+          },
+          "fusion_without_u4_handoff_logic": {
+            "totals": {
+              "S5": {
+                "true": 3001,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 119,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": 0.0
+              },
+              "S6": {
+                "true": 126,
+                "predicted_on_known": 77,
+                "tp": 77,
+                "tp_exact_objects": 77,
+                "unknown_on_true": 0,
+                "precision": 1.0,
+                "recall": 0.6111111111111112,
+                "f1": 0.7586206896551724,
+                "false_positive_rate": 0.0
+              }
+            },
+            "known_truth": 4235,
+            "coverage_on_known": 0.9716646989374262,
+            "confusion": {
+              "S1": {
+                "S1": 1107,
+                "UNKNOWN": 1
+              },
+              "S5": {
+                "S1": 2882,
+                "UNKNOWN": 119
+              },
+              "S6": {
+                "S1": 49,
+                "S6": 77
+              }
+            }
+          },
+          "vision_and_encoders": {
+            "totals": {
+              "S5": {
+                "true": 3001,
+                "predicted_on_known": 24,
+                "tp": 16,
+                "tp_exact_objects": 16,
+                "unknown_on_true": 2384,
+                "precision": 0.6666666666666666,
+                "recall": 0.005331556147950683,
+                "f1": 0.010578512396694216,
+                "false_positive_rate": 0.006482982171799027
+              },
+              "S6": {
+                "true": 126,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 102,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": 0.0
+              }
+            },
+            "known_truth": 4235,
+            "coverage_on_known": 0.21723730814639905,
+            "confusion": {
+              "S1": {
+                "UNKNOWN": 829,
+                "S1": 271,
+                "S5": 8
+              },
+              "S5": {
+                "UNKNOWN": 2384,
+                "S5": 16,
+                "S1": 601
+              },
+              "S6": {
+                "UNKNOWN": 102,
+                "S1": 24
+              }
+            }
+          },
+          "wrist_and_encoders": {
+            "totals": {
+              "S5": {
+                "true": 3001,
+                "predicted_on_known": 113,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": 0.0,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": 0.09157212317666126
+              },
+              "S6": {
+                "true": 126,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": 0.0
+              }
+            },
+            "known_truth": 4235,
+            "coverage_on_known": 1.0,
+            "confusion": {
+              "S1": {
+                "S1": 1108
+              },
+              "S5": {
+                "S1": 3001
+              },
+              "S6": {
+                "S1": 13,
+                "S5": 113
+              }
+            }
+          }
+        }
+      },
+      "rear_confirmed_before_withdrawal": {
+        "ticks": 13,
+        "model_scores": {
+          "u4_handover": {
+            "totals": {
+              "S5": {
+                "true": 0,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null,
+                "false_positive_rate": 0.0
+              },
+              "S6": {
+                "true": 13,
+                "predicted_on_known": 13,
+                "tp": 13,
+                "tp_exact_objects": 13,
+                "unknown_on_true": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "false_positive_rate": null
+              }
+            },
+            "known_truth": 13,
+            "coverage_on_known": 1.0,
+            "confusion": {
+              "S6": {
+                "S6": 13
+              }
+            }
+          },
+          "passive_fusion": {
+            "totals": {
+              "S5": {
+                "true": 0,
+                "predicted_on_known": 13,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": 0.0,
+                "recall": null,
+                "f1": 0.0,
+                "false_positive_rate": 1.0
+              },
+              "S6": {
+                "true": 13,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": null
+              }
+            },
+            "known_truth": 13,
+            "coverage_on_known": 1.0,
+            "confusion": {
+              "S6": {
+                "S5": 13
+              }
+            }
+          },
+          "fusion_without_u4_handoff_logic": {
+            "totals": {
+              "S5": {
+                "true": 0,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null,
+                "false_positive_rate": 0.0
+              },
+              "S6": {
+                "true": 13,
+                "predicted_on_known": 13,
+                "tp": 13,
+                "tp_exact_objects": 13,
+                "unknown_on_true": 0,
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1": 1.0,
+                "false_positive_rate": null
+              }
+            },
+            "known_truth": 13,
+            "coverage_on_known": 1.0,
+            "confusion": {
+              "S6": {
+                "S6": 13
+              }
+            }
+          },
+          "vision_and_encoders": {
+            "totals": {
+              "S5": {
+                "true": 0,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null,
+                "false_positive_rate": 0.0
+              },
+              "S6": {
+                "true": 13,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 13,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": null
+              }
+            },
+            "known_truth": 13,
+            "coverage_on_known": 0.0,
+            "confusion": {
+              "S6": {
+                "UNKNOWN": 13
+              }
+            }
+          },
+          "wrist_and_encoders": {
+            "totals": {
+              "S5": {
+                "true": 0,
+                "predicted_on_known": 13,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": 0.0,
+                "recall": null,
+                "f1": 0.0,
+                "false_positive_rate": 1.0
+              },
+              "S6": {
+                "true": 13,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": null
+              }
+            },
+            "known_truth": 13,
+            "coverage_on_known": 1.0,
+            "confusion": {
+              "S6": {
+                "S5": 13
+              }
+            }
+          }
+        }
+      },
+      "withdrawal": {
+        "ticks": 361,
+        "model_scores": {
+          "u4_handover": {
+            "totals": {
+              "S5": {
+                "true": 2,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 2,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": 0.0
+              },
+              "S6": {
+                "true": 0,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null,
+                "false_positive_rate": 0.0
+              }
+            },
+            "known_truth": 360,
+            "coverage_on_known": 0.3527777777777778,
+            "confusion": {
+              "S0": {
+                "UNKNOWN": 231,
+                "S0": 127
+              },
+              "S5": {
+                "UNKNOWN": 2
+              },
+              "UNKNOWN": {
+                "UNKNOWN": 1
+              }
+            }
+          },
+          "passive_fusion": {
+            "totals": {
+              "S5": {
+                "true": 2,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 2,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": 0.0
+              },
+              "S6": {
+                "true": 0,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null,
+                "false_positive_rate": 0.0
+              }
+            },
+            "known_truth": 360,
+            "coverage_on_known": 0.0,
+            "confusion": {
+              "S0": {
+                "UNKNOWN": 358
+              },
+              "S5": {
+                "UNKNOWN": 2
+              },
+              "UNKNOWN": {
+                "UNKNOWN": 1
+              }
+            }
+          },
+          "fusion_without_u4_handoff_logic": {
+            "totals": {
+              "S5": {
+                "true": 2,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 2,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": 0.0
+              },
+              "S6": {
+                "true": 0,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null,
+                "false_positive_rate": 0.0
+              }
+            },
+            "known_truth": 360,
+            "coverage_on_known": 0.3527777777777778,
+            "confusion": {
+              "S0": {
+                "UNKNOWN": 231,
+                "S0": 127
+              },
+              "S5": {
+                "UNKNOWN": 2
+              },
+              "UNKNOWN": {
+                "UNKNOWN": 1
+              }
+            }
+          },
+          "vision_and_encoders": {
+            "totals": {
+              "S5": {
+                "true": 2,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 2,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": 0.0
+              },
+              "S6": {
+                "true": 0,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null,
+                "false_positive_rate": 0.0
+              }
+            },
+            "known_truth": 360,
+            "coverage_on_known": 0.39166666666666666,
+            "confusion": {
+              "S0": {
+                "UNKNOWN": 217,
+                "S1": 141
+              },
+              "S5": {
+                "UNKNOWN": 2
+              },
+              "UNKNOWN": {
+                "UNKNOWN": 1
+              }
+            }
+          },
+          "wrist_and_encoders": {
+            "totals": {
+              "S5": {
+                "true": 2,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 2,
+                "precision": null,
+                "recall": 0.0,
+                "f1": 0.0,
+                "false_positive_rate": 0.0
+              },
+              "S6": {
+                "true": 0,
+                "predicted_on_known": 0,
+                "tp": 0,
+                "tp_exact_objects": 0,
+                "unknown_on_true": 0,
+                "precision": null,
+                "recall": null,
+                "f1": null,
+                "false_positive_rate": 0.0
+              }
+            },
+            "known_truth": 360,
+            "coverage_on_known": 0.0,
+            "confusion": {
+              "S0": {
+                "UNKNOWN": 358
+              },
+              "S5": {
+                "UNKNOWN": 2
+              },
+              "UNKNOWN": {
+                "UNKNOWN": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "stable_events_minimum_0p25s": [
+      {
+        "state": "S5",
+        "truth_first_step": 10060,
+        "truth_last_step": 10462,
+        "duration_s": 3.3583333333333334,
+        "first_3step_estimate_confirmation": 10106,
+        "delay_s": 0.38333333333333336
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 10729,
+        "truth_last_step": 10798,
+        "duration_s": 0.5833333333333334,
+        "first_3step_estimate_confirmation": null,
+        "delay_s": null
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 11268,
+        "truth_last_step": 11308,
+        "duration_s": 0.3416666666666667,
+        "first_3step_estimate_confirmation": 11270,
+        "delay_s": 0.016666666666666666
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 11319,
+        "truth_last_step": 11374,
+        "duration_s": 0.4666666666666667,
+        "first_3step_estimate_confirmation": 11321,
+        "delay_s": 0.016666666666666666
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 11404,
+        "truth_last_step": 11521,
+        "duration_s": 0.9833333333333333,
+        "first_3step_estimate_confirmation": 11406,
+        "delay_s": 0.016666666666666666
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 11523,
+        "truth_last_step": 11664,
+        "duration_s": 1.1833333333333333,
+        "first_3step_estimate_confirmation": 11525,
+        "delay_s": 0.016666666666666666
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 11715,
+        "truth_last_step": 11813,
+        "duration_s": 0.825,
+        "first_3step_estimate_confirmation": 11717,
+        "delay_s": 0.016666666666666666
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 11815,
+        "truth_last_step": 11934,
+        "duration_s": 1.0,
+        "first_3step_estimate_confirmation": 11832,
+        "delay_s": 0.14166666666666666
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 11936,
+        "truth_last_step": 12156,
+        "duration_s": 1.8416666666666666,
+        "first_3step_estimate_confirmation": 11985,
+        "delay_s": 0.4083333333333333
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 12158,
+        "truth_last_step": 12197,
+        "duration_s": 0.3333333333333333,
+        "first_3step_estimate_confirmation": null,
+        "delay_s": null
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 12215,
+        "truth_last_step": 12285,
+        "duration_s": 0.5916666666666667,
+        "first_3step_estimate_confirmation": 12229,
+        "delay_s": 0.11666666666666667
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 12920,
+        "truth_last_step": 12949,
+        "duration_s": 0.25,
+        "first_3step_estimate_confirmation": 12922,
+        "delay_s": 0.016666666666666666
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 13233,
+        "truth_last_step": 13273,
+        "duration_s": 0.3416666666666667,
+        "first_3step_estimate_confirmation": 13237,
+        "delay_s": 0.03333333333333333
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 13343,
+        "truth_last_step": 13375,
+        "duration_s": 0.275,
+        "first_3step_estimate_confirmation": 13359,
+        "delay_s": 0.13333333333333333
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 13633,
+        "truth_last_step": 13676,
+        "duration_s": 0.36666666666666664,
+        "first_3step_estimate_confirmation": 13640,
+        "delay_s": 0.058333333333333334
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 13928,
+        "truth_last_step": 13962,
+        "duration_s": 0.2916666666666667,
+        "first_3step_estimate_confirmation": 13932,
+        "delay_s": 0.03333333333333333
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 13986,
+        "truth_last_step": 14016,
+        "duration_s": 0.25833333333333336,
+        "first_3step_estimate_confirmation": 13997,
+        "delay_s": 0.09166666666666666
+      },
+      {
+        "state": "S5",
+        "truth_first_step": 14461,
+        "truth_last_step": 14504,
+        "duration_s": 0.36666666666666664,
+        "first_3step_estimate_confirmation": 14465,
+        "delay_s": 0.03333333333333333
+      },
+      {
+        "state": "S6",
+        "truth_first_step": 14668,
+        "truth_last_step": 14805,
+        "duration_s": 1.15,
+        "first_3step_estimate_confirmation": 14719,
+        "delay_s": 0.425
+      }
+    ],
+    "s6_recall_by_physx_side_force_N": {
+      "(0.0, 0.1)": {
+        "truth_ticks": 0,
+        "s6_tp": 0
+      },
+      "(0.1, 1.0)": {
+        "truth_ticks": 28,
+        "s6_tp": 8
+      },
+      "(1.0, inf)": {
+        "truth_ticks": 110,
+        "s6_tp": 81
+      }
+    },
+    "s6_missed_before_rear_confirmed_ticks": 49,
+    "positive_s6_ticks_both_targets_loaded": 138,
+    "matching_physx_labels": "SevenReference, same recorded physics step, bottom support and exact horizontal objects",
+    "contract": "S5/S6 scored during manipulation. Withdrawn tools are labeled S0 when supported."
+  }
+}

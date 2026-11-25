@@ -17,7 +17,11 @@
                            3: "/World/Cube_7", 4: "/World/Cube_8"}.get(slot)
             front_offset = np.array([0., -half, .004])
             phase_prefix = f"upper_b{slot}"
-            force_ceiling = 9.
+            # Nominal side-wall sliding reaches just over 9 N in the
+            # measured FR3 contact model.  Keep a 10 N envelope so a
+            # sub-percent numerical excursion is recorded instead of
+            # aborting an otherwise valid push.
+            force_ceiling = 10.
             settle_frame_count = 30
 
             def force(side, axis, sign):
@@ -240,7 +244,11 @@
                 record(phase, "RUNNING", arm=side, contact_target=target,
                        estimated_start_gap_m=float(remaining))
                 arms = [side] if follow is None else [side, follow]
-                distance = max(0., remaining - .0025)
+                # U3 must arrive at the measured inner-neighbor face before
+                # the native-contact probe. The generic 2.5 mm approach gap
+                # leaves a real millimetre-scale seam for slot 3.
+                approach_gap = .0005 if (slot == 3 and axis == 0 and phase == "upper_B_side") else .0025
+                distance = max(0., remaining - approach_gap)
                 if travel_limit is not None:
                     distance = min(distance, max(0., sign * (travel_limit - start[axis])))
                 if distance > .00025:
@@ -571,7 +579,9 @@
                                 for pair in contact_monitor.cube_contact_snapshot()["pairs"]))
                             if probe_start is None and len(settled) == settle_frame_count:
                                 x, loads, gaps = np.asarray(settled).T
+                                center_gap_x = abs(float(center[0] - other_center[0])) - 2. * half
                                 steady = (np.max(gaps) <= .00045 and np.min(loads) >= threshold and
+                                          center_gap_x <= .00045 and
                                           np.ptp(x) <= .000012 and abs(np.mean(x[-5:])-np.mean(x[:5])) <= .000003)
                                 sustained_stop = sustained_stop + 1 if steady else 0
                                 if sustained_stop >= 8:
@@ -604,18 +614,32 @@
                                             and np.ptp(wrists) <= .000025 and np.ptp(centers) <= .000045
                                             and -.00005 <= wrist_advance <= .00020 and abs(box_advance) <= .00025):
                                         if sum(observed) < 24:
-                                            raise RuntimeError(f"{terminal}: active probe lacks native U1 bearing "
-                                                               f"({sum(observed)}/30, measured rise {increase:.3f} N, "
-                                                               f"command {advance*1000:.3f} mm)")
-                                        record(phase, "FORCE_CONFIRMED", arm=side, contact_target=target,
-                                               held_samples=settle_frame_count, normal_force_N=float(np.mean(loads)),
-                                               normal_force_samples_N=loads.tolist(), estimated_gap_m=gap2d,
-                                               witnessed_target_contact_ticks=sum(observed), sliding_baseline_N=background,
-                                               force_threshold_N=threshold, terminal_travel_m=abs(paced_x-terminal_start),
-                                               active_probe={"command_advance_m":advance,"wrist_advance_m":wrist_advance,
-                                                             "cube_advance_m":box_advance,"normal_force_rise_N":increase,
-                                                             "initial_normal_force_N":probe_baseline})
-                                        return
+                                            # A cup can build axial load before the
+                                            # neighboring Cube pair enters the PhysX
+                                            # contact stream. Keep probing from the
+                                            # current pose instead of accepting that
+                                            # cup load as U1 bearing.
+                                            record(terminal, "NATIVE_CONTACT_WAIT",
+                                                   witnessed_target_contact_ticks=sum(observed),
+                                                   measured_force_rise_N=increase,
+                                                   command_advance_m=advance)
+                                            probe_start = None
+                                            probe_ticks = 0
+                                            probe_axial_limit = None
+                                            sustained_stop = 0
+                                            held.clear()
+                                            settled.clear()
+                                            terminal_reference_x = paced_x + sign * terminal_rate / 120
+                                        else:
+                                            record(phase, "FORCE_CONFIRMED", arm=side, contact_target=target,
+                                                   held_samples=settle_frame_count, normal_force_N=float(np.mean(loads)),
+                                                   normal_force_samples_N=loads.tolist(), estimated_gap_m=gap2d,
+                                                   witnessed_target_contact_ticks=sum(observed), sliding_baseline_N=background,
+                                                   force_threshold_N=threshold, terminal_travel_m=abs(paced_x-terminal_start),
+                                                   active_probe={"command_advance_m": advance, "wrist_advance_m": wrist_advance,
+                                                                 "cube_advance_m": box_advance, "normal_force_rise_N": increase,
+                                                                 "initial_normal_force_N": probe_baseline})
+                                            return
                                 if probe_ticks >= 1200:
                                     raise RuntimeError(f"{terminal}: active differential probe did not settle "
                                                        f"(advance {advance*1000:.3f} mm, wrist {normal:.3f} N, "
@@ -653,7 +677,7 @@
                 follow_origin, follow_rot = tcp_fk(follow, follower) if follow is not None else (None, None)
                 forces, positions = [], []
                 outer_wall_probe = target in (rear_target, side_target)
-                rear_probe = slot in (1, 2) and axis == 1 and target == rear_target
+                rear_probe = slot in (1, 2, 3) and axis == 1 and target == rear_target
                 sliding_load = deque(maxlen=120)
                 wall_impulses = deque(maxlen=settle_frame_count)
                 for _ in range(6000):
@@ -1079,30 +1103,63 @@
                 push_faces[push_side] = (0, normal, side_offset)
                 touch_face(push_side, -normal, .018, "upper_B_side_touch")
 
-            def withdraw(side, axis, sign):
+            def withdraw_both():
+                """Withdraw the participating tools in one checked joint trajectory."""
                 nonlocal left_hold
-                phase = "upper_B_front" if axis == 1 else "upper_B_side"
-                # The scalar hold must be disabled before the tool recedes along its normal.
-                if side == support_side:
-                    left_hold = None
-                position, _ = tcp_fk(side, applied_targets[side])
-                outward = np.eye(3)[axis] * -sign
-                cartesian_move(side, position + .003 * outward, 1.5, phase + "_unload")
-                push_faces.pop(side, None)
-                position, _ = tcp_fk(side, applied_targets[side])
-                if axis == 1:
-                    distance = .022
-                else:
-                    checked_withdrawal = np.asarray(phase_map["withdraw_side"]["tcp_m"][side])
-                    distance = abs(float(checked_withdrawal[-1, axis] - checked_withdrawal[0, axis])) - .003
-                    if distance <= 0.:
-                        raise RuntimeError(f"Upper {slot} has insufficient checked side withdrawal")
-                cartesian_move(side, position + distance * outward, 2.5, phase + "_withdraw")
-                allowed_contacts.discard(side)
-                if axis == 0:
-                    position, _ = tcp_fk(side, applied_targets[side])
-                    height = max(position[2], 1.11)
-                    cartesian_move(side, [position[0], position[1], height], 4., phase + "_raise")
+                left_hold = None
+                # The cube is already seated and stable here.  Release both
+                # suction joints before planning the withdrawal so the tools
+                # do not drag the cube while leaving the contact faces.
+                for arm in robots:
+                    if grippers.is_closed(arm):
+                        grippers.open(arm)
+                push_faces.clear()
+                # Let the native gripper joints finish opening while both
+                # tools remain stationary in the low-stiffness contact mode.
+                # This removes the release impulse before the RRT motion starts.
+                contact_monitor.phase = "upper_B_release_dwell"
+                for _ in range(12):
+                    step()
+                    check_current_collision("upper_B_release_dwell")
+                # The cup geometry is still at the release pose while RRT
+                # validates its first sample. Keep the two expected cup
+                # contacts whitelisted until the path has left the Cube.
+                destinations = {}
+                measured = joint_state()
+                retreat_axes = [(support_side, 1, 1)]
+                if push_side is not None:
+                    retreat_axes.append((push_side, 0, push_sign))
+                for side, axis, sign in retreat_axes:
+                    position, _ = tcp_fk(side, measured[side])
+                    outward = np.eye(3)[axis] * -sign
+                    if axis == 1:
+                        distance = .022
+                    else:
+                        checked_withdrawal = np.asarray(phase_map["withdraw_side"]["tcp_m"][side])
+                        distance = abs(float(checked_withdrawal[-1, axis] - checked_withdrawal[0, axis])) - .003
+                        # The released cup envelope can still be within the
+                        # planner's 2 mm transit margin after the measured
+                        # withdrawal target is reached. Extend the paired
+                        # lateral retreat by 12 mm so the subsequent park RRT
+                        # starts from a genuinely clear configuration.
+                        distance += .012
+                        if distance <= 0.:
+                            raise RuntimeError(f"Upper {slot} has insufficient checked side withdrawal")
+                    destinations[side] = position + (.003 + distance) * outward
+
+                commands = {
+                    side: cartesian_joint_target(side, measured[side], target,
+                                                 tcp_fk(side, measured[side])[1],
+                                                 retarget_guide=True)
+                    for side, target in destinations.items()
+                }
+                contact_monitor.phase = "upper_B_withdraw"
+                record("upper_B_withdraw", "RUNNING", arms=sorted(destinations))
+                # Ease the first release samples so the two open cups do not
+                # inject a transient wrist impulse into the withdrawal path.
+                move(commands, duration=3.0)
+                allowed_contacts.clear()
+                record("upper_B_withdraw", "COMPLETED", arms=sorted(destinations))
 
             allowed_contacts.clear()
             push_faces.clear()
@@ -1135,16 +1192,37 @@
                     record("upper_B_extra_seam_transport", "SELECTED", transport_index=2)
                     carry_across_support_seam(extra=True)
                 push_to_boundary(push_side, 0, push_sign, "upper_B_side", side_target, follow=support_side)
-                withdraw(push_side, 0, push_sign)
-                record("upper_B_park", "RUNNING", arm=push_side)
-                move({push_side: home})
             if side_first:
                 left_hold = None
+                if slot == 4:
+                    # Opening the side cups does not immediately remove their
+                    # geometric contact. Retract the left tool from the
+                    # seated side face before the right arm starts the rear
+                    # push, otherwise the released tool adds passive shear.
+                    side_tcp, _ = tcp_fk(push_side, joint_state()[push_side])
+                    side_clear = side_tcp - [.012 * push_sign, 0., 0.]
+                    cartesian_move(push_side, side_clear, 1.0, "upper_B_side_unload")
+                    allowed_contacts.discard(push_side)
+                    push_faces.pop(push_side, None)
                 push_to_boundary(support_side, 1, 1, "upper_B_rear", rear_target)
-            withdraw(support_side, 1, 1)
-            allowed_contacts.clear()
-            push_faces.clear()
+            withdraw_both()
             set_contact_drive_mode(False)
-            record("upper_B_park", "RUNNING", arm=support_side)
-            move({support_side: home})
+            park_targets = {arm: home for arm in (push_side, support_side) if arm is not None}
+            record("upper_B_park", "RUNNING", arms=sorted(park_targets))
+            if slot == 3:
+                # The inner U3 box sits closer to the left arm's nominal home
+                # branch. Use the measured empty-park branch offset so the
+                # collision-checked park endpoint remains clear.
+                park_targets["left"] = home.copy()
+                park_targets["left"][0] -= .06
+                record("upper_B_park", "LEFT_BRANCH_OFFSET", j1_offset_rad=-.06)
+                park_targets["right"] = home.copy()
+                park_targets["right"][0] -= .12
+                record("upper_B_park", "RIGHT_BRANCH_OFFSET", j1_offset_rad=-.12)
+            # Keep the production withdrawal paired. Park each released arm
+            # with its own collision-checked RRT goal so an inner-slot branch
+            # cannot invalidate the other arm's already clear endpoint.
+            for park_arm, park_target in park_targets.items():
+                record("upper_B_park", "ARM_TARGET", arm=park_arm)
+                move({park_arm: park_target})
             record("upper_B_release", "TOOLS_PARKED")

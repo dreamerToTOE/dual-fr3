@@ -786,7 +786,9 @@ def main():
                     neighbor_phase = (contact_monitor.phase in ("B2_push", "B2_push_seat", "B2_push_unload")
                                       or (task_cube_id == 10
                                           and contact_monitor.phase.startswith("upper_B")))
-                    if (neighbor_phase and neighbor_name is not None
+                    if (neighbor_phase and isinstance(neighbor_name, str)
+                            and neighbor_name.startswith("Cube_")
+                            and neighbor_name.removeprefix("Cube_").isdigit()
                             and control_center is not None
                             and abs(control_center[0] - task_goal_x) < .025
                             and 0 <= receive_time - capture_time <= .20):
@@ -797,13 +799,18 @@ def main():
                             neighbor = vision_estimator.estimate(rgba.astype(np.uint8, copy=False))
                         finally:
                             vision_estimator.marker_id = active_id
-                        pose = vision_estimator.resting_pose(neighbor, CONFIG["floor_top_m"])
+                        neighbor_key = neighbor_name
+                        neighbor_support_z = CONFIG["floor_top_m"]
+                        if task_cube_id == 10:
+                            neighbor_key = f"/World/{neighbor_name}"
+                            neighbor_support_z += CONFIG["cube_size_m"]
+                        pose = vision_estimator.resting_pose(neighbor, neighbor_support_z)
                         if pose is not None:
-                            if neighbor_name not in neighbor_filters:
-                                neighbor_filters[neighbor_name] = PlanarPoseMedian()
-                            filtered = neighbor_filters[neighbor_name].update(frame_id, capture_time, *pose)
+                            if neighbor_key not in neighbor_filters:
+                                neighbor_filters[neighbor_key] = PlanarPoseMedian()
+                            filtered = neighbor_filters[neighbor_key].update(frame_id, capture_time, *pose)
                             if filtered is not None:
-                                live_neighbors[neighbor_name] = filtered
+                                live_neighbors[neighbor_key] = (*filtered, receive_time)
             latest_camera_observation = {
                 "status": observation["status"], "position_m": observation["cube_position_m"],
                 "cube_rotation_world": observation.get("cube_rotation_world"),
@@ -1045,13 +1052,16 @@ def main():
                     },
                     auxiliary={
                         "cube_id": None if current_task is None else current_task.get("cube_id"),
-                        "right_command_y_m": float(tcp_fk("right", applied_targets["right"])[0][1]),
+                        "tcp_command_positions_m": {
+                            side: tcp_fk(side, q)[0].tolist()
+                            for side, q in applied_targets.items()
+                        } if current_task and current_task.get("cube_id") == 10 else {},
                         "neighbors": {
                             path: {
                                 "position_m": np.asarray(value[0], dtype=float).tolist(),
                                 "rotation_world": np.asarray(value[1], dtype=float).tolist(),
                                 "capture_time_s": float(value[2]),
-                                "received_time_s": float(world.current_time),
+                                "received_time_s": float(value[3]),
                             }
                             for path, value in live_neighbors.items()
                         },
@@ -1266,7 +1276,7 @@ def main():
             if (issues and phase in ("B2_push_seat", "B2_push_unload")
                     and target in live_neighbors and issues[0]["kind"] == "cube_obstacle"
                     and issues[0]["b"] == target):
-                neighbor_center, neighbor_rotation, capture = live_neighbors[target]
+                neighbor_center, neighbor_rotation, capture = live_neighbors[target][:3]
                 age = float(world.current_time) - capture
                 force = np.asarray(last_force_sample[push_side]["tcp_gravity_corrected_world"][:3])
                 normal = float(-push_sign * force[0])
@@ -1291,7 +1301,7 @@ def main():
             if issues:
                 raise RuntimeError(f"Measured collision in {phase}: {issues[0]}")
 
-        def cartesian_move(side, destination, duration, phase):
+        def cartesian_move(side, destination, duration, phase, *, retarget_guide=False):
             record(phase, "RUNNING")
             start, rotation = tcp_fk(side, applied_targets[side])
             duration = max(duration, 1.875 * float(np.linalg.norm(np.asarray(destination) - start)) / .08)
@@ -1299,7 +1309,7 @@ def main():
             for t in np.linspace(0, 1, max(2, int(duration * 120))):
                 blend = 10 * t**3 - 15 * t**4 + 6 * t**5
                 target = start + blend * (np.asarray(destination) - start)
-                seed = cartesian_joint_target(side, seed, target, rotation)
+                seed = cartesian_joint_target(side, seed, target, rotation, retarget_guide=retarget_guide)
                 command_positions(side, seed)
                 step()
                 check_current_collision(phase)
@@ -1416,6 +1426,12 @@ def main():
                     if follow_side is not None:
                         follow_position, follow_rotation = tcp_fk(follow_side, applied_targets[follow_side])
                         follow_position[axis] += sign * max(0., sign * (position[axis] - previous_axis))
+                        if left_hold is not None and follow_side == support_side:
+                            # The normal-force update in step() also commands the
+                            # support arm. Keep its lateral coordinate synchronized
+                            # with the side-seating follower instead of overwriting
+                            # the follower command on the next physics tick.
+                            current_task["rear_to_side_hold_x_m"] = float(follow_position[0])
                         follow_q = cartesian_joint_target(
                             follow_side, applied_targets[follow_side], follow_position, follow_rotation)
                         command_positions(follow_side, follow_q)
@@ -1479,6 +1495,12 @@ def main():
                                                 gain_m_per_Ns=B2_CONTROLLER_PARAMETERS["unload_gain_m_per_Ns"]))
             controller.gain_m_per_Ns = B2_CONTROLLER_PARAMETERS["unload_gain_m_per_Ns"]
             initial_force = max(0.0, -sign * last_force_sample[side]["tcp_gravity_corrected_world"][axis])
+            if not np.isfinite(initial_force):
+                raise RuntimeError(f"{phase}: non-finite initial unload force for {side}")
+            # A side-seat correction can leave a real preload above the nominal
+            # 10 N controller envelope. Let the unload controller release that
+            # measured preload instead of passing an invalid target to update().
+            controller.max_force_N = max(controller.max_force_N, initial_force + .5)
             stable = 0
             for index in range(1800):
                 force = -sign * last_force_sample[side]["tcp_gravity_corrected_world"][axis]
@@ -1580,14 +1602,43 @@ def main():
             lower = np.concatenate([robots[side].dof_properties["lower"][joints[side]] for side in sides])
             upper = np.concatenate([robots[side].dof_properties["upper"][joints[side]] for side in sides])
             center, rotation = sensed_cube()
+            # Keep the planner's generic endpoint error actionable.  The
+            # collision checker already knows the exact link/tool and obstacle
+            # pair, so record those pairs before RRT-Connect raises.  This is
+            # diagnostic only and does not relax the endpoint check.
+            endpoint_diagnostics = []
+            for endpoint_name, endpoint in (("start", start), ("goal", goal)):
+                endpoint_states = {**current, **{
+                    side: endpoint[i * 7:(i + 1) * 7]
+                    for i, side in enumerate(sides)
+                }}
+                endpoint_issues = checker.check(
+                    endpoint_states,
+                    cube_center=center,
+                    cube_rotation=rotation,
+                    cup_contacts=allowed_contacts,
+                    first_only=False,
+                )
+                if endpoint_issues:
+                    endpoint_diagnostics.append({
+                        "phase": phase,
+                        "endpoint": endpoint_name,
+                        "arms": sides,
+                        "issues": endpoint_issues,
+                    })
+            if endpoint_diagnostics:
+                report.setdefault("motion_endpoint_diagnostics", []).extend(endpoint_diagnostics)
             def clear(q):
                 planning_update(planning_message)
                 states = {**current, **{side: q[i * 7:(i + 1) * 7] for i, side in enumerate(sides)}}
                 return checker.is_clear(states, cube_center=center, cube_rotation=rotation,
                                         cup_contacts=allowed_contacts)
             path = plan_collision_free_path(start, goal, clear, lower, upper)
-            paths = {side: path[:, i * 7:(i + 1) * 7] for i, side in enumerate(sides)}
-            execute_joint_path(paths, phase, max_joint_speed=0.4)
+            min_duration = duration if phase == "upper_B_withdraw_transit" else 0.
+            # The executor inserts the measured start before retiming.
+            waypoints = path[1:] if min_duration else path
+            paths = {side: waypoints[:, i * 7:(i + 1) * 7] for i, side in enumerate(sides)}
+            execute_joint_path(paths, phase, max_joint_speed=0.4, min_duration_s=min_duration)
 
         def solve(side, tcp, rotation, continuous=False, seed_override=None):
             planning_update(f"{contact_monitor.phase}: {side} IK planning")
@@ -1630,7 +1681,7 @@ def main():
 
         def execute_joint_path(paths, phase, max_joint_speed=0.4, check_step=None,
                                 moving_cube_offset=None, cube_center_path=None,
-                                prefetched_cache=None, sampled_trajectory=None):
+                                min_duration_s=0., prefetched_cache=None, sampled_trajectory=None):
             planning_update(f"{phase}: trajectory planning", force=True)
             current = joint_state()
             count = {len(path) for path in paths.values()}
@@ -1659,7 +1710,8 @@ def main():
                              if side in paths else np.tile(current[side], (next(iter(count)) + 1, 1))
                              for side in sides}
                 times, combined = plan_joint_trajectory(np.hstack([all_paths[side] for side in sides]),
-                                                        max_joint_speed=max_joint_speed, sample_hz=120.0)
+                                                        max_joint_speed=max_joint_speed,
+                                                        min_duration_s=min_duration_s, sample_hz=120.0)
                 samples = {side: combined[:, i * 7:(i + 1) * 7] for i, side in enumerate(sides)}
                 replay_source = "online_planner"
             def within_limits():
@@ -1700,7 +1752,8 @@ def main():
                     and sampled_trajectory is None):
                 # Retain the checked straight RRT edges if corner blending cuts into an obstacle.
                 times, combined = plan_joint_trajectory(np.hstack([all_paths[side] for side in sides]),
-                    max_joint_speed=max_joint_speed, sample_hz=120.0, stop_at_waypoints=True)
+                    max_joint_speed=max_joint_speed, min_duration_s=min_duration_s,
+                    sample_hz=120.0, stop_at_waypoints=True)
                 samples = {side: combined[:, i * 7:(i + 1) * 7] for i, side in enumerate(sides)}
                 if not within_limits():
                     raise RuntimeError(f"{phase} corner trajectory exceeds joint limits")
@@ -2484,7 +2537,10 @@ def main():
             frames = set()
             active_id = vision_estimator.marker_id
             started = float(world.current_time)
-            for _ in range(30):
+            # A resumed upper-row run can begin while the D455 render stream
+            # is still warming up. Keep collecting fresh frames for a bounded
+            # longer window before declaring the required neighbor pose lost.
+            for _ in range(90):
                 step(vision_period)
                 render_only()
                 frame = vision_camera.get_current_frame(clone=True)
@@ -2557,6 +2613,7 @@ def main():
                     np.asarray(row["position_m"], dtype=float),
                     np.asarray(row["rotation_world"], dtype=float),
                     float(row["capture_time_s"]),
+                    float(world.current_time),
                 )
             return observed
 

@@ -1,0 +1,102 @@
+{
+  "outcome": "SEATED_WITHOUT_LOADED_NEIGHBOR_CONTACT",
+  "runner_status": "PASS_W760_UPPER_ROW",
+  "runner_error": null,
+  "runner_active_phase": "upper_row_complete",
+  "peak_wrist_force": {
+    "physics_step": 10182,
+    "time_s": 84.86667109280825,
+    "cube_id": 11,
+    "phase": "upper_B_rear_travel",
+    "arm": "left",
+    "value": 9.20045837601356
+  },
+  "wrist_stop": null,
+  "experiment": null,
+  "entry_gate": {
+    "phase": "upper_B_straight_entry_gate",
+    "status": "CLEAR",
+    "sim_time_s": 52.75,
+    "wall_elapsed_s": 214.03638667699124,
+    "cube_position_m": [
+      0.0008648122893646359,
+      0.9896005392074585,
+      0.9369996190071106
+    ],
+    "cube_orientation_wxyz": [
+      1.0,
+      -1.7207258906637435e-07,
+      1.5076724935170205e-07,
+      -1.814133376853988e-08
+    ],
+    "cube_id": 11,
+    "left_gap_m": 0.004007789711696089,
+    "right_gap_m": 0.0010220928333586066,
+    "projected_cube_width_m": 0.15104024512227002,
+    "slot_width_m": 0.1560701276673247,
+    "left_inner_edge_x_m": -0.07745823946173146,
+    "right_inner_edge_x_m": 0.07861188820559326,
+    "observed_cube_x_m": 0.0020696728110996456,
+    "minimum_gap_per_side_m": 0.001,
+    "observed_yaw_deg": -0.39873502687062307
+  },
+  "first_push_tick": 9580,
+  "last_push_tick": 14044,
+  "expected_push_frames": 4465,
+  "valid_push_frames": 4465,
+  "state_counts": {
+    "UNKNOWN": 390,
+    "NORMAL_ADVANCE": 3975,
+    "AT_BACK_TARGET": 100
+  },
+  "seated_stable": true,
+  "push_delta_y_mm": 85.97487211227417,
+  "final_rear_gap_mm": 0.0003602734977986577,
+  "first_loaded_neighbor": null,
+  "first_loaded_neighbor_during_front_touch": null,
+  "first_native_wall_contact": {
+    "physics_step": 13939,
+    "time_s": 116.1750060589984,
+    "cube_position_m": [
+      0.001530574867501855,
+      1.0755698680877686,
+      0.9370006322860718
+    ],
+    "cube_rotation_world": [
+      [
+        0.999983618869843,
+        0.005723808096227756,
+        3.5846944936517724e-06
+      ],
+      [
+        -0.005723808204635546,
+        0.9999836183951616,
+        3.099929391537774e-05
+      ],
+      [
+        -3.4072017611129282e-06,
+        -3.1019304215663215e-05,
+        0.9999999995130968
+      ]
+    ],
+    "yaw_deg": -0.32795184361180635,
+    "rear_gap_m": -2.500297969637577e-07,
+    "valid": true,
+    "back_contact": true,
+    "left_cup_contact": true,
+    "neighbor_impulse_Ns": {},
+    "state": "AT_BACK_TARGET"
+  },
+  "first_measured_stall": null,
+  "neighbor_contact_frame_count": 0,
+  "wall_contact_frame_count": 100,
+  "reference_rules": {
+    "min_current_impulse_Ns": 1e-05,
+    "moving_window_s": 0.25,
+    "moving_min_forward_mm": 0.02,
+    "stall_window_s": 0.5,
+    "stall_max_y_span_mm": 0.04,
+    "stall_min_rear_gap_mm": 1.0,
+    "stall_min_simultaneous_neighbor_and_cup_fraction": 0.8
+  }
+}

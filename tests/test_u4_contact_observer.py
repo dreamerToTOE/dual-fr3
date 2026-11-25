@@ -1,5 +1,9 @@
+import gzip
+import json
+
 import numpy as np
 
+from fr3_contact_state_validation import ContactStateExperiment
 from test_seven_observer import CONFIG, sample
 from u4_contact_observer import REAR, SIDE, U4ContactObserver
 
@@ -12,6 +16,27 @@ def front_sample(tick, command_increment=.00010, lateral_force=.0):
     row["right_wrench_world"] = [lateral_force, -3. - 1.5*t, 0., 0., 0., 0.]
     row["right_command_y_m"] = .845 + t * command_increment
     return row
+
+
+def test_online_u4_passes_both_issued_commands_to_the_state_observer(tmp_path):
+    experiment = ContactStateExperiment(tmp_path, {**CONFIG, "floor_top_m": 0.})
+    row = front_sample(1)
+    for key in ("position_m", "cube_rotation_world"):
+        row["camera"][key] = row["camera"][key].tolist()
+    row["cup_normals_world"]["left"] = [1., 0., 0.]
+    row["tcp_positions_m"]["left"] = [-.075, .920, .075]
+    row["left_wrench_world"] = [-4., 0., 0., 0., 0., 0.]
+    right_command_y = row.pop("right_command_y_m")
+    commands = {"left": [-.074, .920, .075], "right": [0., right_command_y, .075]}
+
+    experiment.append(physics_step=1, sensors=row, truth={"cube_contacts": {"valid": False}},
+                      auxiliary={"cube_id": 10, "tcp_command_positions_m": commands})
+    assert all(len(window) == 1 for window in experiment.u4_model.base.command_windows)
+    assert experiment.u4_model.window[-1][1][0] == right_command_y
+    for stream in [*experiment.streams.values(), experiment.u4_stream]:
+        stream.close()
+    with gzip.open(tmp_path / "sensor_inputs.jsonl.gz", "rt") as stream:
+        assert json.loads(next(stream))["tcp_command_positions_m"] == commands
 
 
 def test_independent_axes_require_current_wrist_evidence():

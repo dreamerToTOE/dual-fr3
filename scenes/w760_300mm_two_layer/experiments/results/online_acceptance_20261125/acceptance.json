@@ -1,0 +1,209 @@
+{
+  "protocol": "Sequential single headless Isaac Sim runs from measured checkpoints",
+  "lower_front_five_cube_withdrawals": "lower_front_withdrawal_metrics.json",
+  "upper_retreats": [
+    {
+      "slot": 1,
+      "run_report": "upper1/runner_report.json",
+      "withdrawal_arms": [
+        "left",
+        "right"
+      ],
+      "planned_sim_duration_s": 3.0,
+      "first_physics_step": 24926,
+      "last_physics_step": 25286,
+      "collision_checked_samples": 361,
+      "unexpected_physx_contacts": 0,
+      "both_arms_measured_moving_samples": 352,
+      "peak_force_N": {
+        "left": 0.20519410860496254,
+        "right": 2.244467085415073
+      },
+      "peak_torque_Nm": {
+        "left": 0.007638884161592548,
+        "right": 0.08767429319983182
+      },
+      "release_dwell_peak_force_N": {
+        "left": 1.0627434605714927,
+        "right": 6.678785297616209
+      },
+      "cube_start_to_end_shift_mm": 0.001042655449183935,
+      "final_position_error_mm": 0.4852703822291496,
+      "support": {
+        "positive_steps": 60,
+        "median_contact_impulse_Ns": 0.10236524678170501,
+        "samples": 60
+      },
+      "input_checkpoint": "upper1/input_checkpoint.json"
+    },
+    {
+      "slot": 2,
+      "run_report": "upper2/runner_report.json",
+      "withdrawal_arms": [
+        "left",
+        "right"
+      ],
+      "planned_sim_duration_s": 3.0,
+      "first_physics_step": 12376,
+      "last_physics_step": 12736,
+      "collision_checked_samples": 361,
+      "unexpected_physx_contacts": 0,
+      "both_arms_measured_moving_samples": 352,
+      "peak_force_N": {
+        "left": 1.7817877517449792,
+        "right": 0.009162894372614108
+      },
+      "peak_torque_Nm": {
+        "left": 0.06638178995945143,
+        "right": 0.0004217791058894204
+      },
+      "release_dwell_peak_force_N": {
+        "left": 6.534513054710635,
+        "right": 0.827906044336298
+      },
+      "cube_start_to_end_shift_mm": 0.0058764255256015,
+      "final_position_error_mm": 0.7388422005780583,
+      "support": {
+        "positive_steps": 60,
+        "median_contact_impulse_Ns": 0.10219596837512739,
+        "samples": 60
+      },
+      "input_checkpoint": "upper2/input_checkpoint.json"
+    },
+    {
+      "slot": 3,
+      "run_report": "upper3/runner_report.json",
+      "withdrawal_arms": [
+        "left",
+        "right"
+      ],
+      "planned_sim_duration_s": 3.0,
+      "first_physics_step": 8917,
+      "last_physics_step": 9277,
+      "collision_checked_samples": 361,
+      "unexpected_physx_contacts": 0,
+      "both_arms_measured_moving_samples": 350,
+      "peak_force_N": {
+        "left": 0.19868000820579712,
+        "right": 2.2296137240323
+      },
+      "peak_torque_Nm": {
+        "left": 0.008945937843020427,
+        "right": 0.07964688635129062
+      },
+      "release_dwell_peak_force_N": {
+        "left": 0.8458525707684271,
+        "right": 7.876677823338969
+      },
+      "cube_start_to_end_shift_mm": 0.005535295018731632,
+      "final_position_error_mm": 2.3301183121965368,
+      "support": {
+        "positive_steps": 60,
+        "median_contact_impulse_Ns": 0.1085370161689163,
+        "samples": 60
+      },
+      "input_checkpoint": "upper3/input_checkpoint.json"
+    },
+    {
+      "slot": 4,
+      "run_report": "upper4/runner_report.json",
+      "withdrawal_arms": [
+        "left",
+        "right"
+      ],
+      "planned_sim_duration_s": 3.0,
+      "first_physics_step": 14806,
+      "last_physics_step": 15166,
+      "collision_checked_samples": 361,
+      "unexpected_physx_contacts": 0,
+      "both_arms_measured_moving_samples": 350,
+      "peak_force_N": {
+        "left": 0.00416041184142237,
+        "right": 0.14032428508313657
+      },
+      "peak_torque_Nm": {
+        "left": 0.0001756393547650485,
+        "right": 0.005554195687335299
+      },
+      "release_dwell_peak_force_N": {
+        "left": 4.016685672209666e-06,
+        "right": 7.2099860028658425
+      },
+      "cube_start_to_end_shift_mm": 0.006048036047919188,
+      "final_position_error_mm": 0.669531698581326,
+      "support": {
+        "positive_steps": 60,
+        "median_contact_impulse_Ns": 0.10218897212449654,
+        "samples": 60
+      },
+      "input_checkpoint": "upper4/input_checkpoint.json"
+    },
+    {
+      "slot": 5,
+      "run_report": "upper5/runner_report.json",
+      "withdrawal_arms": [
+        "left"
+      ],
+      "planned_sim_duration_s": 3.0,
+      "first_physics_step": 14057,
+      "last_physics_step": 14417,
+      "collision_checked_samples": 361,
+      "unexpected_physx_contacts": 0,
+      "both_arms_measured_moving_samples": 0,
+      "peak_force_N": {
+        "left": 0.07597361521108541,
+        "right": 4.844082703792969e-07
+      },
+      "peak_torque_Nm": {
+        "left": 0.003073935415156086,
+        "right": 6.048296236425657e-08
+      },
+      "release_dwell_peak_force_N": {
+        "left": 7.360180119809678,
+        "right": 3.7034578547632415e-07
+      },
+      "cube_start_to_end_shift_mm": 0.003239616862561159,
+      "final_position_error_mm": 0.9916852256645504,
+      "support": {
+        "positive_steps": 60,
+        "median_contact_impulse_Ns": 0.10107637895496652,
+        "samples": 60
+      },
+      "input_checkpoint": "upper5/input_checkpoint.json"
+    }
+  ],
+  "end_of_row_report": "upper5/runner_report.json",
+  "upper4_s5_s6_full_metrics": "upper4/acceptance_metrics.json",
+  "upper4_s5_s6": {
+    "S5": {
+      "true": 3404,
+      "predicted_on_known": 1831,
+      "tp": 1693,
+      "tp_exact_objects": 1693,
+      "unknown_on_true": 298,
+      "precision": 0.9246313489896232,
+      "recall": 0.4973560517038778,
+      "f1": 0.6468003820439351,
+      "false_positive_rate": 0.03042328042328042
+    },
+    "S6": {
+      "true": 138,
+      "predicted_on_known": 89,
+      "tp": 89,
+      "tp_exact_objects": 89,
+      "unknown_on_true": 0,
+      "precision": 1.0,
+      "recall": 0.644927536231884,
+      "f1": 0.7841409691629956,
+      "false_positive_rate": 0.0
+    }
+  },
+  "upper4_s6_first_3_sample_confirmation": {
+    "state": "S6",
+    "truth_first_step": 14668,
+    "truth_last_step": 14805,
+    "duration_s": 1.15,
+    "first_3step_estimate_confirmation": 14719,
+    "delay_s": 0.425
+  }
+}

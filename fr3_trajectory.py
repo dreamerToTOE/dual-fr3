@@ -78,6 +78,7 @@ def plan_joint_trajectory(
     *,
     max_joint_speed: float = 0.8,
     min_segment_time_s: float = 0.08,
+    min_duration_s: float = 0.0,
     sample_hz: float = 120.0,
     stop_at_waypoints: bool = False,
 ):
@@ -86,6 +87,7 @@ def plan_joint_trajectory(
     The path is time-parameterized by the largest joint displacement in each
     segment.  Centered knot velocities remove the stop/start behavior caused
     by issuing one target and waiting before issuing the next target.
+    A minimum duration stretches the schedule without changing the waypoints.
     """
     q = np.asarray(joint_path, dtype=float)
     if q.ndim != 2 or q.shape[0] < 2 or q.shape[1] == 0:
@@ -94,12 +96,15 @@ def plan_joint_trajectory(
         raise ValueError("joint_path contains non-finite values")
     if max_joint_speed <= 0 or min_segment_time_s <= 0 or sample_hz <= 0:
         raise ValueError("trajectory timing parameters must be positive")
+    if not np.isfinite(min_duration_s) or min_duration_s < 0.0:
+        raise ValueError("minimum trajectory duration must be finite and nonnegative")
 
     displacement = np.max(np.abs(np.diff(q, axis=0)), axis=1)
     # Cubic blending briefly exceeds the endpoint slope when it ramps a
     # segment in or out.  Leave a 1.5x timing margin so the sampled motion
     # remains below max_joint_speed instead of creating a hidden speed spike.
     durations = np.maximum(float(min_segment_time_s), 1.5 * displacement / float(max_joint_speed))
+    durations *= max(1.0, min_duration_s / float(durations.sum()))
     knot_times = np.concatenate(([0.0], np.cumsum(durations)))
 
     # Zero endpoint velocities prevent an approach/retraction impulse.  The

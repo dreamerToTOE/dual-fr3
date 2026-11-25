@@ -148,6 +148,7 @@ class ContactStateExperiment:
                            if not key.startswith("u4_support_")}
         outputs = {mode: model.update(**generic_sensors) for mode, model in self.models.items()}
         u4_output = None
+        logged_sensors = sensors
         if auxiliary and auxiliary.get("cube_id") == 10:
             if self.u4_model is None:
                 experiments = Path(__file__).parent / "scenes" / "w760_300mm_two_layer" / "experiments"
@@ -156,16 +157,23 @@ class ContactStateExperiment:
                 self.u4_model = U4ContactObserver(self.config, handover=True)
                 self.u4_stream = gzip.open(self.directory / "u4_handover.jsonl.gz", "wt")
             u4_sensors = dict(sensors)
-            if auxiliary.get("right_command_y_m") is not None:
+            commands = auxiliary.get("tcp_command_positions_m", {})
+            if commands:
+                u4_sensors["tcp_command_positions_m"] = commands
+            right_command = commands.get("right")
+            if right_command is not None:
+                u4_sensors["right_command_y_m"] = right_command[1]
+            elif auxiliary.get("right_command_y_m") is not None:
                 u4_sensors["right_command_y_m"] = auxiliary["right_command_y_m"]
             u4_output = self.u4_model.update(u4_sensors, auxiliary.get("neighbors", {}))
             self.u4_predictions.append(u4_output)
+            logged_sensors = {**u4_sensors, "optical_neighbors": auxiliary.get("neighbors", {})}
         reference = reference_state(truth, self.config)
         common = {"physics_step": physics_step, "time_s": sensors["time_s"]}
         prediction_row = dict(outputs)
         if u4_output is not None:
             prediction_row["u4_handover"] = u4_output
-        for name, row in (("sensor_inputs", sensors), ("reference", {**truth, **reference}),
+        for name, row in (("sensor_inputs", logged_sensors), ("reference", {**truth, **reference}),
                           ("predictions", prediction_row)):
             self.streams[name].write(json.dumps({**common, **row}, allow_nan=False) + "\n")
         if self.u4_stream is not None and u4_output is not None:
