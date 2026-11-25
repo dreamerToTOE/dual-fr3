@@ -18,6 +18,17 @@
 
 完整测试运行包括 `fresh_a_01`、`fresh_a_02`、`fresh_a_03`、`fresh_u4_03_minus_040mm`、`fresh_u5_01_yaw_000` 和 `fresh_u5_02_yaw_035`。每条运行的命令、断点 SHA256、状态和停止原因记录在 `thesis_run_manifest.json`。
 
+## 复算
+
+[评分清单](thesis_test_manifest.json)引用同目录下的配对数据，包含观测、指令和独立 PhysX 真值。开发与验证的指令来自原始腕力日志，经原有 FK 脚本恢复。验证清单保留两次对同一第 5 箱运行的历史回放，共用一份输入。六次独立测试使用原始评分输入。
+
+从仓库根目录用带 NumPy 的 Python 执行下列命令即可复算所有指标。
+
+```bash
+e=scenes/w760_300mm_two_layer/experiments
+python3 "$e/thesis_metrics.py" "$e/results/thesis_test_manifest.json" /tmp/fr3-thesis-metrics.json
+```
+
 ## 三种观测线总体对比
 
 | 观测线 | 识别成功率 | coverage |

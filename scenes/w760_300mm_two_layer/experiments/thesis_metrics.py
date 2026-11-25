@@ -194,7 +194,10 @@ def run(manifest_path: Path, output: Path):
         if name in seen:
             raise ValueError(f"Duplicate run name: {name}")
         seen.add(name)
-        header, rows = load_clip(Path(entry["path"]))
+        clip_path = Path(entry["path"])
+        if manifest.get("schema_version") == 2:
+            clip_path = manifest_path.parent / clip_path
+        header, rows = load_clip(clip_path)
         traces = classify(header, rows)
         run_reports.append({
             "name": name,
