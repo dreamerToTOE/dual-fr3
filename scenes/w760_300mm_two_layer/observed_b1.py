@@ -15,7 +15,8 @@ def install(source):
                     and np.linalg.norm(error[3:]) / .2 < angle_limit):
                 return fit.x''')
     anchor = '        def solve(side, tcp, rotation, continuous=False, seed_override=None):'
-    source = replace_once(source, anchor, '''        def move_to_observed_precontact(arm, destination, attitude, phase, ik_hint=None):
+    source = replace_once(source, anchor, '''        def move_to_observed_precontact(arm, destination, attitude, phase, ik_hint=None,
+                                        *, prefer_hint=False):
             measured = joint_state()
             tool, tool_rotation = tcp_fk(arm, measured[arm])
             center, rotation = sensed_cube()
@@ -23,11 +24,11 @@ def install(source):
                    measured_tcp_m=tool.tolist(), measured_tcp_rotation=tool_rotation.tolist(),
                    measured_joints_rad=measured[arm].tolist(), measured_rail_y_m=float(rail_states[arm][1]),
                    observed_cube_m=center.tolist(), precontact_tcp_m=destination.tolist())
-            guesses = [measured[arm]]
+            guesses = [("measured_joints", measured[arm])]
             if ik_hint is not None:
-                guesses.append(np.asarray(ik_hint, dtype=float))
+                guesses.insert(0 if prefer_hint else 1, ("posture_hint", np.asarray(ik_hint, dtype=float)))
             failures = []
-            for guess in guesses:
+            for seed_source, guess in guesses:
                 try:
                     # Keep the fit tighter than the measured arrival gate (1 mm, about 14 mrad).
                     q = cartesian_joint_target(arm, guess, destination, attitude, retarget_guide=True,
@@ -54,7 +55,8 @@ def install(source):
                             frame_error = float(np.linalg.norm(actual_attitude - attitude))
                             if error <= .001 and frame_error <= .02:
                                 record(phase, "PRECONTACT_REACHED", arm=arm, measured_tcp_m=position.tolist(),
-                                       position_error_m=error, orientation_matrix_error=frame_error)
+                                       position_error_m=error, orientation_matrix_error=frame_error,
+                                       ik_seed_source=seed_source)
                                 return
                             step()
                             check_current_collision(phase)
@@ -70,7 +72,7 @@ def install(source):
     source = source[:start] + '''                    hint = (outside_plan["b1_q"] if outside_plan is not None
                             else third_box_seed if slot == 3 else None)
                     move_to_observed_precontact(support_side, contact, front_tool_rotation,
-                                                "front_B1_observed_approach", hint)
+                                                "front_B1_observed_approach", hint, prefer_hint=slot == 2)
 ''' + source[end:]
     for arm, point, attitude in (("push_side", "high", "side_tool"),
                                  ("push_side", "target", "side_tool"),
@@ -105,6 +107,14 @@ def install(source):
                     move({support_side: np.asarray(CONFIG["fr3"]["official_start_q_rad"])})''',
                           '''                    # The just-cleared wrist provides a local IK seed for this face.
                     reapproach_seed = (side_resume or {}).get("cleared_wrist_q_rad", joint_state()[support_side])
+                    if not side_resume:
+                        center, attitude = sensed_cube()
+                        save_front_checkpoint(slot, upper_pose_records({str(current_task["cube_id"]): cube})[0],
+                            side_seat={"cube_id": current_task["cube_id"], "source_step": tick,
+                                       "cube_start_rgb": cube_start.tolist(), "lateral_progress_m": progress,
+                                       "side_seat": evidence["side_seat"], "estimated_center_m": center.tolist(),
+                                       "estimated_rotation_world": attitude.tolist(),
+                                       "cleared_wrist_q_rad": np.asarray(reapproach_seed).tolist()})
                     record("B2_stage_camera_clear", "RUNNING", arms=list(robots))
                     move({arm: np.asarray(CONFIG["fr3"]["official_start_q_rad"]) for arm in robots})''')
     source = replace_once(source, '''                if slot in (1, 2, 3):
@@ -119,4 +129,11 @@ def install(source):
                                    3., "B2_stage_rear_pretouch")
                     allowed_contacts.add(support_side)''',
                           '''                    allowed_contacts.add(support_side)''')
+    source = replace_once(source, '        def save_front_checkpoint(next_front, landed=None):',
+                          '        def save_front_checkpoint(next_front, landed=None, *, side_seat=None):')
+    source = replace_once(source, '''            name = "front_landing_checkpoint.json" if landed else "front_row_checkpoint.json"''',
+                          '''            name = "front_landing_checkpoint.json" if landed else "front_row_checkpoint.json"
+            if side_seat is not None:
+                data["front_side"] = side_seat
+                name = "front_side_checkpoint.json"''')
     return source

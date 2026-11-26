@@ -40,6 +40,10 @@
 
 从 F1 就位断点开始。D455 拟合供料箱位，左腕吸后面、右腕吸前面。整段导轨搬运的 9,324 个物理采样点均保持两杯吸附。落稳开杯后，两腕分别实测外撤 2.784 mm、2.786 mm，触发 S0。PhysX 在该时刻确认两杯分离，地板承载 12.26 N。B1 用落箱后的相机观测和右腕实测关节位置生成接近路径，实测 TCP 误差小于 1 mm 后进入贴面，随后沿 +Y 推至横推区。 [F2 运行证据](validation/observed/front2_progress.json) · [F2 landing 断点](validation/observed/front2_landing_checkpoint.json) · [F2 B1 完成断点](validation/observed/front2_b1_checkpoint.json)
 
+首次 B2 在横推前被避障检查拦截。计划样本中右臂第 6 连杆距右墙仅 1.879 mm，低于既有 2 mm 规划余量。PhysX 未记录非预期接触。复验从 landing 断点出发，在 B1 优先采用历史可行构型作 IK 初值。仍用当前相机拟合箱面生成目标，用实测关节位置开始 RRTConnect。横推的 1,801 个采样点通过避障检查。
+
+F2 由左臂横推至右墙，确认两杯分离后双臂 RRTConnect 清场，重新观测箱位，再由右臂沿 +Y 推至 `Cube_2`。右墙和目标后排箱均各有 24/24 帧的对应承载记录。最终 S0 在右腕实测外撤 3.137 mm 时确认，PhysX 同步确认两杯无接触、地面承载 12.26 N。F2 从 landing 到就位验收通过，非预期接触为零，可从生成的断点选中 F3 `Cube_13`。 [F2 就位断点](validation/observed/front2_complete_checkpoint.json)
+
 ### U5 上层第 5 箱
 
 从带 14 个已码箱的实测 landing 断点出发。相机拟合的两侧槽隙为 4.54 mm 和 3.92 mm，左臂根据观测和实测关节生成 RRTConnect 路径，实测 TCP 误差达到 0.966 mm 后开始贴面。沿 +Y 推进 86.65 mm，横向位移全幅 1.54 mm。确认后墙承载时，PhysX 同步参考为 6.02 N。
