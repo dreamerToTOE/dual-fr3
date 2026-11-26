@@ -126,11 +126,12 @@ REAR_BODY = '''
                 if follower is not None:
                     follow_q = applied_targets[follower].copy()
                     follow_tip, follow_attitude = tcp_fk(follower, follow_q)
-                # The lateral wall stiffness rises over fewer samples than the rear approach.
-                window = deque(maxlen=19 if axis == 0 else 61)
-                average_count = 4 if axis == 0 else 8
-                min_advance = .000012 if axis == 0 else .00004
-                max_tracking_ratio = .45 if axis == 0 else .35
+                # R3's rear contact rises on the same timescale as the lateral wall contacts.
+                short_window = axis == 0 or slot == 3
+                window = deque(maxlen=19 if short_window else 61)
+                average_count = 4 if short_window else 8
+                min_advance = .000012 if short_window else .00004
+                max_tracking_ratio = .45 if short_window else .35
                 extended_terminal = axis == 0 or slot in (2, 3)
                 for _ in range(3600):
                     center, rotation = sensed_cube()
@@ -198,9 +199,10 @@ REAR_BODY = '''
                     guide = json.loads((ROOT / "validation/fr3_row_b2_final_feasibility.json").read_text())
                     case = next(case for case in guide["cases"] if case["cube_id"] == slot)
                     hint = case["precontact_q"][arm]
+                margin = .003 if slot == 3 and axis == 0 else .002
                 move_to_observed_precontact(arm, destination, rotation @ tool, f"rear_{slot}_B1_approach", hint,
                                             prefer_hint=rear2_lateral_entry or neighbor_entry
-                                            or (axis == 1 and hint is not None))
+                                            or (axis == 1 and hint is not None), planning_margin_m=margin)
                 if not allowed_contacts:
                     set_contact_drive_mode(True)
                 allowed_contacts.add(arm)

@@ -592,15 +592,27 @@
       }
     ],
     "physx_at_rear_wall_confirmation": {
-      "native_physics_step": 7516,
-      "physics_step": 7514,
-      "time_s": 62.63333659991622,
+      "physics_step": 7516,
+      "native_physics_step": 7518,
+      "native_time_s": 62.65000326745212,
       "load_N_by_label": {
-        "floor": 13.558495827019215,
-        "wall_back": 4.238619357347488,
-        "right_cup": 6.990067598809043
+        "floor": 12.94531088322401,
+        "wall_back": 4.194104969501495,
+        "right_cup": 6.865062835941187
       },
-      "rear_wall_gap_m": -4.805563055820805e-08
+      "tool_contact": {
+        "left": false,
+        "right": true
+      },
+      "attachments": {
+        "left": false,
+        "right": false
+      },
+      "wall_gaps_m": {
+        "wall_back": -1.2830442028266553e-07,
+        "wall_left": 0.3495144818424169,
+        "wall_right": 0.2604433123468343
+      }
     },
     "unexpected_contacts": 0,
     "first_collision": null
@@ -629,11 +641,11 @@
         ],
         "cube_id": 2,
         "physx_reference": {
-          "physics_step": 166,
-          "native_physics_step": 168,
-          "event_time_difference_s": 7.301568993867136e-08,
+          "physics_step": 168,
+          "native_physics_step": 170,
+          "native_time_s": 1.416666740551591,
           "load_N_by_label": {
-            "floor": 12.262503057718277,
+            "floor": 12.262500822544098,
             "wall_back": 0.0
           },
           "tool_contact": {
@@ -645,9 +657,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": 0.002566550689721697,
-            "wall_left": 0.3492067840492415,
-            "wall_right": 0.2603925701772856
+            "wall_back": 0.002566552046739154,
+            "wall_left": 0.3492067887669187,
+            "wall_right": 0.2603925748949628
           }
         }
       },
@@ -712,11 +724,11 @@
           0.791
         ],
         "physx_reference": {
-          "physics_step": 2491,
-          "native_physics_step": 2493,
-          "event_time_difference_s": 1.0835006847287332e-06,
+          "physics_step": 2493,
+          "native_physics_step": 2495,
+          "native_time_s": 20.791667751036584,
           "load_N_by_label": {
-            "floor": 12.26250171661377,
+            "floor": 12.26249948143959,
             "wall_back": 0.0
           },
           "tool_contact": {
@@ -728,9 +740,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": 0.0025665495826899948,
-            "wall_left": 0.34920678456654713,
-            "wall_right": 0.26039257814517186
+            "wall_back": 0.0025665509244068158,
+            "wall_left": 0.3492067855427646,
+            "wall_right": 0.2603925716708087
           }
         }
       },
@@ -761,11 +773,11 @@
         "orientation_matrix_error": 0.007312950954153085,
         "ik_seed_source": "posture_hint",
         "physx_reference": {
-          "physics_step": 4267,
-          "native_physics_step": 4269,
-          "event_time_difference_s": 1.8553808303067854e-06,
+          "physics_step": 4269,
+          "native_physics_step": 4271,
+          "native_time_s": 35.591668522916734,
           "load_N_by_label": {
-            "floor": 12.262501940131187,
+            "floor": 12.262499704957008,
             "wall_back": 0.0
           },
           "tool_contact": {
@@ -777,9 +789,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": 0.0025665522636538485,
-            "wall_left": 0.3492067885103127,
-            "wall_right": 0.26039257463835686
+            "wall_back": 0.002566546135437664,
+            "wall_left": 0.3492067857832455,
+            "wall_right": 0.2603925719112896
           }
         }
       },
@@ -801,11 +813,11 @@
         ],
         "cube_id": 2,
         "physx_reference": {
-          "physics_step": 4267,
-          "native_physics_step": 4269,
-          "event_time_difference_s": 1.8553808303067854e-06,
+          "physics_step": 4269,
+          "native_physics_step": 4271,
+          "native_time_s": 35.591668522916734,
           "load_N_by_label": {
-            "floor": 12.262501940131187,
+            "floor": 12.262499704957008,
             "wall_back": 0.0
           },
           "tool_contact": {
@@ -817,9 +829,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": 0.0025665522636538485,
-            "wall_left": 0.3492067885103127,
-            "wall_right": 0.26039257463835686
+            "wall_back": 0.002566546135437664,
+            "wall_left": 0.3492067857832455,
+            "wall_right": 0.2603925719112896
           }
         }
       },
@@ -842,13 +854,13 @@
         "cube_id": 2,
         "target": "wall_back",
         "physx_reference": {
-          "physics_step": 6058,
-          "native_physics_step": 6060,
-          "event_time_difference_s": 2.6337802410125732e-06,
+          "physics_step": 6060,
+          "native_physics_step": 6062,
+          "native_time_s": 50.51666930131614,
           "load_N_by_label": {
-            "floor": 12.178490906953812,
+            "floor": 12.084439639002085,
             "wall_back": 0.0,
-            "right_cup": 1.651144699898991
+            "right_cup": 1.5418893318485927
           },
           "tool_contact": {
             "left": false,
@@ -859,9 +871,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": 0.0025651372101742204,
-            "wall_left": 0.3492067596662403,
-            "wall_right": 0.26039306733492623
+            "wall_back": 0.002565142315328936,
+            "wall_left": 0.34920675027077464,
+            "wall_right": 0.26039308029120234
           }
         }
       },
@@ -889,13 +901,13 @@
         "encoder_advance_m": 1.8071152595444673e-05,
         "force_rise_N": 1.043305165739917,
         "physx_reference": {
-          "physics_step": 7514,
-          "native_physics_step": 7516,
-          "event_time_difference_s": 3.2665828868516655e-06,
+          "physics_step": 7516,
+          "native_physics_step": 7518,
+          "native_time_s": 62.65000326745212,
           "load_N_by_label": {
-            "floor": 13.558495827019215,
-            "wall_back": 4.238619357347488,
-            "right_cup": 6.990067598809043
+            "floor": 12.94531088322401,
+            "wall_back": 4.194104969501495,
+            "right_cup": 6.865062835941187
           },
           "tool_contact": {
             "left": false,
@@ -906,9 +918,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": -4.805563055820805e-08,
-            "wall_left": 0.34951453388018217,
-            "wall_right": 0.26044323027414884
+            "wall_back": -1.2830442028266553e-07,
+            "wall_left": 0.3495144818424169,
+            "wall_right": 0.2604433123468343
           }
         }
       },
@@ -973,13 +985,13 @@
           0.807
         ],
         "physx_reference": {
-          "physics_step": 7538,
-          "native_physics_step": 7540,
-          "event_time_difference_s": 3.277013696845188e-06,
+          "physics_step": 7540,
+          "native_physics_step": 7542,
+          "native_time_s": 62.850003277882934,
           "load_N_by_label": {
-            "floor": 11.926186457276344,
+            "floor": 12.089803218841553,
             "wall_back": 0.0,
-            "right_cup": 0.7615458343249516
+            "right_cup": 0.7490678064423129
           },
           "tool_contact": {
             "left": false,
@@ -990,9 +1002,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": 5.850773769772166e-07,
-            "wall_left": 0.34951473437125474,
-            "wall_right": 0.2604424547391632
+            "wall_back": 4.863550737699285e-07,
+            "wall_left": 0.3495147656338352,
+            "wall_right": 0.26044235934187354
           }
         }
       },
@@ -1023,13 +1035,13 @@
         "orientation_matrix_error": 0.006284142905461446,
         "ik_seed_source": "posture_hint",
         "physx_reference": {
-          "physics_step": 8900,
-          "native_physics_step": 8902,
-          "event_time_difference_s": 3.868962323849701e-06,
+          "physics_step": 8902,
+          "native_physics_step": 8904,
+          "native_time_s": 74.20000386983156,
           "load_N_by_label": {
-            "floor": 11.468613669276237,
-            "wall_back": 1.403147694800282,
-            "right_cup": 1.8590339978744905
+            "floor": 12.150176614522934,
+            "wall_back": 1.6014742758125067,
+            "right_cup": 2.074100178188316
           },
           "tool_contact": {
             "left": false,
@@ -1040,9 +1052,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": -1.0604273098513417e-07,
-            "wall_left": 0.35204441382154433,
-            "wall_right": 0.25787122084363906
+            "wall_back": -2.3602396596877906e-07,
+            "wall_left": 0.3520444606246329,
+            "wall_right": 0.25787118569034106
           }
         }
       },
@@ -1064,13 +1076,13 @@
         ],
         "cube_id": 2,
         "physx_reference": {
-          "physics_step": 8900,
-          "native_physics_step": 8902,
-          "event_time_difference_s": 3.868962323849701e-06,
+          "physics_step": 8902,
+          "native_physics_step": 8904,
+          "native_time_s": 74.20000386983156,
           "load_N_by_label": {
-            "floor": 11.468613669276237,
-            "wall_back": 1.403147694800282,
-            "right_cup": 1.8590339978744905
+            "floor": 12.150176614522934,
+            "wall_back": 1.6014742758125067,
+            "right_cup": 2.074100178188316
           },
           "tool_contact": {
             "left": false,
@@ -1081,9 +1093,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": -1.0604273098513417e-07,
-            "wall_left": 0.35204441382154433,
-            "wall_right": 0.25787122084363906
+            "wall_back": -2.3602396596877906e-07,
+            "wall_left": 0.3520444606246329,
+            "wall_right": 0.25787118569034106
           }
         }
       },
@@ -1105,14 +1117,14 @@
         ],
         "cube_id": 2,
         "physx_reference": {
-          "physics_step": 10802,
-          "native_physics_step": 10804,
-          "event_time_difference_s": 4.695604246762741e-06,
+          "physics_step": 10804,
+          "native_physics_step": 10806,
+          "native_time_s": 90.05000469647348,
           "load_N_by_label": {
-            "floor": 14.60647065192461,
+            "floor": 12.596476189792156,
             "wall_back": 0.0,
-            "left_cup": 5.858528718075376,
-            "right_cup": 1.8426188518668398
+            "left_cup": 5.51086646470039,
+            "right_cup": 1.9571900854534205
           },
           "tool_contact": {
             "left": true,
@@ -1123,9 +1135,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": 1.2980819267122135e-06,
-            "wall_left": 0.3520543099672396,
-            "wall_right": 0.2578668044240076
+            "wall_back": 3.75146739932386e-06,
+            "wall_left": 0.35206201428843337,
+            "wall_right": 0.25786514336539107
           }
         }
       },
@@ -1151,14 +1163,14 @@
           "left": 1.0906578516534584
         },
         "physx_reference": {
-          "physics_step": 10950,
-          "native_physics_step": 10952,
-          "event_time_difference_s": 4.75992759163546e-06,
+          "physics_step": 10952,
+          "native_physics_step": 10954,
+          "native_time_s": 91.28333809413016,
           "load_N_by_label": {
-            "floor": 12.349714525043964,
+            "floor": 11.717597544193268,
             "wall_back": 0.0,
-            "left_cup": 1.1495388918328648,
-            "right_cup": 1.9379734058713303
+            "left_cup": 1.0265077421224191,
+            "right_cup": 1.9949424131223528
           },
           "tool_contact": {
             "left": true,
@@ -1169,9 +1181,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": 6.733408916353989e-06,
-            "wall_left": 0.35207688130140335,
-            "wall_right": 0.2578605941653255
+            "wall_back": 6.470619148948864e-06,
+            "wall_left": 0.3520768227749394,
+            "wall_right": 0.2578606175952481
           }
         }
       },
@@ -1195,14 +1207,14 @@
         "arm": "left",
         "follower": "right",
         "physx_reference": {
-          "physics_step": 10950,
-          "native_physics_step": 10952,
-          "event_time_difference_s": 4.75992759163546e-06,
+          "physics_step": 10952,
+          "native_physics_step": 10954,
+          "native_time_s": 91.28333809413016,
           "load_N_by_label": {
-            "floor": 12.349714525043964,
+            "floor": 11.717597544193268,
             "wall_back": 0.0,
-            "left_cup": 1.1495388918328648,
-            "right_cup": 1.9379734058713303
+            "left_cup": 1.0265077421224191,
+            "right_cup": 1.9949424131223528
           },
           "tool_contact": {
             "left": true,
@@ -1213,9 +1225,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": 6.733408916353989e-06,
-            "wall_left": 0.35207688130140335,
-            "wall_right": 0.2578605941653255
+            "wall_back": 6.470619148948864e-06,
+            "wall_left": 0.3520768227749394,
+            "wall_right": 0.2578606175952481
           }
         }
       },
@@ -1238,14 +1250,14 @@
         "cube_id": 2,
         "target": "wall_right",
         "physx_reference": {
-          "physics_step": 15102,
-          "native_physics_step": 15104,
-          "event_time_difference_s": 6.564458217894753e-06,
+          "physics_step": 15104,
+          "native_physics_step": 15106,
+          "native_time_s": 125.88333989866078,
           "load_N_by_label": {
-            "floor": 9.85671266913414,
-            "wall_back": 2.042348189279437,
-            "left_cup": 4.78111488531933,
-            "right_cup": 2.0464166253810676
+            "floor": 9.826705902814865,
+            "wall_back": 2.5567582435905933,
+            "left_cup": 4.681054358774894,
+            "right_cup": 2.0415774732844385
           },
           "tool_contact": {
             "left": true,
@@ -1256,9 +1268,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": 2.818550519922969e-07,
-            "wall_left": 0.6048531512048894,
-            "wall_right": 0.005107877614801498
+            "wall_back": 4.0645488162682764e-07,
+            "wall_left": 0.6048545735381079,
+            "wall_right": 0.005106558134360409
           }
         }
       },
@@ -1286,15 +1298,15 @@
         "encoder_advance_m": 6.739427242052898e-06,
         "force_rise_N": 1.285821472658152,
         "physx_reference": {
-          "physics_step": 17047,
-          "native_physics_step": 17049,
-          "event_time_difference_s": 7.409788679524354e-06,
+          "physics_step": 17049,
+          "native_physics_step": 17051,
+          "native_time_s": 142.09167407732457,
           "load_N_by_label": {
-            "floor": 10.449998080730438,
-            "wall_back": 3.247851928099408,
-            "wall_right": 1.8232939951121807,
-            "left_cup": 6.928423995225503,
-            "right_cup": 1.8627290055158572
+            "floor": 9.886247366666794,
+            "wall_back": 3.5210617425036617,
+            "wall_right": 1.9942227378487587,
+            "left_cup": 6.408134926047918,
+            "right_cup": 1.9301323592663315
           },
           "tool_contact": {
             "left": true,
@@ -1305,9 +1317,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": 3.3003808055931394e-07,
-            "wall_left": 0.6099825687218107,
-            "wall_right": 7.818225986055971e-08
+            "wall_back": 2.6808428407743e-08,
+            "wall_left": 0.6099853169420971,
+            "wall_right": -9.422504762546247e-08
           }
         }
       },
@@ -1329,15 +1341,15 @@
         ],
         "cube_id": 2,
         "physx_reference": {
-          "physics_step": 17047,
-          "native_physics_step": 17049,
-          "event_time_difference_s": 7.409788679524354e-06,
+          "physics_step": 17049,
+          "native_physics_step": 17051,
+          "native_time_s": 142.09167407732457,
           "load_N_by_label": {
-            "floor": 10.449998080730438,
-            "wall_back": 3.247851928099408,
-            "wall_right": 1.8232939951121807,
-            "left_cup": 6.928423995225503,
-            "right_cup": 1.8627290055158572
+            "floor": 9.886247366666794,
+            "wall_back": 3.5210617425036617,
+            "wall_right": 1.9942227378487587,
+            "left_cup": 6.408134926047918,
+            "right_cup": 1.9301323592663315
           },
           "tool_contact": {
             "left": true,
@@ -1348,9 +1360,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": 3.3003808055931394e-07,
-            "wall_left": 0.6099825687218107,
-            "wall_right": 7.818225986055971e-08
+            "wall_back": 2.6808428407743e-08,
+            "wall_left": 0.6099853169420971,
+            "wall_right": -9.422504762546247e-08
           }
         }
       },
@@ -1378,15 +1390,15 @@
         ],
         "position_spread_m": 1.0574243702037584e-06,
         "physx_reference": {
-          "physics_step": 17076,
-          "native_physics_step": 17078,
-          "event_time_difference_s": 7.422392570788361e-06,
+          "physics_step": 17078,
+          "native_physics_step": 17080,
+          "native_time_s": 142.33334075659513,
           "load_N_by_label": {
-            "floor": 11.842107474803925,
-            "wall_back": 3.6250891909003258,
-            "wall_right": 4.2183866165578365,
-            "left_cup": 7.269815951587569,
-            "right_cup": 2.0018273592003557
+            "floor": 11.948331780731678,
+            "wall_back": 3.681607539765537,
+            "wall_right": 4.149709269404411,
+            "left_cup": 7.377790063620526,
+            "right_cup": 1.868800185621751
           },
           "tool_contact": {
             "left": true,
@@ -1397,9 +1409,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": -2.9342648935615223e-08,
-            "wall_left": 0.609999889756744,
-            "wall_right": -5.3390812465581305e-09
+            "wall_back": 1.9830628956996055e-07,
+            "wall_left": 0.609999908398524,
+            "wall_right": -4.630194597177173e-08
           }
         }
       },
@@ -1426,15 +1438,15 @@
         ],
         "travel_limit_m": 0.012,
         "physx_reference": {
-          "physics_step": 17076,
-          "native_physics_step": 17078,
-          "event_time_difference_s": 7.422392570788361e-06,
+          "physics_step": 17078,
+          "native_physics_step": 17080,
+          "native_time_s": 142.33334075659513,
           "load_N_by_label": {
-            "floor": 11.842107474803925,
-            "wall_back": 3.6250891909003258,
-            "wall_right": 4.2183866165578365,
-            "left_cup": 7.269815951587569,
-            "right_cup": 2.0018273592003557
+            "floor": 11.948331780731678,
+            "wall_back": 3.681607539765537,
+            "wall_right": 4.149709269404411,
+            "left_cup": 7.377790063620526,
+            "right_cup": 1.868800185621751
           },
           "tool_contact": {
             "left": true,
@@ -1445,9 +1457,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": -2.9342648935615223e-08,
-            "wall_left": 0.609999889756744,
-            "wall_right": -5.3390812465581305e-09
+            "wall_back": 1.9830628956996055e-07,
+            "wall_left": 0.609999908398524,
+            "wall_right": -4.630194597177173e-08
           }
         }
       },
@@ -1507,12 +1519,12 @@
           ]
         },
         "physx_reference": {
-          "physics_step": 17233,
-          "native_physics_step": 17235,
-          "event_time_difference_s": 7.490627467632294e-06,
+          "physics_step": 17235,
+          "native_physics_step": 17237,
+          "native_time_s": 143.64167415816337,
           "load_N_by_label": {
-            "floor": 12.281383574008942,
-            "wall_back": 0.37571063730865717,
+            "floor": 12.293747439980507,
+            "wall_back": 0.3927301615476608,
             "wall_right": 0.0,
             "left_cup": 0.0,
             "right_cup": 0.0
@@ -1526,9 +1538,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": 1.2547993115397116e-07,
-            "wall_left": 0.6099987124698749,
-            "wall_right": 1.2611644855248239e-06
+            "wall_back": 1.2893756760889996e-07,
+            "wall_left": 0.6099986858175133,
+            "wall_right": 1.294116768621456e-06
           }
         }
       },
@@ -1554,12 +1566,12 @@
           "right"
         ],
         "physx_reference": {
-          "physics_step": 17233,
-          "native_physics_step": 17235,
-          "event_time_difference_s": 7.490627467632294e-06,
+          "physics_step": 17235,
+          "native_physics_step": 17237,
+          "native_time_s": 143.64167415816337,
           "load_N_by_label": {
-            "floor": 12.281383574008942,
-            "wall_back": 0.37571063730865717,
+            "floor": 12.293747439980507,
+            "wall_back": 0.3927301615476608,
             "wall_right": 0.0,
             "left_cup": 0.0,
             "right_cup": 0.0
@@ -1573,9 +1585,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": 1.2547993115397116e-07,
-            "wall_left": 0.6099987124698749,
-            "wall_right": 1.2611644855248239e-06
+            "wall_back": 1.2893756760889996e-07,
+            "wall_left": 0.6099986858175133,
+            "wall_right": 1.294116768621456e-06
           }
         }
       },
@@ -1598,12 +1610,12 @@
         "cube_id": 2,
         "slot": 2,
         "physx_reference": {
-          "physics_step": 18869,
-          "native_physics_step": 18871,
-          "event_time_difference_s": 8.201661216844514e-06,
+          "physics_step": 18871,
+          "native_physics_step": 18873,
+          "native_time_s": 157.27500820253044,
           "load_N_by_label": {
-            "floor": 12.26920947432518,
-            "wall_back": 0.4017481952905655,
+            "floor": 12.296143993735313,
+            "wall_back": 0.3748033766169101,
             "wall_right": 0.0
           },
           "tool_contact": {
@@ -1615,9 +1627,9 @@
             "right": false
           },
           "wall_gaps_m": {
-            "wall_back": 1.2265452102588892e-07,
-            "wall_left": 0.6099986842038203,
-            "wall_right": 1.2925030756644196e-06
+            "wall_back": 2.4572140232270723e-07,
+            "wall_left": 0.6099987157854512,
+            "wall_right": 1.2644800618383245e-06
           }
         }
       }
