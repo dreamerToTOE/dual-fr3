@@ -1,0 +1,2049 @@
+{
+  "state_labels": [
+    "S0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S6"
+  ],
+  "fusion": "SevenObserver fusion_compensated, revised, 5 mm tool separation for both optics",
+  "ground_truth": "SevenReference from each trajectory's PhysX samples",
+  "clips": {
+    "aruco_a": {
+      "source": "A_01",
+      "case": "a",
+      "hz": 120,
+      "step_window": [
+        145,
+        21062
+      ],
+      "input_sha256": "c629a832d076456e21cced2271a4f47f0760c3285bcec820be1768148a66b19b",
+      "checkpoint_sha256": null,
+      "reference_monitor_sha256": null,
+      "metrics": {
+        "S0": {
+          "tp": 7336,
+          "truth": 10213,
+          "predicted": 7336,
+          "precision": 1.0,
+          "recall": 0.7183002056202878,
+          "f1": 0.836059034702832,
+          "unknown": 2877
+        },
+        "S1": {
+          "tp": 178,
+          "truth": 533,
+          "predicted": 178,
+          "precision": 1.0,
+          "recall": 0.3339587242026266,
+          "f1": 0.50070323488045,
+          "unknown": 355
+        },
+        "S2": {
+          "tp": 103,
+          "truth": 116,
+          "predicted": 108,
+          "precision": 0.9537037037037037,
+          "recall": 0.8879310344827587,
+          "f1": 0.9196428571428572,
+          "unknown": 5
+        },
+        "S3": {
+          "tp": 50,
+          "truth": 59,
+          "predicted": 52,
+          "precision": 0.9615384615384616,
+          "recall": 0.847457627118644,
+          "f1": 0.9009009009009009,
+          "unknown": 0
+        },
+        "S4": {
+          "tp": 9331,
+          "truth": 9331,
+          "predicted": 9341,
+          "precision": 0.9989294508082647,
+          "recall": 1.0,
+          "f1": 0.9994644387317909,
+          "unknown": 0
+        },
+        "S6": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "_overall": {
+          "known_steps": 20252,
+          "correct_steps": 16998,
+          "unknown_steps": 3237,
+          "coverage": 0.8401639344262295,
+          "accuracy": 0.8393245111593917,
+          "truth_unknown_steps": 666
+        },
+        "s6_event": {
+          "truth": {
+            "first_step": null,
+            "first_3step_confirm": null,
+            "last_step": null,
+            "positive_ticks": 0,
+            "episodes": 0,
+            "longest_ticks": 0
+          },
+          "hit": {
+            "first_step": null,
+            "first_3step_confirm": null,
+            "last_step": null,
+            "positive_ticks": 0,
+            "episodes": 0,
+            "longest_ticks": 0
+          },
+          "first_3step_delay_ms": null
+        },
+        "confusion": {
+          "S0": {
+            "S0": 7336,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 2877
+          },
+          "S1": {
+            "S0": 0,
+            "S1": 178,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 355
+          },
+          "S2": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 103,
+            "S3": 2,
+            "S4": 6,
+            "S6": 0,
+            "UNKNOWN": 5
+          },
+          "S3": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 5,
+            "S3": 50,
+            "S4": 4,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S4": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 9331,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S6": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          }
+        },
+        "a_s1_misses_by_wrist_evidence": {
+          "single_compression": 118,
+          "2_loaded_arms_without_single_compression": 234,
+          "0_loaded_arms_without_single_compression": 3
+        },
+        "s0_timing": {
+          "before_final_release": {
+            "tp": 1000,
+            "truth": 3725,
+            "predicted": 1000,
+            "precision": 1.0,
+            "recall": 0.2684563758389262,
+            "f1": 0.42328042328042326,
+            "unknown": 2725
+          },
+          "after_final_release": {
+            "tp": 6336,
+            "truth": 6488,
+            "predicted": 6336,
+            "precision": 1.0,
+            "recall": 0.9765721331689272,
+            "f1": 0.9881472239550843,
+            "unknown": 152
+          }
+        }
+      },
+      "optics": {
+        "packets": 2626,
+        "detected": 2586,
+        "paired": 2586,
+        "median_signed_xyz_mm": [
+          2.0447937693158815,
+          -13.47832979357577,
+          -25.54337910951049
+        ],
+        "median_exposure_to_receive_ms": 0.0
+      },
+      "method": "aruco"
+    },
+    "aruco_u4": {
+      "source": "post_audit_u4_online_20261125",
+      "case": "u4",
+      "hz": 120,
+      "step_window": [
+        1,
+        16581
+      ],
+      "input_sha256": "a9d96d13c8092f0758ddc0e6aa1d782266a0f875aebbbda7032065afb8e51123",
+      "checkpoint_sha256": "1f44307d9a6a31c675d1b9f9984fc5c5289935cdb5892c0457e4dc28f45d6c26",
+      "reference_monitor_sha256": null,
+      "metrics": {
+        "S0": {
+          "tp": 3794,
+          "truth": 6045,
+          "predicted": 3794,
+          "precision": 1.0,
+          "recall": 0.6276261373035567,
+          "f1": 0.7712165870515296,
+          "unknown": 2251
+        },
+        "S1": {
+          "tp": 7713,
+          "truth": 10397,
+          "predicted": 7762,
+          "precision": 0.9936871940221592,
+          "recall": 0.7418486101760123,
+          "f1": 0.8494961176276227,
+          "unknown": 2684
+        },
+        "S2": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S3": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S4": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S6": {
+          "tp": 89,
+          "truth": 138,
+          "predicted": 89,
+          "precision": 1.0,
+          "recall": 0.644927536231884,
+          "f1": 0.7841409691629956,
+          "unknown": 0
+        },
+        "_overall": {
+          "known_steps": 16580,
+          "correct_steps": 11596,
+          "unknown_steps": 4935,
+          "coverage": 0.7023522316043426,
+          "accuracy": 0.6993968636911942,
+          "truth_unknown_steps": 1
+        },
+        "s6_event": {
+          "truth": {
+            "first_step": 14668,
+            "first_3step_confirm": 14670,
+            "last_step": 14805,
+            "positive_ticks": 138,
+            "episodes": 1,
+            "longest_ticks": 138
+          },
+          "hit": {
+            "first_step": 14717,
+            "first_3step_confirm": 14719,
+            "last_step": 14805,
+            "positive_ticks": 89,
+            "episodes": 1,
+            "longest_ticks": 89
+          },
+          "first_3step_delay_ms": 425.0
+        },
+        "confusion": {
+          "S0": {
+            "S0": 3794,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 2251
+          },
+          "S1": {
+            "S0": 0,
+            "S1": 7713,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 2684
+          },
+          "S2": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S3": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S4": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S6": {
+            "S0": 0,
+            "S1": 49,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 89,
+            "UNKNOWN": 0
+          }
+        },
+        "u4_side_to_withdraw": {
+          "S0": {
+            "tp": 0,
+            "truth": 0,
+            "predicted": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "unknown": 0
+          },
+          "S1": {
+            "tp": 5289,
+            "truth": 7802,
+            "predicted": 5338,
+            "precision": 0.9908205320344698,
+            "recall": 0.6779031017687772,
+            "f1": 0.8050228310502283,
+            "unknown": 2513
+          },
+          "S2": {
+            "tp": 0,
+            "truth": 0,
+            "predicted": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "unknown": 0
+          },
+          "S3": {
+            "tp": 0,
+            "truth": 0,
+            "predicted": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "unknown": 0
+          },
+          "S4": {
+            "tp": 0,
+            "truth": 0,
+            "predicted": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "unknown": 0
+          },
+          "S6": {
+            "tp": 89,
+            "truth": 138,
+            "predicted": 89,
+            "precision": 1.0,
+            "recall": 0.644927536231884,
+            "f1": 0.7841409691629956,
+            "unknown": 0
+          },
+          "_overall": {
+            "known_steps": 7940,
+            "correct_steps": 5378,
+            "unknown_steps": 2513,
+            "coverage": 0.6835012594458438,
+            "accuracy": 0.6773299748110831,
+            "truth_unknown_steps": 0
+          },
+          "s6_event": {
+            "truth": {
+              "first_step": 14668,
+              "first_3step_confirm": 14670,
+              "last_step": 14805,
+              "positive_ticks": 138,
+              "episodes": 1,
+              "longest_ticks": 138
+            },
+            "hit": {
+              "first_step": 14717,
+              "first_3step_confirm": 14719,
+              "last_step": 14805,
+              "positive_ticks": 89,
+              "episodes": 1,
+              "longest_ticks": 89
+            },
+            "first_3step_delay_ms": 425.0
+          },
+          "confusion": {
+            "S0": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "S4": 0,
+              "S6": 0,
+              "UNKNOWN": 0
+            },
+            "S1": {
+              "S0": 0,
+              "S1": 5289,
+              "S2": 0,
+              "S3": 0,
+              "S4": 0,
+              "S6": 0,
+              "UNKNOWN": 2513
+            },
+            "S2": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "S4": 0,
+              "S6": 0,
+              "UNKNOWN": 0
+            },
+            "S3": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "S4": 0,
+              "S6": 0,
+              "UNKNOWN": 0
+            },
+            "S4": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "S4": 0,
+              "S6": 0,
+              "UNKNOWN": 0
+            },
+            "S6": {
+              "S0": 0,
+              "S1": 49,
+              "S2": 0,
+              "S3": 0,
+              "S4": 0,
+              "S6": 89,
+              "UNKNOWN": 0
+            }
+          }
+        },
+        "u4_s1_by_motion": {
+          "lateral_push": {
+            "tp": 1091,
+            "truth": 3563,
+            "predicted": 1091,
+            "precision": 1.0,
+            "recall": 0.30620263822621385,
+            "f1": 0.46884400515685426,
+            "unknown": 2472
+          },
+          "arm_handover": {
+            "tp": 88,
+            "truth": 129,
+            "predicted": 88,
+            "precision": 1.0,
+            "recall": 0.6821705426356589,
+            "f1": 0.8110599078341014,
+            "unknown": 41
+          },
+          "rear_push_through_seating": {
+            "tp": 4110,
+            "truth": 4110,
+            "predicted": 4159,
+            "precision": 0.98821832171195,
+            "recall": 1.0,
+            "f1": 0.994074253234974,
+            "unknown": 0
+          }
+        }
+      },
+      "optics": {
+        "packets": 2071,
+        "detected": 2070,
+        "paired": 2070,
+        "median_signed_xyz_mm": [
+          4.506213094627162,
+          -9.91404670246959,
+          -30.976515504165526
+        ],
+        "median_exposure_to_receive_ms": 0.0
+      },
+      "method": "aruco"
+    },
+    "aruco_u5": {
+      "source": "U5_01",
+      "case": "u5",
+      "hz": 120,
+      "step_window": [
+        1,
+        8971
+      ],
+      "input_sha256": "39d8a4669576ac740780a894e2fb7f7499947fdbe82c8004da93ad6d76428649",
+      "checkpoint_sha256": null,
+      "reference_monitor_sha256": null,
+      "metrics": {
+        "S0": {
+          "tp": 3009,
+          "truth": 4639,
+          "predicted": 3009,
+          "precision": 1.0,
+          "recall": 0.6486311705108859,
+          "f1": 0.7868723849372385,
+          "unknown": 1630
+        },
+        "S1": {
+          "tp": 4330,
+          "truth": 4332,
+          "predicted": 4330,
+          "precision": 1.0,
+          "recall": 0.9995383194829178,
+          "f1": 0.9997691064419303,
+          "unknown": 2
+        },
+        "S2": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S3": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S4": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S6": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "_overall": {
+          "known_steps": 8971,
+          "correct_steps": 7339,
+          "unknown_steps": 1632,
+          "coverage": 0.8180804815516665,
+          "accuracy": 0.8180804815516665,
+          "truth_unknown_steps": 0
+        },
+        "s6_event": {
+          "truth": {
+            "first_step": null,
+            "first_3step_confirm": null,
+            "last_step": null,
+            "positive_ticks": 0,
+            "episodes": 0,
+            "longest_ticks": 0
+          },
+          "hit": {
+            "first_step": null,
+            "first_3step_confirm": null,
+            "last_step": null,
+            "positive_ticks": 0,
+            "episodes": 0,
+            "longest_ticks": 0
+          },
+          "first_3step_delay_ms": null
+        },
+        "confusion": {
+          "S0": {
+            "S0": 3009,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 1630
+          },
+          "S1": {
+            "S0": 0,
+            "S1": 4330,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 2
+          },
+          "S2": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S3": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S4": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S6": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          }
+        }
+      },
+      "optics": {
+        "packets": 1120,
+        "detected": 1119,
+        "paired": 1119,
+        "median_signed_xyz_mm": [
+          3.1043032227629217,
+          -3.2378434719321225,
+          -20.0826624206234
+        ],
+        "median_exposure_to_receive_ms": 33.33333507180214
+      },
+      "method": "aruco"
+    },
+    "fitting_a": {
+      "source": "fitting_a_full_01",
+      "case": "a",
+      "hz": 120,
+      "step_window": [
+        361,
+        21185
+      ],
+      "input_sha256": "b2c60675196aa38a9575a855b3728c299f5e9af3907fa2e4471c6746795c98a6",
+      "checkpoint_sha256": "dc2d5b50926fbd1974e3d9445043ad65bbc2e6c0709b11aa93b099feb7fde880",
+      "reference_monitor_sha256": "b77f2865803bedcc3b4babb16d2422c50a1d8150f870d5e1463c0a526334a424",
+      "metrics": {
+        "S0": {
+          "tp": 8995,
+          "truth": 10320,
+          "predicted": 8995,
+          "precision": 1.0,
+          "recall": 0.8716085271317829,
+          "f1": 0.9314004659590992,
+          "unknown": 1325
+        },
+        "S1": {
+          "tp": 11,
+          "truth": 373,
+          "predicted": 11,
+          "precision": 1.0,
+          "recall": 0.029490616621983913,
+          "f1": 0.057291666666666664,
+          "unknown": 302
+        },
+        "S2": {
+          "tp": 73,
+          "truth": 74,
+          "predicted": 142,
+          "precision": 0.5140845070422535,
+          "recall": 0.9864864864864865,
+          "f1": 0.675925925925926,
+          "unknown": 0
+        },
+        "S3": {
+          "tp": 43,
+          "truth": 54,
+          "predicted": 44,
+          "precision": 0.9772727272727273,
+          "recall": 0.7962962962962963,
+          "f1": 0.8775510204081632,
+          "unknown": 0
+        },
+        "S4": {
+          "tp": 9331,
+          "truth": 9331,
+          "predicted": 9333,
+          "precision": 0.9997857066323798,
+          "recall": 1.0,
+          "f1": 0.9998928418345477,
+          "unknown": 0
+        },
+        "S6": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "_overall": {
+          "known_steps": 20152,
+          "correct_steps": 18453,
+          "unknown_steps": 1627,
+          "coverage": 0.9192635966653434,
+          "accuracy": 0.9156907502977372,
+          "truth_unknown_steps": 673
+        },
+        "s6_event": {
+          "truth": {
+            "first_step": null,
+            "first_3step_confirm": null,
+            "last_step": null,
+            "positive_ticks": 0,
+            "episodes": 0,
+            "longest_ticks": 0
+          },
+          "hit": {
+            "first_step": null,
+            "first_3step_confirm": null,
+            "last_step": null,
+            "positive_ticks": 0,
+            "episodes": 0,
+            "longest_ticks": 0
+          },
+          "first_3step_delay_ms": null
+        },
+        "confusion": {
+          "S0": {
+            "S0": 8995,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 1325
+          },
+          "S1": {
+            "S0": 0,
+            "S1": 11,
+            "S2": 60,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 302
+          },
+          "S2": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 73,
+            "S3": 1,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S3": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 9,
+            "S3": 43,
+            "S4": 2,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S4": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 9331,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S6": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          }
+        },
+        "a_s1_misses_by_wrist_evidence": {
+          "2_loaded_arms_without_single_compression": 301,
+          "single_compression": 60,
+          "0_loaded_arms_without_single_compression": 1
+        },
+        "s0_timing": {
+          "before_final_release": {
+            "tp": 2635,
+            "truth": 3854,
+            "predicted": 2635,
+            "precision": 1.0,
+            "recall": 0.6837052413077322,
+            "f1": 0.8121436276776083,
+            "unknown": 1219
+          },
+          "after_final_release": {
+            "tp": 6360,
+            "truth": 6466,
+            "predicted": 6360,
+            "precision": 1.0,
+            "recall": 0.9836065573770492,
+            "f1": 0.9917355371900827,
+            "unknown": 106
+          }
+        }
+      },
+      "optics": {
+        "packets": 2647,
+        "detected": 1378,
+        "paired": 1378,
+        "median_signed_xyz_mm": [
+          -0.4078112542629242,
+          -0.007748603820800781,
+          -4.7683712534052347e-07
+        ],
+        "median_exposure_to_receive_ms": 0.0
+      },
+      "method": "fitting"
+    },
+    "fitting_u4": {
+      "source": "fitting_u4_matched_01",
+      "case": "u4",
+      "hz": 120,
+      "step_window": [
+        1,
+        17756
+      ],
+      "input_sha256": "81d728b20ed7283cb0f58a63ba177c356137612430c00cd15fc6ae2a9175de3c",
+      "checkpoint_sha256": "1f44307d9a6a31c675d1b9f9984fc5c5289935cdb5892c0457e4dc28f45d6c26",
+      "reference_monitor_sha256": "b77f2865803bedcc3b4babb16d2422c50a1d8150f870d5e1463c0a526334a424",
+      "metrics": {
+        "S0": {
+          "tp": 3813,
+          "truth": 5116,
+          "predicted": 3813,
+          "precision": 1.0,
+          "recall": 0.7453088350273651,
+          "f1": 0.8540710045917795,
+          "unknown": 1303
+        },
+        "S1": {
+          "tp": 10213,
+          "truth": 12519,
+          "predicted": 10234,
+          "precision": 0.9979480164158687,
+          "recall": 0.8157999840242831,
+          "f1": 0.8977277721619127,
+          "unknown": 2273
+        },
+        "S2": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S3": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S4": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S6": {
+          "tp": 100,
+          "truth": 121,
+          "predicted": 133,
+          "precision": 0.7518796992481203,
+          "recall": 0.8264462809917356,
+          "f1": 0.7874015748031495,
+          "unknown": 0
+        },
+        "_overall": {
+          "known_steps": 17756,
+          "correct_steps": 14126,
+          "unknown_steps": 3576,
+          "coverage": 0.7986032890290606,
+          "accuracy": 0.7955620635278216,
+          "truth_unknown_steps": 0
+        },
+        "s6_event": {
+          "truth": {
+            "first_step": 16479,
+            "first_3step_confirm": 16481,
+            "last_step": 16612,
+            "positive_ticks": 121,
+            "episodes": 2,
+            "longest_ticks": 118
+          },
+          "hit": {
+            "first_step": 16513,
+            "first_3step_confirm": 16515,
+            "last_step": 16612,
+            "positive_ticks": 100,
+            "episodes": 1,
+            "longest_ticks": 100
+          },
+          "first_3step_delay_ms": 300.0
+        },
+        "confusion": {
+          "S0": {
+            "S0": 3813,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 1303
+          },
+          "S1": {
+            "S0": 0,
+            "S1": 10213,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 33,
+            "UNKNOWN": 2273
+          },
+          "S2": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S3": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S4": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S6": {
+            "S0": 0,
+            "S1": 21,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 100,
+            "UNKNOWN": 0
+          }
+        },
+        "u4_side_to_withdraw": {
+          "S0": {
+            "tp": 0,
+            "truth": 104,
+            "predicted": 0,
+            "precision": null,
+            "recall": 0.0,
+            "f1": null,
+            "unknown": 104
+          },
+          "S1": {
+            "tp": 7459,
+            "truth": 9679,
+            "predicted": 7480,
+            "precision": 0.997192513368984,
+            "recall": 0.7706374625477839,
+            "f1": 0.8693979835654759,
+            "unknown": 2187
+          },
+          "S2": {
+            "tp": 0,
+            "truth": 0,
+            "predicted": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "unknown": 0
+          },
+          "S3": {
+            "tp": 0,
+            "truth": 0,
+            "predicted": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "unknown": 0
+          },
+          "S4": {
+            "tp": 0,
+            "truth": 0,
+            "predicted": 0,
+            "precision": null,
+            "recall": null,
+            "f1": null,
+            "unknown": 0
+          },
+          "S6": {
+            "tp": 100,
+            "truth": 121,
+            "predicted": 133,
+            "precision": 0.7518796992481203,
+            "recall": 0.8264462809917356,
+            "f1": 0.7874015748031495,
+            "unknown": 0
+          },
+          "_overall": {
+            "known_steps": 9904,
+            "correct_steps": 7559,
+            "unknown_steps": 2291,
+            "coverage": 0.7686793214862682,
+            "accuracy": 0.7632269789983845,
+            "truth_unknown_steps": 0
+          },
+          "s6_event": {
+            "truth": {
+              "first_step": 16479,
+              "first_3step_confirm": 16481,
+              "last_step": 16612,
+              "positive_ticks": 121,
+              "episodes": 2,
+              "longest_ticks": 118
+            },
+            "hit": {
+              "first_step": 16513,
+              "first_3step_confirm": 16515,
+              "last_step": 16612,
+              "positive_ticks": 100,
+              "episodes": 1,
+              "longest_ticks": 100
+            },
+            "first_3step_delay_ms": 300.0
+          },
+          "confusion": {
+            "S0": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "S4": 0,
+              "S6": 0,
+              "UNKNOWN": 104
+            },
+            "S1": {
+              "S0": 0,
+              "S1": 7459,
+              "S2": 0,
+              "S3": 0,
+              "S4": 0,
+              "S6": 33,
+              "UNKNOWN": 2187
+            },
+            "S2": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "S4": 0,
+              "S6": 0,
+              "UNKNOWN": 0
+            },
+            "S3": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "S4": 0,
+              "S6": 0,
+              "UNKNOWN": 0
+            },
+            "S4": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "S4": 0,
+              "S6": 0,
+              "UNKNOWN": 0
+            },
+            "S6": {
+              "S0": 0,
+              "S1": 21,
+              "S2": 0,
+              "S3": 0,
+              "S4": 0,
+              "S6": 100,
+              "UNKNOWN": 0
+            }
+          }
+        },
+        "u4_s1_by_motion": {
+          "lateral_push": {
+            "tp": 1660,
+            "truth": 3770,
+            "predicted": 1660,
+            "precision": 1.0,
+            "recall": 0.4403183023872679,
+            "f1": 0.6114180478821363,
+            "unknown": 2110
+          },
+          "arm_handover": {
+            "tp": 1573,
+            "truth": 1647,
+            "predicted": 1573,
+            "precision": 1.0,
+            "recall": 0.9550698239222829,
+            "f1": 0.9770186335403727,
+            "unknown": 74
+          },
+          "rear_push_through_seating": {
+            "tp": 4226,
+            "truth": 4262,
+            "predicted": 4247,
+            "precision": 0.9950553331763597,
+            "recall": 0.991553261379634,
+            "f1": 0.9933012104830179,
+            "unknown": 3
+          }
+        }
+      },
+      "optics": {
+        "packets": 2218,
+        "detected": 2198,
+        "paired": 2198,
+        "median_signed_xyz_mm": [
+          -0.1940644599517094,
+          0.4665851593017578,
+          2.3365020695997885e-05
+        ],
+        "median_exposure_to_receive_ms": 0.0
+      },
+      "method": "fitting"
+    },
+    "fitting_u5": {
+      "source": "upper5_current_04",
+      "case": "u5",
+      "hz": 120,
+      "step_window": [
+        1,
+        14194
+      ],
+      "input_sha256": "4a84e3929e5545044f71736aa5678393b71d435581fe170009ef664f0c01886c",
+      "checkpoint_sha256": null,
+      "reference_monitor_sha256": null,
+      "metrics": {
+        "S0": {
+          "tp": 2980,
+          "truth": 4243,
+          "predicted": 2980,
+          "precision": 1.0,
+          "recall": 0.7023332547725666,
+          "f1": 0.8251419077945452,
+          "unknown": 1263
+        },
+        "S1": {
+          "tp": 9543,
+          "truth": 9558,
+          "predicted": 9543,
+          "precision": 1.0,
+          "recall": 0.9984306340238543,
+          "f1": 0.9992147008010053,
+          "unknown": 15
+        },
+        "S2": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S3": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S4": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S6": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "_overall": {
+          "known_steps": 13801,
+          "correct_steps": 12523,
+          "unknown_steps": 1278,
+          "coverage": 0.9073980146366205,
+          "accuracy": 0.9073980146366205,
+          "truth_unknown_steps": 393
+        },
+        "s6_event": {
+          "truth": {
+            "first_step": null,
+            "first_3step_confirm": null,
+            "last_step": null,
+            "positive_ticks": 0,
+            "episodes": 0,
+            "longest_ticks": 0
+          },
+          "hit": {
+            "first_step": null,
+            "first_3step_confirm": null,
+            "last_step": null,
+            "positive_ticks": 0,
+            "episodes": 0,
+            "longest_ticks": 0
+          },
+          "first_3step_delay_ms": null
+        },
+        "confusion": {
+          "S0": {
+            "S0": 2980,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 1263
+          },
+          "S1": {
+            "S0": 0,
+            "S1": 9543,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 15
+          },
+          "S2": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S3": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S4": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S6": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          }
+        }
+      },
+      "optics": {
+        "packets": 1773,
+        "detected": 1753,
+        "paired": 1753,
+        "median_signed_xyz_mm": [
+          0.23905414855107665,
+          0.5284895985635529,
+          -0.0009899139403746204
+        ],
+        "median_exposure_to_receive_ms": 0.0
+      },
+      "method": "fitting"
+    },
+    "aruco_a_repeat_02": {
+      "source": "A_02",
+      "case": "a",
+      "hz": 120,
+      "step_window": [
+        145,
+        21006
+      ],
+      "input_sha256": "7cde5ff4071fa21dcc72273e53b641da1febde28b9f318449f403c9f1d799860",
+      "checkpoint_sha256": null,
+      "reference_monitor_sha256": null,
+      "metrics": {
+        "S0": {
+          "tp": 7346,
+          "truth": 10221,
+          "predicted": 7346,
+          "precision": 1.0,
+          "recall": 0.7187163682614226,
+          "f1": 0.836340866397222,
+          "unknown": 2875
+        },
+        "S1": {
+          "tp": 168,
+          "truth": 508,
+          "predicted": 168,
+          "precision": 1.0,
+          "recall": 0.33070866141732286,
+          "f1": 0.4970414201183432,
+          "unknown": 340
+        },
+        "S2": {
+          "tp": 73,
+          "truth": 81,
+          "predicted": 79,
+          "precision": 0.9240506329113924,
+          "recall": 0.9012345679012346,
+          "f1": 0.9125,
+          "unknown": 1
+        },
+        "S3": {
+          "tp": 44,
+          "truth": 55,
+          "predicted": 45,
+          "precision": 0.9777777777777777,
+          "recall": 0.8,
+          "f1": 0.8800000000000001,
+          "unknown": 0
+        },
+        "S4": {
+          "tp": 9331,
+          "truth": 9331,
+          "predicted": 9342,
+          "precision": 0.9988225219439092,
+          "recall": 1.0,
+          "f1": 0.9994109141541263,
+          "unknown": 0
+        },
+        "S6": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "_overall": {
+          "known_steps": 20196,
+          "correct_steps": 16962,
+          "unknown_steps": 3216,
+          "coverage": 0.8407605466428996,
+          "accuracy": 0.8398692810457516,
+          "truth_unknown_steps": 666
+        },
+        "s6_event": {
+          "truth": {
+            "first_step": null,
+            "first_3step_confirm": null,
+            "last_step": null,
+            "positive_ticks": 0,
+            "episodes": 0,
+            "longest_ticks": 0
+          },
+          "hit": {
+            "first_step": null,
+            "first_3step_confirm": null,
+            "last_step": null,
+            "positive_ticks": 0,
+            "episodes": 0,
+            "longest_ticks": 0
+          },
+          "first_3step_delay_ms": null
+        },
+        "confusion": {
+          "S0": {
+            "S0": 7346,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 2875
+          },
+          "S1": {
+            "S0": 0,
+            "S1": 168,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 340
+          },
+          "S2": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 73,
+            "S3": 1,
+            "S4": 6,
+            "S6": 0,
+            "UNKNOWN": 1
+          },
+          "S3": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 6,
+            "S3": 44,
+            "S4": 5,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S4": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 9331,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S6": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          }
+        },
+        "a_s1_misses_by_wrist_evidence": {
+          "single_compression": 120,
+          "2_loaded_arms_without_single_compression": 218,
+          "0_loaded_arms_without_single_compression": 2
+        },
+        "s0_timing": {
+          "before_final_release": {
+            "tp": 1029,
+            "truth": 3726,
+            "predicted": 1029,
+            "precision": 1.0,
+            "recall": 0.27616747181964574,
+            "f1": 0.432807570977918,
+            "unknown": 2697
+          },
+          "after_final_release": {
+            "tp": 6317,
+            "truth": 6495,
+            "predicted": 6317,
+            "precision": 1.0,
+            "recall": 0.9725943033102387,
+            "f1": 0.9861067748985326,
+            "unknown": 178
+          }
+        }
+      },
+      "optics": {
+        "packets": 2621,
+        "detected": 2580,
+        "paired": 2580,
+        "median_signed_xyz_mm": [
+          2.0649541083054235,
+          -13.121549952353206,
+          -25.525003939852965
+        ],
+        "median_exposure_to_receive_ms": 0.0
+      },
+      "method": "aruco"
+    },
+    "aruco_a_repeat_03": {
+      "source": "A_03",
+      "case": "a",
+      "hz": 120,
+      "step_window": [
+        145,
+        21016
+      ],
+      "input_sha256": "b2f241efebfef7ca85d105dcc92304ce0d732f55ac600b99faf44a456385b865",
+      "checkpoint_sha256": null,
+      "reference_monitor_sha256": null,
+      "metrics": {
+        "S0": {
+          "tp": 7340,
+          "truth": 10203,
+          "predicted": 7340,
+          "precision": 1.0,
+          "recall": 0.7193962560031363,
+          "f1": 0.8368010032491592,
+          "unknown": 2863
+        },
+        "S1": {
+          "tp": 166,
+          "truth": 533,
+          "predicted": 166,
+          "precision": 1.0,
+          "recall": 0.31144465290806755,
+          "f1": 0.47496423462088705,
+          "unknown": 367
+        },
+        "S2": {
+          "tp": 82,
+          "truth": 87,
+          "predicted": 90,
+          "precision": 0.9111111111111111,
+          "recall": 0.9425287356321839,
+          "f1": 0.9265536723163842,
+          "unknown": 0
+        },
+        "S3": {
+          "tp": 44,
+          "truth": 57,
+          "predicted": 44,
+          "precision": 1.0,
+          "recall": 0.7719298245614035,
+          "f1": 0.8712871287128713,
+          "unknown": 0
+        },
+        "S4": {
+          "tp": 9331,
+          "truth": 9331,
+          "predicted": 9341,
+          "precision": 0.9989294508082647,
+          "recall": 1.0,
+          "f1": 0.9994644387317909,
+          "unknown": 0
+        },
+        "S6": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "_overall": {
+          "known_steps": 20211,
+          "correct_steps": 16963,
+          "unknown_steps": 3230,
+          "coverage": 0.8401860373064173,
+          "accuracy": 0.8392954331799515,
+          "truth_unknown_steps": 661
+        },
+        "s6_event": {
+          "truth": {
+            "first_step": null,
+            "first_3step_confirm": null,
+            "last_step": null,
+            "positive_ticks": 0,
+            "episodes": 0,
+            "longest_ticks": 0
+          },
+          "hit": {
+            "first_step": null,
+            "first_3step_confirm": null,
+            "last_step": null,
+            "positive_ticks": 0,
+            "episodes": 0,
+            "longest_ticks": 0
+          },
+          "first_3step_delay_ms": null
+        },
+        "confusion": {
+          "S0": {
+            "S0": 7340,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 2863
+          },
+          "S1": {
+            "S0": 0,
+            "S1": 166,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 367
+          },
+          "S2": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 82,
+            "S3": 0,
+            "S4": 5,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S3": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 8,
+            "S3": 44,
+            "S4": 5,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S4": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 9331,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S6": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          }
+        },
+        "a_s1_misses_by_wrist_evidence": {
+          "0_loaded_arms_without_single_compression": 3,
+          "single_compression": 139,
+          "2_loaded_arms_without_single_compression": 225
+        },
+        "s0_timing": {
+          "before_final_release": {
+            "tp": 1016,
+            "truth": 3726,
+            "predicted": 1016,
+            "precision": 1.0,
+            "recall": 0.2726784755770263,
+            "f1": 0.4285111767186841,
+            "unknown": 2710
+          },
+          "after_final_release": {
+            "tp": 6324,
+            "truth": 6477,
+            "predicted": 6324,
+            "precision": 1.0,
+            "recall": 0.9763779527559056,
+            "f1": 0.9880478087649402,
+            "unknown": 153
+          }
+        }
+      },
+      "optics": {
+        "packets": 2622,
+        "detected": 2578,
+        "paired": 2578,
+        "median_signed_xyz_mm": [
+          2.0603618658117666,
+          -13.923786581380131,
+          -25.45420255973624
+        ],
+        "median_exposure_to_receive_ms": 0.0
+      },
+      "method": "aruco"
+    },
+    "aruco_u5_yaw_035": {
+      "source": "U5_02",
+      "case": "u5",
+      "hz": 120,
+      "step_window": [
+        1,
+        9167
+      ],
+      "input_sha256": "e70cbafde5e3b3a6a3591bb78ba94a6b6a9802379d3f6cb37e663a8086fb24ff",
+      "checkpoint_sha256": null,
+      "reference_monitor_sha256": null,
+      "metrics": {
+        "S0": {
+          "tp": 3434,
+          "truth": 4613,
+          "predicted": 3434,
+          "precision": 1.0,
+          "recall": 0.7444179492737915,
+          "f1": 0.8534857710948179,
+          "unknown": 1179
+        },
+        "S1": {
+          "tp": 4550,
+          "truth": 4552,
+          "predicted": 4550,
+          "precision": 1.0,
+          "recall": 0.9995606326889279,
+          "f1": 0.999780268072951,
+          "unknown": 2
+        },
+        "S2": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S3": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S4": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S6": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "_overall": {
+          "known_steps": 9165,
+          "correct_steps": 7984,
+          "unknown_steps": 1181,
+          "coverage": 0.8711402073104201,
+          "accuracy": 0.8711402073104201,
+          "truth_unknown_steps": 2
+        },
+        "s6_event": {
+          "truth": {
+            "first_step": null,
+            "first_3step_confirm": null,
+            "last_step": null,
+            "positive_ticks": 0,
+            "episodes": 0,
+            "longest_ticks": 0
+          },
+          "hit": {
+            "first_step": null,
+            "first_3step_confirm": null,
+            "last_step": null,
+            "positive_ticks": 0,
+            "episodes": 0,
+            "longest_ticks": 0
+          },
+          "first_3step_delay_ms": null
+        },
+        "confusion": {
+          "S0": {
+            "S0": 3434,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 1179
+          },
+          "S1": {
+            "S0": 0,
+            "S1": 4550,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 2
+          },
+          "S2": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S3": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S4": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          },
+          "S6": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S6": 0,
+            "UNKNOWN": 0
+          }
+        }
+      },
+      "optics": {
+        "packets": 1144,
+        "detected": 1143,
+        "paired": 1143,
+        "median_signed_xyz_mm": [
+          3.0637420738231596,
+          -4.50129873566274,
+          -24.05496143125596
+        ],
+        "median_exposure_to_receive_ms": 0.0
+      },
+      "method": "aruco"
+    }
+  },
+  "pooled_steps": {
+    "aruco": {
+      "S0": {
+        "tp": 14139,
+        "truth": 20897,
+        "predicted": 14139,
+        "precision": 1.0,
+        "recall": 0.6766042972675503,
+        "f1": 0.8071126840963581,
+        "unknown": 6758
+      },
+      "S1": {
+        "tp": 12221,
+        "truth": 15262,
+        "predicted": 12270,
+        "precision": 0.9960065199674002,
+        "recall": 0.8007469532171406,
+        "f1": 0.8877669620804882,
+        "unknown": 3041
+      },
+      "S2": {
+        "tp": 103,
+        "truth": 116,
+        "predicted": 108,
+        "precision": 0.9537037037037037,
+        "recall": 0.8879310344827587,
+        "f1": 0.9196428571428572,
+        "unknown": 5
+      },
+      "S3": {
+        "tp": 50,
+        "truth": 59,
+        "predicted": 52,
+        "precision": 0.9615384615384616,
+        "recall": 0.847457627118644,
+        "f1": 0.9009009009009009,
+        "unknown": 0
+      },
+      "S4": {
+        "tp": 9331,
+        "truth": 9331,
+        "predicted": 9341,
+        "precision": 0.9989294508082647,
+        "recall": 1.0,
+        "f1": 0.9994644387317909,
+        "unknown": 0
+      },
+      "S6": {
+        "tp": 89,
+        "truth": 138,
+        "predicted": 89,
+        "precision": 1.0,
+        "recall": 0.644927536231884,
+        "f1": 0.7841409691629956,
+        "unknown": 0
+      },
+      "_overall": {
+        "known_steps": 45803,
+        "correct_steps": 35933,
+        "unknown_steps": 9804,
+        "coverage": 0.7859528851821933,
+        "accuracy": 0.784511931532869
+      }
+    },
+    "fitting": {
+      "S0": {
+        "tp": 15788,
+        "truth": 19679,
+        "predicted": 15788,
+        "precision": 1.0,
+        "recall": 0.802276538441994,
+        "f1": 0.8902923844700708,
+        "unknown": 3891
+      },
+      "S1": {
+        "tp": 19767,
+        "truth": 22450,
+        "predicted": 19788,
+        "precision": 0.9989387507580352,
+        "recall": 0.8804899777282851,
+        "f1": 0.9359818173208958,
+        "unknown": 2590
+      },
+      "S2": {
+        "tp": 73,
+        "truth": 74,
+        "predicted": 142,
+        "precision": 0.5140845070422535,
+        "recall": 0.9864864864864865,
+        "f1": 0.675925925925926,
+        "unknown": 0
+      },
+      "S3": {
+        "tp": 43,
+        "truth": 54,
+        "predicted": 44,
+        "precision": 0.9772727272727273,
+        "recall": 0.7962962962962963,
+        "f1": 0.8775510204081632,
+        "unknown": 0
+      },
+      "S4": {
+        "tp": 9331,
+        "truth": 9331,
+        "predicted": 9333,
+        "precision": 0.9997857066323798,
+        "recall": 1.0,
+        "f1": 0.9998928418345477,
+        "unknown": 0
+      },
+      "S6": {
+        "tp": 100,
+        "truth": 121,
+        "predicted": 133,
+        "precision": 0.7518796992481203,
+        "recall": 0.8264462809917356,
+        "f1": 0.7874015748031495,
+        "unknown": 0
+      },
+      "_overall": {
+        "known_steps": 51709,
+        "correct_steps": 45102,
+        "unknown_steps": 6481,
+        "coverage": 0.8746639849929413,
+        "accuracy": 0.8722272718482276
+      }
+    }
+  },
+  "equal_case_accuracy": {
+    "aruco": 0.7856006188007507,
+    "fitting": 0.8728836094873932
+  }
+}

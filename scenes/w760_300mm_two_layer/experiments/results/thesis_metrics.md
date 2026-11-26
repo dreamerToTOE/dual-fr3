@@ -26,7 +26,8 @@
 
 ```bash
 e=scenes/w760_300mm_two_layer/experiments
-python3 "$e/thesis_metrics.py" "$e/results/thesis_test_manifest.json" /tmp/fr3-thesis-metrics.json
+python3 "$e/thesis_metrics.py" "$e/results/thesis_test_manifest.json" /tmp/fr3-thesis-metrics.json \
+  --legacy-seven-states
 ```
 
 ## 三种观测线总体对比

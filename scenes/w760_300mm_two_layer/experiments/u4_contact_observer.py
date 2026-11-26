@@ -9,6 +9,7 @@ from active_probe_replay import (AVERAGE_END_S, MAX_COMMAND_M, MAX_TCP_FOLLOW_FR
                                  MIN_COMMAND_M, MIN_FORCE_RISE_N, WINDOW_S, response)
 from fusion_upper5 import BLOCKING_LOAD_N, CAMERA_MAX_AGE_S, FRONT_LOAD_N, axes_for, yaw_of
 from seven_observer import SevenObserver
+from task_state_labels import task_state
 
 
 SIDE = "/World/Cube_8"
@@ -320,7 +321,7 @@ class U4ContactObserver:
                 self.weak_geometry_streak = 0
             if silent_loss_event is not None:
                 side_event = silent_loss_event
-            return {**result, "side_loaded": side_loaded,
+            return {**result, "task_state": task_state(result["state"]), "side_loaded": side_loaded,
                     "rear_loaded": True if REAR in bounds else rear, "side_gap_m": side_gap,
                     "rear_gap_m": rear_gap, "handover_active": bool(exchange),
                     "supported_view_used": supported is not None,
@@ -361,6 +362,6 @@ class U4ContactObserver:
                 state = "S1"
         else:
             state = result["state"] if result["state"] not in ("S5", "S6") else "UNKNOWN"
-        return {**result, "state": state, "boundaries": sorted(boundaries),
+        return {**result, "state": state, "task_state": task_state(state), "boundaries": sorted(boundaries),
                 "side_loaded": side, "rear_loaded": rear, "side_gap_m": side_gap,
                 "rear_gap_m": rear_gap, "wall_response": witnessed}

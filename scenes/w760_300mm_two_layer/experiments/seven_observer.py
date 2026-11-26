@@ -8,6 +8,7 @@ import numpy as np
 from active_probe_replay import (AVERAGE_END_S, MAX_COMMAND_M, MAX_TCP_FOLLOW_FRACTION,
                                  MIN_COMMAND_M, MIN_FORCE_RISE_N, WINDOW_S, response)
 from fusion_upper5 import CAMERA_HOLD_S, FRONT_LOAD_N, axes_for, yaw_of
+from task_state_labels import task_state
 
 
 MODES = ("vision_fk", "wrench_fk", "fusion_arrival", "fusion_compensated")
@@ -378,7 +379,7 @@ class SevenObserver:
         for i, side in enumerate(SIDES):
             if self.known_grip[i]:
                 hands[side] = "inferred_seal"
-        return {"state": state, "boundaries": sorted(hits), "camera_age_s": age,
+        return {"state": state, "task_state": task_state(state), "boundaries": sorted(hits), "camera_age_s": age,
                 "position_m": xyz.tolist() if xyz is not None else None,
                 "tools": hands, "vertical_load_fraction": vertical if use_force else None,
                 **({"tool_retreat_complete": retreat_complete} if self.revised else {})}

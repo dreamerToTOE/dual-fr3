@@ -1,4 +1,4 @@
-"""Score RGB-D box fitting and rear RGB ArUco with the same S0-S6 observer."""
+"""Compare RGB-D box fitting and rear RGB ArUco on the same contact states."""
 
 import argparse
 from collections import Counter
@@ -17,6 +17,7 @@ from seven_dataset import CAMERA, PAIR, REFERENCE, SENSOR, select
 from seven_observer import SevenObserver
 from seven_reference import SevenReference
 from seven_replay import optical_audit
+from task_state_labels import TASK_STATES
 from thesis_metrics import STATES, confusion_metrics
 from u4_contact_observer import U4ContactObserver
 from u4_handover_score import events
@@ -152,9 +153,9 @@ def load(path):
     return header, samples
 
 
-def summarize(trace, hz):
-    values = confusion_metrics(trace)
-    values["_overall"]["truth_unknown_steps"] = sum(row["truth"] not in STATES for row in trace)
+def summarize(trace, hz, states):
+    values = confusion_metrics(trace, states)
+    values["_overall"]["truth_unknown_steps"] = sum(row["truth"] not in states for row in trace)
     values["s6_event"] = {
         "truth": events(trace, "truth", "S6"),
         "hit": events([dict(row, hit=row["truth"] == row["pred"] == "S6") for row in trace], "hit"),
@@ -166,19 +167,21 @@ def summarize(trace, hz):
     )
     values["confusion"] = {
         state: {p: sum(r["truth"] == state and r["pred"] == p for r in trace)
-                for p in (*STATES, "UNKNOWN")}
-        for state in STATES
+                for p in (*states, "UNKNOWN")}
+        for state in states
     }
     return values
 
 
-def score(path, specialized):
+def score(path, specialized, *, legacy_seven_states=False):
     header, rows = load(path)
     hz = header["hz"]
     reference = SevenReference(header["config"], hz, header["reference_positions"])
     neighbors = header["optical_neighbors"]
     observer = SevenObserver(header["config"], "fusion_compensated", revised=True)
     u4_observer = U4ContactObserver(header["config"], handover=True) if specialized else None
+    states = STATES if legacy_seven_states else TASK_STATES
+    label_key = "state" if legacy_seven_states else "task_state"
     trace, u4_trace = [], []
     approach_s1_misses = Counter()
     phases = {(p["phase"], p["status"]): round(p["sim_time_s"] * hz)
@@ -198,13 +201,13 @@ def score(path, specialized):
                 or (previous is not None and step != previous + 1)):
             raise ValueError(f"Unpaired or missing step in {path}: {step}")
         previous = step
-        label = reference.update(physical)["state"]
+        label = reference.update(physical)[label_key]
         # The incident snapshot is available to the independent labeler only.
         optical = sensor.get("optical_neighbors", neighbors)
         result = observer.update(sensor, optical)
         if start < step <= header["stop_step"]:
-            trace.append({"step": step, "truth": label, "pred": result["state"]})
-            if header["case"] == "a" and label == "S1" and result["state"] != label:
+            trace.append({"step": step, "truth": label, "pred": result[label_key]})
+            if header["case"] == "a" and label == "S1" and result[label_key] != label:
                 forces = np.asarray([sensor[arm + "_wrench_world"][:3] for arm in ("left", "right")])
                 normals = np.asarray([sensor["cup_normals_world"][arm] for arm in ("left", "right")])
                 compression = -np.sum(forces * normals, axis=1)
@@ -219,16 +222,17 @@ def score(path, specialized):
                 inputs["right_command_y_m"] = command[1]
             u4 = u4_observer.update(inputs, optical)
             if first <= step <= last:
-                u4_trace.append({"step": step, "truth": label, "pred": u4["state"]})
+                u4_trace.append({"step": step, "truth": label, "pred": u4[label_key]})
     if previous != header["stop_step"] or not trace:
         raise ValueError(f"Incomplete trace in {path}")
-    stats = summarize(trace, hz)
+    stats = summarize(trace, hz, states)
     if u4_observer:
-        stats["u4_side_to_withdraw"] = summarize(u4_trace, hz)
+        stats["u4_side_to_withdraw"] = summarize(u4_trace, hz, states)
         unload = phases["upper_B_side", "FORCE_CONFIRMED"]
         rear = phases["upper_B_rear", "RUNNING"]
-        stats["u4_s5_by_motion"] = {
-            name: confusion_metrics([row for row in u4_trace if low <= row["step"] < high])["S5"]
+        push_label = "S5" if legacy_seven_states else "S1"
+        stats[f"u4_{push_label.lower()}_by_motion"] = {
+            name: confusion_metrics([row for row in u4_trace if low <= row["step"] < high], states)[push_label]
             for name, low, high in (
                 ("lateral_push", first, unload),
                 ("arm_handover", unload, rear),
@@ -238,7 +242,7 @@ def score(path, specialized):
     if header["case"] == "a" and release is not None:
         stats["a_s1_misses_by_wrist_evidence"] = dict(approach_s1_misses)
         stats["s0_timing"] = {
-            name: confusion_metrics(part)["S0"] for name, part in (
+            name: confusion_metrics(part, states)["S0"] for name, part in (
                 ("before_final_release", [r for r in trace if r["step"] <= release]),
                 ("after_final_release", [r for r in trace if r["step"] > release]),
             )
@@ -251,12 +255,13 @@ def score(path, specialized):
             "metrics": stats, "optics": optical_audit(rows, "camera")}, trace
 
 
-def compare(manifest, output):
+def compare(manifest, output, *, legacy_seven_states=False):
     entries = json.loads(manifest.read_text())["clips"]
     reports = {}
     pooled, by_case = {}, {}
     for entry in entries:
-        report, trace = score(manifest.parent / entry["path"], entry.get("specialized", False))
+        report, trace = score(manifest.parent / entry["path"], entry.get("specialized", False),
+                              legacy_seven_states=legacy_seven_states)
         method = entry["method"]
         reports[entry["id"]] = {**report, "method": method}
         if entry.get("pool", True):
@@ -264,10 +269,12 @@ def compare(manifest, output):
             accuracy = report["metrics"]["_overall"]["accuracy"]
             by_case.setdefault(method, {}).setdefault(report["case"], []).append(accuracy)
         print(f"Scored {entry['id']}", flush=True)
-    aggregate = {method: confusion_metrics(trace) for method, trace in pooled.items()}
+    states = STATES if legacy_seven_states else TASK_STATES
+    aggregate = {method: confusion_metrics(trace, states) for method, trace in pooled.items()}
     equal_case_accuracy = {method: float(np.mean([np.mean(group) for group in cases.values()]))
                            for method, cases in by_case.items()}
-    result = {"fusion": "SevenObserver fusion_compensated, revised, 5 mm tool separation for both optics",
+    result = {"state_labels": states,
+              "fusion": "SevenObserver fusion_compensated, revised, 5 mm tool separation for both optics",
               "ground_truth": "SevenReference from each trajectory's PhysX samples",
               "clips": reports, "pooled_steps": aggregate, "equal_case_accuracy": equal_case_accuracy}
     output.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
@@ -284,11 +291,12 @@ def main():
     replay = commands.add_parser("score")
     replay.add_argument("manifest", type=Path)
     replay.add_argument("output", type=Path)
+    replay.add_argument("--legacy-seven-states", action="store_true")
     args = parser.parse_args()
     if args.command == "prepare":
         prepare(args.run, args.case, args.output, args.checkpoint)
     else:
-        compare(args.manifest, args.output)
+        compare(args.manifest, args.output, legacy_seven_states=args.legacy_seven_states)
 
 
 if __name__ == "__main__":

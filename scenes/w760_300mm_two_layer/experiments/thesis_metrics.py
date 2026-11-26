@@ -16,9 +16,10 @@ import numpy as np
 
 from seven_observer import SevenObserver
 from seven_reference import SevenReference
+from task_state_labels import SEVEN_STATES, TASK_STATES
 
 
-STATES = tuple(f"S{i}" for i in range(7))
+STATES = SEVEN_STATES
 MODALITIES = ("vision_only", "tactile_only", "fusion")
 
 
@@ -39,7 +40,7 @@ def load_clip(path: Path):
     return header, rows
 
 
-def classify(header, rows):
+def classify(header, rows, *, label_key="task_state"):
     if header["case"] in ("u4", "u5") and not any(
             sensor.get("tcp_command_positions_m") for sensor, _ in rows):
         raise ValueError(
@@ -59,23 +60,23 @@ def classify(header, rows):
         base = {
             "step": sensor["physics_step"],
             "time_s": sensor["time_s"],
-            "truth": truth["state"],
+            "truth": truth[label_key],
         }
         for name, observer in observers.items():
             prediction = observer.update(sensor, neighbors=header["optical_neighbors"])
-            traces[name].append({**base, "pred": prediction["state"]})
+            traces[name].append({**base, "pred": prediction[label_key]})
     return traces
 
 
-def confusion_metrics(trace):
-    matrix = {state: Counter() for state in STATES}
+def confusion_metrics(trace, states=STATES):
+    matrix = {state: Counter() for state in states}
     for row in trace:
         if row["truth"] in matrix:
             matrix[row["truth"]][row["pred"]] += 1
     result = {}
-    for state in STATES:
+    for state in states:
         truth_count = sum(matrix[state].values())
-        predicted_count = sum(matrix[other][state] for other in STATES)
+        predicted_count = sum(matrix[other][state] for other in states)
         tp = matrix[state][state]
         precision = tp / predicted_count if predicted_count else None
         recall = tp / truth_count if truth_count else None
@@ -90,36 +91,33 @@ def confusion_metrics(trace):
             "f1": f1,
             "unknown": matrix[state]["UNKNOWN"],
         }
-    known = sum(sum(matrix[state].values()) for state in STATES)
-    unknown = sum(matrix[state]["UNKNOWN"] for state in STATES)
+    known = sum(sum(matrix[state].values()) for state in states)
+    unknown = sum(matrix[state]["UNKNOWN"] for state in states)
+    correct = sum(matrix[state][state] for state in states)
     result["_overall"] = {
         "known_steps": known,
-        "correct_steps": sum(matrix[state][state] for state in STATES),
+        "correct_steps": correct,
         "unknown_steps": unknown,
         "coverage": (known - unknown) / known if known else None,
-        "accuracy": sum(matrix[state][state] for state in STATES) / known if known else None,
+        "accuracy": correct / known if known else None,
     }
     return result
 
 
-def event_metrics(trace, minimum_steps=3):
+def event_metrics(trace, minimum_steps=3, *, states=STATES):
     events = []
     current = None
     for row in trace + [{"step": None, "time_s": None, "truth": None, "pred": None}]:
         if row["truth"] != current:
-            if current in STATES and len(events[-1]["rows"]) >= minimum_steps:
-                pass
-            if current in STATES and events:
-                events[-1]["rows"] = events[-1]["rows"]
-            if row["truth"] in STATES:
+            if row["truth"] in states:
                 events.append({"state": row["truth"], "start_step": row["step"],
                                "start_time_s": row["time_s"], "rows": []})
             current = row["truth"]
-        if events and row["truth"] == events[-1]["state"]:
+        if current in states:
             events[-1]["rows"].append(row)
     events = [event for event in events if len(event["rows"]) >= minimum_steps]
     by_state = {}
-    for state in STATES:
+    for state in states:
         selected = [event for event in events if event["state"] == state]
         delays = []
         early = 0
@@ -158,7 +156,7 @@ def mean_ci(values, rng, samples=5000):
     }
 
 
-def summarize(runs, seed=20261122):
+def summarize(runs, seed=20261122, *, states=STATES):
     rng = np.random.default_rng(seed)
     result = {"seed": seed, "runs": runs, "modalities": {}}
     for modality in MODALITIES:
@@ -167,7 +165,7 @@ def summarize(runs, seed=20261122):
             result["modalities"][modality]["overall"][metric] = mean_ci(
                 [run["metrics"][modality]["_overall"][metric] for run in runs], rng
             )
-        for state in STATES:
+        for state in states:
             result["modalities"][modality]["states"][state] = {
                 metric: mean_ci([run["metrics"][modality][state][metric] for run in runs], rng)
                 for metric in ("precision", "recall", "f1")
@@ -179,7 +177,7 @@ def summarize(runs, seed=20261122):
     return result
 
 
-def run(manifest_path: Path, output: Path):
+def run(manifest_path: Path, output: Path, *, legacy_seven_states=False):
     manifest = json.loads(manifest_path.read_text())
     entries = manifest.get("runs", [])
     if not entries:
@@ -187,6 +185,8 @@ def run(manifest_path: Path, output: Path):
     split_names = {entry.get("split") for entry in entries}
     if split_names != {"development", "validation", "test"}:
         raise ValueError("Manifest must contain development, validation and test splits")
+    states = STATES if legacy_seven_states else TASK_STATES
+    label_key = "state" if legacy_seven_states else "task_state"
     seen = set()
     run_reports = []
     for entry in entries:
@@ -198,21 +198,22 @@ def run(manifest_path: Path, output: Path):
         if manifest.get("schema_version") == 2:
             clip_path = manifest_path.parent / clip_path
         header, rows = load_clip(clip_path)
-        traces = classify(header, rows)
+        traces = classify(header, rows, label_key=label_key)
         run_reports.append({
             "name": name,
             "split": entry["split"],
             "case": header["case"],
             "source": header["source"],
             "steps": len(rows),
-            "metrics": {modality: confusion_metrics(trace) for modality, trace in traces.items()},
-            "events": {modality: event_metrics(trace) for modality, trace in traces.items()},
+            "metrics": {modality: confusion_metrics(trace, states) for modality, trace in traces.items()},
+            "events": {modality: event_metrics(trace, states=states) for modality, trace in traces.items()},
         })
     test_runs = [run for run in run_reports if run["split"] == "test"]
-    summary = summarize(test_runs)
+    summary = summarize(test_runs, states=states)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps({
         "manifest": str(manifest_path),
+        "state_labels": states,
         "split_counts": dict(Counter(run["split"] for run in run_reports)),
         "run_reports": run_reports,
         "test_summary": summary,
@@ -223,5 +224,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("manifest", type=Path)
     parser.add_argument("output", type=Path)
+    parser.add_argument("--legacy-seven-states", action="store_true")
     args = parser.parse_args()
-    run(args.manifest, args.output)
+    run(args.manifest, args.output, legacy_seven_states=args.legacy_seven_states)

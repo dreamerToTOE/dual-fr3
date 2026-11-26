@@ -1,5 +1,7 @@
 # 双层码垛场景的视觉拟合与 ArUco 状态识别对照
 
+下文保留原七类对照。现行口径见[合并后的六类复算](six_states.md)。
+
 测试沿用 76 cm 托盘、30 cm 高墙和 15 cm 箱体。拟合法使用已发布的场景，由同一台后置 D455 读取 RGB-D。ArUco 使用该相机的 RGB 图像估计箱位。两组回放都使用各试次记录的双腕 TCP 力/力矩、编码器、实际发出的推进指令以及当时已取得的邻箱观测。[视觉拟合法基线](https://github.com/dreamerToTOE/dual-fr3/tree/727c5ae8b9dbc9800c0f0c173fc7307e2c2b0952/scenes/w760_300mm_two_layer)
 
 ## 评分口径
@@ -65,7 +67,8 @@ S1 的总体识别率提高。A 段刚接触料台箱体时，S1 从 33.4% 降�
 ```bash
 e=scenes/w760_300mm_two_layer/experiments
 python3 "$e/compare_vision_states.py" score \
-  "$e/results/fitting_vs_aruco_20261126/manifest.json" /tmp/fr3-fitting-state-scores.json
+  "$e/results/fitting_vs_aruco_20261126/manifest.json" /tmp/fr3-fitting-state-scores.json \
+  --legacy-seven-states
 ```
 
 新试次由 [采集入口](../../capture_fitting_states.py) 从对应断点启动。A 使用视觉拟合法基线保存的第一层两排实测断点，第 4 箱使用原 ArUco 在线验收断点。之前的拟合法日志没有三轴冲量，因此新采集的 A 段用来评分 S2 和 S3。第 5 箱使用基线验收的直推段。尝试在同一场景交替显示标记时，无标记帧仍检出了 ArUco，相关试次未用于评分。

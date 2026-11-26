@@ -4,6 +4,8 @@ from collections import deque
 from math import isfinite
 from statistics import median
 
+from task_state_labels import task_state
+
 
 MIN_IMPULSE_NS = 1e-5
 WALL_FACE = {"wall_back": (1, 1), "wall_front": (1, -1),
@@ -187,7 +189,7 @@ class SevenReference:
                     reason = "partial_support_without_confirmed_transfer"
         if fraction is not None and not isfinite(fraction):
             raise ValueError("Nonfinite support load")
-        return {"state": state, "reason": reason, "support_load_fraction": fraction,
+        return {"state": state, "task_state": task_state(state), "reason": reason, "support_load_fraction": fraction,
                 "support_objects": sorted(supports), "horizontal_objects": sorted(sides),
                 "sealed_arms": sealed, "inferred_tool_load_fraction": inferred_tool_share,
                 "ambiguous_contacts": sorted(ambiguous_contacts)}

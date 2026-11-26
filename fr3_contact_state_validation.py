@@ -206,6 +206,7 @@ class ContactStateExperiment:
             from collections import Counter
             u4_summary = {
                 "samples": len(self.u4_predictions),
+                "task_state_counts": dict(Counter(row["task_state"] for row in self.u4_predictions)),
                 "state_counts": dict(Counter(row["state"] for row in self.u4_predictions)),
                 "handover_active_samples": sum(row.get("handover_active", False) for row in self.u4_predictions),
                 "supported_view_samples": sum(row.get("supported_view_used", False) for row in self.u4_predictions),
