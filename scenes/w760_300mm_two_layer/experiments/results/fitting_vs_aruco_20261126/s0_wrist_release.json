@@ -1,0 +1,238 @@
+{
+  "wrist_force_max_N": 0.3,
+  "quiet_time_s": 0.05,
+  "clips": {
+    "fitting_a_full.jsonl.gz": {
+      "S0": {
+        "wrist_quiet": {
+          "tp": 10307,
+          "truth": 10320,
+          "predicted": 10307,
+          "precision": 1.0,
+          "recall": 0.9987403100775194,
+          "f1": 0.9993697580840646,
+          "unknown": 13
+        },
+        "fused_5mm": {
+          "tp": 8995,
+          "truth": 10320,
+          "predicted": 8995,
+          "precision": 1.0,
+          "recall": 0.8716085271317829,
+          "f1": 0.9314004659590992,
+          "unknown": 1325
+        },
+        "fused_1p5mm": {
+          "tp": 9875,
+          "truth": 10320,
+          "predicted": 9875,
+          "precision": 1.0,
+          "recall": 0.9568798449612403,
+          "f1": 0.9779648427828671,
+          "unknown": 445
+        }
+      },
+      "physical_counts": {
+        "samples": 20825,
+        "native_sealed_samples": 10129,
+        "both_wrist_quiet": 10307,
+        "unsealed_no_observed_cup_contact": 10307
+      },
+      "examples": {},
+      "longest_quiet_touch_steps": 0,
+      "release_events": {
+        "both_seals_open": {
+          "step": 14652,
+          "time_s": 122.11667303554714,
+          "state": "S1",
+          "wrist_force_norm_N": {
+            "left": 1.803912578686148,
+            "right": 0.004302678472110842
+          }
+        },
+        "first_s0": {
+          "step": 14713,
+          "time_s": 122.62500639539212
+        },
+        "first_wrist_quiet": {
+          "step": 14726,
+          "time_s": 122.73333973437548
+        }
+      }
+    },
+    "fitting_u4_matched.jsonl.gz": {
+      "S0": {
+        "wrist_quiet": {
+          "tp": 5107,
+          "truth": 5116,
+          "predicted": 5107,
+          "precision": 1.0,
+          "recall": 0.9982408131352619,
+          "f1": 0.9991196322018977,
+          "unknown": 9
+        },
+        "fused_5mm": {
+          "tp": 3813,
+          "truth": 5116,
+          "predicted": 3813,
+          "precision": 1.0,
+          "recall": 0.7453088350273651,
+          "f1": 0.8540710045917795,
+          "unknown": 1303
+        },
+        "fused_1p5mm": {
+          "tp": 4649,
+          "truth": 5116,
+          "predicted": 4649,
+          "precision": 1.0,
+          "recall": 0.9087177482408131,
+          "f1": 0.9521761392729134,
+          "unknown": 467
+        }
+      },
+      "physical_counts": {
+        "samples": 17756,
+        "native_sealed_samples": 0,
+        "both_wrist_quiet": 5107,
+        "unsealed_no_observed_cup_contact": 5107
+      },
+      "examples": {},
+      "longest_quiet_touch_steps": 0,
+      "release_events": {}
+    },
+    "fitting_u5_archive.jsonl.gz": {
+      "S0": {
+        "wrist_quiet": {
+          "tp": 4228,
+          "truth": 4243,
+          "predicted": 4228,
+          "precision": 1.0,
+          "recall": 0.9964647654961113,
+          "f1": 0.9982292527446582,
+          "unknown": 15
+        },
+        "fused_5mm": {
+          "tp": 2980,
+          "truth": 4243,
+          "predicted": 2980,
+          "precision": 1.0,
+          "recall": 0.7023332547725666,
+          "f1": 0.8251419077945452,
+          "unknown": 1263
+        },
+        "fused_1p5mm": {
+          "tp": 3813,
+          "truth": 4243,
+          "predicted": 3813,
+          "precision": 1.0,
+          "recall": 0.8986566108885222,
+          "f1": 0.9466236345580933,
+          "unknown": 430
+        }
+      },
+      "physical_counts": {
+        "samples": 14194,
+        "native_sealed_samples": 0,
+        "both_wrist_quiet": 4228,
+        "unsealed_no_observed_cup_contact": 4228
+      },
+      "examples": {},
+      "longest_quiet_touch_steps": 0,
+      "release_events": {}
+    }
+  },
+  "pooled_S0": {
+    "wrist_quiet": {
+      "tp": 19642,
+      "truth": 19679,
+      "predicted": 19642,
+      "precision": 1.0,
+      "recall": 0.9981198231617461,
+      "f1": 0.9990590269830371,
+      "unknown": 37
+    },
+    "fused_5mm": {
+      "tp": 15788,
+      "truth": 19679,
+      "predicted": 15788,
+      "precision": 1.0,
+      "recall": 0.802276538441994,
+      "f1": 0.8902923844700708,
+      "unknown": 3891
+    },
+    "fused_1p5mm": {
+      "tp": 18337,
+      "truth": 19679,
+      "predicted": 18337,
+      "precision": 1.0,
+      "recall": 0.9318054779206261,
+      "f1": 0.9646990740740742,
+      "unknown": 1342
+    }
+  },
+  "pooled_physical_counts": {
+    "samples": 52775,
+    "native_sealed_samples": 10129,
+    "both_wrist_quiet": 19642,
+    "unsealed_no_observed_cup_contact": 19642
+  },
+  "light_touch_control": {
+    "source": "light_touch.jsonl.gz",
+    "S0": {
+      "wrist_quiet": {
+        "tp": 4175,
+        "truth": 4183,
+        "predicted": 6918,
+        "precision": 0.6034981208441746,
+        "recall": 0.9980874970117141,
+        "f1": 0.7521844878839744,
+        "unknown": 8
+      },
+      "fused_5mm": {
+        "tp": 834,
+        "truth": 4183,
+        "predicted": 896,
+        "precision": 0.9308035714285714,
+        "recall": 0.19937843652880707,
+        "f1": 0.3284111045481393,
+        "unknown": 3349
+      },
+      "fused_1p5mm": {
+        "tp": 941,
+        "truth": 4183,
+        "predicted": 1003,
+        "precision": 0.938185443668993,
+        "recall": 0.22495816399713126,
+        "f1": 0.3629001156961049,
+        "unknown": 3242
+      }
+    },
+    "physical_counts": {
+      "samples": 7321,
+      "native_sealed_samples": 0,
+      "both_wrist_quiet": 6964,
+      "unsealed_no_observed_cup_contact": 4175,
+      "unsealed_cup_contact": 2789
+    },
+    "examples": {
+      "unsealed_cup_contact": {
+        "step": 4113,
+        "state": "S1",
+        "sealed_arms": [],
+        "bottom_support": [
+          "/World/Environment/supply"
+        ],
+        "wrist_force_norm_N": {
+          "left": 0.00023206611341721237,
+          "right": 0.25570295029023016
+        },
+        "wrist_torque_norm_Nm": {
+          "left": 1.1783610289066684e-05,
+          "right": 0.010084651140557618
+        }
+      }
+    },
+    "longest_quiet_touch_steps": 121,
+    "release_events": {}
+  }
+}
