@@ -68,6 +68,11 @@ def main():
     parser.add_argument("--close-on-finish", action="store_true")
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--capture-layout", action="store_true")
+    parser.add_argument("--observed-skills", action="store_true",
+                        help="Use the experimental observation-driven skill runner")
+    parser.add_argument("--start-empty", action="store_true",
+                        help="Execute rear-row supply and placement before front and upper rows")
+    parser.add_argument("--stop-after-rear", type=int, choices=range(1, 6))
     parser.add_argument("--stop-after-front", type=int, choices=range(1, 6),
                         help="Stop after the indicated lower front slot is verified")
     args = parser.parse_args()
@@ -76,10 +81,29 @@ def main():
         data = args.resume.read_bytes()
         checkpoint = json.loads(data)
         checkpoint["input_provenance"] = {"path": str(args.resume.resolve()), "sha256": hashlib.sha256(data).hexdigest()}
-    front, upper, saved = start_state(checkpoint)
+    if args.start_empty and args.resume:
+        parser.error("Use either --start-empty or --resume.")
+    rear = 1 if args.start_empty else checkpoint.get("next_rear", 6)
+    if rear not in range(1, 7):
+        parser.error("Invalid next rear slot.")
+    if not args.observed_skills and (rear < 6 or args.stop_after_rear is not None):
+        parser.error("Rear-row execution requires --observed-skills.")
+    if args.stop_after_rear is not None and args.stop_after_rear < rear:
+        parser.error("The requested rear slot is already complete.")
+    if args.capture_layout and args.observed_skills:
+        parser.error("Static layout capture uses the baseline runtime.")
+    if rear < 6:
+        front, upper, saved = 1, 1, checkpoint.get("initial_boxes", [])
+        if ((checkpoint and checkpoint.get("scene") != SCENE)
+                or [box["cube_id"] for box in saved] != list(range(1, rear))
+                or [box["cube_id"] for box in checkpoint.get("rear_completed", [])] != list(range(1, rear))
+                or (checkpoint.get("rear_landed") and checkpoint["rear_landed"]["cube_id"] != rear)):
+            parser.error("The rear-row checkpoint must contain exactly the completed rear placements.")
+    else:
+        front, upper, saved = start_state(checkpoint)
     if args.stop_after_front is not None and args.stop_after_front < front:
         parser.error("The requested stopping slot is already complete in the checkpoint")
-    first_id = FRONT_IDS[front - 1] if front < 6 else 6 + upper
+    first_id = rear if rear < 6 else FRONT_IDS[front - 1] if front < 6 else 6 + upper
     output = args.output.resolve()
     source = rear_depth_only(build())
     if args.capture_layout:
@@ -89,6 +113,13 @@ def main():
     else:
         from markerless_tracking import install
         source = install(source)
+        if args.observed_skills:
+            from dynamic_withdraw import install as dynamic_withdraw
+            from observed_b1 import install as observed_b1
+            from observed_rear import install as observed_rear
+            from observed_transport import install as observed_transport
+
+            source = observed_rear(dynamic_withdraw(observed_b1(observed_transport(source))))
     snapshot = output / "runner_snapshot.py"
     runner = compile(source, str(snapshot), "exec")
     if args.check_only:
@@ -108,8 +139,10 @@ def main():
             sys.argv.append("--close-on-finish")
         exec(runner, {"__file__": sys.argv[0], "__name__": "__main__", "SCENE": SCENE, "LOWER_IDS": LOWER_IDS,
                       "FRONT_IDS": FRONT_IDS, "START_FRONT": front, "START_SLOT": upper, "FIRST_ID": first_id,
+                      "START_REAR": rear, "STOP_AFTER_REAR": args.stop_after_rear,
                       "STOP_AFTER_FRONT": args.stop_after_front, "INITIAL_BOXES": saved, "RUNTIME_GUIDES": row_guide_paths(),
-                      "CHECKPOINT": checkpoint, "RELEASE_CHECKPOINT": checkpoint.get("front_landed") or checkpoint.get("landed"),
+                      "CHECKPOINT": checkpoint, "RELEASE_CHECKPOINT":
+                          checkpoint.get("rear_landed") or checkpoint.get("front_landed") or checkpoint.get("landed"),
                       "SUPPORT_TOP_BEVEL_M": None, "UPPER_REST_OFFSET_M": None, "CUBE_CONTACT_OFFSET_M": None,
                       "capture_layout": capture_layout})
 

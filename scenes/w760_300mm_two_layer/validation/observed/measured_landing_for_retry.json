@@ -1,0 +1,24 @@
+{
+  "scene": "W760_H300_rear5_front5_upper5_side_v1",
+  "next_rear": 1,
+  "next_front": 1,
+  "next_slot": 1,
+  "rear_completed": [],
+  "initial_boxes": [],
+  "rear_landed": {
+    "cube_id": 1,
+    "position_m": [
+      -2.8818238206440583e-05,
+      0.7351000905036926,
+      0.7869998812675476
+    ],
+    "orientation_wxyz": [
+      1.0,
+      -2.300282098133266e-08,
+      4.062261282911095e-08,
+      -2.55632730841171e-05
+    ]
+  },
+  "source_run": "fr3-observed-rear1-20261126",
+  "source_step": 18892
+}

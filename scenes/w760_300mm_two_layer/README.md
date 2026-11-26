@@ -12,7 +12,7 @@
 
 ## 技能与状态改造
 
-本分支的设计用状态事件结束技能。允许的安全运动范围内，任何位置的正确识别均视为同等成功。 [新状态表、技能库与改造顺序](long_skill_short_state.md)
+本分支的设计用状态事件结束技能。允许的安全运动范围内，任何位置的正确识别均视为同等成功。 [新状态表、技能库与改造顺序](long_skill_short_state.md) · [15 箱逐箱运行线](long_skill_short_state_routes.md) · [试验运行记录](observed_skills_validation.md)
 
 ## ArUco 版可视化运行
 

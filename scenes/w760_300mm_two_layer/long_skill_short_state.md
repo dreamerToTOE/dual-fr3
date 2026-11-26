@@ -4,6 +4,8 @@
 
 **验收原则是安全范围内正确识别。** 同一技能允许范围内，任何位置正确确认所需事件都算一次成功。越早识别没有额外得分。时间戳留给事后复核。避障检查约束机械臂可以怎样动，状态识别确认实际发生了什么。 [状态、事件和技能接口](long_skill_short_state.json)
 
+[15 箱逐箱识别与技能运行线](long_skill_short_state_routes.md)
+
 ## 新状态表
 
 | 状态 | 可观测的物理关系 | 当前用途 |
@@ -64,4 +66,4 @@ RRTConnect 自由空间段的终点在箱面之外，实际贴合由低速接触
 4. **切换到新调度。** 逐个替换固定撤离点与依赖仿真真值的过渡条件，验证下一技能从实测姿态开始。在单个 Isaac Sim 实例中从可验证断点续跑，最后验证全场景。首轮验收另列第一层后排实跑覆盖。
 5. **按事件评分。** 统计允许范围内正确触发、错误触发、窗口内未确认、碰撞和最终就位。记录碰撞发生在识别错误、原技能运动还是下一技能规划。每个技能机会计一次，观测到得早晚只用于复查。接触状态的逐步记录留作诊断。
 
-本提交确定接口和工程迁移顺序。动态撤离与事件调度的物理验收需要在接入运行器后执行。 [既有 S0 撤离旁路验收](https://github.com/dreamerToTOE/dual-fr3/blob/f35b3d257eed29aa7419ace6cc7011ebd0baee44/scenes/w760_300mm_two_layer/experiments/results/fitting_vs_aruco_20261126/s0_wrist_release.md)
+观测驱动的试验入口和物理覆盖见[试验运行记录](observed_skills_validation.md)。[既有 S0 撤离旁路验收](https://github.com/dreamerToTOE/dual-fr3/blob/f35b3d257eed29aa7419ace6cc7011ebd0baee44/scenes/w760_300mm_two_layer/experiments/results/fitting_vs_aruco_20261126/s0_wrist_release.md)
