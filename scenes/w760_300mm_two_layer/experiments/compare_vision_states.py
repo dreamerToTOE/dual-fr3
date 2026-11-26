@@ -156,15 +156,17 @@ def load(path):
 def summarize(trace, hz, states):
     values = confusion_metrics(trace, states)
     values["_overall"]["truth_unknown_steps"] = sum(row["truth"] not in states for row in trace)
-    values["s6_event"] = {
-        "truth": events(trace, "truth", "S6"),
-        "hit": events([dict(row, hit=row["truth"] == row["pred"] == "S6") for row in trace], "hit"),
+    dual_state = "S6" if "S6" in states else "S5"
+    contact_event = {
+        "truth": events(trace, "truth", dual_state),
+        "hit": events([dict(row, hit=row["truth"] == row["pred"] == dual_state) for row in trace], "hit"),
     }
-    first = values["s6_event"]["truth"]["first_step"]
-    confirmation = values["s6_event"]["hit"]["first_3step_confirm"]
-    values["s6_event"]["first_3step_delay_ms"] = (
+    first = contact_event["truth"]["first_step"]
+    confirmation = contact_event["hit"]["first_3step_confirm"]
+    contact_event["first_3step_delay_ms"] = (
         (confirmation - first) * 1000 / hz if first is not None and confirmation is not None else None
     )
+    values[f"{dual_state.lower()}_event"] = contact_event
     values["confusion"] = {
         state: {p: sum(r["truth"] == state and r["pred"] == p for r in trace)
                 for p in (*states, "UNKNOWN")}

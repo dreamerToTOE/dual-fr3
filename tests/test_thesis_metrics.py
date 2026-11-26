@@ -43,17 +43,18 @@ def test_event_metrics_uses_transition_start_and_excludes_early_prediction():
     assert events["S2"]["median_delay_ms"] == pytest.approx(1000 / 120)
 
 
-def test_merged_push_labels_remove_internal_transition_but_keep_s6_and_unknown():
+def test_merged_push_labels_keep_dual_bearing_and_unknown_distinct():
     raw_pairs = [("S1", "S5"), ("S5", "S1"), ("S5", "UNKNOWN"), ("S6", "S5")]
     trace = [{"step": i, "time_s": i / 120, "truth": task_state(truth), "pred": task_state(pred)}
              for i, (truth, pred) in enumerate(raw_pairs)]
     metrics = confusion_metrics(trace, TASK_STATES)
-    assert "S5" not in metrics
+    assert "S6" not in metrics
     assert metrics["S1"]["tp"] == 2
     assert metrics["S1"]["recall"] == pytest.approx(2 / 3)
     assert metrics["S1"]["precision"] == pytest.approx(2 / 3)
     assert metrics["S1"]["unknown"] == 1
-    assert metrics["S6"]["truth"] == 1
+    assert metrics["S5"]["truth"] == 1
+    assert metrics["S5"]["tp"] == 0
     events = event_metrics(trace, states=TASK_STATES)
     assert events["S1"]["events"] == 1
     assert events["S1"]["median_delay_ms"] == 0
