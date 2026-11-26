@@ -27,7 +27,8 @@ def install(source):
                           '                                        or current_task.get("rear_slot") in (2, 4))')
     source = replace_once(source, '            cruise = cruise and current_task.get("front_slot") not in (2, 4)',
                           '            cruise = cruise and current_task.get("front_slot") not in (2, 4)\n'
-                          '            cruise = cruise and current_task.get("rear_slot") not in (2, 4)')
+                          '            # Preserve the rear R3 rail profile tested with side suction.\n'
+                          '            cruise = cruise and current_task.get("rear_slot") not in (2, 3, 4)')
     return replace_once(source, '            if front_slot != START_FRONT:\n',
                         '            if front_slot != START_FRONT or START_REAR < 6:\n')
 
