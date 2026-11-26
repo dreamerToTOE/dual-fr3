@@ -1,0 +1,530 @@
+{
+  "run": "rear4",
+  "scope": "A-stage live rear-neighbor relative landing",
+  "runner_snapshot_sha256": "d8f492233d90595665deb1bb09bdc793eec6449006e9443ce61a07aa3ade755f",
+  "input_checkpoint_sha256": "7bc257605a8253353eecb759530ff4ca556aed07251d5c041b33769cfb9d1638",
+  "landing_checkpoint_sha256": "16913aef92631b255759beb73a73301cf46ad1c52ce166c62c59c338026ca1de",
+  "transport_steps": 9306,
+  "transport_steps_with_both_seals": 9306,
+  "A_events": [
+    {
+      "phase": "A_observed_transport",
+      "status": "RETARGETED",
+      "sim_time_s": 2.4,
+      "wall_elapsed_s": 18.444674338000368,
+      "cube_position_m": [
+        -2.2736157401226365e-09,
+        -0.29999998211860657,
+        0.7870000004768372
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        1.4388437108436847e-09,
+        1.2681615757514919e-08,
+        -1.0403945482906352e-09
+      ],
+      "cube_id": 4,
+      "source": "rear_rgbd_square",
+      "pickup_m": [
+        0.0,
+        -0.2991093248128891,
+        0.787
+      ],
+      "landing_m": [
+        0.10549849776058196,
+        0.73476583,
+        0.7869999999999999
+      ],
+      "measured_tcp_m": {
+        "left": [
+          -0.18350787625114057,
+          0.30960154870194934,
+          1.2552820665833093
+        ],
+        "right": [
+          0.4027109832095706,
+          0.30960154868425416,
+          1.255282053506949
+        ]
+      },
+      "physx_reference": {
+        "physics_step": 288,
+        "native_step": 290,
+        "load_N_by_label": {
+          "supply": 12.262548431754112
+        },
+        "tool_contact": {
+          "left": false,
+          "right": false
+        },
+        "attachments": {
+          "left": false,
+          "right": false
+        }
+      }
+    },
+    {
+      "phase": "A_attach",
+      "status": "SURFACE_GRIPPERS_CLOSED",
+      "sim_time_s": 48.35,
+      "wall_elapsed_s": 105.39850981700056,
+      "cube_position_m": [
+        5.253142987271531e-08,
+        -0.3000003397464752,
+        0.7869999408721924
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        4.911112228001002e-07,
+        1.0797280225460781e-07,
+        -2.208369096479146e-06
+      ],
+      "cube_id": 4,
+      "compression_N": {
+        "left": 0.5648878932887389,
+        "right": 0.7864943229813561
+      },
+      "seek_travel_m": {
+        "left": 0.00808574438308102,
+        "right": 0.006329901951895737
+      },
+      "physx_reference": {
+        "physics_step": 5802,
+        "native_step": 5804,
+        "load_N_by_label": {
+          "supply": 12.348352521657944,
+          "left_cup": 0.0,
+          "right_cup": 0.0
+        },
+        "tool_contact": {
+          "left": true,
+          "right": true
+        },
+        "attachments": {
+          "left": true,
+          "right": true
+        }
+      }
+    },
+    {
+      "phase": "A_loaded_rail_transfer",
+      "status": "RUNNING",
+      "sim_time_s": 62.875,
+      "wall_elapsed_s": 134.16136645300048,
+      "cube_position_m": [
+        0.10598870366811752,
+        -0.29907503724098206,
+        1.1249783039093018
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -0.0002214521518908441,
+        3.9823980841902085e-06,
+        -0.00031668509473092854
+      ],
+      "cube_id": 4,
+      "physx_reference": {
+        "physics_step": 7545,
+        "native_step": 7547,
+        "load_N_by_label": {
+          "left_cup": 0.0,
+          "right_cup": 0.0
+        },
+        "tool_contact": {
+          "left": true,
+          "right": true
+        },
+        "attachments": {
+          "left": true,
+          "right": true
+        }
+      }
+    },
+    {
+      "phase": "A_loaded_rail_transfer",
+      "status": "CLEAR_PHYSX_EXECUTION",
+      "sim_time_s": 140.41666666666666,
+      "wall_elapsed_s": 300.5862265280002,
+      "cube_position_m": [
+        0.10549864172935486,
+        0.734795093536377,
+        1.124990701675415
+      ],
+      "cube_orientation_wxyz": [
+        0.9999997615814209,
+        -0.0004178177332505584,
+        1.5987734514055774e-05,
+        -0.0005561450379900634
+      ],
+      "cube_id": 4,
+      "physx_reference": {
+        "physics_step": 16850,
+        "native_step": 16852,
+        "load_N_by_label": {
+          "left_cup": 0.0,
+          "right_cup": 0.0
+        },
+        "tool_contact": {
+          "left": true,
+          "right": true
+        },
+        "attachments": {
+          "left": true,
+          "right": true
+        }
+      }
+    },
+    {
+      "phase": "A_vertical_descent",
+      "status": "RUNNING",
+      "sim_time_s": 140.61666666666667,
+      "wall_elapsed_s": 300.92824010300046,
+      "cube_position_m": [
+        0.1054985374212265,
+        0.7347952127456665,
+        1.124990701675415
+      ],
+      "cube_orientation_wxyz": [
+        0.9999997615814209,
+        -0.0004188422462902963,
+        1.609786704648286e-05,
+        -0.000555870879907161
+      ],
+      "cube_id": 4,
+      "physx_reference": {
+        "physics_step": 16874,
+        "native_step": 16876,
+        "load_N_by_label": {
+          "left_cup": 0.0,
+          "right_cup": 0.0
+        },
+        "tool_contact": {
+          "left": true,
+          "right": true
+        },
+        "attachments": {
+          "left": true,
+          "right": true
+        }
+      }
+    },
+    {
+      "phase": "A_vertical_descent",
+      "status": "CLEAR_PHYSX_EXECUTION",
+      "sim_time_s": 151.16666666666666,
+      "wall_elapsed_s": 322.1102354520008,
+      "cube_position_m": [
+        0.10548636317253113,
+        0.7347851991653442,
+        0.7874565720558167
+      ],
+      "cube_orientation_wxyz": [
+        0.9999996423721313,
+        -0.0005441277171485126,
+        1.7136950191343203e-05,
+        -0.0006981734768487513
+      ],
+      "cube_id": 4,
+      "physx_reference": {
+        "physics_step": 18140,
+        "native_step": 18142,
+        "load_N_by_label": {
+          "floor": 0.0,
+          "left_cup": 0.0,
+          "right_cup": 0.0
+        },
+        "tool_contact": {
+          "left": true,
+          "right": true
+        },
+        "attachments": {
+          "left": true,
+          "right": true
+        }
+      }
+    },
+    {
+      "phase": "upper_support_confirmed",
+      "status": "FORCE_TRANSFERRED",
+      "sim_time_s": 155.4,
+      "wall_elapsed_s": 332.1183801770003,
+      "cube_position_m": [
+        0.10547943413257599,
+        0.7347368597984314,
+        0.7870455384254456
+      ],
+      "cube_orientation_wxyz": [
+        0.9999997615814209,
+        -0.0002778438793029636,
+        2.6891950255958363e-05,
+        -0.0007107764249667525
+      ],
+      "cube_id": 4,
+      "hover_load_N": 12.263395389971643,
+      "seated_wrist_load_N": 2.377298445177034,
+      "lower_support_load_N": 9.885228365659714,
+      "stable_wrist_frames": 30,
+      "seating_descent_m": 0.0004641335264074922,
+      "physx_reference": {
+        "physics_step": 18648,
+        "native_step": 18650,
+        "load_N_by_label": {
+          "floor": 9.894064664840698,
+          "left_cup": 0.0,
+          "right_cup": 0.0
+        },
+        "tool_contact": {
+          "left": true,
+          "right": true
+        },
+        "attachments": {
+          "left": true,
+          "right": true
+        }
+      }
+    },
+    {
+      "phase": "A_dynamic_withdraw",
+      "status": "RUNNING",
+      "sim_time_s": 155.9,
+      "wall_elapsed_s": 332.749522137,
+      "cube_position_m": [
+        0.1054745614528656,
+        0.73469477891922,
+        0.7869999408721924
+      ],
+      "cube_orientation_wxyz": [
+        0.9999998211860657,
+        -3.2794648774370216e-08,
+        3.438075424355702e-08,
+        -0.0007093612221069634
+      ],
+      "cube_id": 4,
+      "arms": [
+        "left",
+        "right"
+      ],
+      "travel_limit_m": 0.012,
+      "physx_reference": {
+        "physics_step": 18708,
+        "native_step": 18710,
+        "load_N_by_label": {
+          "floor": 12.262499034404755,
+          "left_cup": 0.0,
+          "right_cup": 0.0
+        },
+        "tool_contact": {
+          "left": false,
+          "right": false
+        },
+        "attachments": {
+          "left": false,
+          "right": false
+        }
+      }
+    },
+    {
+      "phase": "A_dynamic_withdraw",
+      "status": "S0_CONFIRMED",
+      "sim_time_s": 156.93333333333334,
+      "wall_elapsed_s": 335.47477427100057,
+      "cube_position_m": [
+        0.1054745614528656,
+        0.73469477891922,
+        0.7869999408721924
+      ],
+      "cube_orientation_wxyz": [
+        0.9999998211860657,
+        -4.3062701848839424e-08,
+        3.290923089593889e-08,
+        -0.0007093609892763197
+      ],
+      "cube_id": 4,
+      "travel_m": 0.002974999999999996,
+      "cup_gap_m": {
+        "left": 0.003148026200444326,
+        "right": 0.0031194882152154324
+      },
+      "wrist_N": {
+        "left": 0.005973799517727965,
+        "right": 0.005694429297971653
+      },
+      "measured_travel_m": {
+        "left": 0.00278816432516427,
+        "right": 0.002791430706930203
+      },
+      "box_estimate_m": [
+        0.10548307878705915,
+        0.7347342145453228,
+        0.7870286992284505
+      ],
+      "measured_joints_rad": {
+        "left": [
+          -0.41998082399368286,
+          1.1154496669769287,
+          0.7186623811721802,
+          -1.4206714630126953,
+          -0.8340145945549011,
+          2.2175896167755127,
+          -2.6078641414642334
+        ],
+        "right": [
+          0.4652557969093323,
+          0.6409915685653687,
+          0.09096436202526093,
+          -2.046849489212036,
+          -0.12283878028392792,
+          2.6829206943511963,
+          0.6486175656318665
+        ]
+      },
+      "physx_reference": {
+        "physics_step": 18832,
+        "native_step": 18834,
+        "load_N_by_label": {
+          "floor": 12.262499704957008,
+          "left_cup": 0.0,
+          "right_cup": 0.0
+        },
+        "tool_contact": {
+          "left": false,
+          "right": false
+        },
+        "attachments": {
+          "left": false,
+          "right": false
+        }
+      }
+    }
+  ],
+  "B_initial_forward_stage": {
+    "status": "STOPPED",
+    "error": "rear_4_B2_1_travel: right exceeded its wrist wrench limit: [-4.56198215e-01 -8.15051169e+00  3.85030366e+00  2.91188235e-01\n -2.07186068e-02 -7.59410569e-03]",
+    "events": [
+      {
+        "phase": "rear_4_B1_approach",
+        "status": "RRTCONNECT_FROM_MEASUREMENT",
+        "sim_time_s": 204.88333333333333,
+        "wall_elapsed_s": 408.6020513960002,
+        "cube_position_m": [
+          0.105474554002285,
+          0.73469477891922,
+          0.7869999408721924
+        ],
+        "cube_orientation_wxyz": [
+          0.9999998211860657,
+          -5.676595904446913e-08,
+          5.103333222677975e-08,
+          -0.0007093607564456761
+        ],
+        "cube_id": 4,
+        "arm": "right",
+        "measured_tcp_m": [
+          0.4025350517916063,
+          0.5095587498183684,
+          1.2552341938536795
+        ],
+        "measured_tcp_rotation": [
+          [
+            -0.7073110470438196,
+            0.7069024560960413,
+            -1.718022059499922e-05
+          ],
+          [
+            0.7069024532634445,
+            0.7073110460462452,
+            7.557175262906977e-05
+          ],
+          [
+            6.557361734532604e-05,
+            4.1307995392791754e-05,
+            -0.9999999969968747
+          ]
+        ],
+        "measured_joints_rad": [
+          0.00014948051830288023,
+          -0.7849912643432617,
+          8.996087854029611e-05,
+          -2.356107711791992,
+          -1.1989354788966011e-05,
+          1.5711336135864258,
+          0.785322368144989
+        ],
+        "measured_rail_y_m": 0.40000000000000013,
+        "observed_cube_m": [
+          0.10511908121407032,
+          0.734545111656189,
+          0.787
+        ],
+        "precontact_tcp_m": [
+          0.10511908121407032,
+          0.649545111656189,
+          0.791
+        ],
+        "planning_margin_m": 0.002,
+        "approach_lift_m": 0.0
+      },
+      {
+        "phase": "rear_4_B1_approach",
+        "status": "PRECONTACT_REACHED",
+        "sim_time_s": 209.75833333333333,
+        "wall_elapsed_s": 418.03102366800067,
+        "cube_position_m": [
+          0.1054745614528656,
+          0.73469477891922,
+          0.7869999408721924
+        ],
+        "cube_orientation_wxyz": [
+          0.9999998211860657,
+          -4.0897361941460986e-08,
+          5.6248648405698987e-08,
+          -0.0007093456806614995
+        ],
+        "cube_id": 4,
+        "arm": "right",
+        "measured_tcp_m": [
+          0.10509511005793941,
+          0.6492956411623957,
+          0.7917467200906172
+        ],
+        "position_error_m": 0.0007876554051938132,
+        "orientation_matrix_error": 0.002010931560347977,
+        "ik_seed_source": "measured_joints"
+      },
+      {
+        "phase": "rear_4_B1_touch",
+        "status": "TACTILE_APPROACH",
+        "sim_time_s": 209.75833333333333,
+        "wall_elapsed_s": 418.039499128,
+        "cube_position_m": [
+          0.1054745614528656,
+          0.73469477891922,
+          0.7869999408721924
+        ],
+        "cube_orientation_wxyz": [
+          0.9999998211860657,
+          -4.0897361941460986e-08,
+          5.6248648405698987e-08,
+          -0.0007093456806614995
+        ],
+        "cube_id": 4
+      }
+    ],
+    "last_wrench_N_Nm": [
+      -0.45619821475781275,
+      -8.150511686686764,
+      3.8503036590096427,
+      0.2911882347875443,
+      -0.020718606808601724,
+      -0.0075941056864960435
+    ],
+    "last_wrist_N": 9.025729656518013,
+    "measured_cube_stop_pose_m": [
+      0.10501191020011902,
+      0.9694307446479797,
+      0.7870000600814819
+    ],
+    "unexpected_contact_count": 0,
+    "resume_checkpoint_sha256": "5ad034378afefd6d02cba3c22d31ac2d16604f0f455f8469014ace75e3e18b6e"
+  }
+}

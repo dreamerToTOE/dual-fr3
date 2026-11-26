@@ -1792,6 +1792,33 @@
         "median_contact_impulse_Ns": 0.10238479916006327,
         "samples": 60
       }
+    },
+    "transit_contact_reaudit": {
+      "status": "UNEXPECTED_CUP_CONTACT_DURING_APPROACH",
+      "phase": "rear_2_B1_approach_transit",
+      "arm": "left",
+      "contact_samples_with_positive_native_impulse": 104,
+      "first": {
+        "physics_step": 8609,
+        "native_physics_step": 8611,
+        "left_cup_normal_force_N": 6.596069451847427
+      },
+      "last": {
+        "physics_step": 8712,
+        "native_physics_step": 8714,
+        "left_cup_normal_force_N": 0.3302410028757209
+      },
+      "peak": {
+        "physics_step": 8705,
+        "native_physics_step": 8707,
+        "left_cup_normal_force_N": 6.669132275486211
+      },
+      "legacy_allowed_contacts_at_restore": [
+        "left",
+        "right"
+      ],
+      "legacy_unexpected_contact_count": 0,
+      "closure_scope": "Placement and paired retreat were verified. The free-space approach requires a new physical run."
     }
   }
 }

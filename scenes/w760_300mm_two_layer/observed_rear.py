@@ -92,6 +92,9 @@ def install(source):
     source = replace_once(source, '                "duration_sim_s": frames / 120.,',
                           '''                "duration_sim_s": frames / 120.,
                 "shared_grasp_reference": bool(paired_offsets),''')
+    source = replace_once(source, '                            speed = .00010 if force < 1.6 else .000020',
+                          '''                            slow_load = max(1.6, probe.get("sliding_baseline_N", 0.) + .5)
+                            speed = .00010 if force < slow_load else .000020''')
     return replace_once(source, '            if front_slot != START_FRONT:\n',
                         '            if front_slot != START_FRONT or START_REAR < 6:\n')
 
@@ -104,6 +107,8 @@ REAR_BODY = '''
 
             nonlocal support_side, push_side, push_sign, left_hold, left_hold_z, left_hold_rotation
             nonlocal contact_plan_rotation
+            # A restored box is resting on the floor, with no holding wrist.
+            allowed_contacts.clear()
             rear_arm = "left" if slot in (1, 3, 5) else "right"
             lateral = "right" if slot in (1, 3) else "left"
             sign = -1 if lateral == "right" else 1
@@ -199,7 +204,7 @@ REAR_BODY = '''
                     guide = json.loads((ROOT / "validation/fr3_row_b2_final_feasibility.json").read_text())
                     case = next(case for case in guide["cases"] if case["cube_id"] == slot)
                     hint = case["precontact_q"][arm]
-                descend_to_side = slot == 3 and axis == 0
+                descend_to_side = slot in (2, 3) and axis == 0
                 margin = .003 if descend_to_side else .002
                 move_to_observed_precontact(arm, destination, rotation @ tool, f"rear_{slot}_B1_approach", hint,
                                             prefer_hint=rear2_lateral_entry or neighbor_entry
@@ -213,6 +218,7 @@ REAR_BODY = '''
 
             def advance(arm, axis, direction, boundary, target_name, follower=None):
                 start, rotation = sensed_cube()
+                measured_slide = {}
                 goal = start.copy()
                 standoff = .005 if slot in (2, 3) and axis == 1 else .001
                 goal[axis] = boundary - direction * (half * np.abs(rotation[axis]).sum() + standoff)
@@ -220,12 +226,23 @@ REAR_BODY = '''
                     goal[axis] = boundary
                 if direction * (goal[axis] - start[axis]) > .0001:
                     if follower is None:
-                        contact_path(arm, start, goal, f"rear_{slot}_B2_{axis}_travel", speed=.018, force_limit=9.)
+                        phase = f"rear_{slot}_B2_{axis}_travel"
+                        if target_name is None:
+                            # Ease into the observed lateral staging lane before turning across it.
+                            if direction * (goal[axis] - start[axis]) > .005:
+                                lead = goal.copy()
+                                lead[axis] -= direction * .005
+                                contact_path(arm, start, lead, phase, speed=.018, force_limit=9.)
+                                start, _ = sensed_cube()
+                            contact_path(arm, start, goal, phase + "_stage", speed=.004, force_limit=9.)
+                        else:
+                            contact_path(arm, start, goal, phase, speed=.018, force_limit=9.)
                     else:
                         # Keep the command-to-encoder preload established by contact synchronization.
                         phase = f"rear_{slot}_B2_side_travel"
                         stop = goal.copy()
-                        stop[axis] -= direction * min(.004, abs(goal[axis] - start[axis]) / 2)
+                        terminal_gap = .001 if slot == 4 else .004
+                        stop[axis] -= direction * min(terminal_gap, abs(goal[axis] - start[axis]) / 2)
                         seeds = {active: applied_targets[active].copy() for active in (arm, follower)}
                         tips = {active: tcp_fk(active, q) for active, q in seeds.items()}
                         count = int(round(B2_CONTROLLER_PARAMETERS["push_duration_s"] * 120)) + 1
@@ -305,7 +322,9 @@ REAR_BODY = '''
                                 else:
                                     raise RuntimeError(f"{phase}: lateral travel remained blocked under load")
 
-                        def check_load(_index, _count):
+                        def check_load(index, count):
+                            if slot == 4 and .2 * count <= index <= .7 * count and index not in measured_slide:
+                                measured_slide[index] = -direction * last_force_sample[arm]["tcp_gravity_corrected_world"][0]
                             for active in robots:
                                 force = np.asarray(last_force_sample[active]["tcp_gravity_corrected_world"][:3])
                                 if np.linalg.norm(force) > 9.:
@@ -320,8 +339,13 @@ REAR_BODY = '''
                 if target_name in ("wall_back", "wall_left", "wall_right"):
                     confirm_wall_bearing(arm, axis, direction, boundary, target_name, follower)
                 elif target_name is not None:
-                    # R3 slides alongside the back wall; the staged R4 approach uses a gentler seat.
-                    probe = B2_CONTROLLER_PARAMETERS["neighbor_seating_probe"] if slot == 4 else None
+                    probe = None
+                    if slot == 4:
+                        baseline = float(np.percentile(list(measured_slide.values()), 90)) if measured_slide else 0.
+                        probe = {"sliding_baseline_N": baseline, "entry_force_N": max(2., baseline + .5),
+                                 "entry_samples": 3, "samples": 30, "minimum_force_N": 1.5,
+                                 "mean_force_N": max(1.8, baseline + .4), "max_axial_travel_m": .0005,
+                                 "target_uncertainty_m": .003}
                     seat_against_wall(arm, axis, direction, boundary - direction * half,
                                       f"rear_{slot}_B2_{axis}_bearing", contact_target=target_name,
                                       follow_side=follower, probe_override=probe)
