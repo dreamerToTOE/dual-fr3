@@ -131,6 +131,7 @@ REAR_BODY = '''
                 average_count = 4 if axis == 0 else 8
                 min_advance = .000012 if axis == 0 else .00004
                 max_tracking_ratio = .45 if axis == 0 else .35
+                extended_terminal = axis == 0 or slot in (2, 3)
                 for _ in range(3600):
                     center, rotation = sensed_cube()
                     measured, _ = tcp_fk(arm, joint_state()[arm])
@@ -154,10 +155,10 @@ REAR_BODY = '''
                             return
                     increment = 0.
                     if total < 7.7:
-                        speed = .0005 if (axis == 0 or slot == 2) and gap > .001 else .00012
+                        speed = .0005 if extended_terminal and gap > .001 else .00012
                         increment = direction * speed / 120
                         tip[axis] += increment
-                    if abs(tip[axis] - start) > (.009 if axis == 0 or slot == 2 else .004):
+                    if abs(tip[axis] - start) > (.009 if extended_terminal else .004):
                         break
                     candidate = cartesian_joint_target(arm, q, tip, attitude)
                     if np.max(np.abs(candidate - q)) * 120 > .4:
@@ -209,7 +210,7 @@ REAR_BODY = '''
             def advance(arm, axis, direction, boundary, target_name, follower=None):
                 start, rotation = sensed_cube()
                 goal = start.copy()
-                standoff = .005 if slot == 2 and axis == 1 else .001
+                standoff = .005 if slot in (2, 3) and axis == 1 else .001
                 goal[axis] = boundary - direction * (half * np.abs(rotation[axis]).sum() + standoff)
                 if target_name is None:
                     goal[axis] = boundary
