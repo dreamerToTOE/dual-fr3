@@ -1,0 +1,595 @@
+{
+  "state_labels": [
+    "S0",
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5"
+  ],
+  "base_commit": "727c5ae8b9dbc9800c0f0c173fc7307e2c2b0952",
+  "resume": "../online_acceptance_20261125/upper4/input_checkpoint.json",
+  "checkpoint_sha256": "1f44307d9a6a31c675d1b9f9984fc5c5289935cdb5892c0457e4dc28f45d6c26",
+  "physical_status": "CAPTURED_FITTING_STATES",
+  "physx_unexpected_contacts": 0,
+  "physx_slot4": {
+    "slot": 4,
+    "cube_id": 10,
+    "target_m": [
+      0.15301829874515535,
+      1.076,
+      0.9369999999999999
+    ],
+    "rgb_final_m": [
+      0.1523305436968583,
+      1.076608937672843,
+      0.9369999999999999
+    ],
+    "physical_final_m": [
+      0.152572900056839,
+      1.0759563446044922,
+      0.9369999170303345
+    ],
+    "yaw_pitch_roll_deg": [
+      0.025621266469833984,
+      2.6599873020389193e-05,
+      -8.819648809528612e-05
+    ],
+    "support": {
+      "positive_steps": 60,
+      "median_contact_impulse_Ns": 0.10193430760872653,
+      "samples": 60
+    },
+    "max_lower_shift_m": 7.020630820675726e-05
+  },
+  "phases": [
+    {
+      "phase": "upper_B_side",
+      "status": "RUNNING",
+      "sim_time_s": 57.075,
+      "wall_elapsed_s": 166.6067352680002,
+      "cube_position_m": [
+        0.14006271958351135,
+        1.009443759918213,
+        0.9369998574256897
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -1.3701338730243151e-06,
+        1.4568593087460613e-06,
+        -2.7859455258294474e-06
+      ],
+      "cube_id": 10,
+      "arm": "left",
+      "contact_target": "/World/Cube_8",
+      "estimated_start_gap_m": 0.012955157085572239
+    },
+    {
+      "phase": "upper_B_side",
+      "status": "FORCE_CONFIRMED",
+      "sim_time_s": 88.49166666666666,
+      "wall_elapsed_s": 293.02149584700237,
+      "cube_position_m": [
+        0.15259255468845367,
+        1.010063648223877,
+        0.9370002150535583
+      ],
+      "cube_orientation_wxyz": [
+        0.9999997615814209,
+        -4.051646271818754e-07,
+        3.158764002364478e-06,
+        0.0006871595978736877
+      ],
+      "cube_id": 10,
+      "arm": "left",
+      "contact_target": "/World/Cube_8",
+      "held_samples": 30,
+      "normal_force_N": 6.306103536732313,
+      "normal_force_samples_N": [
+        6.317304690889387,
+        6.656619831782842,
+        6.706646178243549,
+        5.790067987276075,
+        6.2330231601277895,
+        6.317762407394075,
+        5.912757448586228,
+        6.195552733712023,
+        6.514043406904029,
+        5.952047233016735,
+        6.250773404080466,
+        6.103555321048604,
+        6.202080322102187,
+        6.171559168254152,
+        5.56039513257278,
+        5.8162479291296725,
+        5.795367005649031,
+        6.0763089696686405,
+        6.406688252621949,
+        6.2705256420591144,
+        6.731770258179735,
+        6.364023123333706,
+        6.526727074543649,
+        6.667729658426193,
+        6.5427109877281495,
+        6.541913266389847,
+        6.705055750137987,
+        6.546168662588777,
+        6.683092271359002,
+        6.624588824162997
+      ],
+      "estimated_gap_m": 0.00015996252718410153,
+      "witnessed_target_contact_ticks": 30,
+      "sliding_baseline_N": 4.28691330299094,
+      "force_threshold_N": 4.88691330299094
+    },
+    {
+      "phase": "upper_B_park",
+      "status": "RUNNING",
+      "sim_time_s": 96.49166666666666,
+      "wall_elapsed_s": 316.38920512700133,
+      "cube_position_m": [
+        0.15259242057800293,
+        1.0100643634796143,
+        0.9369999766349792
+      ],
+      "cube_orientation_wxyz": [
+        0.9999997615814209,
+        -1.4814774829119415e-07,
+        -1.172143342387244e-07,
+        0.000687386142089963
+      ],
+      "cube_id": 10,
+      "arm": "left"
+    },
+    {
+      "phase": "upper_B_rear",
+      "status": "RUNNING",
+      "sim_time_s": 102.21666666666667,
+      "wall_elapsed_s": 335.82807679100006,
+      "cube_position_m": [
+        0.1525924801826477,
+        1.0100643634796143,
+        0.9369999170303345
+      ],
+      "cube_orientation_wxyz": [
+        0.9999997615814209,
+        -9.966727247956442e-07,
+        3.778303607759881e-07,
+        0.0006873769452795386
+      ],
+      "cube_id": 10,
+      "arm": "right",
+      "contact_target": "/World/Environment/wall_back",
+      "estimated_start_gap_m": 0.06565013946406942,
+      "control": "rear_contact_admittance",
+      "neighbor_side_slope_x_per_y": -0.0
+    },
+    {
+      "phase": "upper_B_rear",
+      "status": "FORCE_CONFIRMED",
+      "sim_time_s": 138.1,
+      "wall_elapsed_s": 470.79445871900316,
+      "cube_position_m": [
+        0.1525723934173584,
+        1.0759650468826294,
+        0.9369989037513733
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -1.0578162800811697e-05,
+        -1.275674037515273e-07,
+        0.00022341670410241932
+      ],
+      "cube_id": 10,
+      "arm": "right",
+      "contact_target": "/World/Environment/wall_back",
+      "held_samples": 30,
+      "normal_force_N": 6.885361324487375,
+      "normal_force_samples_N": [
+        6.760875959417402,
+        6.742486533072884,
+        6.934037251940276,
+        6.717523357054134,
+        6.850547795918082,
+        6.825869134191856,
+        6.80361217975233,
+        6.892765100481398,
+        6.848863776205064,
+        6.849227116572192,
+        6.763079048319711,
+        6.893258461584026,
+        6.948900299974059,
+        6.8964271738580925,
+        6.888242617829076,
+        6.893882292791094,
+        6.8892249151747835,
+        6.967923897780715,
+        6.852925667640701,
+        6.751515198983325,
+        6.965302086449762,
+        6.912506883009857,
+        7.012623026214355,
+        6.892472678421121,
+        6.989968474552029,
+        6.885652570846174,
+        6.94721862054567,
+        6.940639193086149,
+        7.0074878896898545,
+        7.035780533265082
+      ],
+      "estimated_gap_m": -0.0006782496761179035,
+      "witnessed_target_contact_ticks": 30,
+      "sliding_baseline_N": 6.461699855182324,
+      "force_threshold_N": 6.811699855182324
+    },
+    {
+      "phase": "upper_B_park",
+      "status": "RUNNING",
+      "sim_time_s": 142.1,
+      "wall_elapsed_s": 481.27621589000046,
+      "cube_position_m": [
+        0.1525728851556778,
+        1.0759562253952026,
+        0.9370000958442688
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -8.272060085801058e-07,
+        7.685720504468918e-08,
+        0.00022331591753754765
+      ],
+      "cube_id": 10,
+      "arm": "right"
+    },
+    {
+      "phase": "upper_slot_complete",
+      "status": "SEATED_STABLE",
+      "sim_time_s": 147.96666666666667,
+      "wall_elapsed_s": 498.33099027900244,
+      "cube_position_m": [
+        0.152572900056839,
+        1.0759563446044922,
+        0.9369999170303345
+      ],
+      "cube_orientation_wxyz": [
+        1.0,
+        -7.696076522734074e-07,
+        2.3229976875427383e-07,
+        0.0002235877327620983
+      ],
+      "cube_id": 10,
+      "slot": 4
+    }
+  ],
+  "causal_replay": {
+    "source": "six_state_u4_repeat_20261126",
+    "case": "u4",
+    "hz": 120,
+    "step_window": [
+      1,
+      17756
+    ],
+    "input_sha256": "467a34581f4881682d8ae5ee972a98a4a57ff9ccefb4dcf811b6456fd37ba693",
+    "checkpoint_sha256": "1f44307d9a6a31c675d1b9f9984fc5c5289935cdb5892c0457e4dc28f45d6c26",
+    "reference_monitor_sha256": "b77f2865803bedcc3b4babb16d2422c50a1d8150f870d5e1463c0a526334a424",
+    "metrics": {
+      "S0": {
+        "tp": 3813,
+        "truth": 5116,
+        "predicted": 3813,
+        "precision": 1.0,
+        "recall": 0.7453088350273651,
+        "f1": 0.8540710045917795,
+        "unknown": 1303
+      },
+      "S1": {
+        "tp": 10213,
+        "truth": 12519,
+        "predicted": 10234,
+        "precision": 0.9979480164158687,
+        "recall": 0.8157999840242831,
+        "f1": 0.8977277721619127,
+        "unknown": 2273
+      },
+      "S2": {
+        "tp": 0,
+        "truth": 0,
+        "predicted": 0,
+        "precision": null,
+        "recall": null,
+        "f1": null,
+        "unknown": 0
+      },
+      "S3": {
+        "tp": 0,
+        "truth": 0,
+        "predicted": 0,
+        "precision": null,
+        "recall": null,
+        "f1": null,
+        "unknown": 0
+      },
+      "S4": {
+        "tp": 0,
+        "truth": 0,
+        "predicted": 0,
+        "precision": null,
+        "recall": null,
+        "f1": null,
+        "unknown": 0
+      },
+      "S5": {
+        "tp": 100,
+        "truth": 121,
+        "predicted": 133,
+        "precision": 0.7518796992481203,
+        "recall": 0.8264462809917356,
+        "f1": 0.7874015748031495,
+        "unknown": 0
+      },
+      "_overall": {
+        "known_steps": 17756,
+        "correct_steps": 14126,
+        "unknown_steps": 3576,
+        "coverage": 0.7986032890290606,
+        "accuracy": 0.7955620635278216,
+        "truth_unknown_steps": 0
+      },
+      "s5_event": {
+        "truth": {
+          "first_step": 16479,
+          "first_3step_confirm": 16481,
+          "last_step": 16612,
+          "positive_ticks": 121,
+          "episodes": 2,
+          "longest_ticks": 118
+        },
+        "hit": {
+          "first_step": 16513,
+          "first_3step_confirm": 16515,
+          "last_step": 16612,
+          "positive_ticks": 100,
+          "episodes": 1,
+          "longest_ticks": 100
+        },
+        "first_3step_delay_ms": 300.0
+      },
+      "confusion": {
+        "S0": {
+          "S0": 3813,
+          "S1": 0,
+          "S2": 0,
+          "S3": 0,
+          "S4": 0,
+          "S5": 0,
+          "UNKNOWN": 1303
+        },
+        "S1": {
+          "S0": 0,
+          "S1": 10213,
+          "S2": 0,
+          "S3": 0,
+          "S4": 0,
+          "S5": 33,
+          "UNKNOWN": 2273
+        },
+        "S2": {
+          "S0": 0,
+          "S1": 0,
+          "S2": 0,
+          "S3": 0,
+          "S4": 0,
+          "S5": 0,
+          "UNKNOWN": 0
+        },
+        "S3": {
+          "S0": 0,
+          "S1": 0,
+          "S2": 0,
+          "S3": 0,
+          "S4": 0,
+          "S5": 0,
+          "UNKNOWN": 0
+        },
+        "S4": {
+          "S0": 0,
+          "S1": 0,
+          "S2": 0,
+          "S3": 0,
+          "S4": 0,
+          "S5": 0,
+          "UNKNOWN": 0
+        },
+        "S5": {
+          "S0": 0,
+          "S1": 21,
+          "S2": 0,
+          "S3": 0,
+          "S4": 0,
+          "S5": 100,
+          "UNKNOWN": 0
+        }
+      },
+      "u4_side_to_withdraw": {
+        "S0": {
+          "tp": 0,
+          "truth": 104,
+          "predicted": 0,
+          "precision": null,
+          "recall": 0.0,
+          "f1": null,
+          "unknown": 104
+        },
+        "S1": {
+          "tp": 7459,
+          "truth": 9679,
+          "predicted": 7480,
+          "precision": 0.997192513368984,
+          "recall": 0.7706374625477839,
+          "f1": 0.8693979835654759,
+          "unknown": 2187
+        },
+        "S2": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S3": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S4": {
+          "tp": 0,
+          "truth": 0,
+          "predicted": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null,
+          "unknown": 0
+        },
+        "S5": {
+          "tp": 100,
+          "truth": 121,
+          "predicted": 133,
+          "precision": 0.7518796992481203,
+          "recall": 0.8264462809917356,
+          "f1": 0.7874015748031495,
+          "unknown": 0
+        },
+        "_overall": {
+          "known_steps": 9904,
+          "correct_steps": 7559,
+          "unknown_steps": 2291,
+          "coverage": 0.7686793214862682,
+          "accuracy": 0.7632269789983845,
+          "truth_unknown_steps": 0
+        },
+        "s5_event": {
+          "truth": {
+            "first_step": 16479,
+            "first_3step_confirm": 16481,
+            "last_step": 16612,
+            "positive_ticks": 121,
+            "episodes": 2,
+            "longest_ticks": 118
+          },
+          "hit": {
+            "first_step": 16513,
+            "first_3step_confirm": 16515,
+            "last_step": 16612,
+            "positive_ticks": 100,
+            "episodes": 1,
+            "longest_ticks": 100
+          },
+          "first_3step_delay_ms": 300.0
+        },
+        "confusion": {
+          "S0": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S5": 0,
+            "UNKNOWN": 104
+          },
+          "S1": {
+            "S0": 0,
+            "S1": 7459,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S5": 33,
+            "UNKNOWN": 2187
+          },
+          "S2": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S5": 0,
+            "UNKNOWN": 0
+          },
+          "S3": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S5": 0,
+            "UNKNOWN": 0
+          },
+          "S4": {
+            "S0": 0,
+            "S1": 0,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S5": 0,
+            "UNKNOWN": 0
+          },
+          "S5": {
+            "S0": 0,
+            "S1": 21,
+            "S2": 0,
+            "S3": 0,
+            "S4": 0,
+            "S5": 100,
+            "UNKNOWN": 0
+          }
+        }
+      },
+      "u4_s1_by_motion": {
+        "lateral_push": {
+          "tp": 1660,
+          "truth": 3770,
+          "predicted": 1660,
+          "precision": 1.0,
+          "recall": 0.4403183023872679,
+          "f1": 0.6114180478821363,
+          "unknown": 2110
+        },
+        "arm_handover": {
+          "tp": 1573,
+          "truth": 1647,
+          "predicted": 1573,
+          "precision": 1.0,
+          "recall": 0.9550698239222829,
+          "f1": 0.9770186335403727,
+          "unknown": 74
+        },
+        "rear_push_through_seating": {
+          "tp": 4226,
+          "truth": 4262,
+          "predicted": 4247,
+          "precision": 0.9950553331763597,
+          "recall": 0.991553261379634,
+          "f1": 0.9933012104830179,
+          "unknown": 3
+        }
+      }
+    },
+    "optics": {
+      "packets": 2218,
+      "detected": 2198,
+      "paired": 2198,
+      "median_signed_xyz_mm": [
+        -0.1940644599517094,
+        0.4665851593017578,
+        2.3365020695997885e-05
+      ],
+      "median_exposure_to_receive_ms": 0.0
+    },
+    "method": "fitting"
+  }
+}
