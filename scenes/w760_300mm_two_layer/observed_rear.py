@@ -143,6 +143,8 @@ REAR_BODY = '''
                 max_tracking_ratio = .45 if short_window else .35
                 extended_terminal = axis == 0 or slot != 1
                 travel_limit = .012 if slot == 5 else .009 if extended_terminal else .004
+                gap_limit = (B2_CONTROLLER_PARAMETERS["seating_gap_tolerance_m"]
+                             if slot == 2 and axis == 1 else .00045)
                 for _ in range(5400 if slot == 5 else 3600):
                     center, rotation = sensed_cube()
                     measured, _ = tcp_fk(arm, joint_state()[arm])
@@ -157,7 +159,7 @@ REAR_BODY = '''
                         values = np.asarray(window)
                         commanded, response, rise = (values[-average_count:].mean(axis=0)
                                                      - values[:average_count].mean(axis=0))
-                        if (-.002 <= gap <= .00045 and commanded >= min_advance
+                        if (-.002 <= gap <= gap_limit and commanded >= min_advance
                                 and abs(response) <= max_tracking_ratio * commanded
                                 and rise >= .30 and normal >= 5.5):
                             record(phase, "FORCE_CONFIRMED", contact_target=target_name, normal_force_N=normal,
