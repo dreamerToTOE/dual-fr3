@@ -58,6 +58,54 @@
           "step": 14726,
           "time_s": 122.73333973437548
         }
+      },
+      "withdrawal_acceptance": {
+        "markers": {
+          "start": 14651,
+          "separation_end": 15754,
+          "parked": 21185
+        },
+        "checkpoints": {
+          "separation_end": {
+            "step": 15754,
+            "truth": "S0",
+            "pred": "S0",
+            "cup_estimates": {
+              "left": "separated",
+              "right": "separated"
+            },
+            "wrist_force_norm_N": {
+              "left": 8.528251600493221e-05,
+              "right": 6.880774118766422e-05
+            },
+            "camera_age_s": 0.01666666753590107
+          },
+          "parked": {
+            "step": 21185,
+            "truth": "S0",
+            "pred": "S0",
+            "cup_estimates": {
+              "left": "separated",
+              "right": "separated"
+            },
+            "wrist_force_norm_N": {
+              "left": 1.1788282067467716e-06,
+              "right": 5.183387613138252e-07
+            },
+            "camera_age_s": 0.008333333767950535
+          }
+        },
+        "excluded_steps": 1102,
+        "s1_withdrawal_excluded": {
+          "tp": 7,
+          "truth": 308,
+          "predicted": 7,
+          "precision": 1.0,
+          "recall": 0.022727272727272728,
+          "f1": 0.044444444444444446,
+          "unknown": 301
+        },
+        "s1_excluded_truth_steps": 65
       }
     },
     "fitting_u4_matched.jsonl.gz": {
@@ -98,7 +146,55 @@
       },
       "examples": {},
       "longest_quiet_touch_steps": 0,
-      "release_events": {}
+      "release_events": {},
+      "withdrawal_acceptance": {
+        "markers": {
+          "start": 16572,
+          "separation_end": 17052,
+          "parked": 17672
+        },
+        "checkpoints": {
+          "separation_end": {
+            "step": 17052,
+            "truth": "S0",
+            "pred": "S0",
+            "cup_estimates": {
+              "left": "separated",
+              "right": "separated"
+            },
+            "wrist_force_norm_N": {
+              "left": 8.981926526183941e-07,
+              "right": 0.0021937482401957137
+            },
+            "camera_age_s": 0.03333333507180214
+          },
+          "parked": {
+            "step": 17672,
+            "truth": "S0",
+            "pred": "S0",
+            "cup_estimates": {
+              "left": "separated",
+              "right": "separated"
+            },
+            "wrist_force_norm_N": {
+              "left": 9.375276729231985e-07,
+              "right": 0.02136157114099494
+            },
+            "camera_age_s": 0.0
+          }
+        },
+        "excluded_steps": 479,
+        "s1_withdrawal_excluded": {
+          "tp": 10213,
+          "truth": 12483,
+          "predicted": 10234,
+          "precision": 0.9979480164158687,
+          "recall": 0.8181526876552111,
+          "f1": 0.8991504159880267,
+          "unknown": 2270
+        },
+        "s1_excluded_truth_steps": 36
+      }
     },
     "fitting_u5_archive.jsonl.gz": {
       "S0": {
@@ -138,7 +234,55 @@
       },
       "examples": {},
       "longest_quiet_touch_steps": 0,
-      "release_events": {}
+      "release_events": {},
+      "withdrawal_acceptance": {
+        "markers": {
+          "start": 13061,
+          "separation_end": 13541,
+          "parked": 14110
+        },
+        "checkpoints": {
+          "separation_end": {
+            "step": 13541,
+            "truth": "S0",
+            "pred": "S0",
+            "cup_estimates": {
+              "left": "separated",
+              "right": "separated"
+            },
+            "wrist_force_norm_N": {
+              "left": 0.002844685554903638,
+              "right": 7.643775481235135e-07
+            },
+            "camera_age_s": 0.041666668839752674
+          },
+          "parked": {
+            "step": 14110,
+            "truth": "S0",
+            "pred": "S0",
+            "cup_estimates": {
+              "left": "separated",
+              "right": "separated"
+            },
+            "wrist_force_norm_N": {
+              "left": 0.02147178235593053,
+              "right": 7.633281042271619e-07
+            },
+            "camera_age_s": 0.05000000260770321
+          }
+        },
+        "excluded_steps": 479,
+        "s1_withdrawal_excluded": {
+          "tp": 9537,
+          "truth": 9552,
+          "predicted": 9537,
+          "precision": 1.0,
+          "recall": 0.9984296482412061,
+          "f1": 0.9992142071349992,
+          "unknown": 15
+        },
+        "s1_excluded_truth_steps": 6
+      }
     }
   },
   "pooled_S0": {
