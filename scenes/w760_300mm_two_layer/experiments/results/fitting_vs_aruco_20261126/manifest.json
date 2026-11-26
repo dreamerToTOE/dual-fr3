@@ -1,0 +1,15 @@
+{
+  "fitting_baseline": "727c5ae8b9dbc9800c0f0c173fc7307e2c2b0952",
+  "clip_selection": "The main comparison uses one nominal A, U4 and U5 run per input. The additional ArUco repeats are reported separately.",
+  "clips": [
+    {"id": "aruco_a", "method": "aruco", "path": "../thesis_data/A_01.jsonl.gz"},
+    {"id": "aruco_u4", "method": "aruco", "specialized": true, "path": "aruco_u4_online.jsonl.gz"},
+    {"id": "aruco_u5", "method": "aruco", "path": "../thesis_data/U5_01.jsonl.gz"},
+    {"id": "fitting_a", "method": "fitting", "path": "fitting_a_full.jsonl.gz"},
+    {"id": "fitting_u4", "method": "fitting", "specialized": true, "path": "fitting_u4_matched.jsonl.gz"},
+    {"id": "fitting_u5", "method": "fitting", "path": "fitting_u5_archive.jsonl.gz"},
+    {"id": "aruco_a_repeat_02", "method": "aruco", "pool": false, "path": "../thesis_data/A_02.jsonl.gz"},
+    {"id": "aruco_a_repeat_03", "method": "aruco", "pool": false, "path": "../thesis_data/A_03.jsonl.gz"},
+    {"id": "aruco_u5_yaw_035", "method": "aruco", "pool": false, "path": "../thesis_data/U5_02.jsonl.gz"}
+  ]
+}
