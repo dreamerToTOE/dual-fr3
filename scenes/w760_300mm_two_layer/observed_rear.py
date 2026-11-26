@@ -45,10 +45,9 @@ REAR_BODY = '''
             sign = -1 if lateral == "right" else 1
             support_side, push_side, push_sign = rear_arm, lateral, sign
             rear_y = wall_plane(CONFIG, "wall_back", 1, 1)
-            outer = None
-            if slot in (1, 2):
-                postures = ROOT / "scenes/w760_300mm/b_postures.json"
-                outer = json.loads(postures.read_text())["outer"][str(slot)]
+            postures = json.loads((ROOT / "scenes/w760_300mm/b_postures.json").read_text())
+            outer = postures["outer"].get(str(slot))
+            third = postures["third"] if slot == 3 else None
             side_name = {1: "wall_left", 2: "wall_right", 3: "Cube_1", 4: "Cube_2"}.get(slot)
             tracked = {name: (center, rotation) for name, center, rotation in neighbors}
             if slot in (1, 2):
@@ -57,9 +56,12 @@ REAR_BODY = '''
                 p, r = tracked[side_name]
                 side_x = p[0] - sign * half * np.abs(r[0]).sum()
             else:
-                a, r = tracked["Cube_3"]
-                b, s = tracked["Cube_4"]
-                edges = [a[0] + half * np.abs(r[0]).sum(), b[0] - half * np.abs(s[0]).sum()]
+                def slot_edges(poses):
+                    a, r = poses["Cube_3"]
+                    b, s = poses["Cube_4"]
+                    return a[0] + half * np.abs(r[0]).sum(), b[0] - half * np.abs(s[0]).sum()
+
+                edges = slot_edges(tracked)
                 side_x = sum(edges) / 2
             target = np.array([side_x - sign * half if side_name else side_x, rear_y - half, SUPPORT_TOP + half])
 
@@ -100,10 +102,10 @@ REAR_BODY = '''
                             return
                     increment = 0.
                     if total < 7.7:
-                        speed = .0005 if axis == 0 and gap > .001 else .00012
+                        speed = .0005 if (axis == 0 or slot == 2) and gap > .001 else .00012
                         increment = direction * speed / 120
                         tip[axis] += increment
-                    if abs(tip[axis] - start) > (.009 if axis == 0 else .004):
+                    if abs(tip[axis] - start) > (.009 if axis == 0 or slot == 2 else .004):
                         break
                     candidate = cartesian_joint_target(arm, q, tip, attitude)
                     if np.max(np.abs(candidate - q)) * 120 > .4:
@@ -126,14 +128,26 @@ REAR_BODY = '''
                 offset = -direction * half * np.eye(3)[axis] + [0., 0., .004 if axis == 1 else .020]
                 if axis == 1:
                     tool = np.asarray(FRONT_ROTATION) if arm == "left" else np.diag([-1., 1., -1.])
-                    hint = outer["b1_q"] if outer is not None else None
+                    hint = (outer["b1_q"] if outer is not None
+                            else third["precontact_q_rad"] if third is not None else None)
                 else:
                     role = b2_role_seeds(json.loads((ROOT / "validation/fr3_b2_collision_plan.json").read_text()), arm)
                     tool = role["push_rotation_world"]
                     hint = role["rail_hold_push_q"]
-                destination = center + rotation @ offset - .010 * inward
+                rear2_lateral_entry = slot == 2 and axis == 0
+                distance = .007 if rear2_lateral_entry else .010
+                destination = center + rotation @ offset - distance * inward
+                if rear2_lateral_entry:
+                    hint = min(outer["b2_entry_q"],
+                               key=lambda q: np.linalg.norm(tcp_fk(arm, np.asarray(q))[0] - destination))
+                neighbor_entry = axis == 0 and slot in (3, 4)
+                if neighbor_entry:
+                    guide = json.loads((ROOT / "validation/fr3_row_b2_final_feasibility.json").read_text())
+                    case = next(case for case in guide["cases"] if case["cube_id"] == slot)
+                    hint = case["precontact_q"][arm]
                 move_to_observed_precontact(arm, destination, rotation @ tool, f"rear_{slot}_B1_approach", hint,
-                                            prefer_hint=axis == 1 and outer is not None)
+                                            prefer_hint=rear2_lateral_entry or neighbor_entry
+                                            or (axis == 1 and hint is not None))
                 if not allowed_contacts:
                     set_contact_drive_mode(True)
                 allowed_contacts.add(arm)
@@ -143,7 +157,8 @@ REAR_BODY = '''
             def advance(arm, axis, direction, boundary, target_name, follower=None):
                 start, rotation = sensed_cube()
                 goal = start.copy()
-                goal[axis] = boundary - direction * (half * np.abs(rotation[axis]).sum() + .001)
+                standoff = .005 if slot == 2 and axis == 1 else .001
+                goal[axis] = boundary - direction * (half * np.abs(rotation[axis]).sum() + standoff)
                 if target_name is None:
                     goal[axis] = boundary
                 if direction * (goal[axis] - start[axis]) > .0001:
@@ -290,9 +305,14 @@ REAR_BODY = '''
                 record(f"rear_{slot}_repark", "RRTCONNECT_FROM_SEPARATION", arms=list(robots))
                 move({arm: np.asarray(CONFIG["fr3"]["official_start_q_rad"]) for arm in robots})
 
-            stations = {rear_arm: .8} if slot == 5 else {rear_arm: .8, lateral: .8}
+            stations = {rear_arm: .4}
+            if side_name is not None:
+                stations[lateral] = .8
             if outer is not None:
                 stations = {rear_arm: outer["support_y"], lateral: outer["push_y"]}
+            elif third is not None:
+                # Reuse the support branch checked through the full lateral slide.
+                stations[rear_arm] = third["support_rail_y_m"]
             nominal_wall = CONFIG["goal_cube_centers_m"][0][1] + half
             for arm, station in stations.items():
                 base = rail_states[arm].copy()
@@ -307,7 +327,12 @@ REAR_BODY = '''
             contact_plan_rotation = control_rotation.copy()
             approach(rear_arm, 1, 1)
             if slot == 4:
-                advance(rear_arm, 1, 1, target[1] - .106, None)
+                neighbor_center, neighbor_attitude = tracked[side_name]
+                near_face = neighbor_center[1] - half * np.abs(neighbor_attitude[1]).sum()
+                _, attitude = sensed_cube()
+                leading_extent = half * np.abs(attitude[1]).sum()
+                side_push_overlap = .044
+                advance(rear_arm, 1, 1, near_face + side_push_overlap - leading_extent, None)
             else:
                 advance(rear_arm, 1, 1, rear_y, "wall_back")
             if side_name:
@@ -330,8 +355,15 @@ REAR_BODY = '''
             if np.linalg.norm(final - target) > .010 or stable["positive_steps"] < 48:
                 raise RuntimeError(f"Rear slot {slot} failed placement: observed {final}, target {target}")
             rows.placed[current_task["cube_id"]] = (final.copy(), attitude.copy())
-            return {"cube_id": current_task["cube_id"], "slot": slot,
-                    "target_m": target.tolist(), "observed_position_m": final.tolist(), "support": stable}
+            result = {"cube_id": current_task["cube_id"], "slot": slot,
+                      "target_m": target.tolist(), "observed_position_m": final.tolist(), "support": stable}
+            if slot == 5:
+                sides = observe_known_lower({"Cube_3", "Cube_4"})
+                left_edge, right_edge = slot_edges({name: (center, rotation) for name, center, rotation in sides})
+                extent = half * np.abs(attitude[0]).sum()
+                result["observed_slot_gaps_m"] = {"left": float(final[0] - extent - left_edge),
+                                                 "right": float(right_edge - final[0] - extent)}
+            return result
 
         if START_REAR < 6:
             from front_row_a import floor_guide
