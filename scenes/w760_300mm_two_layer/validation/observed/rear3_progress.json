@@ -751,5 +751,192 @@
       }
     }
   },
-  "followup": "Restore the historical quintic loaded-rail profile for this slot while retaining live target and current gripper capacity. The elevated pre-rail twist remains a separate hypothesis."
+  "followup": "The historical rail profile reproduced the same seal loss with similar differential torque. The next trial retains the same estimated grasp relation throughout carry, reconciles each segment from measured joints, and returns to the original rail profile.",
+  "A_historical_rail_profile_retry": {
+    "status": "STOPPED",
+    "snapshot_sha256": "3ff60cbd92ce3ca36a48bcc7dd059e4fab9cb6b095116eed085480c9482dd18e",
+    "error": "Surface Gripper seal lost while carrying the Cube",
+    "lost_suction": [
+      "left"
+    ],
+    "stop_cube_position_m": [
+      -0.02918108180165291,
+      0.7351366877555847,
+      1.1148948669433594
+    ],
+    "unexpected_contact_count": 0,
+    "motion_records": [
+      {
+        "phase": "A_high_align_x",
+        "cube_id": 3,
+        "samples": 339,
+        "joint_peak_rad_s": 0.12419028586494463,
+        "rail_peak_m_s": 0.0,
+        "rail_y_m": {
+          "left": [
+            -0.15510932481288914,
+            -0.15510932481288914
+          ],
+          "right": [
+            -0.15510932481288914,
+            -0.15510932481288914
+          ]
+        },
+        "carrying": true,
+        "planning_wall_s": 0.8133250739997493,
+        "collision_workers": 3,
+        "profile": "quintic_position",
+        "duration_sim_s": 2.816666666666667,
+        "ik_loop_wall_s": 0.3405283890001556,
+        "parallel_collision_wall_s": 0.47175081400018826,
+        "execution_wall_s": 4.9653590600000825
+      },
+      {
+        "phase": "A_loaded_rail_transfer",
+        "cube_id": 3,
+        "samples": 9317,
+        "joint_peak_rad_s": 0.0017326473566026124,
+        "rail_peak_m_s": 0.024999956089195585,
+        "rail_y_m": {
+          "left": [
+            -0.15510932481288914,
+            0.88
+          ],
+          "right": [
+            -0.15510932481288914,
+            0.88
+          ]
+        },
+        "carrying": true,
+        "planning_wall_s": 18.915580665000107,
+        "collision_workers": 3,
+        "profile": "quintic_position",
+        "duration_sim_s": 77.63333333333334,
+        "ik_loop_wall_s": 5.614314942999954,
+        "parallel_collision_wall_s": 13.287600618999932,
+        "execution_wall_s": 153.5386878119998
+      },
+      {
+        "phase": "A_vertical_descent",
+        "cube_id": 3,
+        "samples": 1230,
+        "joint_peak_rad_s": 0.2003138612113986,
+        "rail_peak_m_s": 0.0,
+        "rail_y_m": {
+          "left": [
+            0.88,
+            0.88
+          ],
+          "right": [
+            0.88,
+            0.88
+          ]
+        },
+        "carrying": true,
+        "planning_wall_s": 2.9153018759998304,
+        "collision_workers": 3,
+        "profile": "quintic_position",
+        "duration_sim_s": 10.241666666666667,
+        "ik_loop_wall_s": 1.1384732010001244,
+        "parallel_collision_wall_s": 1.7744526159999623
+      }
+    ],
+    "final_window_median_abs_differential_x_torque_Nm": {
+      "A_high_align_x": 1.8135660359674846,
+      "A_loaded_rail_transfer": 1.8550060574400364,
+      "A_vertical_descent": 1.8698659477538828
+    },
+    "last_wrench_sample_N_Nm": {
+      "left": [
+        -1.7706410759352105,
+        3.1498268602245423,
+        -5.778892077279204,
+        -2.119143669718364,
+        -0.0883906785244464,
+        0.48229929311550385
+      ],
+      "right": [
+        1.6901877923620654,
+        -3.1663860153846746,
+        -6.501969172138471,
+        2.130288982222565,
+        0.02375192277189412,
+        -0.003370703318666105
+      ]
+    },
+    "stop_context_events": [
+      {
+        "phase": "A_high_align_x",
+        "status": "CLEAR_PHYSX_EXECUTION",
+        "sim_time_s": 58.291666666666664,
+        "wall_elapsed_s": 149.87990690000015,
+        "cube_position_m": [
+          -0.02916007861495018,
+          -0.2999749183654785,
+          1.1149733066558838
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          2.5009518139995635e-05,
+          4.995271592633799e-05,
+          5.8559253375278786e-05
+        ],
+        "cube_id": 3
+      },
+      {
+        "phase": "A_loaded_rail_transfer",
+        "status": "RUNNING",
+        "sim_time_s": 58.291666666666664,
+        "wall_elapsed_s": 149.88580834700042,
+        "cube_position_m": [
+          -0.02916007861495018,
+          -0.2999749183654785,
+          1.1149733066558838
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          2.5009518139995635e-05,
+          4.995271592633799e-05,
+          5.8559253375278786e-05
+        ],
+        "cube_id": 3
+      },
+      {
+        "phase": "A_loaded_rail_transfer",
+        "status": "CLEAR_PHYSX_EXECUTION",
+        "sim_time_s": 135.925,
+        "wall_elapsed_s": 322.346181933,
+        "cube_position_m": [
+          -0.029166288673877716,
+          0.7351212501525879,
+          1.1149787902832031
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          4.381368125905283e-05,
+          9.290475281886756e-05,
+          5.4787851695436984e-05
+        ],
+        "cube_id": 3
+      },
+      {
+        "phase": "A_vertical_descent",
+        "status": "RUNNING",
+        "sim_time_s": 136.125,
+        "wall_elapsed_s": 322.7038674700002,
+        "cube_position_m": [
+          -0.02916625700891018,
+          0.7351211309432983,
+          1.1149790287017822
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          4.33655695815105e-05,
+          9.246685658581555e-05,
+          5.2851682994514704e-05
+        ],
+        "cube_id": 3
+      }
+    ]
+  }
 }

@@ -27,8 +27,32 @@ def install(source):
                           '                                        or current_task.get("rear_slot") in (2, 4))')
     source = replace_once(source, '            cruise = cruise and current_task.get("front_slot") not in (2, 4)',
                           '            cruise = cruise and current_task.get("front_slot") not in (2, 4)\n'
-                          '            # Preserve the rear R3 rail profile tested with side suction.\n'
-                          '            cruise = cruise and current_task.get("rear_slot") not in (2, 3, 4)')
+                          '            cruise = cruise and current_task.get("rear_slot") not in (2, 4)')
+    source = replace_once(source, '            guides_start = {side: tcp_fk(side, guide_q[side][0])[0] for side in robots}',
+                          '''            paired_offsets = {}
+            if carrying and current_task.get("rear_slot") == 3:
+                from scipy.spatial.transform import Rotation
+
+                # Keep both commanded tool poses consistent with the same grasped box pose.
+                # Reseeding each segment's wrist reference independently can accumulate internal twist.
+                for side, (offset, relative_rotation) in carry_offsets.items():
+                    measured_tcp, measured_rotation = actual_tool[side]
+                    attitude = payload_rotation @ relative_rotation.T
+                    position = start_center - attitude @ offset
+                    paired_offsets[side] = (position - measured_tcp,
+                        Rotation.from_matrix(attitude @ measured_rotation.T).as_rotvec())
+            guides_start = {side: tcp_fk(side, guide_q[side][0])[0] for side in robots}''')
+    source = replace_once(source, '                                target = measured_tcp + payload_path[index] - start_center',
+                          '''                                target = measured_tcp + payload_path[index] - start_center
+                                if paired_offsets:
+                                    translation, angular = paired_offsets[side]
+                                    progress = min(1., index / 30.)
+                                    blend = progress**3 * (10 - 15 * progress + 6 * progress**2)
+                                    target += blend * translation
+                                    rotation = Rotation.from_rotvec(blend * angular).as_matrix() @ rotation''')
+    source = replace_once(source, '                "duration_sim_s": frames / 120.,',
+                          '''                "duration_sim_s": frames / 120.,
+                "shared_grasp_reference": bool(paired_offsets),''')
     return replace_once(source, '            if front_slot != START_FRONT:\n',
                         '            if front_slot != START_FRONT or START_REAR < 6:\n')
 
