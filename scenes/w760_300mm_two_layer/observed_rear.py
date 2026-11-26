@@ -227,9 +227,11 @@ REAR_BODY = '''
             if side_name:
                 position, left_hold_rotation = tcp_fk(rear_arm, joint_state()[rear_arm])
                 left_hold_z = float(position[2])
-                left_hold = NormalForceController(position[1], target_force_N=.65, gain_m_per_Ns=.0001,
+                support_load = .65 if slot == 4 else B2_CONTROLLER_PARAMETERS["left_target_force_N"]
+                left_hold = NormalForceController(position[1], target_force_N=support_load, gain_m_per_Ns=.0001,
                                                    max_offset_m=.0035, max_speed_m_s=.0004)
                 approach(lateral, 0, sign)
+                settle_b2_contacts(lateral, sign, f"rear_{slot}_B2_contact_sync", support_target=support_load)
                 advance(lateral, 0, sign, side_x, side_name, follower=rear_arm)
                 if slot == 4:
                     clear(lateral, [-sign, 0., 0.])
