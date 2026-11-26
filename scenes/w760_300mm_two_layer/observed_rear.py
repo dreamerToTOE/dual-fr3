@@ -115,6 +115,7 @@ REAR_BODY = '''
             support_side, push_side, push_sign = rear_arm, lateral, sign
             rear_y = wall_plane(CONFIG, "wall_back", 1, 1)
             final_forward_resume = CHECKPOINT.get("rear_forward_resume") if slot == START_REAR and slot == 4 else None
+            lateral_resume = CHECKPOINT.get("rear_lateral_resume") if slot == START_REAR and slot == 2 else None
             postures = json.loads((ROOT / "scenes/w760_300mm/b_postures.json").read_text())
             outer = postures["outer"].get(str(slot))
             third = postures["third"] if slot == 3 else None
@@ -213,6 +214,8 @@ REAR_BODY = '''
                     guide = json.loads((ROOT / "validation/fr3_row_b2_final_feasibility.json").read_text())
                     case = next(case for case in guide["cases"] if case["cube_id"] == slot)
                     hint = case["precontact_q"][arm]
+                if lateral_resume:
+                    hint = lateral_resume["wrist_seeds_rad"][arm]
                 descend_to_side = slot in (2, 3) and axis == 0
                 margin = .003 if descend_to_side else .002
                 move_to_observed_precontact(arm, destination, rotation @ tool, f"rear_{slot}_B1_approach", hint,
@@ -274,6 +277,7 @@ REAR_BODY = '''
 
                         axial = 0.
                         relief = np.zeros(3)
+                        tangential_limit = .004 if slot == 2 else .002
                         nominal_axial = direction * (tips[arm][0][axis] + translation[:, axis])
                         allowed_lead = .001
 
@@ -301,7 +305,7 @@ REAR_BODY = '''
                                       np.clip(.0007 * wrench[1], -.001, .001),
                                       np.clip(.001 * deadband, -.003, .003)]
                             relief = np.clip(relief + np.asarray(speeds) / 120,
-                                             [-.003, -.002, -.002], [0., .002, .006])
+                                             [-.003, -tangential_limit, -.002], [0., tangential_limit, .006])
                             relief[0] -= max(0., measured_lead(index) - allowed_lead)
                             center, attitude = sensed_cube()
                             options = dict(cube_center=center, cube_rotation=attitude, cup_contacts=allowed_contacts,

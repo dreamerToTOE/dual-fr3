@@ -2006,5 +2006,568 @@
       "force_rise_N": 0.3,
       "inferred_gap_at_first_trigger_m": 0.0004566508705311778
     }
+  },
+  "B_overhead_permission_clean": {
+    "run": "rear2-requalified",
+    "status": "STOPPED",
+    "error": "Rear slot 2 coordinated push exceeded wrist load",
+    "runner_snapshot_sha256": "c56e6c148fe0fdea5fd5bf67dabe5e77a4ad4ad61f5fd0110290d20366ce70e8",
+    "events": [
+      {
+        "phase": "rear_landing_resume",
+        "status": "SENSOR_POSE_CONFIRMED",
+        "sim_time_s": 1.4,
+        "wall_elapsed_s": 17.76395546800086,
+        "cube_position_m": [
+          0.044407106935977936,
+          1.0732331275939941,
+          0.7869999408721924
+        ],
+        "cube_orientation_wxyz": [
+          0.9999991059303284,
+          -4.6538048081856687e-08,
+          3.2041725717135705e-08,
+          0.00133721181191504
+        ],
+        "cube_id": 2,
+        "physx_reference": {
+          "physics_step": 168,
+          "native_step": 170,
+          "loads_N_by_label": {
+            "floor": 12.262500822544098,
+            "wall_back": 0.0
+          },
+          "wall_gaps_m": {
+            "wall_back": 0.002566552046739154,
+            "wall_left": 0.3492067887669187,
+            "wall_right": 0.2603925748949628
+          }
+        }
+      },
+      {
+        "phase": "rear_2_B1_approach",
+        "status": "RRTCONNECT_FROM_MEASUREMENT",
+        "sim_time_s": 20.775,
+        "wall_elapsed_s": 41.89421447600034,
+        "cube_position_m": [
+          0.044407106935977936,
+          1.0732331275939941,
+          0.7869999408721924
+        ],
+        "cube_orientation_wxyz": [
+          0.9999991059303284,
+          -5.05130728356562e-08,
+          5.00583148266287e-08,
+          0.0013372153043746948
+        ],
+        "cube_id": 2,
+        "arm": "right",
+        "measured_tcp_m": [
+          0.40271098320962506,
+          0.8596015486990726,
+          1.2552820535163336
+        ],
+        "measured_tcp_rotation": [
+          [
+            -0.7071067657350374,
+            0.7071067966380549,
+            -5.960464488069193e-08
+          ],
+          [
+            0.7071067966380562,
+            0.7071067657350386,
+            6.038686729263849e-11
+          ],
+          [
+            4.218954762866191e-08,
+            -4.2104149543910814e-08,
+            -0.9999999999999982
+          ]
+        ],
+        "measured_joints_rad": [
+          4.140527330720456e-12,
+          -0.7853981852531433,
+          -2.5346903937718823e-13,
+          -2.356194496154785,
+          -6.056672524623608e-11,
+          1.5707963705062866,
+          0.7853981852531433
+        ],
+        "measured_rail_y_m": 0.75,
+        "observed_cube_m": [
+          0.044583513867110014,
+          1.074297559261322,
+          0.787
+        ],
+        "precontact_tcp_m": [
+          0.044583513867110014,
+          0.989297559261322,
+          0.791
+        ],
+        "planning_margin_m": 0.002,
+        "approach_lift_m": 0.0,
+        "physx_reference": {
+          "physics_step": 2493,
+          "native_step": 2495,
+          "loads_N_by_label": {
+            "floor": 12.26249948143959,
+            "wall_back": 0.0
+          },
+          "wall_gaps_m": {
+            "wall_back": 0.0025665509244068158,
+            "wall_left": 0.3492067855427646,
+            "wall_right": 0.2603925716708087
+          }
+        }
+      },
+      {
+        "phase": "rear_2_B1_approach",
+        "status": "PRECONTACT_REACHED",
+        "sim_time_s": 35.575,
+        "wall_elapsed_s": 79.14814404500066,
+        "cube_position_m": [
+          0.044407106935977936,
+          1.0732331275939941,
+          0.7869999408721924
+        ],
+        "cube_orientation_wxyz": [
+          0.9999991059303284,
+          -7.386149292187838e-08,
+          3.9894665349038405e-08,
+          0.00133722391910851
+        ],
+        "cube_id": 2,
+        "arm": "right",
+        "measured_tcp_m": [
+          0.04377987646921188,
+          0.9887538484222849,
+          0.7911918232248836
+        ],
+        "position_error_m": 0.0009890655657698749,
+        "orientation_matrix_error": 0.007312950954153085,
+        "ik_seed_source": "posture_hint",
+        "physx_reference": {
+          "physics_step": 4269,
+          "native_step": 4271,
+          "loads_N_by_label": {
+            "floor": 12.262499704957008,
+            "wall_back": 0.0
+          },
+          "wall_gaps_m": {
+            "wall_back": 0.002566546135437664,
+            "wall_left": 0.3492067857832455,
+            "wall_right": 0.2603925719112896
+          }
+        }
+      },
+      {
+        "phase": "rear_2_B1_touch",
+        "status": "TACTILE_APPROACH",
+        "sim_time_s": 35.575,
+        "wall_elapsed_s": 79.15358540600027,
+        "cube_position_m": [
+          0.044407106935977936,
+          1.0732331275939941,
+          0.7869999408721924
+        ],
+        "cube_orientation_wxyz": [
+          0.9999991059303284,
+          -7.386149292187838e-08,
+          3.9894665349038405e-08,
+          0.00133722391910851
+        ],
+        "cube_id": 2,
+        "physx_reference": {
+          "physics_step": 4269,
+          "native_step": 4271,
+          "loads_N_by_label": {
+            "floor": 12.262499704957008,
+            "wall_back": 0.0
+          },
+          "wall_gaps_m": {
+            "wall_back": 0.002566546135437664,
+            "wall_left": 0.3492067857832455,
+            "wall_right": 0.2603925719112896
+          }
+        }
+      },
+      {
+        "phase": "rear_2_B2_1_bearing",
+        "status": "RUNNING",
+        "sim_time_s": 51.333333333333336,
+        "wall_elapsed_s": 104.63962507200085,
+        "cube_position_m": [
+          0.04440692067146301,
+          1.0732338428497314,
+          0.7869998812675476
+        ],
+        "cube_orientation_wxyz": [
+          0.9999991059303284,
+          -5.674050385096052e-07,
+          -1.5088740212831908e-07,
+          0.001337182242423296
+        ],
+        "cube_id": 2,
+        "target": "wall_back",
+        "physx_reference": {
+          "physics_step": 6160,
+          "native_step": 6162,
+          "loads_N_by_label": {
+            "floor": 12.36998900771141,
+            "wall_back": 0.0,
+            "right_cup": 0.7410923614177929
+          },
+          "wall_gaps_m": {
+            "wall_back": 0.0025657631212915727,
+            "wall_left": 0.3492065889759832,
+            "wall_right": 0.2603927476330572
+          }
+        }
+      },
+      {
+        "phase": "rear_2_B2_1_bearing",
+        "status": "FORCE_CONFIRMED",
+        "sim_time_s": 60.975,
+        "wall_elapsed_s": 121.68601742000101,
+        "cube_position_m": [
+          0.044218383729457855,
+          1.075609803199768,
+          0.7869997620582581
+        ],
+        "cube_orientation_wxyz": [
+          0.9999966621398926,
+          -2.5916772301570745e-06,
+          -1.8766672837955412e-07,
+          0.002607819391414523
+        ],
+        "cube_id": 2,
+        "contact_target": "wall_back",
+        "normal_force_N": 6.825855490101117,
+        "estimated_gap_m": 0.00045665087053121944,
+        "command_advance_m": 5.299999999563987e-05,
+        "encoder_advance_m": 1.7490102490747006e-05,
+        "force_rise_N": 0.5225255651520726,
+        "physx_reference": {
+          "physics_step": 7317,
+          "native_step": 7319,
+          "loads_N_by_label": {
+            "floor": 13.983111754059792,
+            "wall_back": 2.8203204832971096,
+            "right_cup": 6.817657038712458
+          },
+          "wall_gaps_m": {
+            "wall_back": -3.4332162006378564e-07,
+            "wall_left": 0.3488282031198721,
+            "wall_right": 0.2603914356609564
+          }
+        }
+      },
+      {
+        "phase": "rear_2_B1_approach",
+        "status": "RRTCONNECT_FROM_MEASUREMENT",
+        "sim_time_s": 61.175,
+        "wall_elapsed_s": 121.95556503599983,
+        "cube_position_m": [
+          0.04421865567564964,
+          1.0756081342697144,
+          0.7869998812675476
+        ],
+        "cube_orientation_wxyz": [
+          0.9999966621398926,
+          -1.3881593474707188e-07,
+          5.086548426902482e-08,
+          0.0026097451336681843
+        ],
+        "cube_id": 2,
+        "arm": "left",
+        "measured_tcp_m": [
+          -0.18350787624592488,
+          0.9096015486253857,
+          1.2552820665485276
+        ],
+        "measured_tcp_rotation": [
+          [
+            0.7071067656969522,
+            -0.70710679667614,
+            5.960464488067976e-08
+          ],
+          [
+            -0.7071067966761413,
+            -0.7071067656969534,
+            -2.437094663234627e-10
+          ],
+          [
+            4.231917628214457e-08,
+            -4.197452089609472e-08,
+            -0.9999999999999982
+          ]
+        ],
+        "measured_joints_rad": [
+          -5.880679276870637e-11,
+          -0.7853981852531433,
+          1.2596907024431392e-11,
+          -2.356194496154785,
+          -2.348027328125113e-10,
+          1.5707963705062866,
+          0.7853981852531433
+        ],
+        "measured_rail_y_m": 0.8,
+        "observed_cube_m": [
+          0.04446433810517192,
+          1.0755394097638407,
+          0.787
+        ],
+        "precontact_tcp_m": [
+          -0.03753566189482808,
+          1.0768963813781738,
+          0.807
+        ],
+        "planning_margin_m": 0.003,
+        "approach_lift_m": 0.243,
+        "physx_reference": {
+          "physics_step": 7341,
+          "native_step": 7343,
+          "loads_N_by_label": {
+            "floor": 12.338402196764946,
+            "wall_back": 0.0,
+            "right_cup": 0.36514744051369225
+          },
+          "wall_gaps_m": {
+            "wall_back": 1.4060928365255965e-06,
+            "wall_left": 0.34882820930497066,
+            "wall_right": 0.2603908979536714
+          }
+        }
+      },
+      {
+        "phase": "rear_2_B1_approach",
+        "status": "PRECONTACT_REACHED",
+        "sim_time_s": 72.75,
+        "wall_elapsed_s": 157.14589720799995,
+        "cube_position_m": [
+          0.04421839863061905,
+          1.075608730316162,
+          0.7869998812675476
+        ],
+        "cube_orientation_wxyz": [
+          0.9999966621398926,
+          -1.477505975344684e-06,
+          -1.7749169956005062e-07,
+          0.00260976143181324
+        ],
+        "cube_id": 2,
+        "arm": "left",
+        "measured_tcp_m": [
+          -0.03752835202036833,
+          1.0768806032651204,
+          0.8079298355197008
+        ],
+        "position_error_m": 0.0009299981058116441,
+        "orientation_matrix_error": 0.00015039394380470368,
+        "ik_seed_source": "posture_hint",
+        "physx_reference": {
+          "physics_step": 8730,
+          "native_step": 8732,
+          "loads_N_by_label": {
+            "floor": 12.305948138237,
+            "wall_back": 0.0,
+            "right_cup": 1.9092990430021768
+          },
+          "wall_gaps_m": {
+            "wall_back": 6.069013388232403e-07,
+            "wall_left": 0.34882793020146774,
+            "wall_right": 0.26039113294022964
+          }
+        }
+      },
+      {
+        "phase": "rear_2_B1_touch",
+        "status": "TACTILE_APPROACH",
+        "sim_time_s": 72.75,
+        "wall_elapsed_s": 157.15120667600058,
+        "cube_position_m": [
+          0.04421839863061905,
+          1.075608730316162,
+          0.7869998812675476
+        ],
+        "cube_orientation_wxyz": [
+          0.9999966621398926,
+          -1.477505975344684e-06,
+          -1.7749169956005062e-07,
+          0.00260976143181324
+        ],
+        "cube_id": 2,
+        "physx_reference": {
+          "physics_step": 8730,
+          "native_step": 8732,
+          "loads_N_by_label": {
+            "floor": 12.305948138237,
+            "wall_back": 0.0,
+            "right_cup": 1.9092990430021768
+          },
+          "wall_gaps_m": {
+            "wall_back": 6.069013388232403e-07,
+            "wall_left": 0.34882793020146774,
+            "wall_right": 0.26039113294022964
+          }
+        }
+      },
+      {
+        "phase": "rear_2_B2_contact_sync",
+        "status": "STABILIZING_DUAL_CONTACT",
+        "sim_time_s": 83.875,
+        "wall_elapsed_s": 179.0360655200002,
+        "cube_position_m": [
+          0.04421946778893471,
+          1.0756090879440308,
+          0.7869998812675476
+        ],
+        "cube_orientation_wxyz": [
+          0.9999966621398926,
+          -1.247899604095437e-06,
+          6.703917279082816e-07,
+          0.0026077504735440016
+        ],
+        "cube_id": 2,
+        "physx_reference": {
+          "physics_step": 10065,
+          "native_step": 10067,
+          "loads_N_by_label": {
+            "floor": 13.535377755761147,
+            "wall_back": 0.0,
+            "left_cup": 2.2271383894544647,
+            "right_cup": 1.9986772321896573
+          },
+          "wall_gaps_m": {
+            "wall_back": 5.834474311461335e-07,
+            "wall_left": 0.3488292265562246,
+            "wall_right": 0.2603902909783552
+          }
+        }
+      },
+      {
+        "phase": "rear_2_B2_contact_sync",
+        "status": "FORCE_CONFIRMED",
+        "sim_time_s": 84.6,
+        "wall_elapsed_s": 180.52769181900112,
+        "cube_position_m": [
+          0.04421878233551979,
+          1.0756086111068726,
+          0.7869999408721924
+        ],
+        "cube_orientation_wxyz": [
+          0.9999966621398926,
+          -1.3144999684300274e-06,
+          9.563186154082359e-08,
+          0.002609038259834051
+        ],
+        "cube_id": 2,
+        "filtered_normal_force_N": {
+          "right": 1.9834197918180452,
+          "left": 1.017244269309802
+        },
+        "physx_reference": {
+          "physics_step": 10152,
+          "native_step": 10154,
+          "loads_N_by_label": {
+            "floor": 12.687948793172836,
+            "wall_back": 0.0,
+            "left_cup": 0.9728773873400884,
+            "right_cup": 2.0255032936135224
+          },
+          "wall_gaps_m": {
+            "wall_back": 8.583623593710898e-07,
+            "wall_left": 0.34882843518590106,
+            "wall_right": 0.2603908705148615
+          }
+        }
+      },
+      {
+        "phase": "rear_2_B2_side_travel",
+        "status": "RUNNING",
+        "sim_time_s": 84.6,
+        "wall_elapsed_s": 180.5338593710003,
+        "cube_position_m": [
+          0.04421878233551979,
+          1.0756086111068726,
+          0.7869999408721924
+        ],
+        "cube_orientation_wxyz": [
+          0.9999966621398926,
+          -1.3144999684300274e-06,
+          9.563186154082359e-08,
+          0.002609038259834051
+        ],
+        "cube_id": 2,
+        "arm": "left",
+        "follower": "right",
+        "physx_reference": {
+          "physics_step": 10152,
+          "native_step": 10154,
+          "loads_N_by_label": {
+            "floor": 12.687948793172836,
+            "wall_back": 0.0,
+            "left_cup": 0.9728773873400884,
+            "right_cup": 2.0255032936135224
+          },
+          "wall_gaps_m": {
+            "wall_back": 8.583623593710898e-07,
+            "wall_left": 0.34882843518590106,
+            "wall_right": 0.2603908705148615
+          }
+        }
+      },
+      {
+        "phase": "rear_2_B2_side_travel",
+        "status": "WRIST_LIMIT",
+        "sim_time_s": 129.01666666666668,
+        "wall_elapsed_s": 307.7057831910006,
+        "cube_position_m": [
+          0.2686063051223755,
+          1.0759996175765991,
+          0.787078320980072
+        ],
+        "cube_orientation_wxyz": [
+          0.9999998807907104,
+          -6.676830111018717e-08,
+          0.0005225492059253156,
+          -1.6358806931293657e-07
+        ],
+        "cube_id": 2,
+        "arm": "left",
+        "force_N": [
+          -8.63443120409549,
+          -3.1428039536942127,
+          -0.3044902983494188
+        ],
+        "lateral_relief_m": [
+          -0.0003041583809747541,
+          -0.002,
+          0.002921601021615633
+        ],
+        "physx_reference": {
+          "physics_step": 15482,
+          "native_step": 15484,
+          "loads_N_by_label": {
+            "floor": 11.724795252084732,
+            "wall_back": 5.035574706271291,
+            "left_cup": 8.492748255227268,
+            "right_cup": 1.8758554487550674
+          },
+          "wall_gaps_m": {
+            "wall_back": 3.478775442988802e-07,
+            "wall_left": 0.5735279391792244,
+            "wall_right": 0.03631532893447341
+          }
+        }
+      }
+    ],
+    "native_cup_peak_before_tactile_seek_N": {
+      "left": 0.0,
+      "right": 0.0
+    },
+    "unexpected_contacts": 0,
+    "stop_wrist_force_resultant_N": 9.193657229383897,
+    "stop_checkpoint_sha256": "631942261c1c8dddb3eaed75f17887c9e9f10ffb9987aff73e01bff095974b20"
   }
 }
