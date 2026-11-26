@@ -114,6 +114,7 @@ REAR_BODY = '''
             sign = -1 if lateral == "right" else 1
             support_side, push_side, push_sign = rear_arm, lateral, sign
             rear_y = wall_plane(CONFIG, "wall_back", 1, 1)
+            final_forward_resume = CHECKPOINT.get("rear_forward_resume") if slot == START_REAR and slot == 4 else None
             postures = json.loads((ROOT / "scenes/w760_300mm/b_postures.json").read_text())
             outer = postures["outer"].get(str(slot))
             third = postures["third"] if slot == 3 else None
@@ -131,13 +132,16 @@ REAR_BODY = '''
                 if follower is not None:
                     follow_q = applied_targets[follower].copy()
                     follow_tip, follow_attitude = tcp_fk(follower, follow_q)
-                # R3's rear contact rises on the same timescale as the lateral wall contacts.
-                short_window = axis == 0 or slot == 3
+                # R3 and R4 rear contact rise on the same timescale as the lateral wall contacts.
+                short_window = axis == 0 or slot in (3, 4)
                 window = deque(maxlen=19 if short_window else 61)
                 average_count = 4 if short_window else 8
                 min_advance = .000012 if short_window else .00004
+                if slot == 4 and axis == 1:
+                    # The wrench envelope limits advance while the neighboring box is already bearing.
+                    min_advance = .000004
                 max_tracking_ratio = .45 if short_window else .35
-                extended_terminal = axis == 0 or slot in (2, 3)
+                extended_terminal = axis == 0 or slot != 1
                 for _ in range(3600):
                     center, rotation = sensed_cube()
                     measured, _ = tcp_fk(arm, joint_state()[arm])
@@ -189,6 +193,8 @@ REAR_BODY = '''
                     tool = np.asarray(FRONT_ROTATION) if arm == "left" else np.diag([-1., 1., -1.])
                     hint = (outer["b1_q"] if outer is not None
                             else third["precontact_q_rad"] if third is not None else None)
+                    if final_forward_resume:
+                        hint = final_forward_resume["right_wrist_seed_rad"]
                 else:
                     role = b2_role_seeds(json.loads((ROOT / "validation/fr3_b2_collision_plan.json").read_text()), arm)
                     tool = role["push_rotation_world"]
@@ -220,7 +226,7 @@ REAR_BODY = '''
                 start, rotation = sensed_cube()
                 measured_slide = {}
                 goal = start.copy()
-                standoff = .005 if slot in (2, 3) and axis == 1 else .001
+                standoff = .005 if slot != 1 and target_name == "wall_back" else .001
                 goal[axis] = boundary - direction * (half * np.abs(rotation[axis]).sum() + standoff)
                 if target_name is None:
                     goal[axis] = boundary
@@ -410,7 +416,7 @@ REAR_BODY = '''
                     raise RuntimeError("Rear center insertion has insufficient visually verified slot clearance")
             contact_plan_rotation = control_rotation.copy()
             approach(rear_arm, 1, 1)
-            if slot == 4:
+            if slot == 4 and not final_forward_resume:
                 neighbor_center, neighbor_attitude = tracked[side_name]
                 near_face = neighbor_center[1] - half * np.abs(neighbor_attitude[1]).sum()
                 _, attitude = sensed_cube()
@@ -419,7 +425,7 @@ REAR_BODY = '''
                 advance(rear_arm, 1, 1, near_face + side_push_overlap - leading_extent, None)
             else:
                 advance(rear_arm, 1, 1, rear_y, "wall_back")
-            if side_name:
+            if side_name and not final_forward_resume:
                 position, left_hold_rotation = tcp_fk(rear_arm, joint_state()[rear_arm])
                 left_hold_z = float(position[2])
                 support_load = .65 if slot == 4 else B2_CONTROLLER_PARAMETERS["left_target_force_N"]
