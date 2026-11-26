@@ -138,7 +138,7 @@ class VisionComparison:
                   "capture_time_s": capture_time_s, "frame_id": frame_id}
         truth_row = {**common, "truth_position_m": truth, "source": "isaacsim_reference"}
         camera_row = {**common, "camera_position_m": camera, "status": status,
-                      "source": "rgb_aruco"}
+                      "source": self.metadata.get("camera_stream_source", "rgb_aruco")}
         paired = truth is not None and camera is not None
         error = (np.asarray(camera) - truth).tolist() if paired else None
         row = {**extra, **common, "truth_position_m": truth, "camera_position_m": camera,

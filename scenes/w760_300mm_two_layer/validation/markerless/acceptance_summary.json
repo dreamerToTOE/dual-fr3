@@ -1,0 +1,587 @@
+{
+  "status": "PASS_STAGED_SINGLE_INSTANCE",
+  "continuity": "Independent measured checkpoint segments. The five lower rear boxes are loaded as completed bodies.",
+  "scene_id": "W760_H300_rear5_front5_upper5_side_v1",
+  "final_layout_status": "PASS_W760_UPPER_ROW",
+  "lower_front": [
+    {
+      "slot": 1,
+      "cube_id": 12,
+      "completed_carry": {
+        "log": "front_to_upper_01.log",
+        "line": 474,
+        "event": {
+          "phase": "front_floor_landing",
+          "status": "REACHED_AFTER_SUCTION_RELEASE",
+          "sim_time_s": 146.44166666666666,
+          "wall_elapsed_s": 368.7078974469987,
+          "cube_position_m": [
+            -1.3838787708664313e-05,
+            0.7350835204124451,
+            0.7869998812675476
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -5.6939711612358224e-08,
+            2.99319005137022e-08,
+            -4.93798652314581e-05
+          ],
+          "cube_id": 12,
+          "slot": 1,
+          "landing_error_m": 0.00032043912324161873
+        }
+      },
+      "completed_placement": {
+        "log": "front_resume_05.log",
+        "line": 471,
+        "event": {
+          "phase": "front_slot_complete",
+          "status": "SEATED_STABLE",
+          "sim_time_s": 108.96666666666667,
+          "wall_elapsed_s": 334.4122151850024,
+          "cube_position_m": [
+            -0.30486753582954407,
+            0.9259690046310425,
+            0.7869998812675476
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -4.6433323852568265e-09,
+            3.1506463216146585e-08,
+            -0.00020582358411047608
+          ],
+          "cube_id": 12,
+          "slot": 1
+        }
+      },
+      "support_steps": 60,
+      "vision_center_error_mm": 1.399759711057466,
+      "placement_center_error_mm": 0.9367831741295014,
+      "source_run": "front_resume_05"
+    },
+    {
+      "slot": 2,
+      "cube_id": 15,
+      "completed_carry": {
+        "log": "front2_stationary_seal_01.log",
+        "line": 476,
+        "event": {
+          "phase": "front_floor_landing",
+          "status": "REACHED_AFTER_SUCTION_RELEASE",
+          "sim_time_s": 182.04166666666666,
+          "wall_elapsed_s": 540.849094913,
+          "cube_position_m": [
+            0.04499780386686325,
+            0.7359551191329956,
+            0.7869999408721924
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -4.233152139931917e-08,
+            5.5965802658874964e-08,
+            6.137341551948339e-05
+          ],
+          "cube_id": 15,
+          "slot": 2,
+          "landing_error_m": 0.001458216279036853
+        }
+      },
+      "completed_placement": {
+        "log": "front2_stationary_seal_01.log",
+        "line": 531,
+        "event": {
+          "phase": "front_slot_complete",
+          "status": "SEATED_STABLE",
+          "sim_time_s": 448.7083333333333,
+          "wall_elapsed_s": 1193.058214197,
+          "cube_position_m": [
+            0.30487024784088135,
+            0.9259551763534546,
+            0.7870000004768372
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            3.6795844948755985e-07,
+            -3.186141483979554e-08,
+            0.0002994026872329414
+          ],
+          "cube_id": 15,
+          "slot": 2
+        }
+      },
+      "support_steps": 60,
+      "vision_center_error_mm": 1.4218887151203892,
+      "placement_center_error_mm": 0.9222062472008719,
+      "source_run": "front2_stationary_seal_01"
+    },
+    {
+      "slot": 3,
+      "cube_id": 13,
+      "completed_carry": {
+        "log": "front2_push_01.log",
+        "line": 532,
+        "event": {
+          "phase": "front_floor_landing",
+          "status": "REACHED_AFTER_SUCTION_RELEASE",
+          "sim_time_s": 448.1333333333333,
+          "wall_elapsed_s": 1188.6829528199996,
+          "cube_position_m": [
+            -0.029151489958167076,
+            0.7351189255714417,
+            0.7869998812675476
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -4.66598635284754e-08,
+            4.0525709010807986e-08,
+            4.591245669871569e-05
+          ],
+          "cube_id": 13,
+          "slot": 3,
+          "landing_error_m": 0.00028740537290083675
+        }
+      },
+      "completed_placement": {
+        "log": "front2_push_01.log",
+        "line": 561,
+        "event": {
+          "phase": "front_slot_complete",
+          "status": "SEATED_STABLE",
+          "sim_time_s": 581.9583333333334,
+          "wall_elapsed_s": 1512.515201295002,
+          "cube_position_m": [
+            -0.15241467952728271,
+            0.925925076007843,
+            0.7869999408721924
+          ],
+          "cube_orientation_wxyz": [
+            0.9999998807907104,
+            -7.673323643153651e-10,
+            -2.743783689140855e-08,
+            -0.0004996293573640287
+          ],
+          "cube_id": 13,
+          "slot": 3
+        }
+      },
+      "support_steps": 60,
+      "vision_center_error_mm": 1.3131758418240465,
+      "placement_center_error_mm": 1.7199493019284293,
+      "source_run": "front2_push_01"
+    },
+    {
+      "slot": 4,
+      "cube_id": 14,
+      "completed_carry": {
+        "log": "front4_stationary_seal_01.log",
+        "line": 476,
+        "event": {
+          "phase": "front_floor_landing",
+          "status": "REACHED_AFTER_SUCTION_RELEASE",
+          "sim_time_s": 203.95,
+          "wall_elapsed_s": 561.7135166070002,
+          "cube_position_m": [
+            0.10597299039363861,
+            0.7346680164337158,
+            0.7869999408721924
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -6.271251606904116e-08,
+            3.623394562168869e-08,
+            7.524124521296471e-05
+          ],
+          "cube_id": 14,
+          "slot": 4,
+          "landing_error_m": 0.0005248134837343343
+        }
+      },
+      "completed_placement": {
+        "log": "front4_new_landing_01.log",
+        "line": 482,
+        "event": {
+          "phase": "front_slot_complete",
+          "status": "SEATED_STABLE",
+          "sim_time_s": 132.74166666666667,
+          "wall_elapsed_s": 352.5070786460001,
+          "cube_position_m": [
+            0.15097977221012115,
+            0.9259136319160461,
+            0.7870000004768372
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            2.2138333122256881e-07,
+            -9.282032920054917e-09,
+            0.00033918878762051463
+          ],
+          "cube_id": 14,
+          "slot": 4
+        }
+      },
+      "support_steps": 60,
+      "vision_center_error_mm": 1.3516455640016574,
+      "placement_center_error_mm": 2.9567363036928294,
+      "source_run": "front4_new_landing_01"
+    },
+    {
+      "slot": 5,
+      "cube_id": 6,
+      "completed_carry": {
+        "log": "front4_endpoint_01.log",
+        "line": 488,
+        "event": {
+          "phase": "front_floor_landing",
+          "status": "REACHED_AFTER_SUCTION_RELEASE",
+          "sim_time_s": 192.08333333333334,
+          "wall_elapsed_s": 498.7071379629997,
+          "cube_position_m": [
+            -0.0009510478121228516,
+            0.734151303768158,
+            0.7869999408721924
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -4.846643264500017e-08,
+            3.8198425755808785e-08,
+            -2.557682637416292e-05
+          ],
+          "cube_id": 6,
+          "slot": 5,
+          "landing_error_m": 0.0007942807626835751
+        }
+      },
+      "completed_placement": {
+        "log": "front5_straight_01.log",
+        "line": 474,
+        "event": {
+          "phase": "front_slot_complete",
+          "status": "SEATED_STABLE",
+          "sim_time_s": 59.708333333333336,
+          "wall_elapsed_s": 171.61115001600047,
+          "cube_position_m": [
+            -0.0009071220410987735,
+            0.9259213209152222,
+            0.7870001196861267
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            4.5482710220312583e-07,
+            -4.472516934583837e-08,
+            -0.00026655063265934587
+          ],
+          "cube_id": 6,
+          "slot": 5
+        }
+      },
+      "support_steps": 60,
+      "vision_center_error_mm": 1.312609909150982,
+      "placement_center_error_mm": 0.25815914271257556,
+      "source_run": "front5_straight_01"
+    }
+  ],
+  "upper": [
+    {
+      "slot": 1,
+      "cube_id": 7,
+      "completed_carry": {
+        "log": "front5_straight_01.log",
+        "line": 493,
+        "event": {
+          "phase": "upper_support_confirmed",
+          "status": "FORCE_TRANSFERRED",
+          "sim_time_s": 181.8,
+          "wall_elapsed_s": 522.813697354999,
+          "cube_position_m": [
+            -0.03999779373407364,
+            1.065102458000183,
+            0.936999499797821
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            3.509028658754687e-07,
+            1.6500237052241573e-06,
+            7.002731308602961e-06
+          ],
+          "cube_id": 7,
+          "hover_load_N": 12.259544000408045,
+          "seated_wrist_load_N": 1.9778347204534332,
+          "lower_support_load_N": 10.284722193480915,
+          "stable_wrist_frames": 30,
+          "seating_descent_m": 0.000501022003911322
+        }
+      },
+      "completed_placement": {
+        "log": "upper1_after_seam_02.log",
+        "line": 486,
+        "event": {
+          "phase": "upper_slot_complete",
+          "status": "SEATED_STABLE",
+          "sim_time_s": 180.6,
+          "wall_elapsed_s": 569.4303311509975,
+          "cube_position_m": [
+            -0.3049831986427307,
+            1.0759886503219604,
+            0.9369997978210449
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -7.165040187828708e-07,
+            -8.824682851127363e-08,
+            -7.51406405470334e-05
+          ],
+          "cube_id": 7,
+          "slot": 1
+        }
+      },
+      "support_steps": 60,
+      "vision_center_error_mm": 0.941028301946837,
+      "placement_center_error_mm": 0.02027662876374794,
+      "source_run": "upper1_after_seam_02"
+    },
+    {
+      "slot": 2,
+      "cube_id": 8,
+      "completed_carry": {
+        "log": "upper1_after_seam_02.log",
+        "line": 504,
+        "event": {
+          "phase": "upper_support_confirmed",
+          "status": "FORCE_TRANSFERRED",
+          "sim_time_s": 313.06666666666666,
+          "wall_elapsed_s": 938.2011090470005,
+          "cube_position_m": [
+            0.05999685078859329,
+            1.0651003122329712,
+            0.9369997382164001
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.6800314597276156e-06,
+            -2.4509351987944683e-06,
+            1.3877765013603494e-05
+          ],
+          "cube_id": 8,
+          "hover_load_N": 12.26200109947855,
+          "seated_wrist_load_N": 1.6668837767931943,
+          "lower_support_load_N": 10.595311305016349,
+          "stable_wrist_frames": 30,
+          "seating_descent_m": 0.0004960052525273396
+        }
+      },
+      "completed_placement": {
+        "log": "upper2_pre_seam_02.log",
+        "line": 541,
+        "event": {
+          "phase": "upper_slot_complete",
+          "status": "SEATED_STABLE",
+          "sim_time_s": 215.03333333333333,
+          "wall_elapsed_s": 707.6736414110055,
+          "cube_position_m": [
+            0.30484890937805176,
+            1.0758486986160278,
+            0.9369997382164001
+          ],
+          "cube_orientation_wxyz": [
+            0.9999995231628418,
+            -2.892091686135245e-07,
+            1.9860830491325032e-07,
+            0.0010085261892527342
+          ],
+          "cube_id": 8,
+          "slot": 2
+        }
+      },
+      "support_steps": 60,
+      "vision_center_error_mm": 1.0268132869006084,
+      "placement_center_error_mm": 0.213823650149537,
+      "source_run": "upper2_pre_seam_02"
+    },
+    {
+      "slot": 3,
+      "cube_id": 9,
+      "completed_carry": {
+        "log": "upper2_pre_seam_02.log",
+        "line": 559,
+        "event": {
+          "phase": "upper_support_confirmed",
+          "status": "FORCE_TRANSFERRED",
+          "sim_time_s": 348.28333333333336,
+          "wall_elapsed_s": 1095.2874319300026,
+          "cube_position_m": [
+            -0.025007858872413635,
+            1.0060865879058838,
+            0.9369998574256897
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -2.5328495212306734e-06,
+            1.632304588383704e-06,
+            -2.1805884898640215e-05
+          ],
+          "cube_id": 9,
+          "hover_load_N": 12.257598428106007,
+          "seated_wrist_load_N": 1.2916197983431166,
+          "lower_support_load_N": 10.971006128410002,
+          "stable_wrist_frames": 30,
+          "seating_descent_m": 0.00048423900710535024
+        }
+      },
+      "completed_placement": {
+        "log": "upper3_terminal_02.log",
+        "line": 489,
+        "event": {
+          "phase": "upper_slot_complete",
+          "status": "SEATED_STABLE",
+          "sim_time_s": 119.91666666666667,
+          "wall_elapsed_s": 422.4018032640015,
+          "cube_position_m": [
+            -0.15498025715351105,
+            1.0759998559951782,
+            0.9369997382164001
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -2.0355148535600165e-06,
+            8.218618177124881e-07,
+            -2.713467779358325e-07
+          ],
+          "cube_id": 9,
+          "slot": 3
+        }
+      },
+      "support_steps": 60,
+      "vision_center_error_mm": 0.7614686092395956,
+      "placement_center_error_mm": 0.699099962183281,
+      "source_run": "upper3_terminal_02"
+    },
+    {
+      "slot": 4,
+      "cube_id": 10,
+      "completed_carry": {
+        "log": "upper3_terminal_02.log",
+        "line": 509,
+        "event": {
+          "phase": "upper_support_confirmed",
+          "status": "FORCE_TRANSFERRED",
+          "sim_time_s": 250.44166666666666,
+          "wall_elapsed_s": 815.1652363149988,
+          "cube_position_m": [
+            0.050000566989183426,
+            1.009109377861023,
+            0.9369999766349792
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -2.84682596429775e-06,
+            -2.8229742383700795e-06,
+            9.506066999165341e-05
+          ],
+          "cube_id": 10,
+          "hover_load_N": 12.262876317604796,
+          "seated_wrist_load_N": 1.8983941266641933,
+          "lower_support_load_N": 10.363401919291771,
+          "stable_wrist_frames": 30,
+          "seating_descent_m": 0.0005138234245806103
+        }
+      },
+      "completed_placement": {
+        "log": "upper4_terminal_02.log",
+        "line": 482,
+        "event": {
+          "phase": "upper_slot_complete",
+          "status": "SEATED_STABLE",
+          "sim_time_s": 118.68333333333334,
+          "wall_elapsed_s": 432.2693418550043,
+          "cube_position_m": [
+            0.15406686067581177,
+            1.0756676197052002,
+            0.9369995594024658
+          ],
+          "cube_orientation_wxyz": [
+            0.999997615814209,
+            -1.7240059833056876e-06,
+            5.22639595601504e-07,
+            -0.002216464839875698
+          ],
+          "cube_id": 10,
+          "slot": 4
+        }
+      },
+      "support_steps": 60,
+      "vision_center_error_mm": 0.9376523780843616,
+      "placement_center_error_mm": 0.5677475939054865,
+      "source_run": "upper4_terminal_02"
+    },
+    {
+      "slot": 5,
+      "cube_id": 11,
+      "completed_carry": {
+        "log": "upper4_terminal_02.log",
+        "line": 500,
+        "event": {
+          "phase": "upper_support_confirmed",
+          "status": "FORCE_TRANSFERRED",
+          "sim_time_s": 248.4,
+          "wall_elapsed_s": 841.0122318849972,
+          "cube_position_m": [
+            -0.0005976826651021838,
+            0.9890890121459961,
+            0.9369995594024658
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -4.083494786755182e-06,
+            3.101830316154519e-06,
+            -2.2917345631867647e-05
+          ],
+          "cube_id": 11,
+          "hover_load_N": 12.259825667998705,
+          "seated_wrist_load_N": 1.4862414469974887,
+          "lower_support_load_N": 10.77500900783296,
+          "stable_wrist_frames": 30,
+          "seating_descent_m": 0.0004830280676352739
+        }
+      },
+      "completed_placement": {
+        "log": "upper5_current_04.log",
+        "line": 469,
+        "event": {
+          "phase": "upper_slot_complete",
+          "status": "SEATED_STABLE",
+          "sim_time_s": 118.28333333333333,
+          "wall_elapsed_s": 425.2423602659983,
+          "cube_position_m": [
+            0.0006444597383961082,
+            1.0757261514663696,
+            0.9369997978210449
+          ],
+          "cube_orientation_wxyz": [
+            0.9999983310699463,
+            -1.3640370752909803e-06,
+            -8.796178718739611e-08,
+            -0.0018273773603141308
+          ],
+          "cube_id": 11,
+          "slot": 5
+        }
+      },
+      "support_steps": 60,
+      "vision_center_error_mm": 0.8963530688209776,
+      "placement_center_error_mm": 1.3579720265036601,
+      "source_run": "upper5_current_04"
+    }
+  ],
+  "final_vision_error_mm_max": 1.4218887151203892,
+  "unintended_physx_contact_count_by_recheck": {
+    "front2_stationary_seal_01": 0,
+    "front4_stationary_seal_01": 0,
+    "front4_new_landing_01": 0,
+    "upper5_current_04": 0
+  },
+  "front5_straight_report": "front5_straight_audit.json",
+  "upper5_straight_report": "upper5_straight_audit.json",
+  "vision_baseline": "markerless_rgbd_square_fitting",
+  "final_layout_run": "upper5_current_04",
+  "final_layout_poses": "final_15_box_poses.json"
+}

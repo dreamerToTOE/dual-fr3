@@ -117,15 +117,17 @@ def recognition_metrics(predictions, truth):
 class ContactStateExperiment:
     """Observer only: recommendations are logged, never executed as commands."""
 
-    def __init__(self, directory, config):
+    def __init__(self, directory, config, *, camera_stream_source=None):
         from fr3_contact_state import ContactStateEstimator
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)
         self.config = config
+        self.camera_input = camera_stream_source or "causal RGB/ArUco observation"
         library_path = Path(__file__).with_name("fr3_contact_skills.json")
         metadata = {"schema_version": 1, "scene_config": config,
                     "skill_library_sha256": hashlib.sha256(library_path.read_bytes()).hexdigest(),
                     "recognizer_sha256": hashlib.sha256(Path(__file__).with_name("fr3_contact_state.py").read_bytes()).hexdigest(),
+                    "camera_input": self.camera_input,
                     "modes": {"fusion": "camera + wrist wrench + encoder FK + static geometry",
                               "vision_only": "camera + encoder geometry; no force input",
                               "force_only": "wrist wrench + encoder FK + static geometry; no camera"},
@@ -169,7 +171,7 @@ class ContactStateExperiment:
             "status": "COMPLETED_BASELINE_EVALUATION", "samples": len(self.references),
             "physical_task_status": task_status,
             "metrics": metrics,
-            "input_boundary": ["causal RGB/ArUco observation", "wrist TCP six-axis feedback", "encoder FK/tool geometry"],
+            "input_boundary": [self.camera_input, "wrist TCP six-axis feedback", "encoder FK/tool geometry"],
             "excluded_from_recognizer": ["task phase", "skill ID", "Cube truth", "PhysX contact report", "attachment state"],
             "reference_definition": "independent physical contacts/attachments plus 50 um wall adjacency; no wrist force or task phase",
             "control": "observer only; skill recommendations do not change robot commands",

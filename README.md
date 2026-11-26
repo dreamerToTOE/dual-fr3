@@ -4,6 +4,8 @@
 
 The [76 cm, 30 cm-wall double-layer scene](scenes/w760_300mm_two_layer/README.md) places a five-box upper row on two completed lower rows. The scene directory includes the launcher, measured checkpoints, and the GUI acceptance results for all 15 boxes.
 
+The 15-box scene has a visual baseline that fits the box edges from the rear D455 RGB-D view. [Visual baseline · markerless fitting](scenes/w760_300mm_two_layer/markerless.md)
+
 ## Five-cube row versions on `base`
 
 | Version | Inner tray width | Wall height | Nominal clearance around Cube 5 | Validation |

@@ -35,7 +35,7 @@ def add_cube_marker(stage, cube_path, cube_size_m, marker_size_m, marker_id):
             cell.CreateDisplayColorAttr([Gf.Vec3f(.98 if pixels[row, column] else .02)])
 
 
-def spawn_supply_cube(stage, world, config, cube_index, contact_monitor):
+def spawn_supply_cube(stage, world, config, cube_index, contact_monitor, *, add_marker=True):
     """Create one supply arrival; call initialize after the next controlled physics step."""
     from isaacsim.core.prims import SingleRigidPrim
     from pxr import Gf, UsdGeom
@@ -45,7 +45,6 @@ def spawn_supply_cube(stage, world, config, cube_index, contact_monitor):
     if not isinstance(cube_index, int) or not 0 <= cube_index < len(sequence):
         raise ValueError("Supply index must identify an entry in cube_sequence")
     entry = sequence[cube_index]
-    marker_size = config["vision"]["aruco_marker_size_m"]
     path = f"/World/Cube_{entry['cube_id']}"
     if stage.GetPrimAtPath(path).IsValid():
         raise ValueError(f"Supply actor already exists: {path}")
@@ -54,7 +53,8 @@ def spawn_supply_cube(stage, world, config, cube_index, contact_monitor):
                 collision=True, dynamic=True, mass=config["physics"]["cube_mass_kg"])
     UsdGeom.Gprim(prim).CreateDisplayColorAttr([Gf.Vec3f(*config["row_colors_rgb"][cube_index])])
     body = world.scene.add(SingleRigidPrim(path, name=f"supply_cube_{entry['cube_id']}"))
-    add_cube_marker(stage, path, config["cube_size_m"], marker_size, entry["marker_id"])
+    if add_marker:
+        add_cube_marker(stage, path, config["cube_size_m"], config["vision"]["aruco_marker_size_m"], entry["marker_id"])
     contact_monitor.add_cube_reporter(prim)
     contact_monitor.set_active_cube(path)
     return body

@@ -748,7 +748,10 @@ def main():
         }
         report["target_observations"] = []
         from fr3_contact_state_validation import ContactStateExperiment
-        contact_experiment = ContactStateExperiment(output_directory / "contact_states", CONFIG)
+        contact_experiment = ContactStateExperiment(
+            output_directory / "contact_states", CONFIG,
+            camera_stream_source=vision_comparison.metadata.get("camera_stream_source"),
+        )
 
         def sample_vision(render=True):
             nonlocal latest_camera_observation, control_center, control_rotation, supported_pose_time

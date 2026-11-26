@@ -1,0 +1,23 @@
+{
+  "cube_id": 11,
+  "forward_m": 0.08664119243621826,
+  "max_abs_lateral_offset_m": 0.001546656189020723,
+  "side_neighbor_contact": {
+    "/World/Cube_10": {
+      "records": 9837,
+      "min_gap_m": 0.003049977123737335,
+      "max_impulse_Ns": 0.0
+    },
+    "/World/Cube_9": {
+      "records": 9837,
+      "min_gap_m": 0.004384815692901611,
+      "max_impulse_Ns": 0.0
+    }
+  },
+  "rear_loaded_steps": 30,
+  "floor_support_steps": 60,
+  "final_vision_error_m": 0.0008963530688209777,
+  "max_vision_error_all_placed_m": 0.0014226013246589298,
+  "peak_push_force_N": 7.815261199960932,
+  "unintended_contact_count": 0
+}

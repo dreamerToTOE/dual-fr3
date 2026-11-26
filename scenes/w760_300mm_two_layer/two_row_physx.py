@@ -238,7 +238,7 @@ def start_state(checkpoint):
         raise ValueError("Missing measured upper placements")
     landed = checkpoint.get("landed") or {}
     seam = landed.get("seam_entry_resume")
-    transports = {2: (None, 1, 2), 3: (None, 1), 4: (1,)}
+    transports = {1: (1,), 2: (None, 1, 2), 3: (None, 1), 4: (1,)}
     if seam and (front != 6 or seam.get("slot") != upper or landed.get("cube_id") != 6 + upper
                  or seam.get("completed_transport") not in transports.get(upper, ())):
         raise ValueError("Invalid upper seam checkpoint")
