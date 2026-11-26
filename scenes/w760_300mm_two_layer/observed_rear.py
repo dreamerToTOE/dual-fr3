@@ -63,42 +63,57 @@ REAR_BODY = '''
                 side_x = sum(edges) / 2
             target = np.array([side_x - sign * half if side_name else side_x, rear_y - half, SUPPORT_TOP + half])
 
-            def confirm_rear_bearing(arm):
-                phase = f"rear_{slot}_B2_1_bearing"
-                record(phase, "RUNNING", target="wall_back")
+            def confirm_wall_bearing(arm, axis, direction, boundary, target_name, follower=None):
+                phase = f"rear_{slot}_B2_{axis}_bearing"
+                record(phase, "RUNNING", target=target_name)
                 q = applied_targets[arm].copy()
                 tip, attitude = tcp_fk(arm, q)
-                start_y = tip[1]
-                window = deque(maxlen=61)
+                start = tip[axis]
+                if follower is not None:
+                    follow_q = applied_targets[follower].copy()
+                    follow_tip, follow_attitude = tcp_fk(follower, follow_q)
+                # The lateral wall stiffness rises over fewer samples than the rear approach.
+                window = deque(maxlen=19 if axis == 0 else 61)
+                average_count = 4 if axis == 0 else 8
+                min_advance = .000012 if axis == 0 else .00004
+                max_tracking_ratio = .45 if axis == 0 else .35
                 for _ in range(3600):
                     center, rotation = sensed_cube()
                     measured, _ = tcp_fk(arm, joint_state()[arm])
                     wrench = last_force_sample[arm]["tcp_gravity_corrected_world"]
                     total = np.linalg.norm(wrench[:3])
-                    normal = -float(wrench[1])
-                    gap = rear_y - center[1] - half * np.abs(rotation[1]).sum()
+                    normal = -direction * float(wrench[axis])
+                    gap = direction * (boundary - center[axis]) - half * np.abs(rotation[axis]).sum()
                     if total > 9. or np.linalg.norm(wrench[3:]) > 1. or gap < -.002:
                         raise RuntimeError(f"{phase}: exceeded force or geometry envelope")
-                    window.append((tip[1], measured[1], normal))
+                    window.append((direction * tip[axis], direction * measured[axis], normal))
                     if len(window) == window.maxlen:
                         values = np.asarray(window)
-                        commanded, response, rise = values[-8:].mean(axis=0) - values[:8].mean(axis=0)
-                        if (-.002 <= gap <= .00045 and commanded >= .00004
-                                and abs(response) <= .35 * commanded
+                        commanded, response, rise = (values[-average_count:].mean(axis=0)
+                                                     - values[:average_count].mean(axis=0))
+                        if (-.002 <= gap <= .00045 and commanded >= min_advance
+                                and abs(response) <= max_tracking_ratio * commanded
                                 and rise >= .30 and normal >= 5.5):
-                            record(phase, "FORCE_CONFIRMED", contact_target="wall_back", normal_force_N=normal,
+                            record(phase, "FORCE_CONFIRMED", contact_target=target_name, normal_force_N=normal,
                                    estimated_gap_m=float(gap), command_advance_m=float(commanded),
                                    encoder_advance_m=float(response), force_rise_N=float(rise))
                             return
+                    increment = 0.
                     if total < 7.7:
-                        tip[1] += .00012 / 120
-                    if tip[1] - start_y > .004:
+                        speed = .0005 if axis == 0 and gap > .001 else .00012
+                        increment = direction * speed / 120
+                        tip[axis] += increment
+                    if abs(tip[axis] - start) > (.009 if axis == 0 else .004):
                         break
                     candidate = cartesian_joint_target(arm, q, tip, attitude)
                     if np.max(np.abs(candidate - q)) * 120 > .4:
                         raise RuntimeError(f"{phase}: exceeded joint speed limit")
                     q = candidate
                     command_positions(arm, q)
+                    if follower is not None and increment:
+                        follow_tip[axis] += increment
+                        follow_q = cartesian_joint_target(follower, follow_q, follow_tip, follow_attitude)
+                        command_positions(follower, follow_q)
                     step()
                     check_current_collision(phase)
                 raise RuntimeError(f"{phase}: no verified stiffness response (gap {gap*1000:.2f} mm, "
@@ -230,14 +245,12 @@ REAR_BODY = '''
                                            sample_order=advance_under_load,
                                            cube_center_path=lambda _samples, _times: start + translation,
                                            sampled_trajectory=(times, samples))
-                if target_name == "wall_back":
-                    confirm_rear_bearing(arm)
+                if target_name in ("wall_back", "wall_left", "wall_right"):
+                    confirm_wall_bearing(arm, axis, direction, boundary, target_name, follower)
                 elif target_name is not None:
-                    probe = dict(B2_CONTROLLER_PARAMETERS["neighbor_seating_probe" if target_name.startswith("Cube_")
-                                                            else "wall_seating_probe"])
                     seat_against_wall(arm, axis, direction, boundary - direction * half,
                                       f"rear_{slot}_B2_{axis}_bearing", contact_target=target_name,
-                                      follow_side=follower, probe_override=probe)
+                                      follow_side=follower, probe_override=B2_CONTROLLER_PARAMETERS["neighbor_seating_probe"])
 
             def clear(arm, direction):
                 nonlocal left_hold
