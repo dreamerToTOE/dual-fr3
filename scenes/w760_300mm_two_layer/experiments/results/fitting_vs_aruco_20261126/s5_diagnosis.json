@@ -1,0 +1,357 @@
+{
+  "aruco_u4": {
+    "lateral": {
+      "truth_objects": {
+        "/World/Cube_8": 369
+      },
+      "generic_prediction": {
+        "UNKNOWN": 267,
+        "S1": 75,
+        "S5": 27
+      },
+      "generic_gate": {
+        "contact_response_not_confirmed": 342,
+        "correct_state": 27
+      },
+      "response_failures": {
+        "tcp_follows_too_much": 342,
+        "force_rise_below_minimum": 180,
+        "advance_below_minimum": 79
+      },
+      "camera_pose_age": {
+        "fresh": 369
+      },
+      "geometry_candidate": {
+        "present": 369
+      },
+      "specialized_prediction": {
+        "UNKNOWN": 267,
+        "S1": 75,
+        "S5": 27
+      },
+      "specialized_side_miss_conditions": {
+        "left_arm_still_loaded": 267,
+        "right_arm_not_loaded_forward": 75
+      },
+      "s5_by_load": {
+        "0.1_to_1N_truth": 2,
+        "at_least_1N_truth": 367,
+        "at_least_1N_generic_correct": 27,
+        "at_least_1N_specialized_correct": 27
+      },
+      "s1_geometry_candidates": {
+        "true_s1_steps": 3194,
+        "steps_with_push_aligned_candidate": 861
+      }
+    },
+    "exchange": {
+      "truth_objects": {
+        "/World/Cube_8": 34
+      },
+      "generic_prediction": {
+        "UNKNOWN": 31,
+        "S1": 3
+      },
+      "generic_gate": {
+        "contact_response_not_confirmed": 34
+      },
+      "response_failures": {
+        "tcp_follows_too_much": 22,
+        "advance_below_minimum": 34,
+        "force_rise_below_minimum": 34
+      },
+      "camera_pose_age": {
+        "fresh": 34
+      },
+      "geometry_candidate": {
+        "present": 34
+      },
+      "specialized_prediction": {
+        "UNKNOWN": 31,
+        "S1": 3
+      },
+      "specialized_side_miss_conditions": {
+        "left_arm_still_loaded": 31,
+        "right_arm_not_loaded_forward": 3
+      },
+      "s5_by_load": {
+        "at_least_1N_truth": 23,
+        "0.1_to_1N_truth": 10,
+        "below_0.1N_truth": 1
+      },
+      "s1_geometry_candidates": {
+        "true_s1_steps": 95,
+        "steps_with_push_aligned_candidate": 3
+      }
+    },
+    "rear": {
+      "truth_objects": {
+        "/World/Cube_8": 3001
+      },
+      "generic_prediction": {
+        "S1": 2882,
+        "UNKNOWN": 119
+      },
+      "generic_gate": {
+        "outside_geometry_candidate_set": 2770,
+        "push_not_towards_candidate": 87,
+        "grounded_push_branch_not_eligible": 119,
+        "no_contiguous_response_on_contact_normal": 25
+      },
+      "response_failures": {},
+      "camera_pose_age": {
+        "fresh": 3001
+      },
+      "geometry_candidate": {
+        "absent": 2770,
+        "present": 112,
+        "not_evaluated": 119
+      },
+      "specialized_prediction": {
+        "S1": 1335,
+        "S5": 1666
+      },
+      "specialized_side_miss_conditions": {
+        "side_reported_absent": 234,
+        "right_wrench_no_signed_side_evidence": 857,
+        "other_with_handover_context": 244
+      },
+      "s5_by_load": {
+        "below_0.1N_truth": 220,
+        "0.1_to_1N_truth": 2221,
+        "0.1_to_1N_specialized_correct": 1109,
+        "below_0.1N_specialized_correct": 41,
+        "at_least_1N_truth": 560,
+        "at_least_1N_specialized_correct": 516
+      },
+      "s1_geometry_candidates": {
+        "true_s1_steps": 1109,
+        "steps_with_push_aligned_candidate": 118
+      }
+    }
+  },
+  "aruco_u5": {
+    "insertion": {
+      "truth_objects": {
+        "/World/Environment/wall_back": 213
+      },
+      "generic_prediction": {
+        "S1": 52,
+        "S5": 159,
+        "UNKNOWN": 2
+      },
+      "generic_gate": {
+        "contact_response_not_confirmed": 52,
+        "correct_state": 159,
+        "grounded_push_branch_not_eligible": 2
+      },
+      "response_failures": {
+        "tcp_follows_too_much": 52,
+        "force_rise_below_minimum": 33
+      },
+      "camera_pose_age": {
+        "fresh": 213
+      },
+      "geometry_candidate": {
+        "present": 211,
+        "not_evaluated": 2
+      },
+      "specialized_prediction": {},
+      "specialized_side_miss_conditions": {},
+      "s5_by_load": {
+        "at_least_1N_truth": 205,
+        "0.1_to_1N_truth": 8,
+        "at_least_1N_generic_correct": 159
+      },
+      "s1_geometry_candidates": {
+        "true_s1_steps": 4119,
+        "steps_with_push_aligned_candidate": 1566
+      }
+    }
+  },
+  "fitting_u4": {
+    "lateral": {
+      "truth_objects": {
+        "/World/Cube_8": 722
+      },
+      "generic_prediction": {
+        "UNKNOWN": 476,
+        "S1": 211,
+        "S5": 35
+      },
+      "generic_gate": {
+        "contact_response_not_confirmed": 687,
+        "correct_state": 35
+      },
+      "response_failures": {
+        "tcp_follows_too_much": 687,
+        "force_rise_below_minimum": 365,
+        "advance_below_minimum": 181
+      },
+      "camera_pose_age": {
+        "fresh": 722
+      },
+      "geometry_candidate": {
+        "present": 722
+      },
+      "specialized_prediction": {
+        "UNKNOWN": 476,
+        "S1": 211,
+        "S5": 35
+      },
+      "specialized_side_miss_conditions": {
+        "left_arm_still_loaded": 476,
+        "right_arm_not_loaded_forward": 211
+      },
+      "s5_by_load": {
+        "0.1_to_1N_truth": 11,
+        "at_least_1N_truth": 711,
+        "at_least_1N_generic_correct": 35,
+        "at_least_1N_specialized_correct": 35
+      },
+      "s1_geometry_candidates": {
+        "true_s1_steps": 3048,
+        "steps_with_push_aligned_candidate": 699
+      }
+    },
+    "exchange": {
+      "truth_objects": {
+        "/World/Cube_8": 1022
+      },
+      "generic_prediction": {
+        "UNKNOWN": 67,
+        "S1": 955
+      },
+      "generic_gate": {
+        "contact_response_not_confirmed": 71,
+        "push_not_towards_candidate": 949,
+        "grounded_push_branch_not_eligible": 2
+      },
+      "response_failures": {
+        "tcp_follows_too_much": 24,
+        "advance_below_minimum": 71,
+        "force_rise_below_minimum": 71
+      },
+      "camera_pose_age": {
+        "fresh": 1022
+      },
+      "geometry_candidate": {
+        "present": 1020,
+        "not_evaluated": 2
+      },
+      "specialized_prediction": {
+        "UNKNOWN": 67,
+        "S1": 950,
+        "S5": 5
+      },
+      "specialized_side_miss_conditions": {
+        "left_arm_still_loaded": 65,
+        "right_arm_not_loaded_forward": 8,
+        "right_wrench_no_signed_side_evidence": 938,
+        "side_reported_absent": 5,
+        "other_with_handover_context": 1
+      },
+      "s5_by_load": {
+        "at_least_1N_truth": 60,
+        "0.1_to_1N_truth": 674,
+        "below_0.1N_truth": 288,
+        "0.1_to_1N_specialized_correct": 5
+      },
+      "s1_geometry_candidates": {
+        "true_s1_steps": 625,
+        "steps_with_push_aligned_candidate": 3
+      }
+    },
+    "rear": {
+      "truth_objects": {
+        "/World/Cube_8": 3034,
+        "/World/Environment/wall_back": 13
+      },
+      "generic_prediction": {
+        "S1": 3011,
+        "S6": 33,
+        "UNKNOWN": 3
+      },
+      "generic_gate": {
+        "push_not_towards_candidate": 2009,
+        "no_contiguous_response_on_contact_normal": 989,
+        "contact_response_not_confirmed": 13,
+        "identified_along_with_another_boundary": 33,
+        "grounded_push_branch_not_eligible": 3
+      },
+      "response_failures": {
+        "tcp_follows_too_much": 13,
+        "force_rise_below_minimum": 3
+      },
+      "camera_pose_age": {
+        "fresh": 3047
+      },
+      "geometry_candidate": {
+        "present": 3044,
+        "not_evaluated": 3
+      },
+      "specialized_prediction": {
+        "S1": 1439,
+        "S5": 1572,
+        "S6": 33,
+        "UNKNOWN": 3
+      },
+      "specialized_side_miss_conditions": {
+        "right_wrench_no_signed_side_evidence": 1047,
+        "side_reported_absent": 163,
+        "other_with_handover_context": 216,
+        "also_reported_rear": 33,
+        "right_arm_not_loaded_forward": 3
+      },
+      "s5_by_load": {
+        "0.1_to_1N_truth": 2284,
+        "below_0.1N_truth": 223,
+        "0.1_to_1N_specialized_correct": 1067,
+        "below_0.1N_specialized_correct": 15,
+        "at_least_1N_truth": 540,
+        "at_least_1N_specialized_correct": 490
+      },
+      "s1_geometry_candidates": {
+        "true_s1_steps": 1215,
+        "steps_with_push_aligned_candidate": 170
+      }
+    }
+  },
+  "fitting_u5": {
+    "insertion": {
+      "truth_objects": {
+        "/World/Environment/wall_back": 57
+      },
+      "generic_prediction": {
+        "S1": 23,
+        "S5": 34
+      },
+      "generic_gate": {
+        "contact_response_not_confirmed": 23,
+        "correct_state": 34
+      },
+      "response_failures": {
+        "tcp_follows_too_much": 23,
+        "force_rise_below_minimum": 16
+      },
+      "camera_pose_age": {
+        "fresh": 57
+      },
+      "geometry_candidate": {
+        "present": 57
+      },
+      "specialized_prediction": {},
+      "specialized_side_miss_conditions": {},
+      "s5_by_load": {
+        "at_least_1N_truth": 55,
+        "at_least_1N_generic_correct": 32,
+        "0.1_to_1N_truth": 2,
+        "0.1_to_1N_generic_correct": 2
+      },
+      "s1_geometry_candidates": {
+        "true_s1_steps": 9501,
+        "steps_with_push_aligned_candidate": 162
+      }
+    }
+  }
+}
