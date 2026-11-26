@@ -142,7 +142,8 @@ REAR_BODY = '''
                     min_advance = .000004
                 max_tracking_ratio = .45 if short_window else .35
                 extended_terminal = axis == 0 or slot != 1
-                for _ in range(3600):
+                travel_limit = .012 if slot == 5 else .009 if extended_terminal else .004
+                for _ in range(5400 if slot == 5 else 3600):
                     center, rotation = sensed_cube()
                     measured, _ = tcp_fk(arm, joint_state()[arm])
                     wrench = last_force_sample[arm]["tcp_gravity_corrected_world"]
@@ -168,7 +169,7 @@ REAR_BODY = '''
                         speed = .0005 if extended_terminal and gap > .001 else .00012
                         increment = direction * speed / 120
                         tip[axis] += increment
-                    if abs(tip[axis] - start) > (.009 if extended_terminal else .004):
+                    if abs(tip[axis] - start) > travel_limit:
                         break
                     candidate = cartesian_joint_target(arm, q, tip, attitude)
                     if np.max(np.abs(candidate - q)) * 120 > .4:
@@ -227,6 +228,8 @@ REAR_BODY = '''
                 measured_slide = {}
                 goal = start.copy()
                 standoff = .005 if slot != 1 and target_name == "wall_back" else .001
+                if slot == 5 and target_name == "wall_back":
+                    standoff = .009
                 goal[axis] = boundary - direction * (half * np.abs(rotation[axis]).sum() + standoff)
                 if target_name is None:
                     goal[axis] = boundary
