@@ -12,6 +12,7 @@ from front_row_a import floor_guide
 from markerless_tracking import install as markerless
 from observed_b1 import install as observed_b1
 from observed_rear import install as observed_rear
+from observed_rear import rear_landing
 from observed_transport import install as observed_transport, register_transport
 
 
@@ -28,6 +29,19 @@ def test_registered_carry_connects_the_observed_endpoints():
         for arm, rail in first["rail_paths_m"].items():
             assert np.isclose(rail[-1], second["rail_paths_m"][arm][0])
     assert guide["landing_m"] != live["landing_m"]
+
+
+def test_rear_neighbor_landing_follows_the_fitted_box_and_calibrated_wall():
+    wall = [0., 1.2, .86]
+    config = {"cube_size_m": .15, "floor_top_m": .712,
+              "static_boxes": [("wall_back", wall, [.8, .1, .3])]}
+    left_box = np.array([-.305, 1.075, .787])
+    poses = {"Cube_1": (left_box, np.eye(3))}
+    before = rear_landing(config, 3, poses)
+    np.testing.assert_allclose(before, [-.02915, .735, .787])
+    wall[1] += .025
+    left_box[0] += .006
+    np.testing.assert_allclose(rear_landing(config, 3, poses) - before, [.006, .025, 0.])
 
 
 def test_full_runner_assembles_with_observed_skills():

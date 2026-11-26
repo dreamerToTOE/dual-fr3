@@ -1,6 +1,45 @@
 """Bring the rear row into the same markerless runtime as the front and upper rows."""
 
+import numpy as np
+
+from observed_transport import wall_plane
 from source_hooks import replace_once
+
+
+SIDE_TARGETS = ("wall_left", "wall_right", "Cube_1", "Cube_2", None)
+# Relative clearance lanes from the high-wall floor acceptance, in slot order.
+LANDING_LATERAL_FROM_SEAT_M = (.305, -.260, .12585, -.04900345, 0.)
+LANDING_TO_REAR_WALL_M = (.415, .415, .415, .41623417, .41593692)
+
+
+def center_slot_edges(poses, half):
+    left, left_rotation = poses["Cube_3"]
+    right, right_rotation = poses["Cube_4"]
+    return (left[0] + half * np.abs(left_rotation[0]).sum(),
+            right[0] - half * np.abs(right_rotation[0]).sum())
+
+
+def rear_side_geometry(config, slot, poses):
+    """Return the calibrated wall or observed neighbor plane and the direction into it."""
+    half = config["cube_size_m"] / 2
+    name = SIDE_TARGETS[slot - 1]
+    sign = -1 if slot in (1, 3) else 1
+    if slot in (1, 2):
+        plane = wall_plane(config, name, 0, sign)
+    elif name is not None:
+        center, rotation = poses[name]
+        plane = center[0] - sign * half * np.abs(rotation[0]).sum()
+    else:
+        plane = sum(center_slot_edges(poses, half)) / 2
+    final_x = plane - sign * half if name is not None else plane
+    return name, plane, final_x
+
+
+def rear_landing(config, slot, poses):
+    _, _, final_x = rear_side_geometry(config, slot, poses)
+    return np.array([final_x + LANDING_LATERAL_FROM_SEAT_M[slot - 1],
+                     wall_plane(config, "wall_back", 1, 1) - LANDING_TO_REAR_WALL_M[slot - 1],
+                     config["floor_top_m"] + config["cube_size_m"] / 2])
 
 
 def install(source):
@@ -73,22 +112,10 @@ REAR_BODY = '''
             postures = json.loads((ROOT / "scenes/w760_300mm/b_postures.json").read_text())
             outer = postures["outer"].get(str(slot))
             third = postures["third"] if slot == 3 else None
-            side_name = {1: "wall_left", 2: "wall_right", 3: "Cube_1", 4: "Cube_2"}.get(slot)
+            from observed_rear import center_slot_edges, rear_side_geometry
             tracked = {name: (center, rotation) for name, center, rotation in neighbors}
-            if slot in (1, 2):
-                side_x = wall_plane(CONFIG, side_name, 0, sign)
-            elif slot in (3, 4):
-                p, r = tracked[side_name]
-                side_x = p[0] - sign * half * np.abs(r[0]).sum()
-            else:
-                def slot_edges(poses):
-                    a, r = poses["Cube_3"]
-                    b, s = poses["Cube_4"]
-                    return a[0] + half * np.abs(r[0]).sum(), b[0] - half * np.abs(s[0]).sum()
-
-                edges = slot_edges(tracked)
-                side_x = sum(edges) / 2
-            target = np.array([side_x - sign * half if side_name else side_x, rear_y - half, SUPPORT_TOP + half])
+            side_name, side_x, target_x = rear_side_geometry(CONFIG, slot, tracked)
+            target = np.array([target_x, rear_y - half, SUPPORT_TOP + half])
 
             def confirm_wall_bearing(arm, axis, direction, boundary, target_name, follower=None):
                 phase = f"rear_{slot}_B2_{axis}_bearing"
@@ -345,6 +372,7 @@ REAR_BODY = '''
                 if not np.isclose(rail_states[arm][1], base[1]):
                     move_robot_base(arm, base)
             if slot == 5:
+                edges = center_slot_edges(tracked, half)
                 center, rotation = observe_resting_cube("rear_center_entry", vision_camera, rows, SUPPORT_TOP)
                 extent = half * np.abs(rotation[0]).sum()
                 if min(center[0] - extent - edges[0], edges[1] - center[0] - extent) < .001:
@@ -384,7 +412,8 @@ REAR_BODY = '''
                       "target_m": target.tolist(), "observed_position_m": final.tolist(), "support": stable}
             if slot == 5:
                 sides = observe_known_lower({"Cube_3", "Cube_4"})
-                left_edge, right_edge = slot_edges({name: (center, rotation) for name, center, rotation in sides})
+                left_edge, right_edge = center_slot_edges(
+                    {name: (center, rotation) for name, center, rotation in sides}, half)
                 extent = half * np.abs(attitude[0]).sum()
                 result["observed_slot_gaps_m"] = {"left": float(final[0] - extent - left_edge),
                                                  "right": float(right_edge - final[0] - extent)}
@@ -392,7 +421,7 @@ REAR_BODY = '''
 
         if START_REAR < 6:
             from front_row_a import floor_guide
-            from observed_transport import wall_plane
+            from observed_rear import rear_landing
 
             rear_results = list(CHECKPOINT.get("rear_completed", []))
             report["rear_row"] = {"completed": rear_results}
@@ -428,16 +457,8 @@ REAR_BODY = '''
                 checker.set_other_cubes(neighbors)
                 GUIDE = floor_guide(rear_slot)
                 FIRST_LOADED = next(i for i, row in enumerate(GUIDE["phases"]) if row["carrying"])
-                landing = np.asarray(GUIDE["landing_m"], dtype=float)
-                wall_y = wall_plane(CONFIG, "wall_back", 1, 1)
-                landing[1] += wall_y - (CONFIG["goal_cube_centers_m"][0][1] + half)
-                landing[2] = SUPPORT_TOP + half
-                if rear_slot == 5:
-                    tracked = {name: (p, rot) for name, p, rot in neighbors}
-                    a, ra = tracked["Cube_3"]
-                    b, rb = tracked["Cube_4"]
-                    landing[0] = (a[0] + b[0] + half * (np.abs(ra[0]).sum() - np.abs(rb[0]).sum())) / 2
-                current_task["live_landing_m"] = landing
+                tracked = {name: (center, rotation) for name, center, rotation in neighbors}
+                current_task["live_landing_m"] = rear_landing(CONFIG, rear_slot, tracked)
                 report["upper_row"] = {}
                 if rear_slot == START_REAR and CHECKPOINT.get("rear_landed"):
                     observe_resting_cube("rear_landing_resume", vision_camera, rows, SUPPORT_TOP)
