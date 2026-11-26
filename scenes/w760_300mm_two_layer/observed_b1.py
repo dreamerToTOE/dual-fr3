@@ -22,7 +22,7 @@ def install(source):
                 return fit.x''')
     anchor = '        def solve(side, tcp, rotation, continuous=False, seed_override=None):'
     source = replace_once(source, anchor, '''        def move_to_observed_precontact(arm, destination, attitude, phase, ik_hint=None,
-                                        *, prefer_hint=False, planning_margin_m=.002):
+                                        *, prefer_hint=False, planning_margin_m=.002, approach_lift_m=0.):
             measured = joint_state()
             tool, tool_rotation = tcp_fk(arm, measured[arm])
             center, rotation = sensed_cube()
@@ -30,7 +30,7 @@ def install(source):
                    measured_tcp_m=tool.tolist(), measured_tcp_rotation=tool_rotation.tolist(),
                    measured_joints_rad=measured[arm].tolist(), measured_rail_y_m=float(rail_states[arm][1]),
                    observed_cube_m=center.tolist(), precontact_tcp_m=destination.tolist(),
-                   planning_margin_m=planning_margin_m)
+                   planning_margin_m=planning_margin_m, approach_lift_m=approach_lift_m)
             guesses = [("measured_joints", measured[arm])]
             if ik_hint is not None:
                 guesses.insert(0 if prefer_hint else 1, ("posture_hint", np.asarray(ik_hint, dtype=float)))
@@ -48,7 +48,16 @@ def install(source):
                                        cup_contacts=allowed_contacts, margin_m=planning_margin_m, first_only=True)
                 if not issues:
                     try:
-                        move({arm: q}, planning_margin_m=planning_margin_m)
+                        if approach_lift_m:
+                            raised = [q]
+                            for lift in np.linspace(0., approach_lift_m, 41)[1:]:
+                                above = destination + np.array([0., 0., lift])
+                                raised.append(cartesian_joint_target(arm, raised[-1], above, attitude,
+                                                                     retarget_guide=True))
+                            move({arm: raised[-1]}, planning_margin_m=planning_margin_m)
+                            execute_joint_path({arm: np.asarray(raised[::-1])}, phase + "_descent")
+                        else:
+                            move({arm: q}, planning_margin_m=planning_margin_m)
                     except RuntimeError as error:
                         if not str(error).startswith(("No collision-free joint path found",
                                                       "Motion endpoint is in collision")):

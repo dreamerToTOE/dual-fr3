@@ -2352,5 +2352,134 @@
       }
     ],
     "unexpected_contacts": 0
+  },
+  "B_direct_lateral_margin_trial": {
+    "run": "rear3-lateral-margin",
+    "status": "STOPPED",
+    "error": "Normal force overload: 20.568411 N exceeds 10.000000 N",
+    "runner_snapshot_sha256": "6f07b0f6ee6a04f8354f9b7adc16dc48a81deaa6f6625999cf3115dfaf58e28f",
+    "path_checks": [
+      {
+        "phase": "rear_3_B1_approach_transit",
+        "status": "CLEAR",
+        "workers": 3,
+        "samples_checked": 794,
+        "wall_s": 1.0175831450005717,
+        "control_steps": 0,
+        "render_updates": 0,
+        "max_render_gap_s": null
+      },
+      {
+        "phase": "rear_3_B1_approach_transit",
+        "status": "BLOCKED",
+        "workers": 3,
+        "samples_checked": 1122,
+        "wall_s": 1.9152669910008626,
+        "control_steps": 0,
+        "render_updates": 0,
+        "max_render_gap_s": null
+      },
+      {
+        "phase": "rear_3_B1_approach_transit",
+        "status": "CLEAR",
+        "workers": 3,
+        "samples_checked": 1468,
+        "wall_s": 1.9768016950001766,
+        "control_steps": 0,
+        "render_updates": 0,
+        "max_render_gap_s": null
+      }
+    ],
+    "transit_contact_trace": [
+      {
+        "phase": "rear_3_B1_approach_transit",
+        "physics_step": 7543,
+        "native_step": 7545,
+        "contact_loads_N": {
+          "floor": 12.31875903904438,
+          "wall_back": 0.0,
+          "left_cup": 2.154768984123954,
+          "right_cup": 0.0
+        },
+        "tcp_wrench_N_Nm": {
+          "left": [
+            -0.3436453157813498,
+            -2.1549054491362414,
+            0.055859553532655995,
+            0.06749922038480455,
+            -0.006904621327341219,
+            0.06489697140331022
+          ],
+          "right": [
+            -0.007436080643655497,
+            -0.17012447784744256,
+            -0.06062889900115107,
+            0.006966160457807826,
+            0.004198022950811669,
+            -0.014611946767503445
+          ]
+        }
+      },
+      {
+        "phase": "rear_3_B1_approach_transit",
+        "physics_step": 7544,
+        "native_step": 7546,
+        "contact_loads_N": {
+          "floor": 0.0,
+          "wall_back": 85.28359919786453,
+          "left_cup": 4.187226998856297,
+          "right_cup": 78.83679838223941
+        },
+        "tcp_wrench_N_Nm": {
+          "left": [
+            1.3160491676251238,
+            -3.7560566193057094,
+            0.7130554577401214,
+            0.13281214071474978,
+            0.05198199735816863,
+            0.09088809574059105
+          ],
+          "right": [
+            -9.35949423541832,
+            -76.69267481770585,
+            -33.81628513222634,
+            0.42282316839958745,
+            -0.3236679730348323,
+            0.6646592681296225
+          ]
+        }
+      },
+      {
+        "phase": "rear_3_B1_approach_transit",
+        "physics_step": 7545,
+        "native_step": 7547,
+        "contact_loads_N": {
+          "floor": 0.0,
+          "wall_back": 94.14344429969788,
+          "left_cup": 20.71074626758341,
+          "right_cup": 74.044575936599
+        },
+        "tcp_wrench_N_Nm": {
+          "left": [
+            6.008719958482737,
+            -20.56841148914522,
+            -4.9905372979206595,
+            -0.18241466577149842,
+            -0.10160123945922617,
+            0.7023437509875913
+          ],
+          "right": [
+            -18.437972680959508,
+            -74.63646592486194,
+            -32.35688077073138,
+            0.5156143206005194,
+            -0.4235980566727361,
+            0.7995032109532428
+          ]
+        }
+      }
+    ],
+    "monitor_unexpected_contact_count": 0,
+    "contact_assessment": "Native positive force on the incoming right cup occurred during free-space approach before tactile closure, even though the legacy separation-based monitor did not count it."
   }
 }

@@ -199,10 +199,12 @@ REAR_BODY = '''
                     guide = json.loads((ROOT / "validation/fr3_row_b2_final_feasibility.json").read_text())
                     case = next(case for case in guide["cases"] if case["cube_id"] == slot)
                     hint = case["precontact_q"][arm]
-                margin = .003 if slot == 3 and axis == 0 else .002
+                descend_to_side = slot == 3 and axis == 0
+                margin = .003 if descend_to_side else .002
                 move_to_observed_precontact(arm, destination, rotation @ tool, f"rear_{slot}_B1_approach", hint,
                                             prefer_hint=rear2_lateral_entry or neighbor_entry
-                                            or (axis == 1 and hint is not None), planning_margin_m=margin)
+                                            or (axis == 1 and hint is not None), planning_margin_m=margin,
+                                            approach_lift_m=.243 if descend_to_side else 0.)
                 if not allowed_contacts:
                     set_contact_drive_mode(True)
                 allowed_contacts.add(arm)
