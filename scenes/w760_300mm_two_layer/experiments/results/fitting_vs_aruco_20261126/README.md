@@ -56,6 +56,8 @@ S1 的总体识别率提高。A 段刚接触料台箱体时，S1 从 33.4% 降�
 
 [S5 漏检的逐段诊断](s5_diagnosis.md)
 
+[第 4 箱持续侧压的 PhysX 试验与第 3 箱间隙](u4_side_follow/README.md)
+
 ## 复算
 
 在仓库根目录用带 NumPy 的 Python 运行。配对文件里的观测和 PhysX 真值按同一次运行的物理步配对。清单中的每个主表分组包含 A、第 4 箱和第 5 箱各一次试次，额外的 ArUco 重复试次在 JSON 中单列。 [数据清单](manifest.json) · [完整评分](scores.json)
