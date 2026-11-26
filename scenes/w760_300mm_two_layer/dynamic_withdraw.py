@@ -134,6 +134,16 @@ def install(source):
                                  "front_B2_lateral_dynamic_withdraw")
                 push_faces.pop(push_side, None)
 ''' + source[end:]
+    source = replace_once(source, '''                    unload_normal(support_side, 1, 1, "B2_stage_support_unload")
+                    left_hold = None
+                    push_faces.pop(support_side, None)
+                    position, _ = tcp_fk(support_side, applied_targets[support_side])
+                    cartesian_move(support_side, position - [0., .065, 0.], 4., "B2_stage_rgb_clearance")''',
+                          '''                    left_hold = None
+                    dynamic_withdraw({support_side: np.array([0., -1., 0.])},
+                                     "B2_stage_support_dynamic_withdraw", require_support=True)
+                    push_faces.pop(support_side, None)
+                    allowed_contacts.discard(support_side)''')
     return replace_once(source, '''            unload_normal(support_side, 1, 1, "B2_support_unload")
             left_hold = None
             push_faces.clear()

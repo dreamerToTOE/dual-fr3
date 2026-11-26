@@ -29,8 +29,9 @@ def install(source):
             failures = []
             for guess in guesses:
                 try:
+                    # Keep the fit tighter than the measured arrival gate (1 mm, about 14 mrad).
                     q = cartesian_joint_target(arm, guess, destination, attitude, retarget_guide=True,
-                                               fit_tolerance=(.0005, .005))
+                                               fit_tolerance=(.0005, .007))
                 except RuntimeError as error:
                     failures.append(str(error))
                     continue
@@ -100,15 +101,19 @@ def install(source):
                 high_point[2] = high_z
                 move_to_observed_precontact(push_side, high_point, side_rotation, "upper_B_side_high", high_seed)''')
     source = replace_once(source, '''                    reapproach_q = applied_targets[support_side].copy()
-                    record("B2_stage_camera_clear", "RUNNING", arm=support_side)''',
-                          '''                    record("B2_stage_camera_clear", "RUNNING", arm=support_side)''')
+                    record("B2_stage_camera_clear", "RUNNING", arm=support_side)
+                    move({support_side: np.asarray(CONFIG["fr3"]["official_start_q_rad"])})''',
+                          '''                    # The just-cleared wrist provides a local IK seed for this face.
+                    reapproach_seed = (side_resume or {}).get("cleared_wrist_q_rad", joint_state()[support_side])
+                    record("B2_stage_camera_clear", "RUNNING", arms=list(robots))
+                    move({arm: np.asarray(CONFIG["fr3"]["official_start_q_rad"]) for arm in robots})''')
     source = replace_once(source, '''                if slot in (1, 2, 3):
                     move({support_side: reapproach_q})
                 if abs(observed[0] - b2_target[0]) > .004:''',
                           '''                if slot in (1, 2, 3):
                     destination = observed + rotation @ [0., -half - .007, front_height]
                     move_to_observed_precontact(support_side, destination, rotation @ front_rotation,
-                                                "B2_staged_observed_reapproach")
+                                                "B2_staged_observed_reapproach", reapproach_seed)
                 if abs(observed[0] - b2_target[0]) > .004:''')
     source = replace_once(source, '''                    cartesian_move(support_side, observed + [0., -half - .007, front_height],
                                    3., "B2_stage_rear_pretouch")

@@ -13,16 +13,20 @@ def wall_plane(config, wall, axis, sign):
     return float(center[axis] - sign * extent[axis] / 2)
 
 
-def front_landing(guide, config, slot, observations):
+def front_placement_goal(config, slot, observations):
     size = config["cube_size_m"]
-    nominal_goal = np.asarray(config["goal_cube_centers_m"][slot - 1], dtype=float)
-    nominal_goal[1] -= size
-    wall_x = nominal_goal[0]
+    wall_x = None
     if slot in (1, 2):
         sign = -1 if slot == 1 else 1
         wall = "wall_left" if slot == 1 else "wall_right"
         wall_x = wall_plane(config, wall, 0, sign) - sign * size / 2
-    observed_goal = front_geometry(slot, observations, size, config["floor_top_m"], wall_x)
+    return front_geometry(slot, observations, size, config["floor_top_m"], wall_x)
+
+
+def front_landing(guide, config, slot, observations):
+    nominal_goal = np.asarray(config["goal_cube_centers_m"][slot - 1], dtype=float)
+    nominal_goal[1] -= config["cube_size_m"]
+    observed_goal = front_placement_goal(config, slot, observations)
     # Work in the accepted approach corridor relative to the actual seating target.
     landing = np.asarray(guide["landing_m"]) + observed_goal - nominal_goal
     if slot == 5:
@@ -77,6 +81,10 @@ def install(source):
     source = source[:start] + '''            from observed_transport import front_landing
             current_task["live_landing_m"] = front_landing(GUIDE, CONFIG, slot, observed_neighbors)
 ''' + source[end:]
+    source = replace_once(source, '''            placement_target = front_geometry(slot, observed_neighbors, CONFIG["cube_size_m"], CONFIG["floor_top_m"],
+                                    CONFIG["goal_cube_centers_m"][slot-1][0])''',
+                          '''            from observed_transport import front_placement_goal
+            placement_target = front_placement_goal(CONFIG, slot, observed_neighbors)''')
     source = replace_once(
         source, '            nominal = np.asarray(GUIDE["landing_m"])\n',
         '            nominal = np.asarray(current_task["live_landing_m"])\n')
