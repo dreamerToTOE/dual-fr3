@@ -14,7 +14,7 @@
 
 ## 单实例试验进度
 
-15 个箱位及其断点入口均通过静态装配检查。单实例 Isaac Sim 验证覆盖了 R1 的上料至推送，F1 的 B2，及 U5 落箱后的接近、直推和撤离。下面的数据来自不同次运行。
+15 个箱位及其断点入口均通过静态装配检查。以下记录按箱位列出单实例 Isaac Sim 验证范围。
 
 ### R1 后排第 1 箱
 
@@ -35,6 +35,10 @@
 首次再次接近未通过 IK 门槛。记录并恢复实测侧墙断点后，使用撤离时实测的近箱腕姿作为备用 IK 初值，从 D455 重新拟合下一个接近目标。只让左臂清出相机视野时，前排箱最终抵达 `Cube_1`，但右杯仍靠近箱侧，估计间隙 2.50 mm，最终 S0 未确认。PhysX 对照显示两杯当时已分离。
 
 改为中途 S0 后双臂一起用 RRTConnect 清场，再由左臂从实测关节位置规划接近。最后一次从侧墙断点续跑通过，向后推入约 24.01 mm，连续 24 帧记录到指定后排箱承载。最终 S0 在左腕实测撤离 2.13 mm 时确认，两杯均无接触，地板承载约 12.26 N。最终归位及就位验收完成，PhysX 非预期接触为零。 [F1 运行证据](validation/observed/front1_progress.json) · [F1 侧墙断点](validation/observed/front1_side_seat_checkpoint.json) · [F1 就位断点](validation/observed/front1_complete_checkpoint.json)
+
+### F2 前排第 2 箱
+
+从 F1 就位断点开始。D455 拟合供料箱位，左腕吸后面、右腕吸前面。整段导轨搬运的 9,324 个物理采样点均保持两杯吸附。落稳开杯后，两腕分别实测外撤 2.784 mm、2.786 mm，触发 S0。PhysX 在该时刻确认两杯分离，地板承载 12.26 N。B1 用落箱后的相机观测和右腕实测关节位置生成接近路径，实测 TCP 误差小于 1 mm 后进入贴面，随后沿 +Y 推至横推区。 [F2 运行证据](validation/observed/front2_progress.json) · [F2 landing 断点](validation/observed/front2_landing_checkpoint.json) · [F2 B1 完成断点](validation/observed/front2_b1_checkpoint.json)
 
 ### U5 上层第 5 箱
 
