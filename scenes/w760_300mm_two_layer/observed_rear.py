@@ -4,7 +4,7 @@ from source_hooks import replace_once
 
 
 def install(source):
-    hook = '        def save_front_checkpoint(next_front, landed=None):'
+    hook = '        def save_front_checkpoint('
     source = replace_once(source, hook, REAR_BODY + '\n' + hook)
     source = replace_once(source, '            if phase == "A_pickup_pose":\n',
                           '''            if phase == "rear_landing_resume":
@@ -22,6 +22,12 @@ def install(source):
                        if row["current_step_observed"]
                        and active_cube_path in (row["collider0"], row["collider1"])
                        and ({row["collider0"], row["collider1"]} - {active_cube_path}) <= support_paths)''')
+    source = replace_once(source, '                                        or current_task.get("front_slot") in (2, 4))',
+                          '                                        or current_task.get("front_slot") in (2, 4)\n'
+                          '                                        or current_task.get("rear_slot") in (2, 4))')
+    source = replace_once(source, '            cruise = cruise and current_task.get("front_slot") not in (2, 4)',
+                          '            cruise = cruise and current_task.get("front_slot") not in (2, 4)\n'
+                          '            cruise = cruise and current_task.get("rear_slot") not in (2, 4)')
     return replace_once(source, '            if front_slot != START_FRONT:\n',
                         '            if front_slot != START_FRONT or START_REAR < 6:\n')
 
@@ -39,6 +45,10 @@ REAR_BODY = '''
             sign = -1 if lateral == "right" else 1
             support_side, push_side, push_sign = rear_arm, lateral, sign
             rear_y = wall_plane(CONFIG, "wall_back", 1, 1)
+            outer = None
+            if slot in (1, 2):
+                postures = ROOT / "scenes/w760_300mm/b_postures.json"
+                outer = json.loads(postures.read_text())["outer"][str(slot)]
             side_name = {1: "wall_left", 2: "wall_right", 3: "Cube_1", 4: "Cube_2"}.get(slot)
             tracked = {name: (center, rotation) for name, center, rotation in neighbors}
             if slot in (1, 2):
@@ -101,13 +111,14 @@ REAR_BODY = '''
                 offset = -direction * half * np.eye(3)[axis] + [0., 0., .004 if axis == 1 else .020]
                 if axis == 1:
                     tool = np.asarray(FRONT_ROTATION) if arm == "left" else np.diag([-1., 1., -1.])
-                    hint = None
+                    hint = outer["b1_q"] if outer is not None else None
                 else:
                     role = b2_role_seeds(json.loads((ROOT / "validation/fr3_b2_collision_plan.json").read_text()), arm)
                     tool = role["push_rotation_world"]
                     hint = role["rail_hold_push_q"]
                 destination = center + rotation @ offset - .010 * inward
-                move_to_observed_precontact(arm, destination, rotation @ tool, f"rear_{slot}_B1_approach", hint)
+                move_to_observed_precontact(arm, destination, rotation @ tool, f"rear_{slot}_B1_approach", hint,
+                                            prefer_hint=axis == 1 and outer is not None)
                 if not allowed_contacts:
                     set_contact_drive_mode(True)
                 allowed_contacts.add(arm)
@@ -124,42 +135,101 @@ REAR_BODY = '''
                     if follower is None:
                         contact_path(arm, start, goal, f"rear_{slot}_B2_{axis}_travel", speed=.018, force_limit=9.)
                     else:
-                        # Increment both TCPs together while the front wrist holds rear pressure.
-                        position, rotation = tcp_fk(arm, joint_state()[arm])
-                        other, other_rotation = tcp_fk(follower, joint_state()[follower])
-                        height = NormalForceController(0., target_force_N=0., gain_m_per_Ns=.00055,
-                                                       max_offset_m=.0022, max_speed_m_s=.001, max_force_N=9.)
-                        direction_vector = np.eye(3)[axis]
-                        distance = goal[axis] - start[axis]
-                        samples = max(120, math.ceil(abs(distance)*1.875/.010*120))
-                        record(f"rear_{slot}_B2_side_travel", "RUNNING", arm=arm, follower=follower)
-                        for fraction in np.linspace(0., 1., samples + 1):
-                            delta = (10 - 15*fraction + 6*fraction**2)*fraction**3 * distance * direction_vector
-                            vertical = float(last_force_sample[arm]["tcp_gravity_corrected_world"][2])
-                            # Positive Z reaction means the cup is adding downward load to the box.
-                            vertical_error = math.copysign(max(0., abs(vertical) - .20), vertical)
-                            correction = np.array([0., 0., height.update(-vertical_error)])
-                            commands = joint_state()
-                            for active, tip, tool in ((arm, position + correction, rotation),
-                                                      (follower, other, other_rotation)):
-                                q = cartesian_joint_target(active, applied_targets[active], tip + delta, tool)
-                                commands[active] = q
-                            estimated_center, estimated_rotation = sensed_cube()
-                            issues = checker.check(commands, cube_center=estimated_center,
-                                                   cube_rotation=estimated_rotation, cup_contacts=allowed_contacts,
-                                                   margin_m=0., first_only=True)
+                        # Keep the command-to-encoder preload established by contact synchronization.
+                        phase = f"rear_{slot}_B2_side_travel"
+                        stop = goal.copy()
+                        stop[axis] -= direction * min(.004, abs(goal[axis] - start[axis]) / 2)
+                        seeds = {active: applied_targets[active].copy() for active in (arm, follower)}
+                        tips = {active: tcp_fk(active, q) for active, q in seeds.items()}
+                        count = int(round(B2_CONTROLLER_PARAMETERS["push_duration_s"] * 120)) + 1
+                        times = np.arange(count) / 120
+                        fraction = times / times[-1]
+                        translation = ((10 - 15*fraction + 6*fraction**2)*fraction**3)[:, None] * (stop - start)
+                        paths = {active: [] for active in seeds}
+                        record(phase, "RUNNING", arm=arm, follower=follower)
+                        for delta in translation:
+                            planning_update(f"{phase}: coordinated contact path")
+                            for active, (tip, tool) in tips.items():
+                                q = cartesian_joint_target(active, seeds[active], tip + delta, tool, retarget_guide=True)
+                                seeds[active] = q
+                                paths[active].append(q)
+                        samples = {active: np.asarray(path) for active, path in paths.items()}
+                        if max(float(np.max(np.abs(np.diff(path, axis=0)))) for path in samples.values()) * 120 > .4:
+                            raise RuntimeError(f"{phase}: exceeded 0.4 rad/s while planning the slide")
+
+                        axial = 0.
+                        relief = np.zeros(3)
+                        nominal_axial = direction * (tips[arm][0][axis] + translation[:, axis])
+                        allowed_lead = .001
+
+                        def measured_lead(index):
+                            measured = last_force_sample[arm]["tcp_position_m"][axis]
+                            return nominal_axial[index] + relief[0] - direction * measured
+
+                        def shifted_lateral_commands(commands):
+                            adjusted = {}
+                            for active in (arm, follower):
+                                tip, tool = tcp_fk(active, commands[active])
+                                offset = np.array([direction * relief[0], 0., 0.])
+                                if active == arm:
+                                    offset[1:] = relief[1:]
+                                adjusted[active] = cartesian_joint_target(active, commands[active], tip + offset, tool)
+                            return adjusted
+
+                        def level_push(index, commands):
+                            nonlocal axial, relief
+                            wrench = last_force_sample[arm]["tcp_gravity_corrected_world"]
+                            axial += .25 * (-direction * wrench[0] - axial)
+                            vertical = wrench[2] + 1.8
+                            deadband = math.copysign(max(abs(vertical) - .25, 0.), vertical)
+                            speeds = [np.clip(.001 * (6.5 - axial), -.003, .001),
+                                      np.clip(.0007 * wrench[1], -.001, .001),
+                                      np.clip(.001 * deadband, -.003, .003)]
+                            relief = np.clip(relief + np.asarray(speeds) / 120,
+                                             [-.003, -.002, -.002], [0., .002, .006])
+                            relief[0] -= max(0., measured_lead(index) - allowed_lead)
+                            center, attitude = sensed_cube()
+                            options = dict(cube_center=center, cube_rotation=attitude, cup_contacts=allowed_contacts,
+                                           margin_m=0., first_only=True)
+                            adjusted = shifted_lateral_commands(commands)
+                            issues = checker.check(adjusted, **options)
+                            if issues and issues[0]["kind"] == "tool_obstacle" and issues[0]["b"] == "Cube" and (
+                                    issues[0]["a"].startswith(f"{arm}/cup_") and arm in allowed_contacts):
+                                # Give back any axial lead that would exceed the permitted cup contact depth.
+                                relief[0] += issues[0]["clearance_m"] + .00290
+                                adjusted = shifted_lateral_commands(commands)
+                                issues = checker.check(adjusted, **options)
                             if issues:
-                                raise RuntimeError(f"Rear slot {slot} lateral segment blocked: {issues[0]}")
-                            for active, q in commands.items():
-                                command_positions(active, q)
-                            step()
-                            check_current_collision(contact_monitor.phase)
-                            for a in robots:
-                                force = np.asarray(last_force_sample[a]["tcp_gravity_corrected_world"][:3])
+                                raise RuntimeError(f"{phase}: contact correction blocked by {issues[0]}")
+                            if any(np.max(np.abs(q - applied_targets[a])) * 120 > .4 for a, q in adjusted.items()):
+                                raise RuntimeError(f"{phase}: contact correction exceeded joint speed")
+                            return adjusted
+
+                        def advance_under_load(count):
+                            for index in range(count):
+                                yield index
+                                for _ in range(240):
+                                    force = last_force_sample[arm]["tcp_gravity_corrected_world"][:3]
+                                    follow_index = min(index + 1, count - 1)
+                                    if (axial < 7.2 and np.linalg.norm(force) < 7.8
+                                            and measured_lead(follow_index) <= allowed_lead):
+                                        break
+                                    yield index
+                                else:
+                                    raise RuntimeError(f"{phase}: lateral travel remained blocked under load")
+
+                        def check_load(_index, _count):
+                            for active in robots:
+                                force = np.asarray(last_force_sample[active]["tcp_gravity_corrected_world"][:3])
                                 if np.linalg.norm(force) > 9.:
-                                    record(contact_monitor.phase, "WRIST_LIMIT", arm=a, force_N=force.tolist(),
-                                           vertical_correction_m=height.offset_m)
+                                    record(phase, "WRIST_LIMIT", arm=active, force_N=force.tolist(),
+                                           lateral_relief_m=relief.tolist())
                                     raise RuntimeError(f"Rear slot {slot} coordinated push exceeded wrist load")
+
+                        execute_joint_path(samples, phase, check_step=check_load, adjust_targets=level_push,
+                                           sample_order=advance_under_load,
+                                           cube_center_path=lambda _samples, _times: start + translation,
+                                           sampled_trajectory=(times, samples))
                 if target_name == "wall_back":
                     confirm_rear_bearing(arm)
                 elif target_name is not None:
@@ -207,10 +277,13 @@ REAR_BODY = '''
                 record(f"rear_{slot}_repark", "RRTCONNECT_FROM_SEPARATION", arms=list(robots))
                 move({arm: np.asarray(CONFIG["fr3"]["official_start_q_rad"]) for arm in robots})
 
-            for arm in (rear_arm,) if slot == 5 else (rear_arm, lateral):
+            stations = {rear_arm: .8} if slot == 5 else {rear_arm: .8, lateral: .8}
+            if outer is not None:
+                stations = {rear_arm: outer["support_y"], lateral: outer["push_y"]}
+            nominal_wall = CONFIG["goal_cube_centers_m"][0][1] + half
+            for arm, station in stations.items():
                 base = rail_states[arm].copy()
-                # Use current task geometry for the carriage approach station.
-                base[1] = rear_y - .351
+                base[1] = station + rear_y - nominal_wall
                 if not np.isclose(rail_states[arm][1], base[1]):
                     move_robot_base(arm, base)
             if slot == 5:

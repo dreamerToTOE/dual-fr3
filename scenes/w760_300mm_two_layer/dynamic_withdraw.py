@@ -95,6 +95,33 @@ def install(source):
                 push_faces.pop(side, None)
                 allowed_contacts.discard(side)
 ''' + source[end:]
+    source = replace_once(source, '''                withdraw(push_side, 0, push_sign)
+                record("upper_B_park", "RUNNING", arm=push_side)
+                move({push_side: home})
+            if side_first:''', '''                if side_first:
+                    withdraw(push_side, 0, push_sign)
+                    record("upper_B_park", "RUNNING", arm=push_side)
+                    move({push_side: home})
+            if side_first:''')
+    source = replace_once(source, '''            withdraw(support_side, 1, 1)
+            allowed_contacts.clear()
+            push_faces.clear()
+            set_contact_drive_mode(False)
+            record("upper_B_park", "RUNNING", arm=support_side)
+            move({support_side: home})''', '''            if push_side in allowed_contacts:
+                left_hold = None
+                dynamic_withdraw({support_side: np.array([0., -1., 0.]),
+                                  push_side: np.array([-push_sign, 0., 0.])},
+                                 "upper_B_dual_dynamic_withdraw", require_support=True)
+                parked_arms = list(robots)
+            else:
+                withdraw(support_side, 1, 1)
+                parked_arms = [support_side]
+            allowed_contacts.clear()
+            push_faces.clear()
+            set_contact_drive_mode(False)
+            record("upper_B_park", "RUNNING", arms=parked_arms)
+            move({arm: home for arm in parked_arms})''')
     source = replace_once(source, '''                    unload_normal(push_side, 0, push_sign, f"{prefix}_{push_side}_unload")
                     push_faces.clear()
                     tip, _ = tcp_fk(push_side, applied_targets[push_side])

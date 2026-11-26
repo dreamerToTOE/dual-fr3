@@ -1375,6 +1375,714 @@
         "left": 2.1859331143405223,
         "right": 11.579566436614973
       }
+    },
+    {
+      "run": "fr3-observed-rear1-continuous-20261126",
+      "runner_snapshot_sha256": "0bb7c88d4afb137ef405c8ce8468a7b77a990a8969be9a77bddfad44b9c1b013",
+      "status": "STOPPED",
+      "error": "Planned collision in rear_1_B2_side_travel: {'status': 'BLOCKED', 'samples_checked': 1141, 'sample': 1140, 'segment_fraction': 1.0, 'issues': [{'a': 'left/fr3_link5', 'b': 'wall_left', 'clearance_m': 0.0019075832753421354, 'kind': 'link_obstacle'}]}",
+      "blocked_motion": {
+        "phase": "rear_1_B2_side_travel",
+        "status": "BLOCKED",
+        "samples_checked": 1141,
+        "sample": 1140,
+        "segment_fraction": 1.0,
+        "issues": [
+          {
+            "a": "left/fr3_link5",
+            "b": "wall_left",
+            "clearance_m": 0.0019075832753421354,
+            "kind": "link_obstacle"
+          }
+        ]
+      },
+      "unexpected_contacts": 0,
+      "scope": "Uninterrupted command targets with sampled slide and joint velocity feedforward",
+      "events": [
+        {
+          "phase": "rear_1_B2_contact_sync",
+          "status": "STABILIZING_DUAL_CONTACT",
+          "sim_time_s": 85.45,
+          "wall_elapsed_s": 212.13993692200165,
+          "cube_position_m": [
+            0.0005137077532708645,
+            1.0758706331253052,
+            0.7870002388954163
+          ],
+          "cube_orientation_wxyz": [
+            0.9999996423721313,
+            -3.0939272619434632e-06,
+            -3.5952803045802284e-06,
+            -0.000856395170558244
+          ],
+          "cube_id": 1
+        },
+        {
+          "phase": "rear_1_B2_contact_sync",
+          "status": "FORCE_CONFIRMED",
+          "sim_time_s": 86.36666666666666,
+          "wall_elapsed_s": 214.06606197600195,
+          "cube_position_m": [
+            0.0005102422437630594,
+            1.0758745670318604,
+            0.7869999408721924
+          ],
+          "cube_orientation_wxyz": [
+            0.9999996423721313,
+            -1.1824786270153709e-06,
+            -7.563619419670431e-08,
+            -0.0008345377282239497
+          ],
+          "cube_id": 1,
+          "filtered_normal_force_N": {
+            "left": 1.9871867441730986,
+            "right": 0.9707832148446656
+          }
+        },
+        {
+          "phase": "rear_1_B2_side_travel",
+          "status": "RUNNING",
+          "sim_time_s": 86.36666666666666,
+          "wall_elapsed_s": 214.0711042000039,
+          "cube_position_m": [
+            0.0005102422437630594,
+            1.0758745670318604,
+            0.7869999408721924
+          ],
+          "cube_orientation_wxyz": [
+            0.9999996423721313,
+            -1.1824786270153709e-06,
+            -7.563619419670431e-08,
+            -0.0008345377282239497
+          ],
+          "cube_id": 1,
+          "arm": "right",
+          "follower": "left"
+        }
+      ]
+    },
+    {
+      "run": "fr3-observed-rear1-rail-20261126",
+      "runner_snapshot_sha256": "5598eb138db9144018d7fffa60baade9dc5d58bab7810d9994a82a7c8f2a7557",
+      "status": "STOPPED",
+      "error": "Planned collision in rear_1_B2_side_travel: {'status': 'BLOCKED', 'samples_checked': 1219, 'sample': 1218, 'segment_fraction': 1.0, 'issues': [{'a': 'left/fr3_link6', 'b': 'wall_left', 'clearance_m': 0.001938768770954731, 'kind': 'link_obstacle'}]}",
+      "blocked_motion": {
+        "phase": "rear_1_B2_side_travel",
+        "status": "BLOCKED",
+        "samples_checked": 1219,
+        "sample": 1218,
+        "segment_fraction": 1.0,
+        "issues": [
+          {
+            "a": "left/fr3_link6",
+            "b": "wall_left",
+            "clearance_m": 0.001938768770954731,
+            "kind": "link_obstacle"
+          }
+        ]
+      },
+      "unexpected_contacts": 0,
+      "scope": "Continuous slide, shifted front-support rail from 0.8 m to 1.0 m",
+      "events": [
+        {
+          "phase": "rear_1_B2_1_bearing",
+          "status": "RUNNING",
+          "sim_time_s": 51.358333333333334,
+          "wall_elapsed_s": 99.43187082000077,
+          "cube_position_m": [
+            0.0004942024243064225,
+            1.0748772621154785,
+            0.7869997024536133
+          ],
+          "cube_orientation_wxyz": [
+            0.9999998807907104,
+            -3.12962197313027e-06,
+            -1.5204683734282298e-07,
+            -0.000584243971388787
+          ],
+          "cube_id": 1,
+          "target": "wall_back"
+        },
+        {
+          "phase": "rear_1_B2_1_bearing",
+          "status": "FORCE_CONFIRMED",
+          "sim_time_s": 61.425,
+          "wall_elapsed_s": 117.62685516299825,
+          "cube_position_m": [
+            0.000448339938884601,
+            1.075966715812683,
+            0.7869997620582581
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -2.3339780454989523e-06,
+            -1.5777415285356255e-07,
+            -0.00021738940267823637
+          ],
+          "cube_id": 1,
+          "contact_target": "wall_back",
+          "normal_force_N": 7.3556084463457205,
+          "estimated_gap_m": 3.3487392285994066e-05,
+          "command_advance_m": 5.2999999995417824e-05,
+          "encoder_advance_m": 1.8530734479327293e-05,
+          "force_rise_N": 1.2076078996525457
+        },
+        {
+          "phase": "rear_1_B2_contact_sync",
+          "status": "STABILIZING_DUAL_CONTACT",
+          "sim_time_s": 90.54166666666667,
+          "wall_elapsed_s": 233.94166458599648,
+          "cube_position_m": [
+            0.00044158310629427433,
+            1.0759705305099487,
+            0.7870000004768372
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.4609237268814468e-06,
+            -1.2922853329655482e-06,
+            -0.00018377581727690995
+          ],
+          "cube_id": 1
+        },
+        {
+          "phase": "rear_1_B2_contact_sync",
+          "status": "FORCE_CONFIRMED",
+          "sim_time_s": 91.45833333333333,
+          "wall_elapsed_s": 236.05902402699576,
+          "cube_position_m": [
+            0.00043664354598149657,
+            1.0759742259979248,
+            0.7869998216629028
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.6500215451742406e-06,
+            -1.790988903849211e-07,
+            -0.00016926896933000535
+          ],
+          "cube_id": 1,
+          "filtered_normal_force_N": {
+            "left": 2.02327585084538,
+            "right": 1.0830875264940396
+          }
+        },
+        {
+          "phase": "rear_1_B2_side_travel",
+          "status": "RUNNING",
+          "sim_time_s": 91.45833333333333,
+          "wall_elapsed_s": 236.0644201979958,
+          "cube_position_m": [
+            0.00043664354598149657,
+            1.0759742259979248,
+            0.7869998216629028
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.6500215451742406e-06,
+            -1.790988903849211e-07,
+            -0.00016926896933000535
+          ],
+          "cube_id": 1,
+          "arm": "right",
+          "follower": "left"
+        }
+      ]
+    },
+    {
+      "run": "fr3-observed-rear1-support-branch-20261126",
+      "runner_snapshot_sha256": "c2ead356a18636e23dd858f04dbfa9957da864f0d2410aa117268234f03ab740",
+      "status": "STOPPED",
+      "error": "Rear slot 1 coordinated push exceeded wrist load",
+      "unexpected_contacts": 0,
+      "scope": "Continuous slide, offset support rail and prefer compatible support-arm IK seed",
+      "lateral_path_validation": {
+        "phase": "rear_1_B2_side_travel",
+        "status": "CLEAR",
+        "workers": 3,
+        "samples_checked": 1801,
+        "wall_s": 2.4769208770012483,
+        "control_steps": 0,
+        "render_updates": 0,
+        "max_render_gap_s": null
+      },
+      "active_right_first_sample_N": [
+        1.1263967819553755,
+        -0.0872752139050357,
+        0.2199054422841333
+      ],
+      "active_right_stop_resultant_N": 9.119185751488892,
+      "events": [
+        {
+          "phase": "rear_1_B2_1_bearing",
+          "status": "RUNNING",
+          "sim_time_s": 53.44166666666667,
+          "wall_elapsed_s": 100.73194247100037,
+          "cube_position_m": [
+            0.00040354454540647566,
+            1.0749750137329102,
+            0.7870002388954163
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -3.4755375963868573e-06,
+            -2.6759066713566426e-06,
+            -4.412345151649788e-05
+          ],
+          "cube_id": 1,
+          "target": "wall_back"
+        },
+        {
+          "phase": "rear_1_B2_1_bearing",
+          "status": "FORCE_CONFIRMED",
+          "sim_time_s": 62.30833333333333,
+          "wall_elapsed_s": 116.50414963500225,
+          "cube_position_m": [
+            0.0004228467878419906,
+            1.075992465019226,
+            0.7869999408721924
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.6449514532723697e-06,
+            3.7380075923465483e-07,
+            -4.976603668183088e-05
+          ],
+          "cube_id": 1,
+          "contact_target": "wall_back",
+          "normal_force_N": 7.847470513300277,
+          "estimated_gap_m": 9.707698220576266e-06,
+          "command_advance_m": 4.324999999649748e-05,
+          "encoder_advance_m": 1.4934106145947368e-05,
+          "force_rise_N": 2.3758073127646746
+        },
+        {
+          "phase": "rear_1_B2_contact_sync",
+          "status": "STABILIZING_DUAL_CONTACT",
+          "sim_time_s": 91.325,
+          "wall_elapsed_s": 226.7451570609992,
+          "cube_position_m": [
+            0.0004159825621172786,
+            1.0759954452514648,
+            0.7870000600814819
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -2.0629054233722854e-06,
+            -2.4371465769945644e-06,
+            -2.379267243668437e-05
+          ],
+          "cube_id": 1
+        },
+        {
+          "phase": "rear_1_B2_contact_sync",
+          "status": "FORCE_CONFIRMED",
+          "sim_time_s": 92.30833333333334,
+          "wall_elapsed_s": 228.83274555599928,
+          "cube_position_m": [
+            0.0004121997335460037,
+            1.0759974718093872,
+            0.7869998812675476
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.0242414418826229e-06,
+            -2.8256164341655676e-07,
+            -1.5048366549308412e-05
+          ],
+          "cube_id": 1,
+          "filtered_normal_force_N": {
+            "left": 1.9996433147886723,
+            "right": 0.905870769646557
+          }
+        },
+        {
+          "phase": "rear_1_B2_side_travel",
+          "status": "RUNNING",
+          "sim_time_s": 92.30833333333334,
+          "wall_elapsed_s": 228.83787777399994,
+          "cube_position_m": [
+            0.0004121997335460037,
+            1.0759974718093872,
+            0.7869998812675476
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.0242414418826229e-06,
+            -2.8256164341655676e-07,
+            -1.5048366549308412e-05
+          ],
+          "cube_id": 1,
+          "arm": "right",
+          "follower": "left"
+        },
+        {
+          "phase": "rear_1_B2_side_travel",
+          "status": "WRIST_LIMIT",
+          "sim_time_s": 92.68333333333334,
+          "wall_elapsed_s": 233.86682721699617,
+          "cube_position_m": [
+            0.000391020264942199,
+            1.0759996175765991,
+            0.7869998812675476
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -2.072859160762164e-06,
+            -3.6328287933429237e-06,
+            3.8691862158657386e-08
+          ],
+          "cube_id": 1,
+          "arm": "right",
+          "force_N": [
+            8.145658467522987,
+            -2.582028365232361,
+            3.1844821277194524
+          ]
+        }
+      ]
+    },
+    {
+      "run": "fr3-observed-rear1-loadpace-20261126",
+      "runner_snapshot_sha256": "04b15c2bffdd568b28cc83212ca734964075018305fd577066bbab59f68e1d02",
+      "status": "STOPPED",
+      "error": "rear_1_B2_side_travel: contact correction blocked by {'a': 'right/cup_r1_c1', 'b': 'Cube', 'clearance_m': -0.003003782686790177, 'kind': 'tool_obstacle'}",
+      "unexpected_contacts": 0,
+      "scope": "Online lateral path with wrist feedback pacing and axial/tangential/height correction",
+      "lateral_path_validation": {
+        "phase": "rear_1_B2_side_travel",
+        "status": "CLEAR",
+        "workers": 3,
+        "samples_checked": 1801,
+        "wall_s": 2.4293776630001958,
+        "control_steps": 0,
+        "render_updates": 0,
+        "max_render_gap_s": null
+      },
+      "actual_lateral_travel_m": 0.05285259717493318,
+      "right_peak_force_N": 6.688384131957266,
+      "events": [
+        {
+          "phase": "rear_1_B2_1_bearing",
+          "status": "RUNNING",
+          "sim_time_s": 53.44166666666667,
+          "wall_elapsed_s": 105.32290519800154,
+          "cube_position_m": [
+            0.00040354454540647566,
+            1.0749750137329102,
+            0.7870002388954163
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -3.4755375963868573e-06,
+            -2.6759066713566426e-06,
+            -4.412345151649788e-05
+          ],
+          "cube_id": 1,
+          "target": "wall_back"
+        },
+        {
+          "phase": "rear_1_B2_1_bearing",
+          "status": "FORCE_CONFIRMED",
+          "sim_time_s": 62.30833333333333,
+          "wall_elapsed_s": 121.24916233999829,
+          "cube_position_m": [
+            0.0004228467878419906,
+            1.075992465019226,
+            0.7869999408721924
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.6449514532723697e-06,
+            3.7380075923465483e-07,
+            -4.976603668183088e-05
+          ],
+          "cube_id": 1,
+          "contact_target": "wall_back",
+          "normal_force_N": 7.847470513300277,
+          "estimated_gap_m": 9.707698220576266e-06,
+          "command_advance_m": 4.324999999649748e-05,
+          "encoder_advance_m": 1.4934106145947368e-05,
+          "force_rise_N": 2.3758073127646746
+        },
+        {
+          "phase": "rear_1_B2_contact_sync",
+          "status": "STABILIZING_DUAL_CONTACT",
+          "sim_time_s": 91.325,
+          "wall_elapsed_s": 232.61118238700146,
+          "cube_position_m": [
+            0.0004159825621172786,
+            1.0759954452514648,
+            0.7870000600814819
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -2.0629054233722854e-06,
+            -2.4371465769945644e-06,
+            -2.379267243668437e-05
+          ],
+          "cube_id": 1
+        },
+        {
+          "phase": "rear_1_B2_contact_sync",
+          "status": "FORCE_CONFIRMED",
+          "sim_time_s": 92.30833333333334,
+          "wall_elapsed_s": 234.60129661500105,
+          "cube_position_m": [
+            0.0004121997335460037,
+            1.0759974718093872,
+            0.7869998812675476
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.0242414418826229e-06,
+            -2.8256164341655676e-07,
+            -1.5048366549308412e-05
+          ],
+          "cube_id": 1,
+          "filtered_normal_force_N": {
+            "left": 1.9996433147886723,
+            "right": 0.905870769646557
+          }
+        },
+        {
+          "phase": "rear_1_B2_side_travel",
+          "status": "RUNNING",
+          "sim_time_s": 92.30833333333334,
+          "wall_elapsed_s": 234.6064123870019,
+          "cube_position_m": [
+            0.0004121997335460037,
+            1.0759974718093872,
+            0.7869998812675476
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.0242414418826229e-06,
+            -2.8256164341655676e-07,
+            -1.5048366549308412e-05
+          ],
+          "cube_id": 1,
+          "arm": "right",
+          "follower": "left"
+        }
+      ]
+    },
+    {
+      "run": "fr3-observed-rear1-lead-20261126",
+      "runner_snapshot_sha256": "d79aeae2feb169d76ac758559f2d0d1d415df22cfed01b83c2fe8d37e45b43b7",
+      "status": "INTERRUPTED",
+      "scope": "First retry of axial lead correction. Simulator process disappeared before lateral execution.",
+      "last_logged_step": 10225,
+      "last_box_pose_m": [
+        0.0004226458549965173,
+        1.0759917497634888,
+        0.7870000004768372
+      ],
+      "events": [
+        {
+          "phase": "rear_1_B1_approach",
+          "status": "PRECONTACT_REACHED",
+          "sim_time_s": 32.625,
+          "wall_elapsed_s": 67.95937176500593,
+          "cube_position_m": [
+            0.0004965178668498993,
+            1.074368953704834,
+            0.7869998812675476
+          ],
+          "cube_orientation_wxyz": [
+            0.9999991655349731,
+            -4.918585716495727e-08,
+            3.605415344054563e-08,
+            -0.0012918731663376093
+          ],
+          "cube_id": 1,
+          "arm": "left",
+          "measured_tcp_m": [
+            0.0006218409516852683,
+            0.9885458654800104,
+            0.7915028656787436
+          ],
+          "position_error_m": 0.0009739051669142037,
+          "orientation_matrix_error": 0.002162711106616455,
+          "ik_seed_source": "posture_hint"
+        },
+        {
+          "phase": "rear_1_B2_1_bearing",
+          "status": "FORCE_CONFIRMED",
+          "sim_time_s": 62.30833333333333,
+          "wall_elapsed_s": 122.0420579710044,
+          "cube_position_m": [
+            0.0004228467878419906,
+            1.075992465019226,
+            0.7869999408721924
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.6449514532723697e-06,
+            3.7380075923465483e-07,
+            -4.976603668183088e-05
+          ],
+          "cube_id": 1,
+          "contact_target": "wall_back",
+          "normal_force_N": 7.847470513300277,
+          "estimated_gap_m": 9.707698220576266e-06,
+          "command_advance_m": 4.324999999649748e-05,
+          "encoder_advance_m": 1.4934106145947368e-05,
+          "force_rise_N": 2.3758073127646746
+        },
+        {
+          "phase": "rear_1_B1_approach",
+          "status": "PRECONTACT_REACHED",
+          "sim_time_s": 74.925,
+          "wall_elapsed_s": 208.6237994309995,
+          "cube_position_m": [
+            0.00042264629155397415,
+            1.0759917497634888,
+            0.7870000004768372
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -6.421747684726142e-07,
+            1.3086881267554418e-07,
+            -5.309859989210963e-05
+          ],
+          "cube_id": 1,
+          "arm": "right",
+          "measured_tcp_m": [
+            0.08535351421022855,
+            1.076720655873694,
+            0.8060611519680545
+          ],
+          "position_error_m": 0.0009748559883295384,
+          "orientation_matrix_error": 0.006388847654764556,
+          "ik_seed_source": "measured_joints"
+        }
+      ]
+    },
+    {
+      "run": "fr3-observed-rear1-lateral-20261126",
+      "runner_snapshot_sha256": "d79aeae2feb169d76ac758559f2d0d1d415df22cfed01b83c2fe8d37e45b43b7",
+      "status": "STOPPED",
+      "error": "rear_1_B2_side_travel: contact correction blocked by {'a': 'right/cup_r1_c1', 'b': 'Cube', 'clearance_m': -0.0030476544322408095, 'kind': 'tool_obstacle'}",
+      "unexpected_contacts": 0,
+      "scope": "Online lateral path with wrist feedback pacing and a geometric axial relief correction",
+      "lateral_path_validation": {
+        "phase": "rear_1_B2_side_travel",
+        "status": "CLEAR",
+        "workers": 3,
+        "samples_checked": 1801,
+        "wall_s": 2.5111993190002977,
+        "control_steps": 0,
+        "render_updates": 0,
+        "max_render_gap_s": null
+      },
+      "actual_lateral_travel_m": 0.07669812077074312,
+      "right_peak_force_N": 6.821186842125174,
+      "events": [
+        {
+          "phase": "rear_1_B2_1_bearing",
+          "status": "RUNNING",
+          "sim_time_s": 53.44166666666667,
+          "wall_elapsed_s": 107.07097322699701,
+          "cube_position_m": [
+            0.00040354454540647566,
+            1.0749750137329102,
+            0.7870002388954163
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -3.4755375963868573e-06,
+            -2.6759066713566426e-06,
+            -4.412345151649788e-05
+          ],
+          "cube_id": 1,
+          "target": "wall_back"
+        },
+        {
+          "phase": "rear_1_B2_1_bearing",
+          "status": "FORCE_CONFIRMED",
+          "sim_time_s": 62.30833333333333,
+          "wall_elapsed_s": 123.89473697699577,
+          "cube_position_m": [
+            0.0004228467878419906,
+            1.075992465019226,
+            0.7869999408721924
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.6449514532723697e-06,
+            3.7380075923465483e-07,
+            -4.976603668183088e-05
+          ],
+          "cube_id": 1,
+          "contact_target": "wall_back",
+          "normal_force_N": 7.847470513300277,
+          "estimated_gap_m": 9.707698220576266e-06,
+          "command_advance_m": 4.324999999649748e-05,
+          "encoder_advance_m": 1.4934106145947368e-05,
+          "force_rise_N": 2.3758073127646746
+        },
+        {
+          "phase": "rear_1_B2_contact_sync",
+          "status": "STABILIZING_DUAL_CONTACT",
+          "sim_time_s": 91.325,
+          "wall_elapsed_s": 241.0036940880018,
+          "cube_position_m": [
+            0.0004159825621172786,
+            1.0759954452514648,
+            0.7870000600814819
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -2.0629054233722854e-06,
+            -2.4371465769945644e-06,
+            -2.379267243668437e-05
+          ],
+          "cube_id": 1
+        },
+        {
+          "phase": "rear_1_B2_contact_sync",
+          "status": "FORCE_CONFIRMED",
+          "sim_time_s": 92.30833333333334,
+          "wall_elapsed_s": 243.24849638500018,
+          "cube_position_m": [
+            0.0004121997335460037,
+            1.0759974718093872,
+            0.7869998812675476
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.0242414418826229e-06,
+            -2.8256164341655676e-07,
+            -1.5048366549308412e-05
+          ],
+          "cube_id": 1,
+          "filtered_normal_force_N": {
+            "left": 1.9996433147886723,
+            "right": 0.905870769646557
+          }
+        },
+        {
+          "phase": "rear_1_B2_side_travel",
+          "status": "RUNNING",
+          "sim_time_s": 92.30833333333334,
+          "wall_elapsed_s": 243.25374373699742,
+          "cube_position_m": [
+            0.0004121997335460037,
+            1.0759974718093872,
+            0.7869998812675476
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.0242414418826229e-06,
+            -2.8256164341655676e-07,
+            -1.5048366549308412e-05
+          ],
+          "cube_id": 1,
+          "arm": "right",
+          "follower": "left"
+        }
+      ]
     }
   ]
 }
