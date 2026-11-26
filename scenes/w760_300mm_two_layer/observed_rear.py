@@ -320,9 +320,11 @@ REAR_BODY = '''
                 if target_name in ("wall_back", "wall_left", "wall_right"):
                     confirm_wall_bearing(arm, axis, direction, boundary, target_name, follower)
                 elif target_name is not None:
+                    # R3 slides alongside the back wall; the staged R4 approach uses a gentler seat.
+                    probe = B2_CONTROLLER_PARAMETERS["neighbor_seating_probe"] if slot == 4 else None
                     seat_against_wall(arm, axis, direction, boundary - direction * half,
                                       f"rear_{slot}_B2_{axis}_bearing", contact_target=target_name,
-                                      follow_side=follower, probe_override=B2_CONTROLLER_PARAMETERS["neighbor_seating_probe"])
+                                      follow_side=follower, probe_override=probe)
 
             def clear(arm, direction):
                 nonlocal left_hold
