@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "scene_baseline": "727c5ae8b9dbc9800c0f0c173fc7307e2c2b0952",
+  "states": {
+    "S0": {
+      "name": "工具分离，箱底受支撑",
+      "evidence": ["箱底有承托", "两侧工具都已离开箱面", "无有效侧吸"]
+    },
+    "S1": {
+      "name": "受支撑的工具接触与推压",
+      "evidence": ["箱底有承托", "至少一侧工具接触箱体", "无有效侧吸"]
+    },
+    "S2": {
+      "name": "有侧吸，箱底仍受支撑",
+      "evidence": ["箱底有承托", "至少一侧已建立有效侧吸"]
+    },
+    "S3": {
+      "name": "侧吸悬持",
+      "evidence": ["有效侧吸维持", "箱底已离开支撑", "箱重由工具承担"]
+    }
+  },
+  "events": {
+    "pose_reached": {
+      "parameters": ["object", "target_pose", "tolerance"],
+      "evidence": ["当前实测姿态进入允许的目标误差范围"]
+    },
+    "face_contact": {
+      "parameters": ["arm", "cube", "face"],
+      "evidence": ["工具在指定箱面的接近走廊内", "沿该面法向有一致的接触响应"]
+    },
+    "suction_ready": {
+      "parameters": ["cube", "required_arms"],
+      "evidence": ["所需吸盘发出了闭合操作", "正常加载中各所需吸盘的传力和工具箱体相对运动支持连接成立"]
+    },
+    "payload_clear_support": {
+      "parameters": ["cube", "support"],
+      "state": "S3",
+      "evidence": ["有效侧吸维持", "箱体已离开当前支撑面"]
+    },
+    "support_ready": {
+      "parameters": ["cube", "support"],
+      "evidence": ["目标支撑面已承担箱重", "箱体位姿和运动满足释放要求"]
+    },
+    "suction_open_commanded": {
+      "parameters": ["arms"],
+      "evidence": ["所需解除侧吸的指令已执行"]
+    },
+    "target_bearing": {
+      "parameters": ["cube", "target", "normal"],
+      "evidence": ["箱体与指定目标在给定方向具备接触几何", "腕力和运动响应支持该目标确实传力"]
+    },
+    "placement_stable": {
+      "parameters": ["cube", "support", "target_pose", "required_bearings"],
+      "evidence": ["目标支撑和位姿满足该箱位要求", "箱体保持稳定", "该箱位要求的承载对象已确认"]
+    },
+    "tool_clear": {
+      "parameters": ["arm", "cube"],
+      "evidence": ["该工具已与箱面分离", "该工具已卸载"]
+    },
+    "all_tools_clear": {
+      "parameters": ["cube"],
+      "state": "S0",
+      "evidence": ["两侧工具均已分离", "箱底仍受支撑"]
+    }
+  },
+  "skills": {
+    "free_space_move": {
+      "name": "自由空间避障移动",
+      "method": "从实测关节和导轨位置用 RRTConnect 规划到目标位或预接触位",
+      "parameters": ["arms", "target_pose", "obstacles"],
+      "completion": ["pose_reached"]
+    },
+    "approach_face": {
+      "name": "定向低速贴面",
+      "method": "维持指定末端朝向，沿箱面法向低速接近并检查接触",
+      "parameters": ["arms", "cube", "faces", "approach_range"],
+      "completion": ["face_contact"]
+    },
+    "establish_side_suction": {
+      "name": "建立侧吸",
+      "method": "闭合选定侧吸，在正常加载过程中确认所需吸盘连接",
+      "parameters": ["required_arms", "cube", "faces"],
+      "completion": ["suction_ready"]
+    },
+    "lift_and_carry": {
+      "name": "侧吸起吊与搬运",
+      "method": "侧吸离底后协调双臂和导轨转运，规划时携箱参与避障",
+      "parameters": ["arms", "cube", "source_support", "carry_target", "lift_height"],
+      "milestones": ["payload_clear_support"],
+      "completion": ["pose_reached"]
+    },
+    "set_down": {
+      "name": "落箱与重力交接",
+      "method": "受控下降并将载荷转移到指定支撑面",
+      "parameters": ["arms", "cube", "support", "target_pose"],
+      "completion": ["support_ready"]
+    },
+    "release_side_suction": {
+      "name": "解除侧吸",
+      "method": "确认目标支撑后向所需吸盘执行解除侧吸指令",
+      "parameters": ["arms", "cube"],
+      "completion": ["suction_open_commanded"]
+    },
+    "push_to_target": {
+      "name": "力位混合推箱",
+      "method": "沿指定方向推进，使用腕力修正运动，可由另一臂协作保压",
+      "parameters": ["pushing_arm", "holding_arm", "cube", "direction", "target", "goal_type"],
+      "completion_by_goal": {
+        "position": ["pose_reached"],
+        "bearing": ["target_bearing"],
+        "final_placement": ["placement_stable"]
+      }
+    },
+    "withdraw_tool": {
+      "name": "动态卸力撤离",
+      "method": "沿已检查的允许范围低速撤离，确认所需工具分离时结束",
+      "parameters": ["arms", "cube", "direction", "allowed_motion_range", "scope"],
+      "completion_by_scope": {
+        "selected_arm": ["tool_clear"],
+        "all_tools": ["all_tools_clear"]
+      }
+    }
+  }
+}
