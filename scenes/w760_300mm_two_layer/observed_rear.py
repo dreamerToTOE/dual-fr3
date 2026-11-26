@@ -132,8 +132,8 @@ REAR_BODY = '''
                 if follower is not None:
                     follow_q = applied_targets[follower].copy()
                     follow_tip, follow_attitude = tcp_fk(follower, follow_q)
-                # R3 and R4 rear contact rise on the same timescale as the lateral wall contacts.
-                short_window = axis == 0 or slot in (3, 4)
+                # Inner slots' rear contact rises on the same timescale as the lateral wall contacts.
+                short_window = axis == 0 or slot >= 3
                 window = deque(maxlen=19 if short_window else 61)
                 average_count = 4 if short_window else 8
                 min_advance = .000012 if short_window else .00004
@@ -388,7 +388,7 @@ REAR_BODY = '''
                     raise RuntimeError(f"Rear slot {slot} did not stabilize at the seating target")
                 left_hold = None
                 outward = {rear_arm: np.array([0., -1., 0.])}
-                if lateral in allowed_contacts:
+                if side_name is not None and lateral in allowed_contacts:
                     outward[lateral] = np.array([-sign, 0., 0.])
                 dynamic_withdraw(outward, f"rear_{slot}_final_withdraw", require_support=True)
                 push_faces.clear()
