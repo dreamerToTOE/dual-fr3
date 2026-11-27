@@ -11,7 +11,7 @@ FRONT_IDS = (12, 15, 13, 14, 6)
 OUTER_REAR_GAP_M = .025
 
 
-def front_geometry(slot, observations, size, floor_z, wall_goal_x):
+def front_geometry(slot, observations, size, floor_z, wall_goal_x, *, total_clearance_m=.002):
     if not 1 <= slot <= 5:
         raise ValueError(f"Unknown front slot {slot}")
     tracked = {name: (np.asarray(p), np.asarray(r)) for name, p, r in observations}
@@ -32,7 +32,7 @@ def front_geometry(slot, observations, size, floor_z, wall_goal_x):
     else:
         left = edge(f"Cube_{FRONT_IDS[2]}", 0, 1)
         right = edge(f"Cube_{FRONT_IDS[3]}", 0, -1)
-        if right - left < size + .002 - 1e-12:
+        if right - left <= size or right - left < size + total_clearance_m - 1e-12:
             raise RuntimeError(f"Front center insertion slot is only {right-left:.5f} m wide")
         x = (right + left) / 2
     return np.array([x, y, floor_z + half])

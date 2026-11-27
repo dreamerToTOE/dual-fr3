@@ -20,7 +20,8 @@ def front_placement_goal(config, slot, observations):
         sign = -1 if slot == 1 else 1
         wall = "wall_left" if slot == 1 else "wall_right"
         wall_x = wall_plane(config, wall, 0, sign) - sign * size / 2
-    return front_geometry(slot, observations, size, config["floor_top_m"], wall_x)
+    # A centers the landing in the open slot. B checks its actual yaw and both side gaps.
+    return front_geometry(slot, observations, size, config["floor_top_m"], wall_x, total_clearance_m=0.)
 
 
 def front_landing(guide, config, slot, observations):
