@@ -14,7 +14,7 @@ from observed_b1 import install as observed_b1
 from observed_front_bearing import contact_evidence, install as observed_front_bearing
 from observed_rear import install as observed_rear
 from observed_rear import rear_landing
-from observed_transport import install as observed_transport, register_transport
+from observed_transport import front_placement_goal, install as observed_transport, register_transport
 
 
 def test_registered_carry_connects_the_observed_endpoints():
@@ -43,6 +43,16 @@ def test_rear_neighbor_landing_follows_the_fitted_box_and_calibrated_wall():
     wall[1] += .025
     left_box[0] += .006
     np.testing.assert_allclose(rear_landing(config, 3, poses) - before, [.006, .025, 0.])
+
+
+def test_front_landing_uses_center_of_a_positive_sub_two_mm_slot():
+    config = {"cube_size_m": .15, "floor_top_m": .712}
+    poses = [(name, np.array(center), np.eye(3)) for name, center in (
+        ("Cube_5", [0., 1.075, .787]),
+        ("Cube_13", [-.1505, .925, .787]),
+        ("Cube_14", [.15047, .925, .787]),
+    )]
+    np.testing.assert_allclose(front_placement_goal(config, 5, poses), [-.000015, .925, .787])
 
 
 def test_full_runner_assembles_with_observed_skills():
