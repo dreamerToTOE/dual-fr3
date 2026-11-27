@@ -88,7 +88,7 @@ def install(source):
     source = source[:start] + '''                    hint = (outside_plan["b1_q"] if outside_plan is not None
                             else third_box_seed if slot == 3 else None)
                     move_to_observed_precontact(support_side, contact, front_tool_rotation,
-                                                "front_B1_observed_approach", hint, prefer_hint=slot == 2)
+                                                "front_B1_observed_approach", hint, prefer_hint=slot in (1, 2))
 ''' + source[end:]
     for arm, point, attitude in (("push_side", "high", "side_tool"),
                                  ("push_side", "target", "side_tool"),
