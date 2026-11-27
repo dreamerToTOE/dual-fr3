@@ -1,0 +1,745 @@
+{
+  "scope": "R1–R5 历史物理运行的K0预接触和K1低速贴面基准",
+  "units": "mm, s, N, 以120 Hz计的物理步",
+  "source_paths_relative_to": "工作区 work/runs",
+  "method": {
+    "normal_gap": "将实测TCP与同一步PhysX箱心的差投影到真值箱面外法向，扣除箱半宽75 mm。A段专项报告已保存该量。",
+    "k0_impulse": "从K0开始事件后的第一步到达事件当步，按物理步求和同一臂各杯对活动箱体的新鲜法向冲量，统计大于1e−12 N·s的帧及最大单步冲量乘120 Hz。未到达则截至参考日志最后一帧。",
+    "k1_timing": "从wrench.jsonl.gz统计带对应贴面阶段标签的物理步。若贴面后的动作未立即更换阶段标签，标签时长是贴面控制窗口的上界。",
+    "a_seek": "供料侧吸日志中的指令行程。唯有R1专项试验记录K0末端的独立真值间隙。",
+    "baseline_coverage": "所列为历史运行或各箱位的独立断点片段。R2专项只验证到贴面，R4右杯局部复贴只调用K1。"
+  },
+  "runs": [
+    {
+      "slot": "R1",
+      "scope": "供料专项",
+      "start": {
+        "approximate_start_region": "空托盘上料"
+      },
+      "source_report": "approach-standoff-1127-SMrXQg/a-7-retry/runner_report.json",
+      "source_report_sha256": "7575da0602ad9160ffe09e36de099957208989d6a3662aa59570373532f072e8",
+      "run_status": "RUNNING",
+      "whole_run_unexpected_contact_count": 0,
+      "a_grasp": {
+        "nominal_standoff_mm": 7,
+        "k1_seek_travel_command_mm": {
+          "left": 7.192034,
+          "right": 7.205576
+        },
+        "normal_force_at_confirm_N": {
+          "left": 0.897474,
+          "right": 0.725235
+        },
+        "k1_seek_and_seal_physics_s": 16.825,
+        "both_grippers_closed": true,
+        "actual_tcp_normal_gap_mm": {
+          "left": 7.146699,
+          "right": 7.145273
+        }
+      }
+    },
+    {
+      "slot": "R2",
+      "scope": "供料段通过，后推限力",
+      "start": {
+        "approximate_start_region": "R1就位后上料",
+        "repository_checkpoint_for_same_segment": "validation/observed/rear1_complete_checkpoint.json"
+      },
+      "source_report": "observed-20261127/rear2/runner_report.json",
+      "source_report_sha256": "224fcd1ba41fdc5d20a2f24cc72dd1d32096aed2fb166104d4023aa937055fca",
+      "run_status": "STOPPED",
+      "whole_run_unexpected_contact_count": 0,
+      "stop_reason": "rear_2_B2_1_travel: right exceeded its wrist wrench limit: [-4.81060203e-01 -8.17030081e+00 3.87243707e+00 2.80475727e-01 -1.00353006e-03 2.63132373e-02]",
+      "reference_trace": "observed-20261127/rear2/contact_states/reference.jsonl.gz",
+      "b_precontact": [
+        {
+          "arm": "right",
+          "face": "前",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 25270,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 26870,
+          "actual_tcp_normal_gap_mm": 8.991028,
+          "measured_tcp_target_error_mm": 0.977793,
+          "measured_orientation_matrix_error": 0.004277,
+          "k1_seek_travel_mm": 8.935,
+          "k1_normal_force_at_confirmation_N": 0.677897,
+          "k0_reference_frames": 1600,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1793,
+          "k1_tagged_physics_s": 14.941667
+        }
+      ],
+      "a_grasp": {
+        "nominal_standoff_mm": 7,
+        "k1_seek_travel_command_mm": {
+          "left": 8.087746,
+          "right": 6.331145
+        },
+        "normal_force_at_confirm_N": {
+          "left": 0.545942,
+          "right": 0.798044
+        },
+        "k1_seek_and_seal_physics_s": 18.458333,
+        "both_grippers_closed": true
+      }
+    },
+    {
+      "slot": "R3",
+      "scope": "共用抓取参考验证，供料段通过，后推限力",
+      "start": {
+        "approximate_start_region": "R2就位后上料",
+        "repository_checkpoint_for_same_segment": "validation/observed/rear2_complete_checkpoint.json"
+      },
+      "source_report": "observed-20261127/rear3-shared-grasp/runner_report.json",
+      "source_report_sha256": "12a63a09b2a86b6c46b1b035fe2d75dd98d3ae2a2b1c40497b65923f3f0a2960",
+      "run_status": "STOPPED",
+      "whole_run_unexpected_contact_count": 0,
+      "stop_reason": "rear_3_B2_1_travel: left exceeded its wrist wrench limit: [ 5.37091138e-01 -8.11546187e+00 3.88078947e+00 2.92271423e-01 1.64185690e-02 -1.72057422e-03]",
+      "reference_trace": "observed-20261127/rear3-shared-grasp/contact_states/reference.jsonl.gz",
+      "b_precontact": [
+        {
+          "arm": "left",
+          "face": "前",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 21204,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 22045,
+          "actual_tcp_normal_gap_mm": 9.824778,
+          "measured_tcp_target_error_mm": 0.92124,
+          "measured_orientation_matrix_error": 0.001973,
+          "k1_seek_travel_mm": 9.825,
+          "k1_normal_force_at_confirmation_N": 0.763908,
+          "k0_reference_frames": 841,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1971,
+          "k1_tagged_physics_s": 16.425
+        }
+      ],
+      "a_grasp": {
+        "nominal_standoff_mm": 7,
+        "k1_seek_travel_command_mm": {
+          "left": 7.193396,
+          "right": 7.183405
+        },
+        "normal_force_at_confirm_N": {
+          "left": 0.728558,
+          "right": 0.754231
+        },
+        "k1_seek_and_seal_physics_s": 16.616667,
+        "both_grippers_closed": true
+      }
+    },
+    {
+      "slot": "R4",
+      "scope": "供料段通过，进入横推区前限力",
+      "start": {
+        "approximate_start_region": "R3就位后上料",
+        "repository_checkpoint_for_same_segment": "validation/observed/rear3_complete_checkpoint.json"
+      },
+      "source_report": "observed-20261127/rear4/runner_report.json",
+      "source_report_sha256": "5729e2eede94dd91190ffe42acdb909d6f32a45c9f48b863a52338e824c6abb5",
+      "run_status": "STOPPED",
+      "whole_run_unexpected_contact_count": 0,
+      "stop_reason": "rear_4_B2_1_travel: right exceeded its wrist wrench limit: [-4.56198215e-01 -8.15051169e+00 3.85030366e+00 2.91188235e-01 -2.07186068e-02 -7.59410569e-03]",
+      "reference_trace": "observed-20261127/rear4/contact_states/reference.jsonl.gz",
+      "b_precontact": [
+        {
+          "arm": "right",
+          "face": "前",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 24586,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 25171,
+          "actual_tcp_normal_gap_mm": 10.399591,
+          "measured_tcp_target_error_mm": 0.787655,
+          "measured_orientation_matrix_error": 0.002011,
+          "k1_seek_travel_mm": 10.44,
+          "k1_normal_force_at_confirmation_N": 0.797037,
+          "k0_reference_frames": 585,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 2094,
+          "k1_tagged_physics_s": 17.45
+        }
+      ],
+      "a_grasp": {
+        "nominal_standoff_mm": 7,
+        "k1_seek_travel_command_mm": {
+          "left": 8.085744,
+          "right": 6.329902
+        },
+        "normal_force_at_confirm_N": {
+          "left": 0.564888,
+          "right": 0.786494
+        },
+        "k1_seek_and_seal_physics_s": 18.225,
+        "both_grippers_closed": true
+      }
+    },
+    {
+      "slot": "R5",
+      "scope": "供料段通过且直推无邻箱冲量，后墙前限力",
+      "start": {
+        "approximate_start_region": "R4就位后上料",
+        "repository_checkpoint_for_same_segment": "validation/observed/rear4_complete_checkpoint.json"
+      },
+      "source_report": "observed-20261127/rear5/runner_report.json",
+      "source_report_sha256": "8eee1553ebc4c8f362200bfa84442e379ec367d75d128e1fb20cc2730217e17b",
+      "run_status": "STOPPED",
+      "whole_run_unexpected_contact_count": 0,
+      "stop_reason": "rear_5_B2_1_travel: left exceeded its wrist wrench limit: [ 0.24668448 -8.38918857 3.99874943 0.29978593 0.02710225 0.03311413]",
+      "reference_trace": "observed-20261127/rear5/contact_states/reference.jsonl.gz",
+      "b_precontact": [
+        {
+          "arm": "left",
+          "face": "前",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 16982,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 17647,
+          "actual_tcp_normal_gap_mm": 9.759586,
+          "measured_tcp_target_error_mm": 0.836269,
+          "measured_orientation_matrix_error": 0.001398,
+          "k1_seek_travel_mm": 9.78,
+          "k1_normal_force_at_confirmation_N": 0.626046,
+          "k0_reference_frames": 665,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1962,
+          "k1_tagged_physics_s": 16.35
+        }
+      ],
+      "a_grasp": {
+        "nominal_standoff_mm": 7,
+        "k1_seek_travel_command_mm": {
+          "left": 7.178222,
+          "right": 7.202991
+        },
+        "normal_force_at_confirm_N": {
+          "left": 0.804477,
+          "right": 0.758667
+        },
+        "k1_seek_and_seal_physics_s": 17.1,
+        "both_grippers_closed": true
+      }
+    },
+    {
+      "slot": "R1",
+      "scope": "通过最终放置及退出，从近后墙断点",
+      "start": {
+        "approximate_start_region": "后墙前",
+        "repository_checkpoint_for_same_segment": "validation/observed/before_rear_bearing_checkpoint.json"
+      },
+      "source_report": "observed-20261127/rear1-stiffness/runner_report.json",
+      "source_report_sha256": "c791e8c6cb51e7b7813ead544f0ff0cb9d91f1759bc81be3090fbaa17ef610e9",
+      "run_status": "PASS_REAR_SLOT",
+      "whole_run_unexpected_contact_count": 0,
+      "reference_trace": "observed-20261127/rear1-stiffness/contact_states/reference.jsonl.gz",
+      "b_precontact": [
+        {
+          "arm": "left",
+          "face": "前",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 2969,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 3915,
+          "actual_tcp_normal_gap_mm": 10.822478,
+          "measured_tcp_target_error_mm": 0.973905,
+          "measured_orientation_matrix_error": 0.002163,
+          "k1_seek_travel_mm": 10.055,
+          "k1_normal_force_at_confirmation_N": 3.209378,
+          "k0_reference_frames": 946,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 2017,
+          "k1_tagged_physics_s": 16.808333
+        },
+        {
+          "arm": "right",
+          "face": "右",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 7501,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 8991,
+          "actual_tcp_normal_gap_mm": 9.930785,
+          "measured_tcp_target_error_mm": 0.974856,
+          "measured_orientation_matrix_error": 0.006389,
+          "k1_seek_travel_mm": 9.81,
+          "k1_normal_force_at_confirmation_N": 4.806716,
+          "k0_reference_frames": 1490,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1968,
+          "k1_tagged_physics_s": 16.4
+        }
+      ]
+    },
+    {
+      "slot": "R2",
+      "scope": "右腕正面接近专项",
+      "start": {
+        "approximate_start_region": "landing",
+        "repository_checkpoint_for_same_segment": "validation/observed/rear2_landing_checkpoint.json"
+      },
+      "source_report": "approach-standoff-1127-SMrXQg/b-7/runner_report.json",
+      "source_report_sha256": "b26bb75dcb75e3ad9da2d17f221897d42fb404e944b03bda936100d11289e22d",
+      "run_status": "RUNNING",
+      "whole_run_unexpected_contact_count": 0,
+      "reference_trace": "approach-standoff-1127-SMrXQg/b-7/contact_states/reference.jsonl.gz",
+      "b_precontact": [
+        {
+          "arm": "right",
+          "face": "前",
+          "nominal_standoff_mm": 7,
+          "k0_started_after_physics_step": 2493,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 4107,
+          "actual_tcp_normal_gap_mm": 6.142155,
+          "measured_tcp_target_error_mm": 0.9434,
+          "measured_orientation_matrix_error": 0.004171,
+          "k1_seek_travel_mm": 6.065,
+          "k1_normal_force_at_confirmation_N": 0.635715,
+          "k0_reference_frames": 1614,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1219,
+          "k1_tagged_physics_s": 10.158333
+        }
+      ]
+    },
+    {
+      "slot": "R2",
+      "scope": "右腕正面接近对照",
+      "start": {
+        "approximate_start_region": "landing",
+        "repository_checkpoint_for_same_segment": "validation/observed/rear2_landing_checkpoint.json"
+      },
+      "source_report": "approach-standoff-1127-SMrXQg/b-10/runner_report.json",
+      "source_report_sha256": "1fbf5c287277975e4ef24a04e8c39a990e5ec905d8e2be7a48f7afbf6b303a6a",
+      "run_status": "RUNNING",
+      "whole_run_unexpected_contact_count": 0,
+      "reference_trace": "approach-standoff-1127-SMrXQg/b-10/contact_states/reference.jsonl.gz",
+      "b_precontact": [
+        {
+          "arm": "right",
+          "face": "前",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 2493,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 4093,
+          "actual_tcp_normal_gap_mm": 8.991997,
+          "measured_tcp_target_error_mm": 0.983697,
+          "measured_orientation_matrix_error": 0.004263,
+          "k1_seek_travel_mm": 8.94,
+          "k1_normal_force_at_confirmation_N": 0.597046,
+          "k0_reference_frames": 1600,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1794,
+          "k1_tagged_physics_s": 14.95
+        }
+      ]
+    },
+    {
+      "slot": "R2",
+      "scope": "两腕分别通过接近，后续横推达到腕力上限",
+      "start": {
+        "approximate_start_region": "后墙前",
+        "repository_checkpoint_for_same_segment": "validation/observed/rear2_before_rear_bearing_checkpoint.json"
+      },
+      "source_report": "observed-20261127/rear2-requalified/runner_report.json",
+      "source_report_sha256": "c273950c4154310dc6844fa0267d828f65a0575b956d3d6fc4a73c0c3ca1fb71",
+      "run_status": "STOPPED",
+      "whole_run_unexpected_contact_count": 0,
+      "stop_reason": "Rear slot 2 coordinated push exceeded wrist load",
+      "reference_trace": "observed-20261127/rear2-requalified/contact_states/reference.jsonl.gz",
+      "b_precontact": [
+        {
+          "arm": "right",
+          "face": "前",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 2493,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 4269,
+          "actual_tcp_normal_gap_mm": 9.4773,
+          "measured_tcp_target_error_mm": 0.989066,
+          "measured_orientation_matrix_error": 0.007313,
+          "k1_seek_travel_mm": 9.425,
+          "k1_normal_force_at_confirmation_N": 0.745395,
+          "k0_reference_frames": 1776,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1891,
+          "k1_tagged_physics_s": 15.758333
+        },
+        {
+          "arm": "left",
+          "face": "左",
+          "nominal_standoff_mm": 7,
+          "k0_started_after_physics_step": 7341,
+          "planned_approach_lift_mm": 243.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 8730,
+          "actual_tcp_normal_gap_mm": 6.738991,
+          "measured_tcp_target_error_mm": 0.929998,
+          "measured_orientation_matrix_error": 0.00015,
+          "k1_seek_travel_mm": 6.645,
+          "k1_normal_force_at_confirmation_N": 2.22953,
+          "k0_reference_frames": 1389,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1335,
+          "k1_tagged_physics_s": 11.125
+        }
+      ]
+    },
+    {
+      "slot": "R2",
+      "scope": "通过最终放置及退出，从近右墙断点",
+      "start": {
+        "approximate_start_region": "右墙前",
+        "repository_checkpoint_for_same_segment": "validation/observed/rear2_before_right_wall_checkpoint.json"
+      },
+      "source_report": "observed-20261127/rear2-before-side-final/runner_report.json",
+      "source_report_sha256": "fe5b88b7a33d1ae50d2d384f5fe69ac74b123e9a9fea7d83eec3d1c8a89dc903",
+      "run_status": "PASS_REAR_SLOT",
+      "whole_run_unexpected_contact_count": 0,
+      "reference_trace": "observed-20261127/rear2-before-side-final/contact_states/reference.jsonl.gz",
+      "b_precontact": [
+        {
+          "arm": "right",
+          "face": "前",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 2493,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 4161,
+          "actual_tcp_normal_gap_mm": 9.584044,
+          "measured_tcp_target_error_mm": 0.928281,
+          "measured_orientation_matrix_error": 0.007174,
+          "k1_seek_travel_mm": 9.48,
+          "k1_normal_force_at_confirmation_N": 1.207271,
+          "k0_reference_frames": 1668,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1902,
+          "k1_tagged_physics_s": 15.85
+        },
+        {
+          "arm": "left",
+          "face": "左",
+          "nominal_standoff_mm": 7,
+          "k0_started_after_physics_step": 6297,
+          "planned_approach_lift_mm": 243.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 7427,
+          "actual_tcp_normal_gap_mm": 7.401089,
+          "measured_tcp_target_error_mm": 0.92355,
+          "measured_orientation_matrix_error": 0.000221,
+          "k1_seek_travel_mm": 7.44,
+          "k1_normal_force_at_confirmation_N": 5.380874,
+          "k0_reference_frames": 1130,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1494,
+          "k1_tagged_physics_s": 12.45
+        }
+      ]
+    },
+    {
+      "slot": "R3",
+      "scope": "10 mm目标直线进场，K0尚未交给K1就出现右杯冲量",
+      "start": {
+        "approximate_start_region": "后墙前",
+        "repository_checkpoint_for_same_segment": "validation/observed/rear3_before_rear_bearing_checkpoint.json"
+      },
+      "source_report": "observed-20261127/rear3-lateral-margin/runner_report.json",
+      "source_report_sha256": "6e1b7d2d64122e45986517636d418a779301fa4b32e45297536b0009ef65caa7",
+      "run_status": "STOPPED",
+      "whole_run_unexpected_contact_count": 0,
+      "stop_reason": "Normal force overload: 20.568411 N exceeds 10.000000 N",
+      "reference_trace": "observed-20261127/rear3-lateral-margin/contact_states/reference.jsonl.gz",
+      "b_precontact": [
+        {
+          "arm": "left",
+          "face": "前",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 2193,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 2987,
+          "actual_tcp_normal_gap_mm": 8.877118,
+          "measured_tcp_target_error_mm": 0.42103,
+          "measured_orientation_matrix_error": 0.002539,
+          "k1_seek_travel_mm": 8.76,
+          "k1_normal_force_at_confirmation_N": 2.851753,
+          "k0_reference_frames": 794,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1758,
+          "k1_tagged_physics_s": 14.65
+        },
+        {
+          "arm": "right",
+          "face": "右",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 6226,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": false,
+          "k0_trace_ended_at_physics_step": 7545,
+          "k0_reference_frames": 1319,
+          "k0_positive_cup_impulse_frames": 2,
+          "k0_peak_cup_impulse_equivalent_N": 78.836798
+        }
+      ]
+    },
+    {
+      "slot": "R3",
+      "scope": "改为从上方进场，两腕贴面通过，末段邻箱承载未确认",
+      "start": {
+        "approximate_start_region": "后墙前",
+        "repository_checkpoint_for_same_segment": "validation/observed/rear3_before_rear_bearing_checkpoint.json"
+      },
+      "source_report": "observed-20261127/rear3-lateral-high/runner_report.json",
+      "source_report_sha256": "6a5bcf6da7c2669ab9c87f8af4ec589cbd924678d09e477bd359b3d410950f71",
+      "run_status": "STOPPED",
+      "whole_run_unexpected_contact_count": 0,
+      "stop_reason": "right could not acquire wall contact",
+      "reference_trace": "observed-20261127/rear3-lateral-high/contact_states/reference.jsonl.gz",
+      "b_precontact": [
+        {
+          "arm": "left",
+          "face": "前",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 2193,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 2987,
+          "actual_tcp_normal_gap_mm": 8.877118,
+          "measured_tcp_target_error_mm": 0.42103,
+          "measured_orientation_matrix_error": 0.002539,
+          "k1_seek_travel_mm": 8.76,
+          "k1_normal_force_at_confirmation_N": 2.851753,
+          "k0_reference_frames": 794,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1758,
+          "k1_tagged_physics_s": 14.65
+        },
+        {
+          "arm": "right",
+          "face": "右",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 6226,
+          "planned_approach_lift_mm": 243.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 7974,
+          "actual_tcp_normal_gap_mm": 9.686771,
+          "measured_tcp_target_error_mm": 0.952515,
+          "measured_orientation_matrix_error": 3.7e-05,
+          "k1_seek_travel_mm": 9.77,
+          "k1_normal_force_at_confirmation_N": 2.646798,
+          "k0_reference_frames": 1748,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1960,
+          "k1_tagged_physics_s": 16.333333
+        }
+      ]
+    },
+    {
+      "slot": "R3",
+      "scope": "通过最终放置及退出，从近邻箱断点",
+      "start": {
+        "approximate_start_region": "邻箱前",
+        "repository_checkpoint_for_same_segment": "validation/observed/rear3_before_neighbor_checkpoint.json"
+      },
+      "source_report": "observed-20261127/rear3-neighbor-retry/runner_report.json",
+      "source_report_sha256": "e6cf31b77a775f5daedf5fa9d3202b9fd21ed4d6f7f76ca7c755da5409d18d54",
+      "run_status": "PASS_REAR_SLOT",
+      "whole_run_unexpected_contact_count": 0,
+      "reference_trace": "observed-20261127/rear3-neighbor-retry/contact_states/reference.jsonl.gz",
+      "b_precontact": [
+        {
+          "arm": "left",
+          "face": "前",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 2193,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 2906,
+          "actual_tcp_normal_gap_mm": 9.237156,
+          "measured_tcp_target_error_mm": 0.928132,
+          "measured_orientation_matrix_error": 0.007935,
+          "k1_seek_travel_mm": 9.14,
+          "k1_normal_force_at_confirmation_N": 0.256403,
+          "k0_reference_frames": 713,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1837,
+          "k1_tagged_physics_s": 15.308333
+        },
+        {
+          "arm": "right",
+          "face": "右",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 4810,
+          "planned_approach_lift_mm": 243.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 6540,
+          "actual_tcp_normal_gap_mm": 10.099632,
+          "measured_tcp_target_error_mm": 0.944863,
+          "measured_orientation_matrix_error": 2e-05,
+          "k1_seek_travel_mm": 10.165,
+          "k1_normal_force_at_confirmation_N": 6.393005,
+          "k0_reference_frames": 1730,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 2039,
+          "k1_tagged_physics_s": 16.991667
+        }
+      ]
+    },
+    {
+      "slot": "R4",
+      "scope": "横推及换臂通过，后墙前限力",
+      "start": {
+        "approximate_start_region": "横推区前",
+        "repository_checkpoint_for_same_segment": "validation/observed/rear4_before_side_stage_checkpoint.json"
+      },
+      "source_report": "observed-20261127/rear4-side-stage/runner_report.json",
+      "source_report_sha256": "110e2e26d2712a705b9fab58b841c81a9bca7846a9d4d3a52318194ce52c1981",
+      "run_status": "STOPPED",
+      "whole_run_unexpected_contact_count": 0,
+      "stop_reason": "rear_4_B2_1_travel: right exceeded its wrist wrench limit: [-6.75371920e-01 -8.39200166e+00 3.87258063e+00 3.01401816e-01 -2.19855895e-02 -4.66227718e-04]",
+      "reference_trace": "observed-20261127/rear4-side-stage/contact_states/reference.jsonl.gz",
+      "b_precontact": [
+        {
+          "arm": "right",
+          "face": "前",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 1794,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 2515,
+          "actual_tcp_normal_gap_mm": 10.403784,
+          "measured_tcp_target_error_mm": 0.705663,
+          "measured_orientation_matrix_error": 0.00155,
+          "k1_seek_travel_mm": 10.42,
+          "k1_normal_force_at_confirmation_N": 0.933419,
+          "k0_reference_frames": 721,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 2090,
+          "k1_tagged_physics_s": 17.416667
+        },
+        {
+          "arm": "left",
+          "face": "左",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 5110,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 6252,
+          "actual_tcp_normal_gap_mm": 9.639939,
+          "measured_tcp_target_error_mm": 0.994608,
+          "measured_orientation_matrix_error": 0.007738,
+          "k1_seek_travel_mm": 9.46,
+          "k1_normal_force_at_confirmation_N": 2.834223,
+          "k0_reference_frames": 1142,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1898,
+          "k1_tagged_physics_s": 15.816667
+        }
+      ],
+      "local_retouch_without_k0": {
+        "arm": "right",
+        "face": "前",
+        "k1_seek_travel_mm": 0.0,
+        "k1_normal_force_at_confirmation_N": 0.614985,
+        "k1_tagged_physics_frames": 6
+      }
+    },
+    {
+      "slot": "R4",
+      "scope": "通过最终放置及退出，从后推末段断点",
+      "start": {
+        "approximate_start_region": "后墙前",
+        "repository_checkpoint_for_same_segment": "validation/observed/rear4_before_rear_bearing_checkpoint.json"
+      },
+      "source_report": "observed-20261127/rear4-short-contact/runner_report.json",
+      "source_report_sha256": "52a1926269fe16b525dd25f7944c30d8ea2dcbb76c64512af64696c95beae412",
+      "run_status": "PASS_REAR_SLOT",
+      "whole_run_unexpected_contact_count": 0,
+      "reference_trace": "observed-20261127/rear4-short-contact/contact_states/reference.jsonl.gz",
+      "b_precontact": [
+        {
+          "arm": "right",
+          "face": "前",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 1794,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 2592,
+          "actual_tcp_normal_gap_mm": 10.021689,
+          "measured_tcp_target_error_mm": 0.65787,
+          "measured_orientation_matrix_error": 0.001279,
+          "k1_seek_travel_mm": 9.78,
+          "k1_normal_force_at_confirmation_N": 1.238405,
+          "k0_reference_frames": 798,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 1962,
+          "k1_tagged_physics_s": 16.35
+        }
+      ]
+    },
+    {
+      "slot": "R5",
+      "scope": "通过最终直推及退出，从后推末段断点",
+      "start": {
+        "approximate_start_region": "后墙前",
+        "repository_checkpoint_for_same_segment": "validation/observed/rear5_before_rear_bearing_checkpoint.json"
+      },
+      "source_report": "observed-20261127/rear5-withdraw/runner_report.json",
+      "source_report_sha256": "a86316c5f1785248bb1755865e37511d8e2008f0e239d49515f348ded1c84e9f",
+      "run_status": "PASS_REAR_SLOT",
+      "whole_run_unexpected_contact_count": 0,
+      "reference_trace": "observed-20261127/rear5-withdraw/contact_states/reference.jsonl.gz",
+      "b_precontact": [
+        {
+          "arm": "left",
+          "face": "前",
+          "nominal_standoff_mm": 10,
+          "k0_started_after_physics_step": 617,
+          "planned_approach_lift_mm": 0.0,
+          "reached_precontact": true,
+          "k0_ended_at_physics_step": 1434,
+          "actual_tcp_normal_gap_mm": 10.245787,
+          "measured_tcp_target_error_mm": 0.786205,
+          "measured_orientation_matrix_error": 0.000853,
+          "k1_seek_travel_mm": 10.27,
+          "k1_normal_force_at_confirmation_N": 0.882365,
+          "k0_reference_frames": 817,
+          "k0_positive_cup_impulse_frames": 0,
+          "k0_peak_cup_impulse_equivalent_N": 0.0,
+          "k1_tagged_physics_frames": 2060,
+          "k1_tagged_physics_s": 17.166667
+        }
+      ]
+    }
+  ]
+}

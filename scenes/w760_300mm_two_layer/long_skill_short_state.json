@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "scene_baseline": "727c5ae8b9dbc9800c0f0c173fc7307e2c2b0952",
   "states": {
     "S0": {
@@ -55,7 +55,7 @@
     },
     "tool_clear": {
       "parameters": ["arm", "cube", "face", "minimum_normal_gap"],
-      "evidence": ["实际杯面法向间隙达到要求", "腕力确认该工具已卸载"]
+      "evidence": ["实际杯面法向间隙达到要求", "腕力确认该工具已卸载", "箱底仍有承托"]
     },
     "all_tools_clear": {
       "parameters": ["cube"],
@@ -64,19 +64,19 @@
     }
   },
   "skills": {
-    "K1": {
+    "K0": {
       "name": "空载独立 RRTConnect",
-      "inputs": ["arms", "measured_joints", "measured_rails", "measured_tcp_poses", "target_tcp_poses", "obstacle_geometry", "other_arm_motion"],
+      "inputs": ["arms", "measured_joints", "measured_rails", "measured_tcp_poses", "target_tcp_poses", "obstacle_geometry", "other_arm_motion", "approach_waypoints_if_used", "rail_targets_if_used"],
       "outputs": ["collision_checked_joint_path", "timed_joint_deltas", "timed_rail_deltas_if_used"],
       "completion": ["pose_reached"]
     },
-    "K2": {
+    "K1": {
       "name": "低速法向贴面",
-      "inputs": ["arms", "cube", "target_faces", "measured_tcp_poses", "face_normals", "approach_range", "approach_speed"],
-      "outputs": ["normal_approach_joint_deltas"],
+      "inputs": ["arms", "cube", "target_faces", "measured_tcp_poses", "face_normals", "approach_range", "approach_speed", "preload_target_if_used"],
+      "outputs": ["normal_joint_deltas"],
       "completion": ["face_contact"]
     },
-    "K3": {
+    "K2": {
       "name": "吸盘开关",
       "inputs": ["arms", "cube", "target_faces", "mode"],
       "modes": ["ON", "OFF"],
@@ -86,40 +86,47 @@
         "OFF_after_set_down": ["support_ready"],
         "OFF_after_push": ["placement_stable"]
       },
-      "completion": ["suction_mode_applied"],
-      "required_before_load_bearing_motion": ["suction_ready"]
+      "completion_by_mode": {
+        "ON": ["suction_mode_applied", "suction_ready"],
+        "OFF": ["suction_mode_applied"]
+      }
     },
-    "K4": {
-      "name": "双臂紧协调带箱规划",
-      "inputs": ["measured_joints", "measured_rails", "cube_start_pose", "cube_target_pose", "cube_to_tcp_transforms", "source_support", "lift_direction", "cube_geometry", "obstacle_geometry"],
+    "K3": {
+      "name": "双臂紧协调搬放",
+      "inputs": ["measured_joints", "measured_rails", "cube_start_pose", "cube_target_pose", "cube_to_tcp_transforms", "source_support", "lift_direction", "cube_geometry", "obstacle_geometry", "target_support", "descent_speed"],
       "outputs": ["cube_path", "synchronized_joint_deltas", "synchronized_rail_deltas_if_used"],
       "required_before_motion": ["suction_ready"],
       "milestones": ["payload_clear_support"],
-      "completion": ["pose_reached"]
-    },
-    "K5": {
-      "name": "落箱交载",
-      "inputs": ["cube_pose", "measured_joints", "measured_rails", "cube_to_tcp_transforms", "target_support", "target_cube_pose", "descent_speed"],
-      "outputs": ["synchronized_descent_and_load_transfer_joint_deltas"],
       "completion": ["support_ready"]
     },
-    "K6": {
-      "name": "受支撑带箱规划与推送",
-      "inputs": ["cube_pose", "measured_tcp_poses", "measured_joints", "measured_rails", "support", "allowed_contacts", "pushing_arm", "holding_arm_if_used", "push_direction", "hold_direction_if_used", "goal", "goal_type", "wrench_references", "suction_modes", "active_grasp_transforms_if_used"],
-      "outputs": ["supported_cube_path", "arm_motion_references", "wrench_adjusted_joint_deltas"],
+    "K4": {
+      "name": "受支撑推箱",
+      "inputs": ["cube_pose", "measured_tcp_poses", "measured_joints", "measured_rails", "support", "allowed_contacts", "pushing_arm", "holding_arm_if_used", "push_direction", "hold_direction_if_used", "goal", "goal_type", "suction_modes", "active_grasp_transforms_if_used", "control_mode", "control_frame", "position_axes", "force_axes_if_used", "target_wrench_if_used", "measured_wrench_if_used"],
+      "outputs": ["supported_cube_path", "arm_motion_references", "timed_joint_deltas"],
       "required_before_motion": ["face_contact"],
       "required_in_suction_mode": ["suction_ready"],
       "completion_by_goal": {
         "position": ["pose_reached"],
         "bearing": ["target_bearing"],
         "final_placement": ["placement_stable"]
-      }
+      },
+      "control_modes": {
+        "position": {
+          "force_processor": "disabled_zero_tcp_correction"
+        },
+        "hybrid": {
+          "force_processor": "measured_wrench_to_tcp_correction"
+        }
+      },
+      "control_composition": "按控制方向合成位置参考和力觉修正，每只参与机械臂在同一控制步求一次逆运动学。"
     },
-    "K7": {
+    "K5": {
       "name": "低速分离",
       "inputs": ["arms", "cube", "target_faces", "measured_tcp_poses", "withdraw_directions", "minimum_normal_gaps", "maximum_safe_travel", "scope"],
       "outputs": ["withdrawal_joint_deltas"],
-      "required_after_suction": {"suction_mode_applied": "OFF"},
+      "required_after_suction": {
+        "suction_mode_applied": "OFF"
+      },
       "completion_by_scope": {
         "selected_arm": ["tool_clear"],
         "all_tools": ["all_tools_clear"]
