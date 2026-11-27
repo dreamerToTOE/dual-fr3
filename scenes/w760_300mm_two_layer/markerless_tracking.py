@@ -383,6 +383,9 @@ def install(source, *, observed_skills=False):
                     if not 0. < push_sign * (exit_x - entry_x) <= max_transfer_m:''')
         source = replace_once(source, '                if slot in (1, 2, 3, 4) and completed_transport not in (1, 2):',
                               '                if slot == 1 or (slot in (2, 3, 4) and completed_transport not in (1, 2)):')
+        # U1 uses the same terminal wall confirmation before and after the transfer.
+        source = replace_once(source, 'if slot in (1, 2) and phase in ("upper_B_seam_rear_reseat", "upper_B_extra_seam_rear_reseat"):',
+                              'if slot == 2 and phase in ("upper_B_seam_rear_reseat", "upper_B_extra_seam_rear_reseat"):')
     u1_slide_preload_N = 2.0 if observed_skills else 3.25
     source = replace_once(source, '                push_to_boundary(push_side, 0, push_sign, "upper_B_side", side_target, follow=support_side)',
                           f'''                if slot == 1:
