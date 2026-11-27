@@ -190,10 +190,14 @@ REAR_BODY = '''
                                    f"force {normal:.2f} N)")
 
             def approach(arm, axis, direction):
+                from observed_b1 import FACE_STANDOFF_M
+
                 center, rotation = observe_resting_cube(
                     f"rear_{slot}_{arm}_face_pose", vision_camera, rows, SUPPORT_TOP)
                 inward = direction * rotation[:, axis]
-                offset = -direction * half * np.eye(3)[axis] + [0., 0., .004 if axis == 1 else .020]
+                centered_rear2 = slot == 2 and axis == 1
+                height = .0 if centered_rear2 else .004 if axis == 1 else .020
+                offset = -direction * half * np.eye(3)[axis] + [0., 0., height]
                 if axis == 1:
                     tool = np.asarray(FRONT_ROTATION) if arm == "left" else np.diag([-1., 1., -1.])
                     hint = (outer["b1_q"] if outer is not None
@@ -205,7 +209,7 @@ REAR_BODY = '''
                     tool = role["push_rotation_world"]
                     hint = role["rail_hold_push_q"]
                 rear2_lateral_entry = slot == 2 and axis == 0
-                distance = .007 if rear2_lateral_entry else .010
+                distance = FACE_STANDOFF_M if slot == 2 else .010
                 destination = center + rotation @ offset - distance * inward
                 if rear2_lateral_entry:
                     hint = min(outer["b2_entry_q"],

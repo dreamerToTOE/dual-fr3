@@ -3,6 +3,9 @@
 from source_hooks import replace_once
 
 
+FACE_STANDOFF_M = .007
+
+
 def install(source):
     source = replace_once(source, '        def move(targets, duration=1.0):',
                           '        def move(targets, duration=1.0, *, planning_margin_m=.002):')
@@ -20,8 +23,39 @@ def install(source):
             if (np.linalg.norm(error[:3]) < position_limit
                     and np.linalg.norm(error[3:]) / .2 < angle_limit):
                 return fit.x''')
+    source = replace_once(source, '''            approach_targets = {
+                side: supply + supply_rotation @ (np.asarray(GUIDE["grasp_tcp_offsets_world"][side]) + .007 * normal)
+                for side, normal in face_normals.items()}
+            paired_cartesian_move(approach_targets, 2., "A_contact_approach")
+            allowed_contacts.update(robots)''',
+                          '''            from observed_b1 import FACE_STANDOFF_M
+
+            approach_targets = {side: face_centers[side] + FACE_STANDOFF_M * (supply_rotation @ normal)
+                                for side, normal in face_normals.items()}
+            paired_cartesian_move(approach_targets, 2., "A_contact_approach")
+            for side, target in approach_targets.items():
+                position, error, frame_error = wait_for_precontact(
+                    side, target, desired_rotation, "A_contact_approach")
+                record("A_contact_approach", "PRECONTACT_REACHED", arm=side,
+                       target_tcp_m=target.tolist(), target_face_point_m=face_centers[side].tolist(),
+                       measured_tcp_m=position.tolist(), position_error_m=error,
+                       orientation_matrix_error=frame_error, standoff_m=FACE_STANDOFF_M)
+            allowed_contacts.update(robots)''')
     anchor = '        def solve(side, tcp, rotation, continuous=False, seed_override=None):'
-    source = replace_once(source, anchor, '''        def move_to_observed_precontact(arm, destination, attitude, phase, ik_hint=None,
+    source = replace_once(source, anchor, '''        def wait_for_precontact(arm, destination, attitude, phase):
+            # An ended trajectory may still have tracking lag. Verify before allowing face contact.
+            for _ in range(240):
+                position, actual_attitude = tcp_fk(arm, joint_state()[arm])
+                error = float(np.linalg.norm(position - destination))
+                frame_error = float(np.linalg.norm(actual_attitude - attitude))
+                if error <= .001 and frame_error <= .02:
+                    return position, error, frame_error
+                step()
+                check_current_collision(phase)
+            raise RuntimeError(f"{phase}: measured precontact error is {error*1000:.2f} mm "
+                               f"and frame error {frame_error:.3f}")
+
+        def move_to_observed_precontact(arm, destination, attitude, phase, ik_hint=None,
                                         *, prefer_hint=False, planning_margin_m=.002, approach_lift_m=0.):
             measured = joint_state()
             tool, tool_rotation = tcp_fk(arm, measured[arm])
@@ -64,20 +98,11 @@ def install(source):
                             raise
                         failures.append(str(error))
                     else:
-                        # A timed path ending does not imply the measured TCP has arrived.
-                        for _ in range(240):
-                            position, actual_attitude = tcp_fk(arm, joint_state()[arm])
-                            error = float(np.linalg.norm(position - destination))
-                            frame_error = float(np.linalg.norm(actual_attitude - attitude))
-                            if error <= .001 and frame_error <= .02:
-                                record(phase, "PRECONTACT_REACHED", arm=arm, measured_tcp_m=position.tolist(),
-                                       position_error_m=error, orientation_matrix_error=frame_error,
-                                       ik_seed_source=seed_source)
-                                return
-                            step()
-                            check_current_collision(phase)
-                        raise RuntimeError(f"{phase}: measured precontact error is {error*1000:.2f} mm "
-                                           f"and frame error {frame_error:.3f}")
+                        position, error, frame_error = wait_for_precontact(arm, destination, attitude, phase)
+                        record(phase, "PRECONTACT_REACHED", arm=arm, measured_tcp_m=position.tolist(),
+                               position_error_m=error, orientation_matrix_error=frame_error,
+                               ik_seed_source=seed_source)
+                        return
                 else:
                     failures.append(str(issues[0]))
             raise RuntimeError(f"{phase}: observed precontact is unreachable: {failures}")

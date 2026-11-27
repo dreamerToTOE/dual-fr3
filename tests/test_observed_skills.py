@@ -63,6 +63,10 @@ def test_full_runner_assembles_with_observed_skills():
         name for fn in code.co_consts if hasattr(fn, "co_names") for name in fn.co_names)
     assert "def move_to_observed_precontact(" in generated
     assert "def dynamic_withdraw(" in generated
+    pickup_standoff = generated.index('paired_cartesian_move(approach_targets, 2., "A_contact_approach")')
+    confirm_arrival = generated.index("wait_for_precontact(", pickup_standoff)
+    allow_touch = generated.index("allowed_contacts.update(robots)", pickup_standoff)
+    assert pickup_standoff < confirm_arrival < allow_touch
 
 
 def test_front_bearing_requires_motion_before_the_loaded_stall():

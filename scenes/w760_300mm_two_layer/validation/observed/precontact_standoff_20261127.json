@@ -1,0 +1,133 @@
+{
+  "date": "2026-11-27",
+  "simulator": "Isaac Sim 4.5 / PhysX, one instance at a time",
+  "method": "Fresh D455/encoder inputs, unchanged tactile speed and acceptance limits. PhysX used as independent reference.",
+  "pickup_start": "Empty workspace; cube on supply platform",
+  "front_face_start": "validation/observed/rear2_landing_checkpoint.json",
+  "selected_standoff_mm": 7,
+  "trials": [
+    {
+      "scope": "R1 pickup",
+      "nominal_standoff_mm": 5.0,
+      "actual_tcp_normal_gap_mm": {
+        "left": 5.156319938889389,
+        "right": 5.154773023863371
+      },
+      "cup_contact_pairs_at_precontact": [],
+      "box_shift_during_touch_mm": 0.00019006856438233045,
+      "unexpected_contact_count": 0,
+      "first_collision": null,
+      "source": "approach-standoff-1127-SMrXQg/a-5/runner_report.json",
+      "source_sha256": "71b61e56086c75c294be10d2b4e06389c73c2c0005354d5078839eff69fb6720",
+      "dual_vacuum_connected": {
+        "left": true,
+        "right": true
+      },
+      "seek_travel_mm": {
+        "left": 5.202704834094056,
+        "right": 5.213803113851401
+      },
+      "confirmation_wrist_normal_force_N": {
+        "left": 1.0820021401196538,
+        "right": 0.8054934099872256
+      },
+      "touch_stage_physics_s": 12.425
+    },
+    {
+      "scope": "R1 pickup",
+      "nominal_standoff_mm": 7.0,
+      "actual_tcp_normal_gap_mm": {
+        "left": 7.146699387891697,
+        "right": 7.145272736130429
+      },
+      "cup_contact_pairs_at_precontact": [],
+      "box_shift_during_touch_mm": 0.00018180041007086247,
+      "unexpected_contact_count": 0,
+      "first_collision": null,
+      "source": "approach-standoff-1127-SMrXQg/a-7-retry/runner_report.json",
+      "source_sha256": "7575da0602ad9160ffe09e36de099957208989d6a3662aa59570373532f072e8",
+      "dual_vacuum_connected": {
+        "left": true,
+        "right": true
+      },
+      "seek_travel_mm": {
+        "left": 7.192033698605743,
+        "right": 7.20557638783332
+      },
+      "confirmation_wrist_normal_force_N": {
+        "left": 0.8974736454419039,
+        "right": 0.725234718094188
+      },
+      "touch_stage_physics_s": 16.825
+    },
+    {
+      "scope": "R1 pickup",
+      "nominal_standoff_mm": 10.0,
+      "actual_tcp_normal_gap_mm": {
+        "left": 10.129648618193945,
+        "right": 10.12964219122188
+      },
+      "cup_contact_pairs_at_precontact": [],
+      "box_shift_during_touch_mm": 7.302410788766843e-05,
+      "unexpected_contact_count": 0,
+      "first_collision": null,
+      "source": "approach-standoff-1127-SMrXQg/a-10/runner_report.json",
+      "source_sha256": "370b16a5a54d9fb3933e1b06732c5dfb4b2bc93cb4b0b673d201b742f10ac3db",
+      "dual_vacuum_connected": {
+        "left": true,
+        "right": true
+      },
+      "seek_travel_mm": {
+        "left": 10.17644411538099,
+        "right": 10.188558409328694
+      },
+      "confirmation_wrist_normal_force_N": {
+        "left": 0.6803296943120944,
+        "right": 0.7275172512162693
+      },
+      "touch_stage_physics_s": 22.383333333333336
+    },
+    {
+      "scope": "R2 landing to front face",
+      "nominal_standoff_mm": 7.0,
+      "actual_tcp_normal_gap_mm": {
+        "right": 6.1421554427622675
+      },
+      "cup_contact_pairs_at_precontact": [],
+      "box_shift_during_touch_mm": 0.0004309920994723645,
+      "unexpected_contact_count": 0,
+      "first_collision": null,
+      "source": "approach-standoff-1127-SMrXQg/b-7/runner_report.json",
+      "source_sha256": "b26bb75dcb75e3ad9da2d17f221897d42fb404e944b03bda936100d11289e22d",
+      "right_cup_load_confirmed_by_physx": true,
+      "seek_travel_mm": {
+        "right": 6.064999999999837
+      },
+      "confirmation_wrist_normal_force_N": {
+        "right": 0.635714738700331
+      },
+      "touch_stage_physics_s": 10.158333333333331
+    },
+    {
+      "scope": "R2 landing to front face",
+      "nominal_standoff_mm": 10.0,
+      "actual_tcp_normal_gap_mm": {
+        "right": 8.991997170040095
+      },
+      "cup_contact_pairs_at_precontact": [],
+      "box_shift_during_touch_mm": 0.000497127393412956,
+      "unexpected_contact_count": 0,
+      "first_collision": null,
+      "source": "approach-standoff-1127-SMrXQg/b-10/runner_report.json",
+      "source_sha256": "1fbf5c287277975e4ef24a04e8c39a990e5ec905d8e2be7a48f7afbf6b303a6a",
+      "right_cup_load_confirmed_by_physx": true,
+      "seek_travel_mm": {
+        "right": 8.93999999999972
+      },
+      "confirmation_wrist_normal_force_N": {
+        "right": 0.5970459020305653
+      },
+      "touch_stage_physics_s": 14.949999999999996
+    }
+  ]
+}
