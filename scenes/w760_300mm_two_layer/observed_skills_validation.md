@@ -182,6 +182,10 @@ U4 完成侧吸跨缝，落稳时 PhysX 连续 60 帧记录到下层承载。原
 
 在本分支 U4 就位后，同实例启动 U5 上料。完成侧吸和起吊，带载导轨启动约 1.17 s 后脱封。最后可用样本中两腕分别承担约 8.61 N、3.64 N 的竖向载荷，该次未记录非预期接触。已从本分支 14 箱就位断点复验，将 U2、U3 已实跑的共用抓取参考应用于 U5。 [当前布局下的 U5 运行证据](validation/observed/upper5_progress.json)
 
+从本分支 U4 就位断点复验通过。U5 带载导轨 7,148 帧、下放 704 帧均保持双杯密封。开阀后两腕各外撤约 3.14 mm 触发 S0，PhysX 同步确认两杯分离、下层承载 12.26 N。实际落点按两侧箱面调整，进槽前相机拟合左右余隙为 2.81 mm 和 3.40 mm。左臂沿 +Y 直推 86.61 mm，箱体横向位移全幅约 1.42 mm。推入的 10,501 帧中，两侧 U3、U4 的原始接触冲量均为零。确认后墙时 PhysX 同步测得 4.92 N。左腕外撤 3.40 mm 确认 S0，然后在线规划归位，归位期间两杯与箱体间的原始接触冲量均为零。最终投影左右余隙为 3.97 mm 和 3.38 mm。该次运行没有记录到非预期接触。 [U5 完整运行证据](validation/observed/upper5_progress.json) · [U5 实测 landing](validation/observed/upper5_landing_checkpoint.json)
+
+最终报告为 `PASS_W760_UPPER_ROW`，恢复 U1–U4 的实测就位结果后，本次主动执行 U5 的 A 到 B 全链。最终快照含 15 个实际箱位，上层从左向右为 `Cube_7`、`Cube_9`、`Cube_11`、`Cube_10`、`Cube_8`。全场景验收以多次单实例断点实跑组成，前排主线使用历史实测后排布局。 [15 箱最终实测布局](validation/observed/upper5_complete_checkpoint.json) · [逐箱运行线](long_skill_short_state_routes.md)
+
 ## 运行和续跑
 
 在仓库根目录用一个 Isaac Sim 4.5 实例运行。每次使用新的输出目录。
@@ -203,10 +207,10 @@ sim=/home/ubuntu2004/isaacsim-4.5.0
   --stop-after-front 1 --close-on-finish
 ```
 
-复现上层第 5 箱时直接恢复它的 landing 断点。
+复现最后一箱的整条运行线时，从上层第 4 箱就位断点启动。上层第 5 箱也有实测 landing 断点供直推复验。
 
 ```bash
 "$sim/python.sh" "$scene/markerless_rows.py" /tmp/fr3-observed-upper5 \
-  --observed-skills --resume "$scene/validation/markerless/upper5_landing_checkpoint.json" \
+  --observed-skills --resume "$scene/validation/observed/upper4_complete_checkpoint.json" \
   --close-on-finish
 ```
