@@ -162,6 +162,10 @@ U2 就位后同实例继续。按相机观测建立侧吸，成功起吊。带�
 
 从该断点恢复后，U3 确认贴靠，PhysX 同步测得 U1 承载 2.29 N、后墙承载 3.62 N。侧推指令推进约 0.201 mm，达到原行程门槛。对上一轮的 0.188 mm 实录复核，末尾腕力均值 7.86 N，超过新判据对应的 7.64 N 预压力门槛。该短行程门槛仅完成记录复核。两腕实测外撤约 3.60 mm 和 3.37 mm 时确认 S0，PhysX 同步确认两杯分离、下层承载 12.36 N。联合 RRTConnect 的 1,274 个采样点通过避障检查。归位期间两杯对箱体的原始接触冲量为零。已保存 U4 的实测续跑入口。 [U3 就位证据](validation/observed/upper3_progress.json) · [上层第 4 箱入口](validation/observed/upper3_complete_checkpoint.json)
 
+### U4 上层第 4 箱
+
+U3 就位后同实例启动。D455 定位供料，双腕从相对竖直面依次吸住后起吊。导轨搬运 7,244 帧和下放 704 帧均保持双杯密封。开阀后两腕各实测外撤约 2.78 mm 确认 S0。PhysX 同步确认两杯分离、下层承载 12.26 N。空载 RRTConnect 通过 1,927 个采样点检查，已保存实测 landing。 [U4 运行证据](validation/observed/upper4_progress.json) · [U4 landing 断点](validation/observed/upper4_landing_checkpoint.json)
+
 ### U5 上层第 5 箱
 
 从带 14 个已码箱的实测 landing 断点出发。相机拟合的两侧槽隙为 4.54 mm 和 3.92 mm，左臂根据观测和实测关节生成 RRTConnect 路径，实测 TCP 误差达到 0.966 mm 后开始贴面。沿 +Y 推进 86.65 mm，横向位移全幅 1.54 mm。确认后墙承载时，PhysX 同步参考为 6.02 N。
