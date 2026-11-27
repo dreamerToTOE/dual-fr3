@@ -132,6 +132,10 @@ F4 就位后，相机拟合的槽宽为 150.975 mm，PhysX 姿态投影对照为
 
 F5 完成侧吸搬运，从实时拟合的槽口中心 landing。直推前估计左、右投影余量为 0.933 和 0.041 mm，两侧均为正。左臂直推期间，PhysX 箱体横向位移全幅 0.48 mm，`Cube_13`、`Cube_14` 的原始接触冲量均为零。指定后排 `Cube_5` 承载验收为 24/24 帧。左腕实测外撤 2.34 mm 确认 S0，两杯分离、地面承载 12.26 N。最后 PhysX 姿态投影的侧隙为左 2.04 mm、右 0.93 mm。该次 F5 全程无非预期接触，归位时两杯对箱体的冲量为零。第一层 10 箱的断点保留了前排试验所用的历史实测后排，前排为本分支 F1–F5 的实测就位结果，可接续上层。 [F5 运行证据](validation/observed/front5_progress.json) · [第一层实测断点](validation/observed/front5_complete_checkpoint.json)
 
+### U1 上层第 1 箱
+
+从本分支前排五箱完成后的 10 箱断点开始。双杯仅吸附相对的两个竖直面。带载导轨 7,513 帧和下放 704 帧中，两杯始终密封。落到第一层后，两腕各实测撤离约 3.14 mm 确认 S0。PhysX 同步核对两杯分离，下层箱体合计承载 12.26 N。上层 B 段以这次真实落点继续。 [U1 运行证据](validation/observed/upper1_progress.json) · [U1 landing 断点](validation/observed/upper1_landing_checkpoint.json)
+
 ### U5 上层第 5 箱
 
 从带 14 个已码箱的实测 landing 断点出发。相机拟合的两侧槽隙为 4.54 mm 和 3.92 mm，左臂根据观测和实测关节生成 RRTConnect 路径，实测 TCP 误差达到 0.966 mm 后开始贴面。沿 +Y 推进 86.65 mm，横向位移全幅 1.54 mm。确认后墙承载时，PhysX 同步参考为 6.02 N。
