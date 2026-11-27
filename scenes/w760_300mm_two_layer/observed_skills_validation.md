@@ -166,6 +166,8 @@ U2 就位后同实例继续。按相机观测建立侧吸，成功起吊。带�
 
 U3 就位后同实例启动。D455 定位供料，双腕从相对竖直面依次吸住后起吊。导轨搬运 7,244 帧和下放 704 帧均保持双杯密封。开阀后两腕各实测外撤约 2.78 mm 确认 S0。PhysX 同步确认两杯分离、下层承载 12.26 N。空载 RRTConnect 通过 1,927 个采样点检查，已保存实测 landing。 [U4 运行证据](validation/observed/upper4_progress.json) · [U4 landing 断点](validation/observed/upper4_landing_checkpoint.json)
 
+U4 完成侧吸跨缝，落稳时 PhysX 连续 60 帧记录到下层承载。原横推末段在较低的滑动阻力下暂停推进，形成贴靠候选。当时观测间隙为 −1.97 mm，但 PhysX 的邻箱实际间隙为 0.346 mm，最后 30 帧邻箱承载均为零。观测入口现要求连续编码器位移稳定，且腕部法向压力高于实测滑动阻力，再确认该候选。附近的观测间隙下限按共用 3 mm 检查，推进的 7.8 N 软限、9 N 力限及物理复核保留。已从 U4 跨缝实测断点复验。 [U4 横推误判证据](validation/observed/upper4_progress.json) · [U4 跨缝断点](validation/observed/upper4_after_seam1_checkpoint.json)
+
 ### U5 上层第 5 箱
 
 从带 14 个已码箱的实测 landing 断点出发。相机拟合的两侧槽隙为 4.54 mm 和 3.92 mm，左臂根据观测和实测关节生成 RRTConnect 路径，实测 TCP 误差达到 0.966 mm 后开始贴面。沿 +Y 推进 86.65 mm，横向位移全幅 1.54 mm。确认后墙承载时，PhysX 同步参考为 6.02 N。

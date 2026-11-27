@@ -456,6 +456,24 @@ def install(source, *, observed_skills=False):
                             last_force_sample[side]["tcp_gravity_corrected_world"][:3]) < 7.8)
                         if front_engaged and force_headroom:
                             position[axis] += sign * increment''')
+    if observed_skills:
+        source = replace_once(source, '                side_probe_start = None',
+                              '                side_wrist_window = deque(maxlen=settle_frame_count)')
+        start = source.index('                    negative_gap_limit = -.002 if slot4_boundary else -.003')
+        end = source.index('                        forces.append(measured_force)', start)
+        source = source[:start] + '''                    negative_gap_limit = -.002 if slot4_boundary and not steer_front else -.003
+                    if steer_front:
+                        side_wrist_window.append(float(last_force_sample[side]["tcp_position_m"][axis]))
+                        stationary = (len(side_wrist_window) == settle_frame_count
+                                      and np.ptp(side_wrist_window) <= .000012)
+                        contact_threshold = min(7.25, max(6.6, contact_threshold + .7))
+                    else:
+                        stationary = True
+                    if (front_engaged and stationary and measured_force >= contact_threshold
+                            and negative_gap_limit <= near <= near_limit):
+''' + source[end:]
+        source = replace_once(source, '                        force_headroom = (not probing or np.linalg.norm(',
+                              '                        force_headroom = (not steer_front or np.linalg.norm(')
     source = replace_once(source, '        def save_upper_checkpoint(next_slot, placement=None):',
                           '        def save_upper_checkpoint(next_slot, placement=None, *, filename=None):')
     source = replace_once(source, '            name = "upper_landing_checkpoint.json" if placement else "upper_row_checkpoint.json"',
