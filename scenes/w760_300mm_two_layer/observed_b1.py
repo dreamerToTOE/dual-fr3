@@ -8,7 +8,21 @@ FACE_STANDOFF_M = .007
 
 def install(source):
     source = replace_once(source, '        def move(targets, duration=1.0):',
-                          '        def move(targets, duration=1.0, *, planning_margin_m=.002):')
+                          '        def move(targets, duration=1.0, *, planning_margin_m=.002, continuation=()):')
+    source = replace_once(source, '            cached = take_cached_phase(phase, current)\n',
+                          '            cached = None if continuation else take_cached_phase(phase, current)\n')
+    source = replace_once(source,
+                          "                                prefetched_cache=None, sampled_trajectory=None, sample_order=None, adjust_targets=None):",
+                          "                                prefetched_cache=None, sampled_trajectory=None, sample_order=None, adjust_targets=None, *, use_cache=True):")
+    source = replace_once(source, "            cached_entry = (None if sampled_trajectory is not None else",
+                          "            cached_entry = (None if sampled_trajectory is not None or not use_cache else")
+    source = replace_once(source,
+                          "            execute_joint_path(paths, phase, max_joint_speed=0.4)\n",
+                          '''            if len(continuation):
+                side, = sides
+                paths[side] = np.vstack((paths[side], continuation))
+            execute_joint_path(paths, phase, max_joint_speed=0.4, use_cache=not continuation)
+''')
     source = replace_once(source, '''                return checker.is_clear(states, cube_center=center, cube_rotation=rotation,
                                         cup_contacts=allowed_contacts)''',
                           '''                return checker.is_clear(states, cube_center=center, cube_rotation=rotation,
@@ -56,7 +70,7 @@ def install(source):
                                f"and frame error {frame_error:.3f}")
 
         def move_to_observed_precontact(arm, destination, attitude, phase, ik_hint=None,
-                                        *, prefer_hint=False, planning_margin_m=.002, approach_lift_m=0.):
+                                        *, prefer_hint=False, planning_margin_m=.002, approach_lift_m=0., outward=None):
             measured = joint_state()
             tool, tool_rotation = tcp_fk(arm, measured[arm])
             center, rotation = sensed_cube()
@@ -65,18 +79,47 @@ def install(source):
                    measured_joints_rad=measured[arm].tolist(), measured_rail_y_m=float(rail_states[arm][1]),
                    observed_cube_m=center.tolist(), precontact_tcp_m=destination.tolist(),
                    planning_margin_m=planning_margin_m, approach_lift_m=approach_lift_m)
-            guesses = [("measured_joints", measured[arm])]
+            guesses = [("measured_joints", measured[arm], None)]
+            if outward is not None and not approach_lift_m:
+                # Continue near a freshly solved branch while retaining the same final precontact target.
+                guesses.append(("online_normal_continuation", measured[arm], .003 * outward))
             if ik_hint is not None:
-                guesses.insert(0 if prefer_hint else 1, ("posture_hint", np.asarray(ik_hint, dtype=float)))
+                guesses.insert(0 if prefer_hint else len(guesses),
+                               ("posture_hint", np.asarray(ik_hint, dtype=float), None))
             failures = []
-            for seed_source, guess in guesses:
+            for seed_source, guess, outer_delta in guesses:
+                continuation = []
+                outer = destination if outer_delta is None else destination + outer_delta
                 try:
                     # Keep the fit tighter than the measured arrival gate (1 mm, about 14 mrad).
-                    q = cartesian_joint_target(arm, guess, destination, attitude, retarget_guide=True,
+                    q = cartesian_joint_target(arm, guess, outer, attitude, retarget_guide=True,
                                                fit_tolerance=(.0005, .007))
+                    if outer_delta is not None:
+                        next_q = q
+                        for fraction in np.linspace(0., 1., 7)[1:]:
+                            point = outer - fraction * outer_delta
+                            next_q = cartesian_joint_target(arm, next_q, point, attitude)
+                            continuation.append(next_q)
                 except RuntimeError as error:
                     failures.append(str(error))
                     continue
+                if continuation:
+                    chain = np.vstack((q, continuation))
+                    samples = {side: chain if side == arm else np.tile(state, (len(chain), 1))
+                               for side, state in measured.items()}
+                    validation = checker.validate_path(
+                        samples, cube_centers=center, cube_rotations=rotation, cup_contacts=allowed_contacts,
+                        margin_m=planning_margin_m, max_joint_step_rad=.005)
+                    record(phase, "K0_IK_CONTINUATION", arm=arm, seed_source="measured_joints",
+                           outer_target_tcp_m=outer.tolist(), final_target_tcp_m=destination.tolist(),
+                           outer_q_rad=q.tolist(), final_q_rad=continuation[-1].tolist(),
+                           continuation_checked_samples=validation["samples_checked"],
+                           continuation_issues=validation["issues"], prior_candidate_failures=failures.copy(),
+                           planning_margin_m=planning_margin_m,
+                           allowed_contacts=sorted(allowed_contacts))
+                    if validation["status"] != "CLEAR":
+                        failures.extend(str(issue) for issue in validation["issues"])
+                        continue
                 trial = {**measured, arm: q}
                 issues = checker.check(trial, cube_center=center, cube_rotation=rotation,
                                        cup_contacts=allowed_contacts, margin_m=planning_margin_m, first_only=True)
@@ -91,7 +134,7 @@ def install(source):
                             move({arm: raised[-1]}, planning_margin_m=planning_margin_m)
                             execute_joint_path({arm: np.asarray(raised[::-1])}, phase + "_descent")
                         else:
-                            move({arm: q}, planning_margin_m=planning_margin_m)
+                            move({arm: q}, planning_margin_m=planning_margin_m, continuation=continuation)
                     except RuntimeError as error:
                         if not str(error).startswith(("No collision-free joint path found",
                                                       "Motion endpoint is in collision")):

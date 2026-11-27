@@ -67,6 +67,10 @@ def test_full_runner_assembles_with_observed_skills():
     confirm_arrival = generated.index("wait_for_precontact(", pickup_standoff)
     allow_touch = generated.index("allowed_contacts.update(robots)", pickup_standoff)
     assert pickup_standoff < confirm_arrival < allow_touch
+    assert "distance = FACE_STANDOFF_M if slot" not in generated
+    assert 'hint = None if slot == 1 else role["rail_hold_push_q"]' in generated
+    assert "continuation_issues=validation" in generated
+    assert "use_cache=not continuation" in generated
 
 
 def test_front_bearing_requires_motion_before_the_loaded_stall():

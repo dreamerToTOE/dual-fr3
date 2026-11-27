@@ -17,7 +17,7 @@ lateral_gap_mm = float(os.environ.get("FR3_TEST_LATERAL_STANDOFF_MM", str(gap_mm
 
 def install_probe(source):
     source = original_install(source)
-    source = replace_once(source, "                distance = FACE_STANDOFF_M if slot == 2 else .010",
+    source = replace_once(source, "                distance = FACE_STANDOFF_M",
                           f"                distance = {gap_mm / 1000!r} if axis == 1 else {lateral_gap_mm / 1000!r}")
     source = replace_once(source, '''                move_to_observed_precontact(arm, destination, rotation @ tool, f"rear_{slot}_B1_approach", hint,''',
                           '''                record("rear_k0_probe", "APPROACH_START", approach_axis=axis, arm=arm,

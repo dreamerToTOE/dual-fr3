@@ -207,9 +207,9 @@ REAR_BODY = '''
                 else:
                     role = b2_role_seeds(json.loads((ROOT / "validation/fr3_b2_collision_plan.json").read_text()), arm)
                     tool = role["push_rotation_world"]
-                    hint = role["rail_hold_push_q"]
+                    hint = None if slot == 1 else role["rail_hold_push_q"]
                 rear2_lateral_entry = slot == 2 and axis == 0
-                distance = FACE_STANDOFF_M if slot == 2 else .010
+                distance = FACE_STANDOFF_M
                 destination = center + rotation @ offset - distance * inward
                 if rear2_lateral_entry:
                     hint = min(outer["b2_entry_q"],
@@ -226,7 +226,8 @@ REAR_BODY = '''
                 move_to_observed_precontact(arm, destination, rotation @ tool, f"rear_{slot}_B1_approach", hint,
                                             prefer_hint=rear2_lateral_entry or neighbor_entry
                                             or (axis == 1 and hint is not None), planning_margin_m=margin,
-                                            approach_lift_m=.243 if descend_to_side else 0.)
+                                            approach_lift_m=.243 if descend_to_side else 0.,
+                                            outward=-inward)
                 if not allowed_contacts:
                     set_contact_drive_mode(True)
                 allowed_contacts.add(arm)

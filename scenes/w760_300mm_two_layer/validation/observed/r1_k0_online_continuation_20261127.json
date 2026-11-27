@@ -1,0 +1,216 @@
+{
+  "date": "2026-11-27",
+  "scope": "R1 phase B, from the same pre-rear-wall checkpoint up to K1 contact confirmation.",
+  "checkpoint": "before_rear_bearing_checkpoint.json",
+  "checkpoint_sha256": "c96585cbb85c043e58047a2b655b7dd151d3a28794aed9e8b99a0ea139c41321",
+  "method": "Isaac Sim 4.5, offline truth audit uses fresh PhysX contacts per step, no vacuum and no saved joint seed for the right-arm K0.",
+  "trials": [
+    {
+      "run": "r1",
+      "raw_report_path_relative_to_runs": "r1-k0-branch-1127-lxkkYe/r1/runner_report.json",
+      "raw_report_sha256": "38811252e86423acf72945f0ec05d31ffde7f539c437c6c388f53bb4d9a4ee85",
+      "online_ik": {
+        "phase": "rear_1_B1_approach",
+        "status": "K0_IK_CONTINUATION",
+        "sim_time_s": 60.25,
+        "wall_elapsed_s": 121.62353731299663,
+        "cube_position_m": [
+          0.0004843607312068343,
+          1.0758591890335083,
+          0.7869998812675476
+        ],
+        "cube_orientation_wxyz": [
+          0.9999996423721313,
+          -5.79905702124961e-07,
+          -4.2121104826264855e-08,
+          -0.0009286117856390774
+        ],
+        "cube_id": 1,
+        "arm": "right",
+        "seed_source": "measured_joints",
+        "outer_target_tcp_m": [
+          0.08515850365161896,
+          1.0768963813781738,
+          0.807
+        ],
+        "final_target_tcp_m": [
+          0.08215850365161896,
+          1.0768963813781738,
+          0.807
+        ],
+        "outer_q_rad": [
+          -0.3970124631904905,
+          0.37249842205321404,
+          -0.20640172501954884,
+          -2.5164834095976074,
+          0.28329868260763674,
+          2.8714870991950616,
+          -2.433955970433085
+        ],
+        "final_q_rad": [
+          -0.3934950276965667,
+          0.3762930624976672,
+          -0.20663894013674278,
+          -2.508839541430053,
+          0.28228035269668067,
+          2.867498812042809,
+          -2.4291052305109555
+        ],
+        "continuation_checked_samples": 7,
+        "continuation_issues": [],
+        "planning_margin_m": 0.002,
+        "allowed_contacts": [
+          "left"
+        ]
+      },
+      "unloaded_approach_first_and_last_sim_step": [
+        7231,
+        8747
+      ],
+      "time_parameterized_path_checks": [
+        {
+          "phase": "rear_1_B1_approach_transit",
+          "status": "BLOCKED",
+          "workers": 3,
+          "samples_checked": 680,
+          "wall_s": 1.9401666370031307,
+          "control_steps": 0,
+          "render_updates": 0,
+          "max_render_gap_s": null
+        },
+        {
+          "phase": "rear_1_B1_approach_transit",
+          "status": "CLEAR",
+          "workers": 3,
+          "samples_checked": 1517,
+          "wall_s": 1.8969658679998247,
+          "control_steps": 0,
+          "render_updates": 0,
+          "max_render_gap_s": null
+        }
+      ],
+      "precontact_tcp_fit_error_mm": 0.5924247639237602,
+      "actual_normal_gap_mm": 7.26400403279151,
+      "physx_frames_checked": 1517,
+      "precontact_right_cup_touched_frames": 0,
+      "precontact_right_cup_positive_impulse_frames": 0,
+      "unexpected_contact_count": 0,
+      "k1_tactile_confirmed_with_physx": true,
+      "k1_search_travel_mm": 6.689999999999811,
+      "k1_confirmation_wrist_normal_force_N": 2.1379411727122064
+    },
+    {
+      "run": "runner-seven",
+      "raw_report_path_relative_to_runs": "r1-k0-branch-1127-lxkkYe/runner-seven/runner_report.json",
+      "raw_report_sha256": "7bae4bcb2e46e3105f9ea8f8f8ac7f5ca7e1954022be88739ddec15c997e8faa",
+      "online_ik": {
+        "phase": "rear_1_B1_approach",
+        "status": "K0_IK_CONTINUATION",
+        "sim_time_s": 60.25,
+        "wall_elapsed_s": 117.33243463200051,
+        "cube_position_m": [
+          0.0004843607312068343,
+          1.0758591890335083,
+          0.7869998812675476
+        ],
+        "cube_orientation_wxyz": [
+          0.9999996423721313,
+          -5.79905702124961e-07,
+          -4.2121104826264855e-08,
+          -0.0009286117856390774
+        ],
+        "cube_id": 1,
+        "arm": "right",
+        "seed_source": "measured_joints",
+        "outer_target_tcp_m": [
+          0.08515850365161896,
+          1.0768963813781738,
+          0.807
+        ],
+        "final_target_tcp_m": [
+          0.08215850365161896,
+          1.0768963813781738,
+          0.807
+        ],
+        "outer_q_rad": [
+          -0.3970124631904905,
+          0.37249842205321404,
+          -0.20640172501954884,
+          -2.5164834095976074,
+          0.28329868260763674,
+          2.8714870991950616,
+          -2.433955970433085
+        ],
+        "final_q_rad": [
+          -0.3934950276965667,
+          0.3762930624976672,
+          -0.20663894013674278,
+          -2.508839541430053,
+          0.28228035269668067,
+          2.867498812042809,
+          -2.4291052305109555
+        ],
+        "continuation_checked_samples": 7,
+        "continuation_issues": [],
+        "prior_candidate_failures": [
+          "{'a': 'right/fr3_link5', 'b': 'wall_right', 'clearance_m': -0.008691627707390064, 'kind': 'link_obstacle'}"
+        ],
+        "planning_margin_m": 0.002,
+        "allowed_contacts": [
+          "left"
+        ]
+      },
+      "unloaded_approach_first_and_last_sim_step": [
+        7231,
+        8747
+      ],
+      "time_parameterized_path_checks": [
+        {
+          "phase": "rear_1_B1_approach_transit",
+          "status": "BLOCKED",
+          "workers": 3,
+          "samples_checked": 680,
+          "wall_s": 1.8514032550010597,
+          "control_steps": 0,
+          "render_updates": 0,
+          "max_render_gap_s": null
+        },
+        {
+          "phase": "rear_1_B1_approach_transit",
+          "status": "CLEAR",
+          "workers": 3,
+          "samples_checked": 1517,
+          "wall_s": 1.8080525839977781,
+          "control_steps": 0,
+          "render_updates": 0,
+          "max_render_gap_s": null
+        }
+      ],
+      "precontact_tcp_fit_error_mm": 0.5924247639237602,
+      "actual_normal_gap_mm": 7.26400403279151,
+      "physx_frames_checked": 1517,
+      "precontact_right_cup_touched_frames": 0,
+      "precontact_right_cup_positive_impulse_frames": 0,
+      "unexpected_contact_count": 0,
+      "k1_tactile_confirmed_with_physx": true,
+      "k1_search_travel_mm": 6.689999999999811,
+      "k1_confirmation_wrist_normal_force_N": 2.1379411727122064,
+      "independent_measured_geometry_replay": {
+        "steps": 1517,
+        "start": 7231,
+        "end": 8747,
+        "violations_at_2mm": 0,
+        "first_violations": [],
+        "last_pose_minimum_margin_mm": 7.125043869018556,
+        "last_pose_limiting_pair": [
+          {
+            "a": "right/cup_r1_c2",
+            "b": "Cube",
+            "clearance_m": 0.007125090146201135,
+            "kind": "tool_obstacle"
+          }
+        ]
+      }
+    }
+  ]
+}
