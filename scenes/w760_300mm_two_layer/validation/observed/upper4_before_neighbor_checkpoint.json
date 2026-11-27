@@ -1471,6 +1471,16 @@
         "attachments": {
           "left": false,
           "right": false
+        },
+        "reattained_RGB": {
+          "position_m": [
+            0.1546779901565198,
+            1.0111368055118128,
+            0.9369999999999999
+          ],
+          "source": "rear_rgbd_square",
+          "frame_id": 1703,
+          "capture_time_s": 106.81667223758996
         }
       },
       "source_error": "upper_B_side: wrist contact candidate lacks target contact in the independent PhysX audit (0/30, estimated gap -0.72 mm)",
