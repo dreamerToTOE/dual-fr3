@@ -104,9 +104,11 @@ R5 的低速续跑形成真实后墙接触，61 帧位移和腕力判据未确�
 
 改为中途 S0 后双臂一起用 RRTConnect 清场，再由左臂从实测关节位置规划接近。最后一次从侧墙断点续跑通过，向后推入约 24.01 mm，连续 24 帧记录到指定后排箱承载。最终 S0 在左腕实测撤离 2.13 mm 时确认，两杯均无接触，地板承载约 12.26 N。最终归位及就位验收完成，PhysX 非预期接触为零。 [F1 运行证据](validation/observed/front1_progress.json) · [F1 侧墙断点](validation/observed/front1_side_seat_checkpoint.json) · [F1 就位断点](validation/observed/front1_complete_checkpoint.json)
 
-补验从本分支 R5 就位断点恢复后排五箱，D455 在线拟合该后排与供料箱。F1 导轨搬运 5,933 帧及下放 1,266 帧均保持双杯密封。落稳开阀后两腕各外撤约 3.13 mm 确认 S0，PhysX 同步核对两杯分离、地板承载 12.26 N。已保存这条衔接线路的实际 landing，并继续执行 F1 推入。 [本分支 R5 就位断点](validation/observed/rear5_complete_checkpoint.json) · [F1 补验 landing](validation/observed/front1_from_observed_rear5_landing_checkpoint.json)
+补验从本分支 R5 就位断点恢复后排五箱，D455 在线拟合该后排与供料箱。F1 导轨搬运 5,933 帧及下放 1,266 帧均保持双杯密封。落稳开阀后两腕各外撤约 3.13 mm 确认 S0，PhysX 同步核对两杯分离、地板承载 12.26 N。保存了这条衔接线路的实际 landing。 [本分支 R5 就位断点](validation/observed/rear5_complete_checkpoint.json) · [F1 补验 landing](validation/observed/front1_from_observed_rear5_landing_checkpoint.json)
 
 F1 补验的 B1 实测到位误差为 0.94 mm，两腕也完成推箱接触同步。B2 检查发现左臂第 6 连杆距左墙只有 1.92 mm，低于 2 mm 规划余量，横推在执行前停止。PhysX 记录零次非预期接触。复验优先使用历史可行肘部构型作为 B1 逆解初值。仍使用实际箱面生成目标，从实测关节状态规划。 [补验的 B2 拦截记录](validation/observed/front1_progress.json)
+
+从实测 landing 续跑后，左腕以可行构型到达预接触位，实测 TCP 误差 0.92 mm。B2 横推的 1,801 个规划采样点通过避障检查，右杯在侧面寻触前对箱体的冲量为零。左墙及后排 `Cube_1` 的承载窗口各通过 24/24 帧。贴左墙后两腕先确认 S0，再联合 RRTConnect 清出相机视野。左臂按新拟合的箱面接近并直推至 `Cube_1`。最终左腕实测外撤 2.13 mm 确认 S0，同步记录两杯分离、地板承载 12.24 N。空载归位的 1,160 个规划采样点通过避障检查，两杯对箱体的冲量均为零。该次 PhysX 记录零次非预期接触，结果为 `PASS_FRONT_SLOT`。 [F1 衔接证据](validation/observed/front1_progress.json) · [本分支 R5 到 F1 就位断点](validation/observed/front1_from_observed_rear5_complete_checkpoint.json)
 
 ### F2 前排第 2 箱
 
@@ -188,7 +190,7 @@ U4 完成侧吸跨缝，落稳时 PhysX 连续 60 帧记录到下层承载。原
 
 从本分支 U4 就位断点复验通过。U5 带载导轨 7,148 帧、下放 704 帧均保持双杯密封。开阀后两腕各外撤约 3.14 mm 触发 S0，PhysX 同步确认两杯分离、下层承载 12.26 N。实际落点按两侧箱面调整，进槽前相机拟合左右余隙为 2.81 mm 和 3.40 mm。左臂沿 +Y 直推 86.61 mm，箱体横向位移全幅约 1.42 mm。推入的 10,501 帧中，两侧 U3、U4 的原始接触冲量均为零。确认后墙时 PhysX 同步测得 4.92 N。左腕外撤 3.40 mm 确认 S0，然后在线规划归位，归位期间两杯与箱体间的原始接触冲量均为零。最终投影左右余隙为 3.97 mm 和 3.38 mm。该次运行没有记录到非预期接触。 [U5 完整运行证据](validation/observed/upper5_progress.json) · [U5 实测 landing](validation/observed/upper5_landing_checkpoint.json)
 
-最终报告为 `PASS_W760_UPPER_ROW`，恢复 U1–U4 的实测就位结果后，本次主动执行 U5 的 A 到 B 全链。最终快照含 15 个实际箱位，上层从左向右为 `Cube_7`、`Cube_9`、`Cube_11`、`Cube_10`、`Cube_8`。全场景验收以多次单实例断点实跑组成，前排主线使用历史实测后排布局。 [15 箱最终实测布局](validation/observed/upper5_complete_checkpoint.json) · [逐箱运行线](long_skill_short_state_routes.md)
+最终报告为 `PASS_W760_UPPER_ROW`，恢复 U1–U4 的实测就位结果后，本次主动执行 U5 的 A 到 B 全链。最终快照含 15 个实际箱位，上层从左向右为 `Cube_7`、`Cube_9`、`Cube_11`、`Cube_10`、`Cube_8`。全场景验收以多次单实例断点实跑组成，生成该布局的前排主线使用历史实测后排布局。新跑出的 R5 到 F1 衔接已另行补验，从上料到就位通过。 [15 箱最终实测布局](validation/observed/upper5_complete_checkpoint.json) · [逐箱运行线](long_skill_short_state_routes.md)
 
 ## 运行和续跑
 
