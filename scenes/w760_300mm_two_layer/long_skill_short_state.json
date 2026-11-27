@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "scene_baseline": "727c5ae8b9dbc9800c0f0c173fc7307e2c2b0952",
   "states": {
     "S0": {
@@ -30,7 +30,7 @@
     },
     "suction_ready": {
       "parameters": ["cube", "required_arms"],
-      "evidence": ["所需吸盘发出了闭合操作", "正常加载中各所需吸盘的传力和工具箱体相对运动支持连接成立"]
+      "evidence": ["所需吸盘已确认执行 ON", "正常加载中各所需吸盘的传力和工具箱体相对运动支持连接成立"]
     },
     "payload_clear_support": {
       "parameters": ["cube", "support"],
@@ -41,9 +41,9 @@
       "parameters": ["cube", "support"],
       "evidence": ["目标支撑面已承担箱重", "箱体位姿和运动满足释放要求"]
     },
-    "suction_open_commanded": {
-      "parameters": ["arms"],
-      "evidence": ["所需解除侧吸的指令已执行"]
+    "suction_mode_applied": {
+      "parameters": ["arms", "mode"],
+      "evidence": ["所选吸盘的控制接口反馈目标模式已生效", "有效吸附和杯面分离分别由 suction_ready、tool_clear 确认"]
     },
     "target_bearing": {
       "parameters": ["cube", "target", "normal"],
@@ -54,8 +54,8 @@
       "evidence": ["目标支撑和位姿满足该箱位要求", "箱体保持稳定", "该箱位要求的承载对象已确认"]
     },
     "tool_clear": {
-      "parameters": ["arm", "cube"],
-      "evidence": ["该工具已与箱面分离", "该工具已卸载"]
+      "parameters": ["arm", "cube", "face", "minimum_normal_gap"],
+      "evidence": ["实际杯面法向间隙达到要求", "腕力确认该工具已卸载"]
     },
     "all_tools_clear": {
       "parameters": ["cube"],
@@ -64,61 +64,69 @@
     }
   },
   "skills": {
-    "free_space_move": {
-      "name": "自由空间避障移动",
-      "method": "从实测关节和导轨位置用 RRTConnect 规划到目标位或预接触位",
-      "parameters": ["arms", "target_pose", "obstacles"],
+    "K1": {
+      "name": "空载独立 RRTConnect",
+      "inputs": ["arms", "measured_joints", "measured_rails", "measured_tcp_poses", "target_tcp_poses", "obstacle_geometry", "other_arm_motion"],
+      "outputs": ["collision_checked_joint_path", "timed_joint_deltas", "timed_rail_deltas_if_used"],
       "completion": ["pose_reached"]
     },
-    "approach_face": {
-      "name": "定向低速贴面",
-      "method": "维持指定末端朝向，沿箱面法向低速接近并检查接触",
-      "parameters": ["arms", "cube", "faces", "approach_range"],
+    "K2": {
+      "name": "低速法向贴面",
+      "inputs": ["arms", "cube", "target_faces", "measured_tcp_poses", "face_normals", "approach_range", "approach_speed"],
+      "outputs": ["normal_approach_joint_deltas"],
       "completion": ["face_contact"]
     },
-    "establish_side_suction": {
-      "name": "建立侧吸",
-      "method": "闭合选定侧吸，在正常加载过程中确认所需吸盘连接",
-      "parameters": ["required_arms", "cube", "faces"],
-      "completion": ["suction_ready"]
+    "K3": {
+      "name": "吸盘开关",
+      "inputs": ["arms", "cube", "target_faces", "mode"],
+      "modes": ["ON", "OFF"],
+      "outputs": ["suction_commands", "actuator_acknowledgement"],
+      "required_before_command": {
+        "ON": ["face_contact"],
+        "OFF_after_set_down": ["support_ready"],
+        "OFF_after_push": ["placement_stable"]
+      },
+      "completion": ["suction_mode_applied"],
+      "required_before_load_bearing_motion": ["suction_ready"]
     },
-    "lift_and_carry": {
-      "name": "侧吸起吊与搬运",
-      "method": "侧吸离底后协调双臂和导轨转运，规划时携箱参与避障",
-      "parameters": ["arms", "cube", "source_support", "carry_target", "lift_height"],
+    "K4": {
+      "name": "双臂紧协调带箱规划",
+      "inputs": ["measured_joints", "measured_rails", "cube_start_pose", "cube_target_pose", "cube_to_tcp_transforms", "source_support", "lift_direction", "cube_geometry", "obstacle_geometry"],
+      "outputs": ["cube_path", "synchronized_joint_deltas", "synchronized_rail_deltas_if_used"],
+      "required_before_motion": ["suction_ready"],
       "milestones": ["payload_clear_support"],
       "completion": ["pose_reached"]
     },
-    "set_down": {
-      "name": "落箱与重力交接",
-      "method": "受控下降并将载荷转移到指定支撑面",
-      "parameters": ["arms", "cube", "support", "target_pose"],
+    "K5": {
+      "name": "落箱交载",
+      "inputs": ["cube_pose", "measured_joints", "measured_rails", "cube_to_tcp_transforms", "target_support", "target_cube_pose", "descent_speed"],
+      "outputs": ["synchronized_descent_and_load_transfer_joint_deltas"],
       "completion": ["support_ready"]
     },
-    "release_side_suction": {
-      "name": "解除侧吸",
-      "method": "确认目标支撑后向所需吸盘执行解除侧吸指令",
-      "parameters": ["arms", "cube"],
-      "completion": ["suction_open_commanded"]
-    },
-    "push_to_target": {
-      "name": "力位混合推箱",
-      "method": "沿指定方向推进，使用腕力修正运动，可由另一臂协作保压",
-      "parameters": ["pushing_arm", "holding_arm", "cube", "direction", "target", "goal_type"],
+    "K6": {
+      "name": "受支撑带箱规划与推送",
+      "inputs": ["cube_pose", "measured_tcp_poses", "measured_joints", "measured_rails", "support", "allowed_contacts", "pushing_arm", "holding_arm_if_used", "push_direction", "hold_direction_if_used", "goal", "goal_type", "wrench_references", "suction_modes", "active_grasp_transforms_if_used"],
+      "outputs": ["supported_cube_path", "arm_motion_references", "wrench_adjusted_joint_deltas"],
+      "required_before_motion": ["face_contact"],
+      "required_in_suction_mode": ["suction_ready"],
       "completion_by_goal": {
         "position": ["pose_reached"],
         "bearing": ["target_bearing"],
         "final_placement": ["placement_stable"]
       }
     },
-    "withdraw_tool": {
-      "name": "动态卸力撤离",
-      "method": "沿已检查的允许范围低速撤离，确认所需工具分离时结束",
-      "parameters": ["arms", "cube", "direction", "allowed_motion_range", "scope"],
+    "K7": {
+      "name": "低速分离",
+      "inputs": ["arms", "cube", "target_faces", "measured_tcp_poses", "withdraw_directions", "minimum_normal_gaps", "maximum_safe_travel", "scope"],
+      "outputs": ["withdrawal_joint_deltas"],
+      "required_after_suction": {"suction_mode_applied": "OFF"},
       "completion_by_scope": {
         "selected_arm": ["tool_clear"],
         "all_tools": ["all_tools_clear"]
       }
     }
+  },
+  "observer_handoff": {
+    "outputs": ["confirmed_event", "relevant_objects", "observation_time", "measured_joints", "measured_rails", "measured_tcp_poses", "estimated_cube_pose"]
   }
 }
