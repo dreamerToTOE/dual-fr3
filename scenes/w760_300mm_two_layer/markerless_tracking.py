@@ -191,7 +191,7 @@ class RowFaces:
         self.planes[support].save_view(frame, {"cube_position_m": center, "cube_rotation_world": rotation}, path)
 
 
-def install(source):
+def install(source, *, observed_skills=False):
     source = replace_once(source, 'from fr3_vision import ArucoCubeEstimator, PlanarPoseMedian',
                           'from fr3_vision import PlanarPoseMedian')
     source = replace_block(source, '        def make_vision_estimator(', '        comparison_directory = ',
@@ -370,10 +370,11 @@ def install(source):
                         move({push_side: cartesian_joint_target(push_side, seed, target, side_tool, retarget_guide=True)})''')
     source = replace_once(source, 'preload = (1.0 if final_u2 else 3.25) if slot == 2 else 1.25',
                           'preload = (1.0 if final_u2 else 3.25) if slot in (1, 2) else 1.25')
+    u1_slide_preload_N = 2.0 if observed_skills else 3.25
     source = replace_once(source, '                push_to_boundary(push_side, 0, push_sign, "upper_B_side", side_target, follow=support_side)',
-                          '''                if slot == 1:
-                    # Keep the rear face loaded while the side arm slides the grounded box.
-                    left_hold.target_force_N = 3.25
+                          f'''                if slot == 1:
+                    # Set the wall preload for lateral sliding.
+                    left_hold.target_force_N = {u1_slide_preload_N}
                 push_to_boundary(push_side, 0, push_sign, "upper_B_side", side_target, follow=support_side)''')
     source = replace_once(source, 'force_paced_samples if force_paced_lateral or slot4_boundary else None,',
                           '''force_paced_samples if (force_paced_lateral or slot4_boundary

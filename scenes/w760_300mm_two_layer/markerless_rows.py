@@ -116,7 +116,7 @@ def main():
                                '        comparison_directory = ', '        supply_estimator = vision_estimator\n')
     else:
         from markerless_tracking import install
-        source = install(source)
+        source = install(source, observed_skills=args.observed_skills)
         if args.observed_skills:
             from dynamic_withdraw import install as dynamic_withdraw
             from observed_b1 import install as observed_b1
