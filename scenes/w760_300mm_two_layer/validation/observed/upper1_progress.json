@@ -5797,7 +5797,7 @@
       "fr3_contact_skills.json": "6b84d30df63b92250c68c2bcbded2cb859a581c3c13521861e92104e98d3d655",
       "fr3_four_wall_scene_config.json": "53bccaba12c78e028e6d0e625cd974f588587cf91e55f064c43a1b5487a61770"
     },
-    "run_status": "RUNNING",
+    "run_status": "STOPPED",
     "slot_result": {
       "slot": 1,
       "cube_id": 7,
@@ -5828,7 +5828,7 @@
       },
       "max_lower_shift_m": 8.429369702178807e-07
     },
-    "run_unexpected_contact_count": null,
+    "run_unexpected_contact_count": 0,
     "first_collision": null,
     "error": null,
     "last_physx": {
@@ -7273,6 +7273,8 @@
           }
         }
       }
-    ]
+    ],
+    "run_stopped_on_cube_id": 8,
+    "run_stop_reason_after_U1": "Surface Gripper seal lost while carrying the Cube"
   }
 }
