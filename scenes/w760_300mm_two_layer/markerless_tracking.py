@@ -458,7 +458,10 @@ def install(source, *, observed_skills=False):
                             position[axis] += sign * increment''')
     if observed_skills:
         source = replace_once(source, '                side_probe_start = None',
-                              '                side_wrist_window = deque(maxlen=settle_frame_count)')
+                              '''                side_wrist_window = deque(maxlen=settle_frame_count)
+                if steer_front:
+                    terminal_height = NormalForceController(origin[2], target_force_N=0.,
+                        gain_m_per_Ns=.00055, max_offset_m=.0014, max_speed_m_s=.001, max_force_N=force_ceiling)''')
         start = source.index('                    negative_gap_limit = -.002 if slot4_boundary else -.003')
         end = source.index('                        forces.append(measured_force)', start)
         source = source[:start] + '''                    negative_gap_limit = -.002 if slot4_boundary and not steer_front else -.003
@@ -486,6 +489,14 @@ def install(source, *, observed_skills=False):
                                 position[axis] += sign * increment
                         elif front_engaged:
                             position[axis] += sign * increment''')
+        source = replace_once(source, '                    target_rotation = slot4_side_rotation(steer_rotation) if steer_front else tool_rotation',
+                              '''                    if steer_front:
+                        # Continue the lateral travel's upward shear in the terminal stroke.
+                        vertical_force = float(last_force_sample[side]["tcp_gravity_corrected_world"][2])
+                        vertical_error = vertical_force + 1.5
+                        excess = math.copysign(max(0., abs(vertical_error) - .20), vertical_error)
+                        position[2] = terminal_height.update(-excess)
+                    target_rotation = slot4_side_rotation(steer_rotation) if steer_front else tool_rotation''')
     source = replace_once(source, '        def save_upper_checkpoint(next_slot, placement=None):',
                           '        def save_upper_checkpoint(next_slot, placement=None, *, filename=None):')
     source = replace_once(source, '            name = "upper_landing_checkpoint.json" if placement else "upper_row_checkpoint.json"',
