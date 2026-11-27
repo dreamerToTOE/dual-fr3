@@ -423,6 +423,20 @@ def install(source, *, observed_skills=False):
     source = replace_once(source, '                                if advance >= probe_distance - .000004:',
                           '''                                # A seated box can stop the compliant command short of the full travel.
                                 if advance >= .00020:''')
+    if observed_skills:
+        source = replace_once(source, '''                                if advance >= .00020:
+                                    held.append((wrist_x, center[0], normal, gap2d))
+                                else:
+                                    held.clear()
+                                if len(held) == settle_frame_count:''',
+                              '''                                held.append((wrist_x, center[0], normal, gap2d))
+                                if len(held) == settle_frame_count:''')
+        source = replace_once(source, '''                                    if (increase >= .15 and np.min(loads) >= threshold and np.max(gaps) <= .00045''',
+                              '''                                    # The force controller can reach its preload before the nominal stroke.
+                                    probe_loaded = advance >= .00020 or (
+                                        advance >= .00010 and float(np.mean(loads)) >= probe_axial_limit - .15)
+                                    if (probe_loaded and increase >= .15
+                                            and np.min(loads) >= threshold and np.max(gaps) <= .00045''')
     source = replace_once(source, '                wall_impulses = deque(maxlen=settle_frame_count)\n                for _ in range(6000):',
                           '''                wall_impulses = deque(maxlen=settle_frame_count)
                 side_probe_start = None
