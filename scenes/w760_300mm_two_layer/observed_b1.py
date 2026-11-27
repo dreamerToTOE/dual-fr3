@@ -117,7 +117,8 @@ def install(source):
                 record("upper_B_side_high", "RUNNING", arm=push_side)
                 move({push_side: q})''', '''                high_point = destination.copy()
                 high_point[2] = high_z
-                move_to_observed_precontact(push_side, high_point, side_rotation, "upper_B_side_high", high_seed)''')
+                move_to_observed_precontact(push_side, high_point, side_rotation, "upper_B_side_high",
+                                            high_seed, prefer_hint=True)''')
     source = replace_once(source, '''                    reapproach_q = applied_targets[support_side].copy()
                     record("B2_stage_camera_clear", "RUNNING", arm=support_side)
                     move({support_side: np.asarray(CONFIG["fr3"]["official_start_q_rad"])})''',
