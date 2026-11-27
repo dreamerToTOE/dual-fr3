@@ -2278,5 +2278,958 @@
         "yaw_during_occlusion": "last valid camera estimate"
       }
     }
+  },
+  "B_reached_neighbor_with_force_limit": {
+    "run": "upper4-5-stationary-neighbor",
+    "source_sha256": {
+      "fr3_ab_dynamic_smoke.py": "b6c61576772304507b42739ff899baa97f779d110314aa70c65499a675f34852",
+      "fr3_ab_ik_preflight.py": "8b88411d1268384ca2e80b4958e143cc7a80c2385b9ee6cd54f6ee790702862e",
+      "fr3_ab_preflight.py": "2d480d216df8c2d97e4d58eb55dec71a017d4b3b0ad88fbc79211e60ae69116b",
+      "fr3_ab_visual_runner.py": "b31ef6e00fa936214efb032bc97b4fa5585f6114b5ceab4ebf0ca6603c2e1f87",
+      "fr3_b2_collision_plan.py": "01dd7742daa3092d68bc5c079609ee96f88f802428a265306ee716c791156d2e",
+      "fr3_bilateral_b2.py": "5c80935203369933951868689dc32a5bcc7971c7688d51f8177e860455a94296",
+      "fr3_collision.py": "a311533cc68fab4d54a48a925909a5806a7e33f854aac8ad8662085c4b74d6a0",
+      "fr3_contact_control.py": "8074ed81365a96c0347baee31530dadb159d4ba19cc950f885903c928d176d84",
+      "fr3_contact_monitor.py": "ab692154ea5d61862904d547454d2a0210da146395f6d4ec92bce1b0b0f0e577",
+      "fr3_contact_state.py": "8a1d823675f03a629e4a862f8c6a45929d8811427c7c643664da4b782309b1c8",
+      "fr3_contact_state_validation.py": "184d9e1fb4d6298a31633eee557a36aeaa23d1bacb740fc67ff278d285e09271",
+      "fr3_cube_supply.py": "2afb80f0be642bdad05a0b4605b18a44b78406dec3d8513e124562a58313ee76",
+      "fr3_five_cube_row.py": "5d23c9c18e1f34b182d213beedb2a516b57f1b0b8931ef5c4ce2f5fe5c6c0ff7",
+      "fr3_four_wall_preview.py": "87ac55fe3a67404440145d7fb8c298ffab2b638b658f1c0f88103f272049d910",
+      "fr3_parallel_collision.py": "1f2b39c6b6e4af6e8d6b4e2bea08ce1ba07dbd3a4648b1d9dcc1d834cac69f85",
+      "fr3_row_acceptance.py": "aa088c657f20167cf59486e60a91566cb6f66e57ff77ae3389030675cac16e9a",
+      "fr3_surface_gripper.py": "07f80df5005d2182fa37410a6ad63b946d5a8693cf0c00847672caf3c7d1339b",
+      "fr3_trajectory.py": "65457ddae7fe91821e22e5b2fbbb24b62a1890d82cd0612955f56c9ef3a1acf9",
+      "fr3_vision.py": "b961b3f66d96571f98c15b390f6e61330fd5d2cc5065561b7cb9845ac552a5b3",
+      "fr3_vision_comparison.py": "b540fdbb45a5e7b4f4ebb84dbb839ab61cf0a248cff87a47604ddb4405469f0c",
+      "fr3_wrench.py": "57c69d49a56f404aadb76b0b6e65ab97b9a0ecb2b0066b8adca47e0f56b20758",
+      "fr3_wrist_ft.py": "058cace4d398f0c21fff86c0b945b5018ec32096d1effb2177206afd8a03fc5c",
+      "fr3_wrist_ft_analysis.py": "846415a08a5d5306f466172420e00b6d9a804d5653640fd497375eaf293da702",
+      "fr3_contact_skills.json": "6b84d30df63b92250c68c2bcbded2cb859a581c3c13521861e92104e98d3d655",
+      "fr3_four_wall_scene_config.json": "53bccaba12c78e028e6d0e625cd974f588587cf91e55f064c43a1b5487a61770"
+    },
+    "run_status": "STOPPED",
+    "slot_result": null,
+    "run_unexpected_contact_count": 0,
+    "first_collision": null,
+    "error": "upper_B_seam_pacing: B wrist envelope exceeded at tick 11438: [{'arm': 'left', 'force_N': 9.056696332007196, 'torque_Nm': 0.3946153703004485, 'wrench_world': [-8.97707614559585, -0.8371842821634488, 0.8573067152804974, -0.01047582154277853, -0.27381131405087694, -0.28396991379034503]}]",
+    "last_physx": {
+      "physics_step": 11438,
+      "native_step": 11440,
+      "loads_N": {
+        "cube_neighbor": 18.23550384093886,
+        "left_cup": 8.987884587814253,
+        "right_cup": 0.4181383352883104
+      },
+      "neighbor_by_path_N": {
+        "/World/Cube_14": 4.932216899541046,
+        "/World/Cube_15": 5.4303251701866175,
+        "/World/Cube_4": 7.231709665881995,
+        "/World/Cube_8": 0.6412521053292017
+      },
+      "tool_contact": {
+        "left": true,
+        "right": true
+      },
+      "attachments": {
+        "left": false,
+        "right": false
+      }
+    },
+    "side_cup_precontact_peak_step_load_N": 0.0,
+    "cup_contact_in_park": {
+      "samples": 0,
+      "peak_step_load_N": {}
+    },
+    "run_upper_plans": [
+      {
+        "phase": "upper_B_front_approach_transit",
+        "arm": [
+          "right"
+        ],
+        "samples": 543,
+        "duration_s": 4.5123106587584045,
+        "collision_check": {
+          "status": "CLEAR",
+          "samples_checked": 543,
+          "issues": []
+        },
+        "source": "online_planner"
+      },
+      {
+        "phase": "upper_B_side_high_transit",
+        "arm": [
+          "left"
+        ],
+        "samples": 682,
+        "duration_s": 5.672759184010299,
+        "collision_check": {
+          "status": "CLEAR",
+          "samples_checked": 682,
+          "issues": []
+        },
+        "source": "online_planner"
+      },
+      {
+        "phase": "upper_B_side_travel",
+        "arm": [
+          "left",
+          "right"
+        ],
+        "samples": 843,
+        "duration_s": 7.016666666666667,
+        "collision_check": {
+          "status": "CLEAR",
+          "samples_checked": 843,
+          "issues": []
+        },
+        "source": "Cartesian_quintic_with_force_overlay"
+      }
+    ],
+    "phases": [
+      {
+        "phase": "upper_seam_entry_checkpoint",
+        "status": "GROUNDED_POSE_RESTORED",
+        "sim_time_s": 1.2,
+        "wall_elapsed_s": 18.868690469000285,
+        "cube_position_m": [
+          0.1419880986213684,
+          1.0089342594146729,
+          0.9369999170303345
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -4.948236664858996e-08,
+          2.4655156494191033e-07,
+          -9.451984084307696e-08
+        ],
+        "cube_id": 10,
+        "slot": 4,
+        "source": {
+          "slot": 4,
+          "cube_id": 10,
+          "completed_transport": 1,
+          "source_step": 43699,
+          "source_event": {
+            "phase": "upper_B_seam_transport",
+            "status": "SETTLED_ON_LOWER_SUPPORT",
+            "sim_time_s": 364.15833333333336,
+            "wall_elapsed_s": 1309.0860174619993,
+            "cube_position_m": [
+              0.14198772609233856,
+              1.0089340209960938,
+              0.9370000958442688
+            ],
+            "cube_orientation_wxyz": [
+              1.0,
+              3.8585815098635123e-10,
+              2.078282363981998e-07,
+              0.00019795690604951233
+            ],
+            "cube_id": 10,
+            "arms": [
+              "left",
+              "right"
+            ],
+            "seam_center_x_m": 0.1301740030050278,
+            "lift_height_m": 0.01,
+            "rear_clearance_m": 0.0,
+            "end_center_x_m": 0.1421740030050278,
+            "max_vertical_balance_offset_per_arm_m": 0.00045,
+            "support_positive_frames": 60,
+            "support_load_fraction": 0.9999384050296383,
+            "support_samples": 60,
+            "settle_ticks": 60
+          },
+          "grounded_evidence": {
+            "reattained_RGB": {
+              "position_m": [
+                0.1420837938785553,
+                1.0087589025497437,
+                0.937
+              ],
+              "rotation_world": [
+                [
+                  1.0,
+                  -0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  1.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  1.0
+                ]
+              ],
+              "source": "rear_rgbd_square"
+            },
+            "opened_grippers": {
+              "left": false,
+              "right": false
+            }
+          }
+        },
+        "physx_reference": {
+          "physics_step": 144,
+          "native_step": 146,
+          "loads_N": {
+            "cube_neighbor": 12.259147355799385
+          },
+          "neighbor_by_path_N": {
+            "/World/Cube_14": 2.325112153776133,
+            "/World/Cube_4": 7.591062770225574,
+            "/World/Cube_5": 1.691523122135654,
+            "/World/Cube_6": 0.6514493096620244
+          },
+          "tool_contact": {
+            "left": false,
+            "right": false
+          },
+          "attachments": {
+            "left": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phase": "upper_B_strategy",
+        "status": "SELECTED",
+        "sim_time_s": 1.9,
+        "wall_elapsed_s": 19.898118707998947,
+        "cube_position_m": [
+          0.14198797941207886,
+          1.008933424949646,
+          0.9369997978210449
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -4.0554684943572283e-08,
+          1.4612979271078075e-07,
+          2.223308257498502e-07
+        ],
+        "cube_id": 10,
+        "contact_order": "side_then_rear",
+        "physx_reference": {
+          "physics_step": 228,
+          "native_step": 230,
+          "loads_N": {
+            "cube_neighbor": 12.267074797420898
+          },
+          "neighbor_by_path_N": {
+            "/World/Cube_14": 4.463346870616806,
+            "/World/Cube_4": 6.5287861693661124,
+            "/World/Cube_5": 1.1510908487254767,
+            "/World/Cube_6": 0.12385090871250413
+          },
+          "tool_contact": {
+            "left": false,
+            "right": false
+          },
+          "attachments": {
+            "left": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phase": "upper_B_rail",
+        "status": "RUNNING",
+        "sim_time_s": 1.9,
+        "wall_elapsed_s": 19.90567146199828,
+        "cube_position_m": [
+          0.14198797941207886,
+          1.008933424949646,
+          0.9369997978210449
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -4.0554684943572283e-08,
+          1.4612979271078075e-07,
+          2.223308257498502e-07
+        ],
+        "cube_id": 10,
+        "arm": "left",
+        "rail_y_m": 0.6,
+        "physx_reference": {
+          "physics_step": 228,
+          "native_step": 230,
+          "loads_N": {
+            "cube_neighbor": 12.267074797420898
+          },
+          "neighbor_by_path_N": {
+            "/World/Cube_14": 4.463346870616806,
+            "/World/Cube_4": 6.5287861693661124,
+            "/World/Cube_5": 1.1510908487254767,
+            "/World/Cube_6": 0.12385090871250413
+          },
+          "tool_contact": {
+            "left": false,
+            "right": false
+          },
+          "attachments": {
+            "left": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phase": "upper_B_rail",
+        "status": "RUNNING",
+        "sim_time_s": 8.566666666666666,
+        "wall_elapsed_s": 31.952774404999218,
+        "cube_position_m": [
+          0.14198817312717438,
+          1.0089343786239624,
+          0.9369998574256897
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -1.750128717503685e-07,
+          2.565275565302727e-07,
+          -8.239094739792563e-09
+        ],
+        "cube_id": 10,
+        "arm": "right",
+        "rail_y_m": 0.6,
+        "physx_reference": {
+          "physics_step": 1028,
+          "native_step": 1030,
+          "loads_N": {
+            "cube_neighbor": 12.241728394583939
+          },
+          "neighbor_by_path_N": {
+            "/World/Cube_14": 4.7086303308608475,
+            "/World/Cube_4": 6.41099622705983,
+            "/World/Cube_5": 0.8643609657884073,
+            "/World/Cube_6": 0.2577408708748535
+          },
+          "tool_contact": {
+            "left": false,
+            "right": false
+          },
+          "attachments": {
+            "left": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phase": "upper_B_front_approach",
+        "status": "RRTCONNECT_FROM_MEASUREMENT",
+        "sim_time_s": 15.433333333333334,
+        "wall_elapsed_s": 44.22799499199755,
+        "cube_position_m": [
+          0.14198820292949677,
+          1.008934736251831,
+          0.9369999766349792
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -3.27811847000703e-07,
+          3.633804794844764e-07,
+          5.268412905934383e-08
+        ],
+        "cube_id": 10,
+        "arm": "right",
+        "measured_tcp_m": [
+          0.402710983210628,
+          0.7096015487005998,
+          1.2552820535132503
+        ],
+        "measured_tcp_rotation": [
+          [
+            -0.707106765728567,
+            0.7071067966445251,
+            -5.960464488069148e-08
+          ],
+          [
+            0.7071067966445265,
+            0.707106765728568,
+            3.225440128969926e-11
+          ],
+          [
+            4.216965497035927e-08,
+            -4.212404220134386e-08,
+            -0.999999999999998
+          ]
+        ],
+        "measured_joints_rad": [
+          8.6681824912338e-12,
+          -0.7853981852531433,
+          -1.9597323763775876e-11,
+          -2.356194496154785,
+          -4.611242984675634e-11,
+          1.5707963705062866,
+          0.7853981852531433
+        ],
+        "measured_rail_y_m": 0.6,
+        "observed_cube_m": [
+          0.1420668587088585,
+          1.0087589025497437,
+          0.937
+        ],
+        "precontact_tcp_m": [
+          0.1420668587088585,
+          0.9257589025497437,
+          0.9410000000000001
+        ],
+        "planning_margin_m": 0.002,
+        "approach_lift_m": 0.0,
+        "physx_reference": {
+          "physics_step": 1852,
+          "native_step": 1854,
+          "loads_N": {
+            "cube_neighbor": 12.270497971259784
+          },
+          "neighbor_by_path_N": {
+            "/World/Cube_14": 7.162639321760379,
+            "/World/Cube_4": 1.165430124965665,
+            "/World/Cube_5": 3.4905806556349077,
+            "/World/Cube_6": 0.4518478688988324
+          },
+          "tool_contact": {
+            "left": false,
+            "right": false
+          },
+          "attachments": {
+            "left": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phase": "upper_B_front_approach",
+        "status": "PRECONTACT_REACHED",
+        "sim_time_s": 19.958333333333332,
+        "wall_elapsed_s": 57.219521225997596,
+        "cube_position_m": [
+          0.14198803901672363,
+          1.0089342594146729,
+          0.9369998574256897
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -8.76617463063667e-08,
+          1.7939295560154278e-07,
+          2.423861360512092e-07
+        ],
+        "cube_id": 10,
+        "arm": "right",
+        "measured_tcp_m": [
+          0.14222572236739447,
+          0.9253544600253643,
+          0.9415061572084261
+        ],
+        "position_error_m": 0.000667088103005525,
+        "orientation_matrix_error": 0.002447607422834927,
+        "ik_seed_source": "measured_joints",
+        "physx_reference": {
+          "physics_step": 2395,
+          "native_step": 2397,
+          "loads_N": {
+            "cube_neighbor": 12.258610074498694
+          },
+          "neighbor_by_path_N": {
+            "/World/Cube_14": 5.738708646969426,
+            "/World/Cube_4": 5.329546616414017,
+            "/World/Cube_5": 1.0302996996327058,
+            "/World/Cube_6": 0.1600551114825462
+          },
+          "tool_contact": {
+            "left": false,
+            "right": false
+          },
+          "attachments": {
+            "left": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phase": "upper_B_front_touch",
+        "status": "TACTILE_APPROACH",
+        "sim_time_s": 19.958333333333332,
+        "wall_elapsed_s": 57.22923858200011,
+        "cube_position_m": [
+          0.14198803901672363,
+          1.0089342594146729,
+          0.9369998574256897
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -8.76617463063667e-08,
+          1.7939295560154278e-07,
+          2.423861360512092e-07
+        ],
+        "cube_id": 10,
+        "physx_reference": {
+          "physics_step": 2395,
+          "native_step": 2397,
+          "loads_N": {
+            "cube_neighbor": 12.258610074498694
+          },
+          "neighbor_by_path_N": {
+            "/World/Cube_14": 5.738708646969426,
+            "/World/Cube_4": 5.329546616414017,
+            "/World/Cube_5": 1.0302996996327058,
+            "/World/Cube_6": 0.1600551114825462
+          },
+          "tool_contact": {
+            "left": false,
+            "right": false
+          },
+          "attachments": {
+            "left": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phase": "upper_B_side_high",
+        "status": "RRTCONNECT_FROM_MEASUREMENT",
+        "sim_time_s": 34.34166666666667,
+        "wall_elapsed_s": 91.73853944899747,
+        "cube_position_m": [
+          0.14198791980743408,
+          1.0089346170425415,
+          0.9369999170303345
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          2.760239397048281e-07,
+          2.7614980524504062e-08,
+          -7.654753630959021e-07
+        ],
+        "cube_id": 10,
+        "arm": "left",
+        "measured_tcp_m": [
+          -0.18350787624244813,
+          0.7096015485949507,
+          1.2552820665414666
+        ],
+        "measured_tcp_rotation": [
+          [
+            0.7071067656745216,
+            -0.7071067966985706,
+            5.960464488066634e-08
+          ],
+          [
+            -0.7071067966985719,
+            -0.7071067656745231,
+            -3.081336003651818e-10
+          ],
+          [
+            4.23647310238559e-08,
+            -4.192896615637402e-08,
+            -0.9999999999999984
+          ]
+        ],
+        "measured_joints_rad": [
+          -7.631955484255215e-11,
+          -0.7853981852531433,
+          -7.497136592093945e-12,
+          -2.356194496154785,
+          -3.134354997769151e-10,
+          1.5707963705062866,
+          0.7853981852531433
+        ],
+        "measured_rail_y_m": 0.6,
+        "observed_cube_m": [
+          0.1420668587088585,
+          1.0088647920862788,
+          0.937
+        ],
+        "precontact_tcp_m": [
+          0.055066858708858496,
+          0.9798647920862787,
+          1.11
+        ],
+        "planning_margin_m": 0.002,
+        "approach_lift_m": 0.0,
+        "physx_reference": {
+          "physics_step": 4121,
+          "native_step": 4123,
+          "loads_N": {
+            "cube_neighbor": 12.394744965717598,
+            "right_cup": 0.27378542348853185
+          },
+          "neighbor_by_path_N": {
+            "/World/Cube_14": 5.823080143893213,
+            "/World/Cube_4": 4.2060554749346375,
+            "/World/Cube_5": 2.0180236548192068,
+            "/World/Cube_6": 0.3475856920705403
+          },
+          "tool_contact": {
+            "left": false,
+            "right": true
+          },
+          "attachments": {
+            "left": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phase": "upper_B_side_high",
+        "status": "PRECONTACT_REACHED",
+        "sim_time_s": 40.025,
+        "wall_elapsed_s": 110.4173844759971,
+        "cube_position_m": [
+          0.14198751747608185,
+          1.0089352130889893,
+          0.937000036239624
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          3.6533727154619555e-08,
+          -1.6250676537765685e-07,
+          -2.4475787085975753e-06
+        ],
+        "cube_id": 10,
+        "arm": "left",
+        "measured_tcp_m": [
+          0.05506059665871954,
+          0.9795098559219947,
+          1.1103369959933713
+        ],
+        "position_error_m": 0.0004894744053950951,
+        "orientation_matrix_error": 0.0016389415428039332,
+        "ik_seed_source": "posture_hint",
+        "physx_reference": {
+          "physics_step": 4803,
+          "native_step": 4805,
+          "loads_N": {
+            "cube_neighbor": 12.374041434291046,
+            "right_cup": 0.6935392320250515
+          },
+          "neighbor_by_path_N": {
+            "/World/Cube_14": 6.630872832612431,
+            "/World/Cube_4": 2.765043005347764,
+            "/World/Cube_5": 2.8539301565620745,
+            "/World/Cube_6": 0.12419543976877803
+          },
+          "tool_contact": {
+            "left": false,
+            "right": true
+          },
+          "attachments": {
+            "left": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phase": "upper_B_side_descent",
+        "status": "RUNNING",
+        "sim_time_s": 40.025,
+        "wall_elapsed_s": 110.42892534099883,
+        "cube_position_m": [
+          0.14198751747608185,
+          1.0089352130889893,
+          0.937000036239624
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          3.6533727154619555e-08,
+          -1.6250676537765685e-07,
+          -2.4475787085975753e-06
+        ],
+        "cube_id": 10,
+        "physx_reference": {
+          "physics_step": 4803,
+          "native_step": 4805,
+          "loads_N": {
+            "cube_neighbor": 12.374041434291046,
+            "right_cup": 0.6935392320250515
+          },
+          "neighbor_by_path_N": {
+            "/World/Cube_14": 6.630872832612431,
+            "/World/Cube_4": 2.765043005347764,
+            "/World/Cube_5": 2.8539301565620745,
+            "/World/Cube_6": 0.12419543976877803
+          },
+          "tool_contact": {
+            "left": false,
+            "right": true
+          },
+          "attachments": {
+            "left": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phase": "upper_B_side_standoff",
+        "status": "RUNNING",
+        "sim_time_s": 44.025,
+        "wall_elapsed_s": 121.31273394799791,
+        "cube_position_m": [
+          0.1419876664876938,
+          1.008934736251831,
+          0.9369999170303345
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -2.6442291911621396e-08,
+          -4.231601380411121e-08,
+          -2.274830194437527e-06
+        ],
+        "cube_id": 10,
+        "physx_reference": {
+          "physics_step": 5283,
+          "native_step": 5285,
+          "loads_N": {
+            "cube_neighbor": 12.325536992360604,
+            "right_cup": 0.636824704710287
+          },
+          "neighbor_by_path_N": {
+            "/World/Cube_14": 4.6767334453774385,
+            "/World/Cube_4": 5.9623656235651605,
+            "/World/Cube_5": 1.5753924020104697,
+            "/World/Cube_6": 0.11104552140753499
+          },
+          "tool_contact": {
+            "left": false,
+            "right": true
+          },
+          "attachments": {
+            "left": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phase": "upper_B_side_drive",
+        "status": "COMPLIANT",
+        "sim_time_s": 46.025,
+        "wall_elapsed_s": 126.67835254499732,
+        "cube_position_m": [
+          0.14198771119117737,
+          1.0089352130889893,
+          0.9369997382164001
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -2.1520013149256556e-07,
+          1.8331431306251034e-07,
+          -1.7822499103203882e-06
+        ],
+        "cube_id": 10,
+        "arm": "left",
+        "relative_stiffness": 0.35,
+        "physx_reference": {
+          "physics_step": 5523,
+          "native_step": 5525,
+          "loads_N": {
+            "cube_neighbor": 12.16355337412601,
+            "right_cup": 0.6254623644136204
+          },
+          "neighbor_by_path_N": {
+            "/World/Cube_14": 3.551876354032738,
+            "/World/Cube_4": 6.296043852346767,
+            "/World/Cube_5": 2.217645887286391,
+            "/World/Cube_6": 0.09798728046011519
+          },
+          "tool_contact": {
+            "left": false,
+            "right": true
+          },
+          "attachments": {
+            "left": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phase": "upper_B_side_touch",
+        "status": "TACTILE_APPROACH",
+        "sim_time_s": 46.025,
+        "wall_elapsed_s": 126.68776153900035,
+        "cube_position_m": [
+          0.14198771119117737,
+          1.0089352130889893,
+          0.9369997382164001
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -2.1520013149256556e-07,
+          1.8331431306251034e-07,
+          -1.7822499103203882e-06
+        ],
+        "cube_id": 10,
+        "physx_reference": {
+          "physics_step": 5523,
+          "native_step": 5525,
+          "loads_N": {
+            "cube_neighbor": 12.16355337412601,
+            "right_cup": 0.6254623644136204
+          },
+          "neighbor_by_path_N": {
+            "/World/Cube_14": 3.551876354032738,
+            "/World/Cube_4": 6.296043852346767,
+            "/World/Cube_5": 2.217645887286391,
+            "/World/Cube_6": 0.09798728046011519
+          },
+          "tool_contact": {
+            "left": false,
+            "right": true
+          },
+          "attachments": {
+            "left": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phase": "upper_B_side",
+        "status": "RUNNING",
+        "sim_time_s": 57.78333333333333,
+        "wall_elapsed_s": 159.17049901800056,
+        "cube_position_m": [
+          0.14198890328407288,
+          1.008935809135437,
+          0.9369998574256897
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -1.2021704378639697e-06,
+          1.550207684886118e-06,
+          -2.9803288725815946e-06
+        ],
+        "cube_id": 10,
+        "arm": "left",
+        "contact_target": "/World/Cube_8",
+        "estimated_start_gap_m": 0.012184726655688788,
+        "physx_reference": {
+          "physics_step": 6934,
+          "native_step": 6936,
+          "loads_N": {
+            "cube_neighbor": 12.441093474692213,
+            "left_cup": 1.396533474350752,
+            "right_cup": 0.5949567630936254
+          },
+          "neighbor_by_path_N": {
+            "/World/Cube_14": 4.4147155434126235,
+            "/World/Cube_4": 5.803169645399685,
+            "/World/Cube_5": 2.2232082858799034
+          },
+          "tool_contact": {
+            "left": true,
+            "right": true
+          },
+          "attachments": {
+            "left": false,
+            "right": false
+          }
+        }
+      },
+      {
+        "phase": "upper_B_seam_pacing",
+        "status": "COMPLETED",
+        "sim_time_s": 65.39166666666667,
+        "wall_elapsed_s": 191.0368815059992,
+        "cube_position_m": [
+          0.15059024095535278,
+          1.0098373889923096,
+          0.9369997978210449
+        ],
+        "cube_orientation_wxyz": [
+          0.9999995231628418,
+          -2.806240217978484e-07,
+          5.715578936360544e-06,
+          0.0010566387791186571
+        ],
+        "cube_id": 10,
+        "held_or_unloaded_ticks": 0,
+        "motion_phase": "upper_B_side",
+        "peak_axial_lead_m": 0.0013802811185747998,
+        "peak_downward_load_N": 0.5488687991009146,
+        "physx_reference": {
+          "physics_step": 7847,
+          "native_step": 7849,
+          "loads_N": {
+            "cube_neighbor": 10.561290913476512,
+            "left_cup": 4.970719317972743,
+            "right_cup": 0.6863498769267666
+          },
+          "neighbor_by_path_N": {
+            "/World/Cube_14": 5.3138859947004615,
+            "/World/Cube_4": 5.247404918776049
+          },
+          "tool_contact": {
+            "left": true,
+            "right": true
+          },
+          "attachments": {
+            "left": false,
+            "right": false
+          }
+        }
+      }
+    ],
+    "wrist_stop": {
+      "physics_step": 11438,
+      "time_s": 95.33333830535412,
+      "cube_id": 10,
+      "phase": "upper_B_seam_pacing",
+      "violations": [
+        {
+          "arm": "left",
+          "force_N": 9.056696332007196,
+          "torque_Nm": 0.3946153703004485,
+          "wrench_world": [
+            -8.97707614559585,
+            -0.8371842821634488,
+            0.8573067152804974,
+            -0.01047582154277853,
+            -0.27381131405087694,
+            -0.28396991379034503
+          ]
+        }
+      ]
+    },
+    "first_neighbor_step_above_point_one_N": 11430,
+    "loaded_samples_before_trip": [
+      [
+        11430,
+        0.161851956010202
+      ],
+      [
+        11431,
+        0.2839678407363732
+      ],
+      [
+        11432,
+        0.3070246758653157
+      ],
+      [
+        11433,
+        0.4521305218237651
+      ],
+      [
+        11434,
+        0.5277385251951948
+      ],
+      [
+        11435,
+        0.5279594743376154
+      ],
+      [
+        11436,
+        0.560690815071445
+      ],
+      [
+        11437,
+        0.5879592786912711
+      ],
+      [
+        11438,
+        0.6412521053292017
+      ]
+    ]
   }
 }

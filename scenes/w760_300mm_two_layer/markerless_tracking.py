@@ -472,8 +472,20 @@ def install(source, *, observed_skills=False):
                     if (front_engaged and stationary and measured_force >= contact_threshold
                             and negative_gap_limit <= near <= near_limit):
 ''' + source[end:]
-        source = replace_once(source, '                        force_headroom = (not probing or np.linalg.norm(',
-                              '                        force_headroom = (not steer_front or np.linalg.norm(')
+        source = replace_once(source, '''                        force_headroom = (not probing or np.linalg.norm(
+                            last_force_sample[side]["tcp_gravity_corrected_world"][:3]) < 7.8)
+                        if front_engaged and force_headroom:
+                            position[axis] += sign * increment''',
+                              '''                        if steer_front:
+                            resultant = float(np.linalg.norm(last_force_sample[side]["tcp_gravity_corrected_world"][:3]))
+                            if resultant > 7.4:
+                                # Remove stored drive compression instead of holding the high-force command.
+                                relief = min(.0012, .0012 * (resultant - 7.4)) / 120
+                                position[axis] -= sign * relief
+                            elif front_engaged:
+                                position[axis] += sign * increment
+                        elif front_engaged:
+                            position[axis] += sign * increment''')
     source = replace_once(source, '        def save_upper_checkpoint(next_slot, placement=None):',
                           '        def save_upper_checkpoint(next_slot, placement=None, *, filename=None):')
     source = replace_once(source, '            name = "upper_landing_checkpoint.json" if placement else "upper_row_checkpoint.json"',
