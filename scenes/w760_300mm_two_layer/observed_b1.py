@@ -168,6 +168,13 @@ def install(source):
             new = (f'move_to_observed_precontact({arm}, {point}, {attitude}, '
                    f'f"{{prefix}}_{{{arm}}}_{"approach_high" if point == "high" else "approach"}", {seed})')
             source = source.replace(old, new)
+    source = replace_once(source, '''            def approach_front():
+''', '''            from observed_b1 import FACE_STANDOFF_M
+
+            def approach_front():
+''')
+    source = replace_once(source, '                destination = center + rotation @ front_offset - .008 * front_normal',
+                          '                destination = center + rotation @ front_offset - FACE_STANDOFF_M * front_normal')
     source = replace_once(source, '''                q = cartesian_joint_target(support_side, seed, destination, rotation @ nominal_rotation,
                                            retarget_guide=True)
                 record("upper_B_front_approach", "RUNNING", arm=support_side)
@@ -183,12 +190,14 @@ def install(source):
     source = replace_once(source, '''                        cartesian_move(support_side, target, 5., f"{prefix}_straight_descent")''',
                           '''                        cartesian_move(support_side, target, 5., f"{prefix}_straight_descent")
                         wait_for_precontact(support_side, target, front_rotation, f"{prefix}_straight_descent")''')
-    # Both staging heights are relative to the currently observed box and wall tops.
+    # Keep the high waypoint relative to the fitted box and end the descent at the common standoff.
     source = replace_once(source, '''                high_point = np.asarray(reference["tcp_m"][push_side][0], dtype=float)
                 stand = abs(float(reference["tcp_m"][push_side][-1][0]
-                                  - reference["cube_centers_m"][-1][0])) - half''', '''                reference_tips = np.asarray(reference["tcp_m"][push_side], dtype=float)
+                                  - reference["cube_centers_m"][-1][0])) - half
+                if slot == 3:
+                    stand = .005''', '''                reference_tips = np.asarray(reference["tcp_m"][push_side], dtype=float)
                 reference_centers = np.asarray(reference["cube_centers_m"], dtype=float)
-                stand = abs(float(reference_tips[-1, 0] - reference_centers[-1, 0])) - half
+                stand = FACE_STANDOFF_M
                 high_z = center[2] + reference_tips[0, 2] - reference_centers[0, 2]''')
     source = replace_once(source, '''                high_point[:2] = destination[:2]
                 q = cartesian_joint_target(push_side, high_seed, high_point, side_rotation, retarget_guide=True)
@@ -197,6 +206,17 @@ def install(source):
                 high_point[2] = high_z
                 move_to_observed_precontact(push_side, high_point, side_rotation, "upper_B_side_high",
                                             high_seed, prefer_hint=True)''')
+    source = replace_once(source, '''                    align_contact_plane(push_side, aligned, pitch_phase)
+                    record(pitch_phase, "ALIGNED_BEFORE_CONTACT"''', '''                    align_contact_plane(push_side, aligned, pitch_phase)
+                    side_rotation = aligned
+                    record(pitch_phase, "ALIGNED_BEFORE_CONTACT"''')
+    source = replace_once(source, '''                if stand > .007:
+                    cartesian_move(push_side, face + .007 * normal, 2., "upper_B_side_standoff")''',
+                          '''                position, error, frame_error = wait_for_precontact(
+                    push_side, destination, side_rotation, "upper_B_side_descent")
+                record("upper_B_side_descent", "PRECONTACT_REACHED", arm=push_side,
+                       precontact_tcp_m=destination.tolist(), measured_tcp_m=position.tolist(),
+                       position_error_m=error, orientation_matrix_error=frame_error, standoff_m=stand)''')
     source = replace_once(source, '''                    reapproach_q = applied_targets[support_side].copy()
                     record("B2_stage_camera_clear", "RUNNING", arm=support_side)
                     move({support_side: np.asarray(CONFIG["fr3"]["official_start_q_rad"])})''',
