@@ -1,0 +1,473 @@
+{
+  "scope": "F1–F5 历史空载接近与低速贴面基准",
+  "method": {
+    "phase_boundary": "以报告中接近开始事件后的第一步至 TACTILE_APPROACH 事件当步为被检查的预贴面阶段。报告中后置对齐在冷启动预接触验证之后时也包括对齐。部分旧流程曾提前开放吸盘接触权限，数据按物理冲量另判。",
+    "actual_tcp_normal_gap_mm": "逐步日志末帧实测 TCP 减去同一步 PhysX 真值箱心后投影到箱面外法向，扣除箱半宽 75 mm。并非吸盘几何最小间隙或整机最小余量。",
+    "positive_impulses": "同一物理步求和当前进场臂各吸盘对活动箱体的新鲜法向冲量。阈值为 1e-12 N·s，等效单步峰值以 120 Hz 乘回 N。",
+    "force_at_confirm": "运行报告中 K1 寻触确认事件的腕力值和指令行程。"
+  },
+  "recommended_checkpoints": {
+    "F1": {
+      "landing_checkpoint": "scenes/w760_300mm_two_layer/validation/observed/front1_from_observed_rear5_landing_checkpoint.json",
+      "sha256": "abf99d3636e5dfe0d07684a45b0d92467fe7270de996dbc59e67982cbff18e91"
+    },
+    "F2": {
+      "landing_checkpoint": "scenes/w760_300mm_two_layer/validation/observed/front2_landing_checkpoint.json",
+      "sha256": "5ccfc0a44a31aff68047e205eff90cfccac36984dcc5cdffabf8669d6a98d931"
+    },
+    "F3": {
+      "landing_checkpoint": "scenes/w760_300mm_two_layer/validation/observed/front3_landing_checkpoint.json",
+      "sha256": "ad795cd26a8798ad6536d71f4ebf42dfa9555712d8ed73c67b436d40587261ba"
+    },
+    "F4": {
+      "landing_checkpoint": "scenes/w760_300mm_two_layer/validation/observed/front4_landing_checkpoint.json",
+      "sha256": "951d043d0a3302a2ba4ea1bd3d4e1af7fcda458617a2a32614ed9e214b38f43a"
+    },
+    "F5": {
+      "landing_checkpoint": "scenes/w760_300mm_two_layer/validation/observed/front5_landing_checkpoint.json",
+      "sha256": "d9aa01d25026b461524d120cf03cdb1300f5255dfa3a312a7ead7ac045351ca3"
+    }
+  },
+  "runs": [
+    {
+      "slot": "F1",
+      "source_report_from_repository": "../runs/observed-20261127/front1-from-observed-rear5-b1-hint/runner_report.json",
+      "source_report_sha256": "2b55a6a7f81545e8eaea2ec5eb6d336913469371499c90f9b0d29b2a73d15be2",
+      "runner_snapshot_sha256": "6265df688fad819d14ab6ab82d9b96789da2c3b232df3e2ae09b30f8b1326ae2",
+      "runner_family": "observed_skills",
+      "status": "PASS_FRONT_SLOT",
+      "slot_placement_confirmed": true,
+      "run_unexpected_contacts": 0,
+      "approaches": [
+        {
+          "arm": "left",
+          "face": "front",
+          "start_phase": "front_B1_observed_approach",
+          "end_phase": "B1_touch",
+          "nominal_final_gap_mm": 7,
+          "actual_tcp_normal_gap_before_touch_mm": 6.341699,
+          "first_and_last_physics_step": [
+            1576,
+            2566
+          ],
+          "fresh_native_contact_reference_frames": 991,
+          "premature_cup_impulse_frames": 0,
+          "premature_physical_touch_frames": 0,
+          "peak_precontact_cup_impulse_equivalent_N": 0.0,
+          "k1_seek_command_mm": 5.645,
+          "k1_confirmed_wrist_force_N": 1.132074,
+          "precontact_reached_event_tick": 2566,
+          "precontact_tcp_fit_error_mm": 0.922267,
+          "ik_seed_source": "posture_hint"
+        },
+        {
+          "arm": "right",
+          "face": "right",
+          "start_phase": "B2_high_approach",
+          "end_phase": "B2_touch",
+          "nominal_final_gap_mm": 7,
+          "actual_tcp_normal_gap_before_touch_mm": 7.116349,
+          "first_and_last_physics_step": [
+            4532,
+            7253
+          ],
+          "fresh_native_contact_reference_frames": 2722,
+          "premature_cup_impulse_frames": 0,
+          "premature_physical_touch_frames": 0,
+          "peak_precontact_cup_impulse_equivalent_N": 0.0,
+          "k1_seek_command_mm": 7.055,
+          "k1_confirmed_wrist_force_N": 2.36176
+        },
+        {
+          "arm": "left",
+          "face": "front",
+          "start_phase": "B2_staged_observed_reapproach",
+          "end_phase": "B2_stage_rear_touch",
+          "nominal_final_gap_mm": 7,
+          "actual_tcp_normal_gap_before_touch_mm": 6.044096,
+          "first_and_last_physics_step": [
+            19334,
+            20646
+          ],
+          "fresh_native_contact_reference_frames": 1313,
+          "premature_cup_impulse_frames": 0,
+          "premature_physical_touch_frames": 0,
+          "peak_precontact_cup_impulse_equivalent_N": 0.0,
+          "k1_seek_command_mm": 6.11,
+          "k1_confirmed_wrist_force_N": 1.862601,
+          "precontact_reached_event_tick": 20405,
+          "precontact_tcp_fit_error_mm": 0.988137,
+          "ik_seed_source": "posture_hint"
+        }
+      ]
+    },
+    {
+      "slot": "F2",
+      "source_report_from_repository": "../dual-fr3-vision-square-single/runs/markerless_full/front2_stationary_seal_01/runner_report.json",
+      "source_report_sha256": "4139ecf9fd6ab53afc73deea7bdfa42825e8bc918a17c630a760f784d6e7ffca",
+      "runner_snapshot_sha256": "d156eeeb9c03836fa786266489a3fdfa91139b5d25427adea28268ec03e6f74e",
+      "runner_family": "earlier_markerless_runner",
+      "status": "PASS_FRONT_SLOT",
+      "slot_placement_confirmed": true,
+      "run_unexpected_contacts": 0,
+      "approaches": [
+        {
+          "arm": "right",
+          "face": "front",
+          "start_phase": "B1_contact",
+          "end_phase": "B1_touch",
+          "nominal_final_gap_mm": 7,
+          "actual_tcp_normal_gap_before_touch_mm": 7.245017,
+          "first_and_last_physics_step": [
+            23000,
+            24655
+          ],
+          "fresh_native_contact_reference_frames": 1656,
+          "premature_cup_impulse_frames": 0,
+          "premature_physical_touch_frames": 0,
+          "peak_precontact_cup_impulse_equivalent_N": 0.0,
+          "k1_seek_command_mm": 5.6,
+          "k1_confirmed_wrist_force_N": 0.708909
+        },
+        {
+          "arm": "left",
+          "face": "left",
+          "start_phase": "B2_high_approach",
+          "end_phase": "B2_touch",
+          "nominal_final_gap_mm": 7,
+          "actual_tcp_normal_gap_before_touch_mm": 7.529116,
+          "first_and_last_physics_step": [
+            26612,
+            28536
+          ],
+          "fresh_native_contact_reference_frames": 1925,
+          "premature_cup_impulse_frames": 0,
+          "premature_physical_touch_frames": 0,
+          "peak_precontact_cup_impulse_equivalent_N": 0.0,
+          "k1_seek_command_mm": 7.555,
+          "k1_confirmed_wrist_force_N": 2.352009
+        },
+        {
+          "arm": "right",
+          "face": "front",
+          "start_phase": "B2_stage_camera_clear",
+          "end_phase": "B2_stage_rear_touch",
+          "nominal_final_gap_mm": 7,
+          "actual_tcp_normal_gap_before_touch_mm": 5.668229,
+          "first_and_last_physics_step": [
+            40266,
+            43878
+          ],
+          "fresh_native_contact_reference_frames": 3613,
+          "premature_cup_impulse_frames": 0,
+          "premature_physical_touch_frames": 0,
+          "peak_precontact_cup_impulse_equivalent_N": 0.0,
+          "k1_seek_command_mm": 5.62,
+          "k1_confirmed_wrist_force_N": 0.80085
+        }
+      ]
+    },
+    {
+      "slot": "F3",
+      "source_report_from_repository": "../runs/observed-20261127/front3-landing-resume/runner_report.json",
+      "source_report_sha256": "77f56f00c743f09f1f114c71a6e2466a7015e195c47213222aeaab2cf73fe5fe",
+      "runner_snapshot_sha256": "6a23cc63d3ffc592a373267012523289b6f6358aa97e075eba6e363b88b89782",
+      "runner_family": "observed_skills",
+      "status": "PASS_FRONT_SLOT",
+      "slot_placement_confirmed": true,
+      "run_unexpected_contacts": 0,
+      "approaches": [
+        {
+          "arm": "right",
+          "face": "right",
+          "start_phase": "front_3_right_approach",
+          "end_phase": "front_3_right_touch",
+          "nominal_final_gap_mm": 7,
+          "actual_tcp_normal_gap_before_touch_mm": 7.701542,
+          "first_and_last_physics_step": [
+            1581,
+            2891
+          ],
+          "fresh_native_contact_reference_frames": 1311,
+          "premature_cup_impulse_frames": 0,
+          "premature_physical_touch_frames": 0,
+          "peak_precontact_cup_impulse_equivalent_N": 0.0,
+          "k1_seek_command_mm": 7.685,
+          "k1_confirmed_wrist_force_N": 3.060944,
+          "precontact_reached_event_tick": 2891,
+          "precontact_tcp_fit_error_mm": 0.990119,
+          "ik_seed_source": "posture_hint"
+        },
+        {
+          "arm": "left",
+          "face": "front",
+          "start_phase": "front_3_left_approach",
+          "end_phase": "front_3_left_touch",
+          "nominal_final_gap_mm": 7,
+          "actual_tcp_normal_gap_before_touch_mm": 5.682141,
+          "first_and_last_physics_step": [
+            8054,
+            8674
+          ],
+          "fresh_native_contact_reference_frames": 621,
+          "premature_cup_impulse_frames": 0,
+          "premature_physical_touch_frames": 0,
+          "peak_precontact_cup_impulse_equivalent_N": 0.0,
+          "k1_seek_command_mm": 5.72,
+          "k1_confirmed_wrist_force_N": 0.606207,
+          "precontact_reached_event_tick": 8674,
+          "precontact_tcp_fit_error_mm": 0.791945,
+          "ik_seed_source": "measured_joints"
+        }
+      ]
+    },
+    {
+      "slot": "F4",
+      "source_report_from_repository": "../runs/observed-20261127/front4/runner_report.json",
+      "source_report_sha256": "a69a6ffda3e835f1e3a6a305180414e1a9f1f6da3c5789ce4df4df56358d1881",
+      "runner_snapshot_sha256": "6a23cc63d3ffc592a373267012523289b6f6358aa97e075eba6e363b88b89782",
+      "runner_family": "observed_skills",
+      "status": "STOPPED",
+      "slot_placement_confirmed": true,
+      "run_unexpected_contacts": 0,
+      "approaches": [
+        {
+          "arm": "left",
+          "face": "left",
+          "start_phase": "front_4_left_approach_high",
+          "end_phase": "front_4_left_touch",
+          "nominal_final_gap_mm": 7,
+          "actual_tcp_normal_gap_before_touch_mm": 7.176525,
+          "first_and_last_physics_step": [
+            24365,
+            25258
+          ],
+          "fresh_native_contact_reference_frames": 894,
+          "premature_cup_impulse_frames": 0,
+          "premature_physical_touch_frames": 0,
+          "peak_precontact_cup_impulse_equivalent_N": 0.0,
+          "k1_seek_command_mm": 7.13,
+          "k1_confirmed_wrist_force_N": 3.208913,
+          "precontact_reached_event_tick": 25258,
+          "precontact_tcp_fit_error_mm": 0.949216,
+          "ik_seed_source": "measured_joints"
+        },
+        {
+          "arm": "right",
+          "face": "front",
+          "start_phase": "front_4_right_approach_high",
+          "end_phase": "front_4_right_touch",
+          "nominal_final_gap_mm": 7,
+          "actual_tcp_normal_gap_before_touch_mm": 6.214875,
+          "first_and_last_physics_step": [
+            28566,
+            29872
+          ],
+          "fresh_native_contact_reference_frames": 1307,
+          "premature_cup_impulse_frames": 0,
+          "premature_physical_touch_frames": 0,
+          "peak_precontact_cup_impulse_equivalent_N": 0.0,
+          "k1_seek_command_mm": 6.26,
+          "k1_confirmed_wrist_force_N": 0.521457
+        }
+      ],
+      "stop_reason": "Front center insertion slot is only 0.15097 m wide"
+    },
+    {
+      "slot": "F5",
+      "source_report_from_repository": "../runs/observed-20261127/front5/runner_report.json",
+      "source_report_sha256": "8ab5a82a2666451ea28e768027e80192c40f703a318349c1ac6d96ede521613f",
+      "runner_snapshot_sha256": "6a23cc63d3ffc592a373267012523289b6f6358aa97e075eba6e363b88b89782",
+      "runner_family": "observed_skills",
+      "status": "PASS_FRONT_ROW",
+      "slot_placement_confirmed": true,
+      "run_unexpected_contacts": 0,
+      "approaches": [
+        {
+          "arm": "left",
+          "face": "front",
+          "start_phase": "front_B1_observed_approach",
+          "end_phase": "B1_touch",
+          "nominal_final_gap_mm": 7,
+          "actual_tcp_normal_gap_before_touch_mm": 7.090438,
+          "first_and_last_physics_step": [
+            18829,
+            19540
+          ],
+          "fresh_native_contact_reference_frames": 712,
+          "premature_cup_impulse_frames": 0,
+          "premature_physical_touch_frames": 0,
+          "peak_precontact_cup_impulse_equivalent_N": 0.0,
+          "k1_seek_command_mm": 6.85,
+          "k1_confirmed_wrist_force_N": 0.809182,
+          "precontact_reached_event_tick": 19540,
+          "precontact_tcp_fit_error_mm": 0.789143,
+          "ik_seed_source": "measured_joints"
+        }
+      ]
+    }
+  ],
+  "f2_newer_observed_skills_summary": {
+    "source": "scenes/w760_300mm_two_layer/validation/observed/front2_progress.json",
+    "source_sha256": "155e17e5ce9f1d24efbf36c41cf398ded17933b98d2cf2d88bf40cf9f45b8e12",
+    "status": "PASS_FRONT_SLOT",
+    "cube_unexpected_contacts": 0,
+    "coverage": "此版记录带 PRECONTACT_REACHED 的实测位姿。整段原始冲量使用独立的旧版 markerless 运行复核。",
+    "approach_endpoints": [
+      {
+        "phase": "front_B1_observed_approach",
+        "arm": "right",
+        "nominal_gap_mm": 7,
+        "actual_tcp_normal_gap_mm": 7.118799,
+        "pose_error_mm": 0.959836,
+        "native_tool_contact_at_event": false
+      },
+      {
+        "phase": "B2_staged_observed_reapproach",
+        "arm": "right",
+        "nominal_gap_mm": 7,
+        "actual_tcp_normal_gap_mm": 6.080209,
+        "pose_error_mm": 0.942298,
+        "native_tool_contact_at_event": false
+      }
+    ]
+  },
+  "a_pickup_approaches": [
+    {
+      "slot": "F1",
+      "source_report_from_repository": "../runs/observed-20261127/front1-from-observed-rear5/runner_report.json",
+      "source_report_sha256": "b1dd550ef211e80a8f0f1f4446f06d5af683ed8e1e1f863a71f82647e5c7940d",
+      "nominal_final_gap_mm": 7,
+      "approach_faces": {
+        "left": "left",
+        "right": "right"
+      },
+      "actual_normal_gaps_mm": {
+        "left": 7.146699,
+        "right": 7.145273
+      },
+      "first_and_last_physics_step": [
+        265,
+        2252
+      ],
+      "premature_cup_impulse_frames": {
+        "left": 0,
+        "right": 0
+      },
+      "both_grippers_closed": true,
+      "k1_seek_command_mm": {
+        "left": 7.191337,
+        "right": 7.203247
+      }
+    },
+    {
+      "slot": "F2",
+      "source_report_from_repository": "../dual-fr3-vision-square-single/runs/markerless_full/front2_stationary_seal_01/runner_report.json",
+      "source_report_sha256": "4139ecf9fd6ab53afc73deea7bdfa42825e8bc918a17c630a760f784d6e7ffca",
+      "nominal_final_gap_mm": 7,
+      "approach_faces": {
+        "left": "back",
+        "right": "front"
+      },
+      "actual_normal_gaps_mm": {
+        "left": 8.034018,
+        "right": 6.252481
+      },
+      "first_and_last_physics_step": [
+        481,
+        3844
+      ],
+      "premature_cup_impulse_frames": {
+        "left": 0,
+        "right": 0
+      },
+      "both_grippers_closed": true,
+      "k1_seek_command_mm": {
+        "left": 8.087069,
+        "right": 6.330821
+      }
+    },
+    {
+      "slot": "F3",
+      "source_report_from_repository": "../runs/observed-20261127/front3-shared-grasp/runner_report.json",
+      "source_report_sha256": "ce45fefd49613219cc931328aadcdcac08e01bd90638e5d223c58cd9028587b7",
+      "nominal_final_gap_mm": 7,
+      "approach_faces": {
+        "left": "left",
+        "right": "right"
+      },
+      "actual_normal_gaps_mm": {
+        "left": 7.148928,
+        "right": 7.13915
+      },
+      "first_and_last_physics_step": [
+        481,
+        3589
+      ],
+      "premature_cup_impulse_frames": {
+        "left": 0,
+        "right": 0
+      },
+      "both_grippers_closed": true,
+      "k1_seek_command_mm": {
+        "left": 7.192722,
+        "right": 7.182781
+      }
+    },
+    {
+      "slot": "F4",
+      "source_report_from_repository": "../runs/observed-20261127/front4/runner_report.json",
+      "source_report_sha256": "a69a6ffda3e835f1e3a6a305180414e1a9f1f6da3c5789ce4df4df56358d1881",
+      "nominal_final_gap_mm": 7,
+      "approach_faces": {
+        "left": "back",
+        "right": "front"
+      },
+      "actual_normal_gaps_mm": {
+        "left": 8.033412,
+        "right": 6.252725
+      },
+      "first_and_last_physics_step": [
+        481,
+        3831
+      ],
+      "premature_cup_impulse_frames": {
+        "left": 0,
+        "right": 0
+      },
+      "both_grippers_closed": true,
+      "k1_seek_command_mm": {
+        "left": 8.089878,
+        "right": 6.332322
+      }
+    },
+    {
+      "slot": "F5",
+      "source_report_from_repository": "../runs/observed-20261127/front5/runner_report.json",
+      "source_report_sha256": "8ab5a82a2666451ea28e768027e80192c40f703a318349c1ac6d96ede521613f",
+      "nominal_final_gap_mm": 7,
+      "approach_faces": {
+        "left": "left",
+        "right": "right"
+      },
+      "actual_normal_gaps_mm": {
+        "left": 7.147216,
+        "right": 7.145386
+      },
+      "first_and_last_physics_step": [
+        481,
+        2488
+      ],
+      "premature_cup_impulse_frames": {
+        "left": 0,
+        "right": 0
+      },
+      "both_grippers_closed": true,
+      "k1_seek_command_mm": {
+        "left": 7.192007,
+        "right": 7.201121
+      }
+    }
+  ],
+  "f5_optional_lateral_alignment": "本次历史通过走直推，未执行可选右腕侧向微调，因此没有该分支的实测留距。"
+}

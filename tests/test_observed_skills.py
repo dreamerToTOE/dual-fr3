@@ -71,6 +71,10 @@ def test_full_runner_assembles_with_observed_skills():
     assert 'hint = None if slot == 1 else role["rail_hold_push_q"]' in generated
     assert "continuation_issues=validation" in generated
     assert "use_cache=not continuation" in generated
+    lateral_precontact = generated.index('cartesian_move(push_side, final_precontact')
+    lateral_arrival = generated.index("wait_for_precontact(push_side, final_precontact", lateral_precontact)
+    lateral_permission = generated.index("allowed_contacts.add(push_side)", lateral_precontact)
+    assert lateral_precontact < lateral_arrival < lateral_permission
 
 
 def test_front_bearing_requires_motion_before_the_loaded_stall():

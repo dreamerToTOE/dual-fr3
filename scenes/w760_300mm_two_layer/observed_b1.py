@@ -173,6 +173,16 @@ def install(source):
                 record("upper_B_front_approach", "RUNNING", arm=support_side)
                 move({support_side: q})''', '''                move_to_observed_precontact(support_side, destination, rotation @ nominal_rotation,
                                             "upper_B_front_approach", seed)''')
+    source = replace_once(source, '''                allowed_contacts.add(push_side)
+                cartesian_move(push_side, b2_center + outward * (half + .007) + [0, 0, active_height],
+                               2.0, "B2_suction_plane_approach")''',
+                          '''                final_precontact = b2_center + outward * (half + .007) + [0, 0, active_height]
+                cartesian_move(push_side, final_precontact, 2.0, "B2_suction_plane_approach")
+                wait_for_precontact(push_side, final_precontact, b2_rotation, "B2_suction_plane_approach")
+                allowed_contacts.add(push_side)''')
+    source = replace_once(source, '''                        cartesian_move(support_side, target, 5., f"{prefix}_straight_descent")''',
+                          '''                        cartesian_move(support_side, target, 5., f"{prefix}_straight_descent")
+                        wait_for_precontact(support_side, target, front_rotation, f"{prefix}_straight_descent")''')
     # Both staging heights are relative to the currently observed box and wall tops.
     source = replace_once(source, '''                high_point = np.asarray(reference["tcp_m"][push_side][0], dtype=float)
                 stand = abs(float(reference["tcp_m"][push_side][-1][0]

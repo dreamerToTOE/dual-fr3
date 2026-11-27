@@ -1,0 +1,629 @@
+{
+  "scene": "w760_300mm_two_layer",
+  "date": "2026-11-27",
+  "scope": "F1–F5 from individual landing checkpoints, normally through last K1 contact",
+  "method": "Project measured TCP to the sampled PhysX face normal. Inspect each frame of the recorded contact-free approach window for that moving cup; ignore allowed contacts of the other, holding wrist. K1 checks wrist force and is compared with PhysX.",
+  "trials": [
+    {
+      "run": "f1",
+      "checkpoint": "front1_from_observed_rear5_landing_checkpoint.json",
+      "checkpoint_sha256": "abf99d3636e5dfe0d07684a45b0d92467fe7270de996dbc59e67982cbff18e91",
+      "source_report": "front-row-k0-1127-VnOSSZ/f1/runner_report.json",
+      "source_report_sha256": "45f04e6bb095c7609c64530f8c32c014107e5a80ddf53b5dd7cac9b72857e20f",
+      "source_runner_snapshot_sha256": "cce53cbd130f7a24f4c0ac45a0f578737786129635d6ef80fa38d4762fd54b8d",
+      "source_contact_reference_sha256": "2017bc1cad5a0574eb4202844e5c59476d7e7abb6fd0103745d67a1d917b51d6",
+      "status": "PASS_FRONT_K0_PROBE",
+      "error": null,
+      "unexpected_contact_count": 0,
+      "approaches": [
+        {
+          "arm": "left",
+          "face": "front",
+          "nominal_gap_mm": 7,
+          "actual_normal_gap_mm": 6.341699146926463,
+          "tactile_phase": "B1_touch",
+          "k0_reference_window_first_last_step": [
+            199,
+            2566
+          ],
+          "k0_audit": {
+            "frames": 2368,
+            "touches": 0,
+            "impulses": 0,
+            "peak_impulse_Ns": 0.0
+          },
+          "tactile_goal_reached": true,
+          "physx_loaded_on_confirmation": true,
+          "tactile_seek_command_travel_mm": 5.644999999999854,
+          "tactile_wrist_normal_force_N": 1.1320743987735413,
+          "passed": true
+        },
+        {
+          "arm": "right",
+          "face": "right_side",
+          "nominal_gap_mm": 7,
+          "actual_normal_gap_mm": 7.116368492521882,
+          "tactile_phase": "B2_touch",
+          "k0_reference_window_first_last_step": [
+            4532,
+            7253
+          ],
+          "k0_audit": {
+            "frames": 2722,
+            "touches": 0,
+            "impulses": 0,
+            "peak_impulse_Ns": 0.0
+          },
+          "tactile_goal_reached": true,
+          "physx_loaded_on_confirmation": true,
+          "tactile_seek_command_travel_mm": 7.054999999999796,
+          "tactile_wrist_normal_force_N": 2.4279310609480955,
+          "passed": true
+        },
+        {
+          "arm": "left",
+          "face": "front",
+          "nominal_gap_mm": 7,
+          "actual_normal_gap_mm": 6.056221328619257,
+          "tactile_phase": "B2_stage_rear_touch",
+          "k0_reference_window_first_last_step": [
+            17974,
+            20684
+          ],
+          "k0_audit": {
+            "frames": 2711,
+            "touches": 0,
+            "impulses": 0,
+            "peak_impulse_Ns": 0.0
+          },
+          "tactile_goal_reached": true,
+          "physx_loaded_on_confirmation": true,
+          "tactile_seek_command_travel_mm": 6.119999999999835,
+          "tactile_wrist_normal_force_N": 1.840003211779002,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "run": "f2",
+      "checkpoint": "front2_landing_checkpoint.json",
+      "checkpoint_sha256": "5ccfc0a44a31aff68047e205eff90cfccac36984dcc5cdffabf8669d6a98d931",
+      "source_report": "front-row-k0-1127-VnOSSZ/f2/runner_report.json",
+      "source_report_sha256": "08ac3cf35564e69348d9f4887ad5c9bc2844be797b73ab897ba9b8358cd53934",
+      "source_runner_snapshot_sha256": "cce53cbd130f7a24f4c0ac45a0f578737786129635d6ef80fa38d4762fd54b8d",
+      "source_contact_reference_sha256": "260080214234b3ef8af98952e6094b0ea67819fb696da0e807bc7912f7997285",
+      "status": "PASS_FRONT_K0_PROBE",
+      "error": null,
+      "unexpected_contact_count": 0,
+      "approaches": [
+        {
+          "arm": "right",
+          "face": "front",
+          "nominal_gap_mm": 7,
+          "actual_normal_gap_mm": 7.118799419132918,
+          "tactile_phase": "B1_touch",
+          "k0_reference_window_first_last_step": [
+            415,
+            3236
+          ],
+          "k0_audit": {
+            "frames": 2822,
+            "touches": 0,
+            "impulses": 0,
+            "peak_impulse_Ns": 0.0
+          },
+          "tactile_goal_reached": true,
+          "physx_loaded_on_confirmation": true,
+          "tactile_seek_command_travel_mm": 6.444999999999822,
+          "tactile_wrist_normal_force_N": 0.7702539841291877,
+          "passed": true
+        },
+        {
+          "arm": "left",
+          "face": "left_side",
+          "nominal_gap_mm": 7,
+          "actual_normal_gap_mm": 7.497045798781437,
+          "tactile_phase": "B2_touch",
+          "k0_reference_window_first_last_step": [
+            5362,
+            7286
+          ],
+          "k0_audit": {
+            "frames": 1925,
+            "touches": 0,
+            "impulses": 0,
+            "peak_impulse_Ns": 0.0
+          },
+          "tactile_goal_reached": true,
+          "physx_loaded_on_confirmation": true,
+          "tactile_seek_command_travel_mm": 7.524999999999777,
+          "tactile_wrist_normal_force_N": 2.426901858534547,
+          "passed": true
+        },
+        {
+          "arm": "right",
+          "face": "front",
+          "nominal_gap_mm": 7,
+          "actual_normal_gap_mm": 5.641202746499929,
+          "tactile_phase": "B2_stage_rear_touch",
+          "k0_reference_window_first_last_step": [
+            18211,
+            21752
+          ],
+          "k0_audit": {
+            "frames": 3542,
+            "touches": 0,
+            "impulses": 0,
+            "peak_impulse_Ns": 0.0
+          },
+          "tactile_goal_reached": true,
+          "physx_loaded_on_confirmation": true,
+          "tactile_seek_command_travel_mm": 5.699999999999852,
+          "tactile_wrist_normal_force_N": 1.224690865062395,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "run": "f3",
+      "checkpoint": "front3_landing_checkpoint.json",
+      "checkpoint_sha256": "ad795cd26a8798ad6536d71f4ebf42dfa9555712d8ed73c67b436d40587261ba",
+      "source_report": "front-row-k0-1127-VnOSSZ/f3/runner_report.json",
+      "source_report_sha256": "e411426450b7e58df1f379805e2e49a9be7229d355d3a2ec682f6435bb3e9542",
+      "source_runner_snapshot_sha256": "cce53cbd130f7a24f4c0ac45a0f578737786129635d6ef80fa38d4762fd54b8d",
+      "source_contact_reference_sha256": "606f289f35ff83a7a3c1e64d940c37a218bdfc39e3c50c67db99f53f3ac9acbb",
+      "status": "INTERRUPTED_AFTER_SIDE_ALIGNMENT",
+      "error": null,
+      "unexpected_contact_count": null,
+      "approaches": [
+        {
+          "arm": "right",
+          "face": "right_side",
+          "nominal_gap_mm": 7,
+          "actual_normal_gap_mm": 7.70155063342795,
+          "tactile_phase": "front_3_right_touch",
+          "k0_reference_window_first_last_step": [
+            679,
+            2891
+          ],
+          "k0_audit": {
+            "frames": 2213,
+            "touches": 0,
+            "impulses": 0,
+            "peak_impulse_Ns": 0.0
+          },
+          "tactile_goal_reached": true,
+          "physx_loaded_on_confirmation": true,
+          "tactile_seek_command_travel_mm": 7.684999999999771,
+          "tactile_wrist_normal_force_N": 3.0328364291570713,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "run": "f3-aligned-retry",
+      "checkpoint": "front3_aligned_k0_checkpoint.json",
+      "checkpoint_sha256": "d0964ce0bacdb7da13b3d5122f84a1afaff6686af33ee21cfd994d745958f21d",
+      "source_report": "front-row-k0-1127-VnOSSZ/f3-aligned-retry/runner_report.json",
+      "source_report_sha256": "40623549f73a16be4852b4e02869e5856ca02b629348b1db78a67773bc2e4cf3",
+      "source_runner_snapshot_sha256": "cba994db35c0374c80317be809988a232ae58e27531b7d54cd3834dc77234ac4",
+      "source_contact_reference_sha256": "bebeee8670e21e4194c6739ef8418193c42278e7129770531e3bef9420b3aaf6",
+      "status": "PASS_FRONT_K0_PROBE",
+      "error": null,
+      "unexpected_contact_count": 0,
+      "approaches": [
+        {
+          "arm": "left",
+          "face": "front",
+          "nominal_gap_mm": 7,
+          "actual_normal_gap_mm": 5.682753962905338,
+          "tactile_phase": "front_3_left_touch",
+          "k0_reference_window_first_last_step": [
+            679,
+            1801
+          ],
+          "k0_audit": {
+            "frames": 1123,
+            "touches": 0,
+            "impulses": 0,
+            "peak_impulse_Ns": 0.0
+          },
+          "tactile_goal_reached": true,
+          "physx_loaded_on_confirmation": true,
+          "tactile_seek_command_travel_mm": 5.72999999999985,
+          "tactile_wrist_normal_force_N": 0.7960411328122101,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "run": "f4",
+      "checkpoint": "front4_landing_checkpoint.json",
+      "checkpoint_sha256": "951d043d0a3302a2ba4ea1bd3d4e1af7fcda458617a2a32614ed9e214b38f43a",
+      "source_report": "front-row-k0-1127-VnOSSZ/f4/runner_report.json",
+      "source_report_sha256": "c9b7a73483e10451c82edeb7c107f29e97dcdc93d67ee5a74e914088be32e7ec",
+      "source_runner_snapshot_sha256": "cce53cbd130f7a24f4c0ac45a0f578737786129635d6ef80fa38d4762fd54b8d",
+      "source_contact_reference_sha256": "d0fa6f2378112a8e6cc7ffe98a7f2b766b3123cc9d42ccccc0aad23d68520ab6",
+      "status": "PASS_FRONT_K0_PROBE",
+      "error": null,
+      "unexpected_contact_count": 0,
+      "approaches": [
+        {
+          "arm": "left",
+          "face": "left_side",
+          "nominal_gap_mm": 7,
+          "actual_normal_gap_mm": 7.176263521892406,
+          "tactile_phase": "front_4_left_touch",
+          "k0_reference_window_first_last_step": [
+            679,
+            2473
+          ],
+          "k0_audit": {
+            "frames": 1795,
+            "touches": 0,
+            "impulses": 0,
+            "peak_impulse_Ns": 0.0
+          },
+          "tactile_goal_reached": true,
+          "physx_loaded_on_confirmation": true,
+          "tactile_seek_command_travel_mm": 7.134999999999794,
+          "tactile_wrist_normal_force_N": 3.389008339858527,
+          "passed": true
+        },
+        {
+          "arm": "right",
+          "face": "front",
+          "nominal_gap_mm": 7,
+          "actual_normal_gap_mm": 6.197708533267579,
+          "tactile_phase": "front_4_right_touch",
+          "k0_reference_window_first_last_step": [
+            5681,
+            7088
+          ],
+          "k0_audit": {
+            "frames": 1408,
+            "touches": 0,
+            "impulses": 0,
+            "peak_impulse_Ns": 0.0
+          },
+          "tactile_goal_reached": true,
+          "physx_loaded_on_confirmation": true,
+          "tactile_seek_command_travel_mm": 6.23999999999983,
+          "tactile_wrist_normal_force_N": 0.4840778073277005,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "run": "f5",
+      "checkpoint": "front5_landing_checkpoint.json",
+      "checkpoint_sha256": "d9aa01d25026b461524d120cf03cdb1300f5255dfa3a312a7ead7ac045351ca3",
+      "source_report": "front-row-k0-1127-VnOSSZ/f5/runner_report.json",
+      "source_report_sha256": "ba78b600e4b281e8386c0a1601f5606889674ee1a59d2446fbaa51aa5d8e5edc",
+      "source_runner_snapshot_sha256": "cce53cbd130f7a24f4c0ac45a0f578737786129635d6ef80fa38d4762fd54b8d",
+      "source_contact_reference_sha256": "ef752137940393d3339b8419257c04fad441e4e7ea4bb48edb59d42694440615",
+      "status": "PASS_FRONT_K0_PROBE",
+      "error": null,
+      "unexpected_contact_count": 0,
+      "approaches": [
+        {
+          "arm": "left",
+          "face": "front",
+          "nominal_gap_mm": 7,
+          "actual_normal_gap_mm": 7.0903479517887416,
+          "tactile_phase": "B1_touch",
+          "k0_reference_window_first_last_step": [
+            415,
+            1515
+          ],
+          "k0_audit": {
+            "frames": 1101,
+            "touches": 0,
+            "impulses": 0,
+            "peak_impulse_Ns": 0.0
+          },
+          "tactile_goal_reached": true,
+          "physx_loaded_on_confirmation": true,
+          "tactile_seek_command_travel_mm": 6.854999999999805,
+          "tactile_wrist_normal_force_N": 0.8796174760561809,
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "f3_initial_resume": {
+    "status": "STOPPED",
+    "error": "front_floor_landing_resume: no stable fresh square observation",
+    "cause": "The generic landing search was centered at the old pre-alignment landing.",
+    "change": "The probe now uses the last D455 fit as its search hint and waits for fresh observations.",
+    "source_report": "front-row-k0-1127-VnOSSZ/f3-aligned/runner_report.json",
+    "source_report_sha256": "a11d2fca1f7547dbad0adf57ce7fea09660f8848ef3cebbaf6b63a1136819552"
+  },
+  "measured_collision_replay": {
+    "scene": "W760_H300_rear5_front5_upper5_side_v1",
+    "method": {
+      "type": "offline replay of measured configurations, not pre-execution validation",
+      "joint_angles": "Measured bilateral joint angles q_rad from wrench stream",
+      "rails": "Same-run rail stations from B1 rail preparation or approach measurements",
+      "environment": "Scene static boxes and all published positions and rotations in latest neighbor observation",
+      "active_cube": "Synchronized per-frame PhysX box position and rotation from reference stream",
+      "geometry": "Existing FR3CollisionChecker, native Lula forward kinematics, official FR3 collision spheres and tool OBBs",
+      "reported_gap": "Collision model clearance, distinct from axial TCP-to-face gap",
+      "threshold_mm": 2
+    },
+    "segments": {
+      "F1_historical_final_lateral": {
+        "source_directory_relative_to_work": "runs/observed-20261127/front1-from-observed-rear5-b1-hint",
+        "source_sha256": {
+          "runner_report.json": "2b55a6a7f81545e8eaea2ec5eb6d336913469371499c90f9b0d29b2a73d15be2",
+          "runner_snapshot.py": "6265df688fad819d14ab6ab82d9b96789da2c3b232df3e2ae09b30f8b1326ae2",
+          "wrench.jsonl.gz": "646f1a7436efc45514f90eca9e9c58708c0d4bb46c9034aa06b14a5e86cb5d9d",
+          "contact_states/reference.jsonl.gz": "39708e94eeda59703ef6de0d50d30df3c5c9915c2a6583a89a3bc4e2c1ab8b4f"
+        },
+        "source_status": "PASS_FRONT_SLOT",
+        "neighbor_count": 5,
+        "cups_permitted_during_replay": [
+          "left"
+        ],
+        "steps": 241,
+        "start": 7013,
+        "end": 7253,
+        "violations_at_2mm": 0,
+        "first_violations": [],
+        "last_pose_minimum_margin_mm": 7.071208953857421,
+        "last_pose_limiting_pair": [
+          {
+            "a": "right/cup_r1_c1",
+            "b": "Cube",
+            "clearance_m": 0.007071447597735453,
+            "kind": "tool_obstacle"
+          }
+        ],
+        "path_limiting_clearance": {
+          "minimum_clearance_mm": 7.0712475965431505,
+          "step": 7253,
+          "closest_pairs": [
+            {
+              "a": "right/cup_r2_c1",
+              "b": "Cube",
+              "clearance_m": 0.007071247596543151,
+              "kind": "tool_obstacle"
+            }
+          ]
+        }
+      },
+      "F1_historical_reacquired_plane_alignment": {
+        "source_directory_relative_to_work": "runs/observed-20261127/front1-from-observed-rear5-b1-hint",
+        "source_sha256": {
+          "runner_report.json": "2b55a6a7f81545e8eaea2ec5eb6d336913469371499c90f9b0d29b2a73d15be2",
+          "runner_snapshot.py": "6265df688fad819d14ab6ab82d9b96789da2c3b232df3e2ae09b30f8b1326ae2",
+          "wrench.jsonl.gz": "646f1a7436efc45514f90eca9e9c58708c0d4bb46c9034aa06b14a5e86cb5d9d",
+          "contact_states/reference.jsonl.gz": "39708e94eeda59703ef6de0d50d30df3c5c9915c2a6583a89a3bc4e2c1ab8b4f"
+        },
+        "source_status": "PASS_FRONT_SLOT",
+        "neighbor_count": 5,
+        "cups_permitted_during_replay": [],
+        "steps": 242,
+        "start": 20405,
+        "end": 20646,
+        "violations_at_2mm": 0,
+        "first_violations": [],
+        "last_pose_minimum_margin_mm": 6.02383613586426,
+        "last_pose_limiting_pair": [
+          {
+            "a": "left/cup_r2_c1",
+            "b": "Cube",
+            "clearance_m": 0.0060238752533730705,
+            "kind": "tool_obstacle"
+          }
+        ],
+        "path_limiting_clearance": {
+          "minimum_clearance_mm": 6.023870081920249,
+          "step": 20548,
+          "closest_pairs": [
+            {
+              "a": "left/cup_r2_c1",
+              "b": "Cube",
+              "clearance_m": 0.006023870081920249,
+              "kind": "tool_obstacle"
+            }
+          ]
+        }
+      },
+      "F2_fresh_final_lateral": {
+        "source_directory_relative_to_work": "runs/front-row-k0-1127-VnOSSZ/f2",
+        "source_sha256": {
+          "runner_report.json": "08ac3cf35564e69348d9f4887ad5c9bc2844be797b73ab897ba9b8358cd53934",
+          "runner_snapshot.py": "cce53cbd130f7a24f4c0ac45a0f578737786129635d6ef80fa38d4762fd54b8d",
+          "wrench.jsonl.gz": "673e51202e6cca5babb44fe16db1053a3c3bca2c9a1e974a8acd21cee8a03ade",
+          "contact_states/reference.jsonl.gz": "260080214234b3ef8af98952e6094b0ea67819fb696da0e807bc7912f7997285"
+        },
+        "source_status": "PASS_FRONT_K0_PROBE",
+        "neighbor_count": 6,
+        "cups_permitted_during_replay": [
+          "right"
+        ],
+        "steps": 241,
+        "start": 7046,
+        "end": 7286,
+        "violations_at_2mm": 0,
+        "first_violations": [],
+        "last_pose_minimum_margin_mm": 7.445335388183594,
+        "last_pose_limiting_pair": [
+          {
+            "a": "left/cup_r1_c2",
+            "b": "Cube",
+            "clearance_m": 0.007445370005347174,
+            "kind": "tool_obstacle"
+          }
+        ],
+        "path_limiting_clearance": {
+          "minimum_clearance_mm": 7.416190542553353,
+          "step": 7072,
+          "closest_pairs": [
+            {
+              "a": "left/cup_r1_c1",
+              "b": "Cube",
+              "clearance_m": 0.0074161905425533525,
+              "kind": "tool_obstacle"
+            }
+          ]
+        }
+      },
+      "F2_fresh_reacquired_plane_alignment": {
+        "source_directory_relative_to_work": "runs/front-row-k0-1127-VnOSSZ/f2",
+        "source_sha256": {
+          "runner_report.json": "08ac3cf35564e69348d9f4887ad5c9bc2844be797b73ab897ba9b8358cd53934",
+          "runner_snapshot.py": "cce53cbd130f7a24f4c0ac45a0f578737786129635d6ef80fa38d4762fd54b8d",
+          "wrench.jsonl.gz": "673e51202e6cca5babb44fe16db1053a3c3bca2c9a1e974a8acd21cee8a03ade",
+          "contact_states/reference.jsonl.gz": "260080214234b3ef8af98952e6094b0ea67819fb696da0e807bc7912f7997285"
+        },
+        "source_status": "PASS_FRONT_K0_PROBE",
+        "neighbor_count": 6,
+        "cups_permitted_during_replay": [],
+        "steps": 242,
+        "start": 21511,
+        "end": 21752,
+        "violations_at_2mm": 0,
+        "first_violations": [],
+        "last_pose_minimum_margin_mm": 5.597686767578126,
+        "last_pose_limiting_pair": [
+          {
+            "a": "right/cup_r2_c1",
+            "b": "Cube",
+            "clearance_m": 0.005597714231205642,
+            "kind": "tool_obstacle"
+          }
+        ],
+        "path_limiting_clearance": {
+          "minimum_clearance_mm": 5.597570361612417,
+          "step": 21612,
+          "closest_pairs": [
+            {
+              "a": "right/cup_r2_c1",
+              "b": "Cube",
+              "clearance_m": 0.005597570361612417,
+              "kind": "tool_obstacle"
+            }
+          ]
+        }
+      },
+      "F4_fresh_final_front_descent": {
+        "source_directory_relative_to_work": "runs/front-row-k0-1127-VnOSSZ/f4",
+        "source_sha256": {
+          "runner_report.json": "c9b7a73483e10451c82edeb7c107f29e97dcdc93d67ee5a74e914088be32e7ec",
+          "runner_snapshot.py": "cce53cbd130f7a24f4c0ac45a0f578737786129635d6ef80fa38d4762fd54b8d",
+          "wrench.jsonl.gz": "fd6d5bdd29b8c8d247de915a10a5a9506f878f1564c4bbfc46e792fe3fdef450",
+          "contact_states/reference.jsonl.gz": "d0fa6f2378112a8e6cc7ffe98a7f2b766b3123cc9d42ccccc0aad23d68520ab6"
+        },
+        "source_status": "PASS_FRONT_K0_PROBE",
+        "neighbor_count": 8,
+        "cups_permitted_during_replay": [],
+        "steps": 729,
+        "start": 6360,
+        "end": 7088,
+        "violations_at_2mm": 0,
+        "first_violations": [],
+        "last_pose_minimum_margin_mm": 6.182193756103516,
+        "last_pose_limiting_pair": [
+          {
+            "a": "right/cup_r1_c1",
+            "b": "Cube",
+            "clearance_m": 0.006182210533510382,
+            "kind": "tool_obstacle"
+          }
+        ],
+        "path_limiting_clearance": {
+          "minimum_clearance_mm": 6.166294359609109,
+          "step": 6881,
+          "closest_pairs": [
+            {
+              "a": "right/cup_r2_c1",
+              "b": "Cube",
+              "clearance_m": 0.006166294359609109,
+              "kind": "tool_obstacle"
+            }
+          ]
+        }
+      },
+      "F1_fresh_final_lateral": {
+        "source_directory_relative_to_work": "runs/front-row-k0-1127-VnOSSZ/f1",
+        "source_sha256": {
+          "runner_report.json": "45f04e6bb095c7609c64530f8c32c014107e5a80ddf53b5dd7cac9b72857e20f",
+          "runner_snapshot.py": "cce53cbd130f7a24f4c0ac45a0f578737786129635d6ef80fa38d4762fd54b8d",
+          "wrench.jsonl.gz": "06d7f6a79408816171b0eeee3bade14da9d6e728b5bf288e9a1d9c52f25d4a60",
+          "contact_states/reference.jsonl.gz": "2017bc1cad5a0574eb4202844e5c59476d7e7abb6fd0103745d67a1d917b51d6"
+        },
+        "source_status": "PASS_FRONT_K0_PROBE",
+        "neighbor_count": 5,
+        "cups_permitted_during_replay": [
+          "left"
+        ],
+        "steps": 241,
+        "start": 7013,
+        "end": 7253,
+        "violations_at_2mm": 0,
+        "first_violations": [],
+        "last_pose_minimum_margin_mm": 7.071256637573241,
+        "last_pose_limiting_pair": [
+          {
+            "a": "right/cup_r1_c1",
+            "b": "Cube",
+            "clearance_m": 0.007071459262644242,
+            "kind": "tool_obstacle"
+          }
+        ],
+        "path_limiting_clearance": {
+          "minimum_clearance_mm": 7.07125926145194,
+          "step": 7253,
+          "closest_pairs": [
+            {
+              "a": "right/cup_r2_c1",
+              "b": "Cube",
+              "clearance_m": 0.00707125926145194,
+              "kind": "tool_obstacle"
+            }
+          ]
+        }
+      },
+      "F1_fresh_reacquired_plane_alignment": {
+        "source_directory_relative_to_work": "runs/front-row-k0-1127-VnOSSZ/f1",
+        "source_sha256": {
+          "runner_report.json": "45f04e6bb095c7609c64530f8c32c014107e5a80ddf53b5dd7cac9b72857e20f",
+          "runner_snapshot.py": "cce53cbd130f7a24f4c0ac45a0f578737786129635d6ef80fa38d4762fd54b8d",
+          "wrench.jsonl.gz": "06d7f6a79408816171b0eeee3bade14da9d6e728b5bf288e9a1d9c52f25d4a60",
+          "contact_states/reference.jsonl.gz": "2017bc1cad5a0574eb4202844e5c59476d7e7abb6fd0103745d67a1d917b51d6"
+        },
+        "source_status": "PASS_FRONT_K0_PROBE",
+        "neighbor_count": 5,
+        "cups_permitted_during_replay": [],
+        "steps": 242,
+        "start": 20443,
+        "end": 20684,
+        "violations_at_2mm": 0,
+        "first_violations": [],
+        "last_pose_minimum_margin_mm": 6.03771209716797,
+        "last_pose_limiting_pair": [
+          {
+            "a": "left/cup_r2_c1",
+            "b": "Cube",
+            "clearance_m": 0.0060377485700334466,
+            "kind": "tool_obstacle"
+          }
+        ],
+        "path_limiting_clearance": {
+          "minimum_clearance_mm": 6.037669903938184,
+          "step": 20551,
+          "closest_pairs": [
+            {
+              "a": "left/cup_r2_c1",
+              "b": "Cube",
+              "clearance_m": 0.006037669903938184,
+              "kind": "tool_obstacle"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
