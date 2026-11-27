@@ -370,6 +370,19 @@ def install(source, *, observed_skills=False):
                         move({push_side: cartesian_joint_target(push_side, seed, target, side_tool, retarget_guide=True)})''')
     source = replace_once(source, 'preload = (1.0 if final_u2 else 3.25) if slot == 2 else 1.25',
                           'preload = (1.0 if final_u2 else 3.25) if slot in (1, 2) else 1.25')
+    if observed_skills:
+        source = replace_once(source, '                span = .012',
+                              '''                # Extend U1's lift to one third of a box width over the outer support.
+                span = 2. * half / 3. if slot == 1 else .012''')
+        source = replace_once(source, '                entry_x, exit_x = seam_x - push_sign * span, seam_x + push_sign * span',
+                              '''                entry_x, exit_x = seam_x - push_sign * span, seam_x + push_sign * span
+                if slot == 1 and push_sign * (exit_x - center[0]) <= .004:
+                    return''')
+        source = replace_once(source, '                    if not 0. < push_sign * (exit_x - entry_x) <= .14:',
+                              '''                    max_transfer_m = .18 if slot == 1 else .14
+                    if not 0. < push_sign * (exit_x - entry_x) <= max_transfer_m:''')
+        source = replace_once(source, '                if slot in (1, 2, 3, 4) and completed_transport not in (1, 2):',
+                              '                if slot == 1 or (slot in (2, 3, 4) and completed_transport not in (1, 2)):')
     u1_slide_preload_N = 2.0 if observed_skills else 3.25
     source = replace_once(source, '                push_to_boundary(push_side, 0, push_sign, "upper_B_side", side_target, follow=support_side)',
                           f'''                if slot == 1:
