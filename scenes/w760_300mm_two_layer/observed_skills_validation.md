@@ -154,6 +154,10 @@ U1 就位后同实例继续。U2 通过供料观察、左右竖直面侧吸、�
 
 同一次运行中，右腕根据相机重新拟合的箱位接近并确认后墙，左腕侧向寻触前对箱体的原始冲量为零。两次跨缝分别落在 X = 167.38 mm 和 254.77 mm，两次均有 60/60 帧下层承载记录。落稳后重新确认后墙，PhysX 在两次确认时分别测得 4.63 N 和 3.31 N。最后确认右墙的同一物理步，PhysX 测得右墙 5.46 N、后墙 1.34 N。两腕同时分离，右腕和左腕分别外撤 4.06 mm、3.87 mm 时确认 S0。此时下层承载 12.27 N。双臂归位的 742 个采样点通过避障检查，归位期间两杯对箱体的原始接触冲量为零。最终箱心距目标 0.21 mm，保存了上层第 3 箱的入口。 [U2 就位证据](validation/observed/upper2_progress.json) · [第一次跨缝断点](validation/observed/upper2_after_seam1_checkpoint.json) · [第二次跨缝断点](validation/observed/upper2_after_seam2_checkpoint.json) · [上层第 3 箱入口](validation/observed/upper2_complete_checkpoint.json)
 
+### U3 上层第 3 箱
+
+U2 就位后同实例继续。按相机观测建立侧吸，成功起吊。带载导轨启动约 1.8 s 后脱封，当时箱体仅沿导轨前进约 1 mm。最后可用腕力样本对应左、右腕承担约 8.88 N 和 3.44 N 的竖向载荷。PhysX 未记录非预期接触。复验将 U2 已验证的共用抓取参考接入 U3，继续用观测箱位及实测腕姿生成运动。 [U3 首次运行证据](validation/observed/upper3_progress.json)
+
 ### U5 上层第 5 箱
 
 从带 14 个已码箱的实测 landing 断点出发。相机拟合的两侧槽隙为 4.54 mm 和 3.92 mm，左臂根据观测和实测关节生成 RRTConnect 路径，实测 TCP 误差达到 0.966 mm 后开始贴面。沿 +Y 推进 86.65 mm，横向位移全幅 1.54 mm。确认后墙承载时，PhysX 同步参考为 6.02 N。

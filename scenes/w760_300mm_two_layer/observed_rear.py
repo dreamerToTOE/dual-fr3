@@ -70,7 +70,7 @@ def install(source):
     source = replace_once(source, '            guides_start = {side: tcp_fk(side, guide_q[side][0])[0] for side in robots}',
                           '''            paired_offsets = {}
             if carrying and (current_task.get("rear_slot") == 3 or current_task.get("front_slot") == 3
-                             or current_task.get("slot") == 2):
+                             or current_task.get("slot") in (2, 3)):
                 from scipy.spatial.transform import Rotation
 
                 # Keep both commanded tool poses consistent with the same grasped box pose.
