@@ -11,6 +11,7 @@ from dynamic_withdraw import install as dynamic_withdraw
 from front_row_a import floor_guide
 from markerless_tracking import install as markerless
 from observed_b1 import install as observed_b1
+from observed_front_bearing import contact_evidence, install as observed_front_bearing
 from observed_rear import install as observed_rear
 from observed_rear import rear_landing
 from observed_transport import install as observed_transport, register_transport
@@ -52,3 +53,27 @@ def test_full_runner_assembles_with_observed_skills():
         name for fn in code.co_consts if hasattr(fn, "co_names") for name in fn.co_names)
     assert "def move_to_observed_precontact(" in generated
     assert "def dynamic_withdraw(" in generated
+
+
+def test_front_bearing_requires_motion_before_the_loaded_stall():
+    travel = np.arange(15) * 3.75e-6
+    noise = 5.e-6 * np.sin(np.arange(15))
+    force = np.full(30, 6.)
+    contact = np.column_stack((np.r_[travel, travel[-1] + noise], force))
+    assert contact_evidence(contact) is not None
+    assert contact_evidence(np.column_stack((np.r_[noise, noise], force))) is None
+    assert contact_evidence(np.column_stack((np.arange(30) * 3.75e-6, force))) is None
+    assert contact_evidence(np.column_stack((contact[:, 0], force / 2))) is None
+
+
+def test_front_bearing_experiment_has_a_separate_physx_audit():
+    generated = markerless(rear_depth_only(build()))
+    generated = observed_rear(dynamic_withdraw(observed_b1(observed_transport(generated))))
+    generated = observed_front_bearing(generated)
+    compile(generated, "<observed front bearing>", "exec")
+    start = generated.index("            def observe_front_rear_bearing(")
+    end = generated.index("            def verify_contact(", start)
+    transition = generated[start:end]
+    assert "contact_monitor.cube_contact_snapshot()" not in transition
+    assert "observe_front_rear_bearing(support_side, rear_name)" in generated
+    assert 'verify_contact("rear_seat", [rear_path], support_side, 1, 1, audit_only=True)' in generated

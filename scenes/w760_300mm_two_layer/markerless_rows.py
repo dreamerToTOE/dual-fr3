@@ -70,6 +70,8 @@ def main():
     parser.add_argument("--capture-layout", action="store_true")
     parser.add_argument("--observed-skills", action="store_true",
                         help="Use the experimental observation-driven skill runner")
+    parser.add_argument("--sensor-front-bearing", action="store_true",
+                        help="Use the sensor-only rear bearing transition for front slots 3 and 4")
     parser.add_argument("--start-empty", action="store_true",
                         help="Execute rear-row supply and placement before front and upper rows")
     parser.add_argument("--stop-after-rear", type=int, choices=range(1, 6))
@@ -88,6 +90,8 @@ def main():
         parser.error("Invalid next rear slot.")
     if not args.observed_skills and (rear < 6 or args.stop_after_rear is not None):
         parser.error("Rear-row execution requires --observed-skills.")
+    if args.sensor_front_bearing and not args.observed_skills:
+        parser.error("--sensor-front-bearing requires --observed-skills.")
     if args.stop_after_rear is not None and args.stop_after_rear < rear:
         parser.error("The requested rear slot is already complete.")
     if args.capture_layout and args.observed_skills:
@@ -120,6 +124,9 @@ def main():
             from observed_transport import install as observed_transport
 
             source = observed_rear(dynamic_withdraw(observed_b1(observed_transport(source))))
+            if args.sensor_front_bearing:
+                from observed_front_bearing import install as observed_front_bearing
+                source = observed_front_bearing(source)
     snapshot = output / "runner_snapshot.py"
     runner = compile(source, str(snapshot), "exec")
     if args.check_only:
