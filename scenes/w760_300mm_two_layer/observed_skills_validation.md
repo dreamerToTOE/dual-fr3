@@ -56,7 +56,7 @@ B1 的实测 TCP 到预接触目标的误差为 0.978 mm，随后完成贴面和
 
 从右墙前实测断点续跑通过。两腕进场在法向寻触前冲量为零。确认右墙时，PhysX 测得右墙载荷 1.46 N、后墙 2.57 N。两腕各外撤约 3.71 mm 确认 S0，两杯无接触，地板承载 12.26 N。空载归位的 1,551 采样点通过检查，实跑无非预期接触，归位期间两杯对箱体的原始冲量为零。保留旧断点以复查下游独立试验，并另存本次无提前接触的就位断点。 [R2 补验就位断点](validation/observed/rear2_requalified_checkpoint.json)
 
-### R3–R5 后续实跑准备
+### R3–R5 后排第 3–5 箱
 
 根据高墙首排的历史实跑，恢复 R3 的左侧导轨站位和冗余初值，避免支撑臂向左横随时肘部扫入左墙。R3、R4 的侧推 IK 用各自已有的可行关节构型作为初值，仍从当前相机观测生成目标。R4、R5 的后推轨道站位按历史可行设置。R4 的侧推起点由当次拟合的 R2 近侧边缘和先前验证过的约 44 mm 侧面重叠量计算。R5 在归位后重新测量两侧间隙。以上调整待新运行器实跑。 [历史站位](../w760_300mm/b_postures.json) · [历史实跑结论](../w760_300mm/validation/acceptance_summary.json)
 
@@ -103,6 +103,8 @@ R5 的低速续跑形成真实后墙接触，61 帧位移和腕力判据未确�
 首次再次接近未通过 IK 门槛。记录并恢复实测侧墙断点后，使用撤离时实测的近箱腕姿作为备用 IK 初值，从 D455 重新拟合下一个接近目标。只让左臂清出相机视野时，前排箱最终抵达 `Cube_1`，但右杯仍靠近箱侧，估计间隙 2.50 mm，最终 S0 未确认。PhysX 对照显示两杯当时已分离。
 
 改为中途 S0 后双臂一起用 RRTConnect 清场，再由左臂从实测关节位置规划接近。最后一次从侧墙断点续跑通过，向后推入约 24.01 mm，连续 24 帧记录到指定后排箱承载。最终 S0 在左腕实测撤离 2.13 mm 时确认，两杯均无接触，地板承载约 12.26 N。最终归位及就位验收完成，PhysX 非预期接触为零。 [F1 运行证据](validation/observed/front1_progress.json) · [F1 侧墙断点](validation/observed/front1_side_seat_checkpoint.json) · [F1 就位断点](validation/observed/front1_complete_checkpoint.json)
+
+补验从本分支 R5 就位断点恢复后排五箱，D455 在线拟合该后排与供料箱。F1 导轨搬运 5,933 帧及下放 1,266 帧均保持双杯密封。落稳开阀后两腕各外撤约 3.13 mm 确认 S0，PhysX 同步核对两杯分离、地板承载 12.26 N。已保存这条衔接线路的实际 landing，并继续执行 F1 推入。 [本分支 R5 就位断点](validation/observed/rear5_complete_checkpoint.json) · [F1 补验 landing](validation/observed/front1_from_observed_rear5_landing_checkpoint.json)
 
 ### F2 前排第 2 箱
 
