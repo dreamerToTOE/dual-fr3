@@ -283,9 +283,9 @@ REAR_BODY = '''
                             if direction * (goal[axis] - start[axis]) > .005:
                                 lead = goal.copy()
                                 lead[axis] -= direction * .005
-                                contact_path(arm, start, lead, phase, speed=.018, force_limit=9.)
+                                contact_path(arm, start, lead, phase, speed=.018, force_limit=9., rear_push=True)
                                 start, _ = sensed_cube()
-                            contact_path(arm, start, goal, phase + "_stage", speed=.004, force_limit=9.)
+                            contact_path(arm, start, goal, phase + "_stage", speed=.004, force_limit=9., rear_push=True)
                         else:
                             contact_path(arm, start, goal, phase, speed=.018, force_limit=9.,
                                          rear_push=target_name == "wall_back")
