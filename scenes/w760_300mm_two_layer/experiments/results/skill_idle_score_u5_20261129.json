@@ -1,0 +1,1035 @@
+{
+  "run": "upper4-bearing",
+  "runner_status": "PASS_W760_UPPER_ROW",
+  "legacy_revision": "f35b3d257eed29aa7419ace6cc7011ebd0baee44",
+  "hz": 120,
+  "robot_sha256": {
+    "fr3.urdf": "3b22a3f5f4707e91eacf9491ce4b273ab380bf3c4a6b06d4c63859b380e6b2f6",
+    "fr3_robot_description.yaml": "573442a5993f698f8e1052f1c2c299653da44495654a806baca6374e105f7201"
+  },
+  "sources_sha256": {
+    "contact_states/sensor_inputs.jsonl.gz": "60462578b0e680ecd356752b8e9bdfb670f3fcefba65867364c3412bc3b6929e",
+    "contact_states/reference.jsonl.gz": "0b362a7b1f20dd4c71db1482cc49f2f63da207b22fb60aeacb59749164f9b814",
+    "wrench.jsonl.gz": "6f970335c3a8f0d8abd24761fe3b0e6a7799ae933ff78553ac81842e54c18230",
+    "runner_report.json": "53c2e8d7f7e0f0918ed82ca5ad063cc4c9cfa06bd3b7df399b5d82f763e79787",
+    "metadata.json": "0bec0a6a7b8b463060477a0414c57a9d8ce11efda8ca2148a7b5b1c95ebe0a25"
+  },
+  "camera_neighbor_counts": {
+    "11": 6
+  },
+  "score_scope": "between_skills_only",
+  "idle_windows": [
+    {
+      "name": "suction_on_to_carry",
+      "cube_id": 11,
+      "after_step": 23781,
+      "through_step": 23841,
+      "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED to A_lift_and_align/RUNNING",
+      "reference_counts": {
+        "S2": 60
+      }
+    },
+    {
+      "name": "suction_off_to_withdraw",
+      "cube_id": 11,
+      "after_step": 33469,
+      "through_step": 33529,
+      "evidence": "Synchronous opening returned before the 60-step support sampling window; A_dynamic_withdraw starts at 33529",
+      "reference_counts": {
+        "S1": 60
+      }
+    },
+    {
+      "name": "park_to_next_approach",
+      "cube_id": 11,
+      "after_step": 37832,
+      "through_step": 37964,
+      "evidence": "A_empty_repark_transit completes at 35362, followed by K0 rail returns of 1870 and 600 steps; upper_B_rail starts at 37964",
+      "reference_counts": {
+        "S0": 132
+      }
+    }
+  ],
+  "cubes": {
+    "11": {
+      "step_range": [
+        18090,
+        37964
+      ],
+      "modes": {
+        "wrench_fk_0ms": {
+          "states": {
+            "S0": {
+              "ref": 132,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S1": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S2": {
+              "ref": 60,
+              "pred": 119,
+              "correct": 59,
+              "recall": 0.9833333333333333,
+              "precision": 0.4957983193277311,
+              "f1": 0.659217877094972
+            },
+            "S3": {
+              "ref": 0,
+              "pred": 0,
+              "correct": 0,
+              "recall": null,
+              "precision": null,
+              "f1": null
+            }
+          },
+          "known_steps": 252,
+          "accuracy": 0.23412698412698413,
+          "confusion": {
+            "S0": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 132
+            },
+            "S1": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 60,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S2": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 59,
+              "S3": 0,
+              "UNKNOWN": 1
+            },
+            "S3": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            }
+          },
+          "unknown_reference_steps": 0,
+          "usable_camera_age_ms": null,
+          "camera_unavailable_steps": null,
+          "events": {}
+        },
+        "vision_fk_0ms": {
+          "states": {
+            "S0": {
+              "ref": 132,
+              "pred": 132,
+              "correct": 132,
+              "recall": 1.0,
+              "precision": 1.0,
+              "f1": 1.0
+            },
+            "S1": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S2": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S3": {
+              "ref": 0,
+              "pred": 0,
+              "correct": 0,
+              "recall": null,
+              "precision": null,
+              "f1": null
+            }
+          },
+          "known_steps": 252,
+          "accuracy": 0.5238095238095238,
+          "confusion": {
+            "S0": {
+              "S0": 132,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S1": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 60
+            },
+            "S2": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 60
+            },
+            "S3": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            }
+          },
+          "unknown_reference_steps": 0,
+          "usable_camera_age_ms": {
+            "median": 33.33333507180214,
+            "p95": 302.91668246500194
+          },
+          "camera_unavailable_steps": 20,
+          "events": {}
+        },
+        "fusion_arrival_0ms": {
+          "states": {
+            "S0": {
+              "ref": 132,
+              "pred": 132,
+              "correct": 132,
+              "recall": 1.0,
+              "precision": 1.0,
+              "f1": 1.0
+            },
+            "S1": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S2": {
+              "ref": 60,
+              "pred": 119,
+              "correct": 59,
+              "recall": 0.9833333333333333,
+              "precision": 0.4957983193277311,
+              "f1": 0.659217877094972
+            },
+            "S3": {
+              "ref": 0,
+              "pred": 0,
+              "correct": 0,
+              "recall": null,
+              "precision": null,
+              "f1": null
+            }
+          },
+          "known_steps": 252,
+          "accuracy": 0.7579365079365079,
+          "confusion": {
+            "S0": {
+              "S0": 132,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S1": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 60,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S2": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 59,
+              "S3": 0,
+              "UNKNOWN": 1
+            },
+            "S3": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            }
+          },
+          "unknown_reference_steps": 0,
+          "usable_camera_age_ms": {
+            "median": 33.33333507180214,
+            "p95": 302.91668246500194
+          },
+          "camera_unavailable_steps": 20,
+          "events": {}
+        },
+        "fusion_compensated_0ms": {
+          "states": {
+            "S0": {
+              "ref": 132,
+              "pred": 132,
+              "correct": 132,
+              "recall": 1.0,
+              "precision": 1.0,
+              "f1": 1.0
+            },
+            "S1": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S2": {
+              "ref": 60,
+              "pred": 119,
+              "correct": 59,
+              "recall": 0.9833333333333333,
+              "precision": 0.4957983193277311,
+              "f1": 0.659217877094972
+            },
+            "S3": {
+              "ref": 0,
+              "pred": 0,
+              "correct": 0,
+              "recall": null,
+              "precision": null,
+              "f1": null
+            }
+          },
+          "known_steps": 252,
+          "accuracy": 0.7579365079365079,
+          "confusion": {
+            "S0": {
+              "S0": 132,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S1": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 60,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S2": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 59,
+              "S3": 0,
+              "UNKNOWN": 1
+            },
+            "S3": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            }
+          },
+          "unknown_reference_steps": 0,
+          "usable_camera_age_ms": {
+            "median": 33.33333507180214,
+            "p95": 302.91668246500194
+          },
+          "camera_unavailable_steps": 20,
+          "events": {}
+        },
+        "fusion_compensated_0ms_K5_3mm": {
+          "states": {
+            "S0": {
+              "ref": 132,
+              "pred": 132,
+              "correct": 132,
+              "recall": 1.0,
+              "precision": 1.0,
+              "f1": 1.0
+            },
+            "S1": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S2": {
+              "ref": 60,
+              "pred": 119,
+              "correct": 59,
+              "recall": 0.9833333333333333,
+              "precision": 0.4957983193277311,
+              "f1": 0.659217877094972
+            },
+            "S3": {
+              "ref": 0,
+              "pred": 0,
+              "correct": 0,
+              "recall": null,
+              "precision": null,
+              "f1": null
+            }
+          },
+          "known_steps": 252,
+          "accuracy": 0.7579365079365079,
+          "confusion": {
+            "S0": {
+              "S0": 132,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S1": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 60,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S2": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 59,
+              "S3": 0,
+              "UNKNOWN": 1
+            },
+            "S3": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            }
+          },
+          "unknown_reference_steps": 0,
+          "usable_camera_age_ms": {
+            "median": 33.33333507180214,
+            "p95": 302.91668246500194
+          },
+          "camera_unavailable_steps": 20,
+          "events": {}
+        },
+        "vision_fk_100ms": {
+          "states": {
+            "S0": {
+              "ref": 132,
+              "pred": 132,
+              "correct": 132,
+              "recall": 1.0,
+              "precision": 1.0,
+              "f1": 1.0
+            },
+            "S1": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S2": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S3": {
+              "ref": 0,
+              "pred": 0,
+              "correct": 0,
+              "recall": null,
+              "precision": null,
+              "f1": null
+            }
+          },
+          "known_steps": 252,
+          "accuracy": 0.5238095238095238,
+          "confusion": {
+            "S0": {
+              "S0": 132,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S1": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 60
+            },
+            "S2": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 60
+            },
+            "S3": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            }
+          },
+          "unknown_reference_steps": 0,
+          "usable_camera_age_ms": {
+            "median": 133.33334028720856,
+            "p95": 307.91668272577226
+          },
+          "camera_unavailable_steps": 32,
+          "events": {}
+        },
+        "fusion_arrival_100ms": {
+          "states": {
+            "S0": {
+              "ref": 132,
+              "pred": 132,
+              "correct": 132,
+              "recall": 1.0,
+              "precision": 1.0,
+              "f1": 1.0
+            },
+            "S1": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S2": {
+              "ref": 60,
+              "pred": 119,
+              "correct": 59,
+              "recall": 0.9833333333333333,
+              "precision": 0.4957983193277311,
+              "f1": 0.659217877094972
+            },
+            "S3": {
+              "ref": 0,
+              "pred": 0,
+              "correct": 0,
+              "recall": null,
+              "precision": null,
+              "f1": null
+            }
+          },
+          "known_steps": 252,
+          "accuracy": 0.7579365079365079,
+          "confusion": {
+            "S0": {
+              "S0": 132,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S1": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 60,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S2": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 59,
+              "S3": 0,
+              "UNKNOWN": 1
+            },
+            "S3": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            }
+          },
+          "unknown_reference_steps": 0,
+          "usable_camera_age_ms": {
+            "median": 133.33334028720856,
+            "p95": 307.91668272577226
+          },
+          "camera_unavailable_steps": 32,
+          "events": {}
+        },
+        "fusion_compensated_100ms": {
+          "states": {
+            "S0": {
+              "ref": 132,
+              "pred": 132,
+              "correct": 132,
+              "recall": 1.0,
+              "precision": 1.0,
+              "f1": 1.0
+            },
+            "S1": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S2": {
+              "ref": 60,
+              "pred": 119,
+              "correct": 59,
+              "recall": 0.9833333333333333,
+              "precision": 0.4957983193277311,
+              "f1": 0.659217877094972
+            },
+            "S3": {
+              "ref": 0,
+              "pred": 0,
+              "correct": 0,
+              "recall": null,
+              "precision": null,
+              "f1": null
+            }
+          },
+          "known_steps": 252,
+          "accuracy": 0.7579365079365079,
+          "confusion": {
+            "S0": {
+              "S0": 132,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S1": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 60,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S2": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 59,
+              "S3": 0,
+              "UNKNOWN": 1
+            },
+            "S3": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            }
+          },
+          "unknown_reference_steps": 0,
+          "usable_camera_age_ms": {
+            "median": 133.33334028720856,
+            "p95": 307.91668272577226
+          },
+          "camera_unavailable_steps": 32,
+          "events": {}
+        },
+        "fusion_compensated_100ms_K5_3mm": {
+          "states": {
+            "S0": {
+              "ref": 132,
+              "pred": 132,
+              "correct": 132,
+              "recall": 1.0,
+              "precision": 1.0,
+              "f1": 1.0
+            },
+            "S1": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S2": {
+              "ref": 60,
+              "pred": 119,
+              "correct": 59,
+              "recall": 0.9833333333333333,
+              "precision": 0.4957983193277311,
+              "f1": 0.659217877094972
+            },
+            "S3": {
+              "ref": 0,
+              "pred": 0,
+              "correct": 0,
+              "recall": null,
+              "precision": null,
+              "f1": null
+            }
+          },
+          "known_steps": 252,
+          "accuracy": 0.7579365079365079,
+          "confusion": {
+            "S0": {
+              "S0": 132,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S1": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 60,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S2": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 59,
+              "S3": 0,
+              "UNKNOWN": 1
+            },
+            "S3": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            }
+          },
+          "unknown_reference_steps": 0,
+          "usable_camera_age_ms": {
+            "median": 133.33334028720856,
+            "p95": 307.91668272577226
+          },
+          "camera_unavailable_steps": 32,
+          "events": {}
+        },
+        "vision_fk_200ms": {
+          "states": {
+            "S0": {
+              "ref": 132,
+              "pred": 132,
+              "correct": 132,
+              "recall": 1.0,
+              "precision": 1.0,
+              "f1": 1.0
+            },
+            "S1": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S2": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S3": {
+              "ref": 0,
+              "pred": 0,
+              "correct": 0,
+              "recall": null,
+              "precision": null,
+              "f1": null
+            }
+          },
+          "known_steps": 252,
+          "accuracy": 0.5238095238095238,
+          "confusion": {
+            "S0": {
+              "S0": 132,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S1": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 60
+            },
+            "S2": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 60
+            },
+            "S3": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            }
+          },
+          "unknown_reference_steps": 0,
+          "usable_camera_age_ms": {
+            "median": 233.33334550261497,
+            "p95": 312.9166829865426
+          },
+          "camera_unavailable_steps": 44,
+          "events": {}
+        },
+        "fusion_arrival_200ms": {
+          "states": {
+            "S0": {
+              "ref": 132,
+              "pred": 132,
+              "correct": 132,
+              "recall": 1.0,
+              "precision": 1.0,
+              "f1": 1.0
+            },
+            "S1": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S2": {
+              "ref": 60,
+              "pred": 119,
+              "correct": 59,
+              "recall": 0.9833333333333333,
+              "precision": 0.4957983193277311,
+              "f1": 0.659217877094972
+            },
+            "S3": {
+              "ref": 0,
+              "pred": 0,
+              "correct": 0,
+              "recall": null,
+              "precision": null,
+              "f1": null
+            }
+          },
+          "known_steps": 252,
+          "accuracy": 0.7579365079365079,
+          "confusion": {
+            "S0": {
+              "S0": 132,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S1": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 60,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S2": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 59,
+              "S3": 0,
+              "UNKNOWN": 1
+            },
+            "S3": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            }
+          },
+          "unknown_reference_steps": 0,
+          "usable_camera_age_ms": {
+            "median": 233.33334550261497,
+            "p95": 312.9166829865426
+          },
+          "camera_unavailable_steps": 44,
+          "events": {}
+        },
+        "fusion_compensated_200ms": {
+          "states": {
+            "S0": {
+              "ref": 132,
+              "pred": 132,
+              "correct": 132,
+              "recall": 1.0,
+              "precision": 1.0,
+              "f1": 1.0
+            },
+            "S1": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S2": {
+              "ref": 60,
+              "pred": 119,
+              "correct": 59,
+              "recall": 0.9833333333333333,
+              "precision": 0.4957983193277311,
+              "f1": 0.659217877094972
+            },
+            "S3": {
+              "ref": 0,
+              "pred": 0,
+              "correct": 0,
+              "recall": null,
+              "precision": null,
+              "f1": null
+            }
+          },
+          "known_steps": 252,
+          "accuracy": 0.7579365079365079,
+          "confusion": {
+            "S0": {
+              "S0": 132,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S1": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 60,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S2": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 59,
+              "S3": 0,
+              "UNKNOWN": 1
+            },
+            "S3": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            }
+          },
+          "unknown_reference_steps": 0,
+          "usable_camera_age_ms": {
+            "median": 233.33334550261497,
+            "p95": 312.9166829865426
+          },
+          "camera_unavailable_steps": 44,
+          "events": {}
+        },
+        "fusion_compensated_200ms_K5_3mm": {
+          "states": {
+            "S0": {
+              "ref": 132,
+              "pred": 132,
+              "correct": 132,
+              "recall": 1.0,
+              "precision": 1.0,
+              "f1": 1.0
+            },
+            "S1": {
+              "ref": 60,
+              "pred": 0,
+              "correct": 0,
+              "recall": 0.0,
+              "precision": null,
+              "f1": 0.0
+            },
+            "S2": {
+              "ref": 60,
+              "pred": 119,
+              "correct": 59,
+              "recall": 0.9833333333333333,
+              "precision": 0.4957983193277311,
+              "f1": 0.659217877094972
+            },
+            "S3": {
+              "ref": 0,
+              "pred": 0,
+              "correct": 0,
+              "recall": null,
+              "precision": null,
+              "f1": null
+            }
+          },
+          "known_steps": 252,
+          "accuracy": 0.7579365079365079,
+          "confusion": {
+            "S0": {
+              "S0": 132,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S1": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 60,
+              "S3": 0,
+              "UNKNOWN": 0
+            },
+            "S2": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 59,
+              "S3": 0,
+              "UNKNOWN": 1
+            },
+            "S3": {
+              "S0": 0,
+              "S1": 0,
+              "S2": 0,
+              "S3": 0,
+              "UNKNOWN": 0
+            }
+          },
+          "unknown_reference_steps": 0,
+          "usable_camera_age_ms": {
+            "median": 233.33334550261497,
+            "p95": 312.9166829865426
+          },
+          "camera_unavailable_steps": 44,
+          "events": {}
+        }
+      }
+    }
+  }
+}

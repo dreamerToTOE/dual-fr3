@@ -1,0 +1,27 @@
+{
+  "run": "upper4-bearing",
+  "runner_report_sha256": "53c2e8d7f7e0f0918ed82ca5ad063cc4c9cfa06bd3b7df399b5d82f763e79787",
+  "windows": [
+    {
+      "name": "suction_on_to_carry",
+      "cube_id": 11,
+      "after_step": 23781,
+      "through_step": 23841,
+      "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED to A_lift_and_align/RUNNING"
+    },
+    {
+      "name": "suction_off_to_withdraw",
+      "cube_id": 11,
+      "after_step": 33469,
+      "through_step": 33529,
+      "evidence": "Synchronous opening returned before the 60-step support sampling window; A_dynamic_withdraw starts at 33529"
+    },
+    {
+      "name": "park_to_next_approach",
+      "cube_id": 11,
+      "after_step": 37832,
+      "through_step": 37964,
+      "evidence": "A_empty_repark_transit completes at 35362, followed by K0 rail returns of 1870 and 600 steps; upper_B_rail starts at 37964"
+    }
+  ]
+}

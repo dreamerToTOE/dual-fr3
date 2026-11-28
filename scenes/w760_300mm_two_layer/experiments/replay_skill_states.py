@@ -159,12 +159,36 @@ def profiles():
         yield "fusion_compensated", delay, .003
 
 
-def replay(run, output, cubes, isaac_dir):
+def load_idle_windows(path, report_digest, cubes):
+    manifest = json.loads(path.read_text())
+    if manifest["runner_report_sha256"] != report_digest:
+        raise ValueError("Idle windows were marked on a different runner report")
+    windows = {}
+    names = set()
+    for cube in cubes:
+        entries = sorted((row for row in manifest["windows"] if row["cube_id"] == cube),
+                         key=lambda row: row["after_step"])
+        if not entries:
+            raise ValueError(f"No verified between-skill interval for Cube_{cube}")
+        previous = 0
+        for row in entries:
+            name = row["name"]
+            if name in names or not previous <= row["after_step"] < row["through_step"]:
+                raise ValueError(f"Repeated, empty or overlapping idle window: {name}")
+            names.add(name)
+            previous = row["through_step"]
+        windows[cube] = entries
+    return windows
+
+
+def replay(run, output, cubes, isaac_dir, idle_manifest=None):
     from seven_commands import targets
     from seven_observer import SevenObserver
     from active_probe_replay import command_kinematics
 
-    report = json.loads((run / "runner_report.json").read_text())
+    report_bytes = (run / "runner_report.json").read_bytes()
+    report = json.loads(report_bytes)
+    idle = load_idle_windows(idle_manifest, sha256(report_bytes).hexdigest(), cubes) if idle_manifest else {}
     config = report["scene_parameters"]
     hz = report["simulation_clock"]["control_hz"]
     kin, robot_sha = command_kinematics(isaac_dir)
@@ -172,10 +196,13 @@ def replay(run, output, cubes, isaac_dir):
     offsets = {side: np.asarray(value) for side, value in
                json.loads((run / "metadata.json").read_text())["tcp_offset_sensor_m"].items()}
     names = ("contact_states/sensor_inputs.jsonl.gz", "contact_states/reference.jsonl.gz", "wrench.jsonl.gz")
-    windows = action_windows(report, hz)
+    windows = {} if idle else action_windows(report, hz)
     neighbors = {cube: optical_neighbors(report, cube) for cube in cubes}
     current = None
     counts, events, ages, unavailable, step_ranges = {}, {}, {}, {}, {}
+    idle_counts = {}
+    if idle:
+        idle_counts = {row["name"]: Counter() for entries in idle.values() for row in entries}
     columns = tuple(profiles())
     result = {"run": run.name, "runner_status": report["status"], "legacy_revision": LEGACY,
               "hz": hz, "robot_sha256": robot_sha, "sources_sha256": {},
@@ -192,7 +219,7 @@ def replay(run, output, cubes, isaac_dir):
             if any((r["physics_step"], r["time_s"]) != pair for r in (physical, wrench)):
                 raise ValueError(f"Unpaired sample at step {step}")
             cube = physical["active_cube_id"]
-            if cube not in cubes:
+            if cube not in cubes or (idle and step > idle[cube][-1]["through_step"]):
                 continue
             if current != cube:
                 current = cube
@@ -209,7 +236,16 @@ def replay(run, output, cubes, isaac_dir):
             step_ranges[cube][1] = step
             inputs = {key: sensor[key] for key in SENSOR_KEYS}
             inputs["tcp_command_positions_m"] = targets(wrench, sensor, kin, yaws, offsets)
+            idle_window = next((row for row in idle.get(cube, ())
+                                if row["after_step"] < step <= row["through_step"]), None)
+            if idle and idle_window is None:
+                # Keep the historical sensor evidence used for delay compensation and seal tracking.
+                for observer in observers.values():
+                    observer.update(inputs, neighbors[cube])
+                continue
             label, clear, bearing = physical_label(physical)
+            if idle_window:
+                idle_counts[idle_window["name"]][label] += 1
             active_windows = [(name, target, arms, all_clear)
                               for (cid, name), (start, end, target, arms, all_clear) in windows.items()
                               if cid == cube and start < step <= end]
@@ -234,6 +270,15 @@ def replay(run, output, cubes, isaac_dir):
                     events[cube][key][name].append((step, truth, detected))
     if set(counts) != set(cubes):
         raise ValueError(f"Missing requested cubes: {set(cubes) - set(counts)}")
+    if idle:
+        result["score_scope"] = "between_skills_only"
+        result["idle_windows"] = []
+        for entries in idle.values():
+            for row in entries:
+                reference = idle_counts[row["name"]]
+                if reference.total() != row["through_step"] - row["after_step"]:
+                    raise ValueError(f"Incomplete idle window: {row['name']}")
+                result["idle_windows"].append({**row, "reference_counts": reference})
     result["cubes"] = {}
     for cube in cubes:
         modes = {}
@@ -261,6 +306,8 @@ def main():
     parser.add_argument("output", type=Path)
     parser.add_argument("--cube", nargs="+", type=int, required=True, choices=range(7, 12))
     parser.add_argument("--isaac-sim-dir", type=Path, required=True)
+    parser.add_argument("--idle-windows", type=Path,
+                        help="Score only the listed verified between-skill intervals")
     args = parser.parse_args()
     with TemporaryDirectory(prefix="fr3-frozen-observer-") as legacy:
         for module in LEGACY_MODULES:
@@ -268,7 +315,7 @@ def main():
             contents = subprocess.check_output(["git", "-C", str(REPO), "show", f"{LEGACY}:{path}"])
             (Path(legacy) / (module + ".py")).write_bytes(contents)
         sys.path.insert(0, legacy)
-        replay(args.run, args.output, args.cube, args.isaac_sim_dir)
+        replay(args.run, args.output, args.cube, args.isaac_sim_dir, args.idle_windows)
 
 
 if __name__ == "__main__":
