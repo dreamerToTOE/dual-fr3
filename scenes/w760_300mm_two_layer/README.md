@@ -116,5 +116,3 @@ checkpoint="$scene/experiments/results/probe_terminal_checkpoint.json"
 ```
 
 [全流程的六种接触主状态与标注口径](contact_states.md) · [多源状态判断实验记录](experiments/results/README.md)
-
-[长时序技能下的短时序状态观测实验方案](experiments/long_skill_observer_plan.md)
