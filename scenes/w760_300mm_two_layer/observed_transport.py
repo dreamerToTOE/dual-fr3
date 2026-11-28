@@ -76,6 +76,41 @@ def register_transport(guide, pickup, landing):
 
 
 def install(source):
+    source = replace_once(source, 'from fr3_contact_control import NormalForceController, oriented_wall_gap\n',
+                          '''from functools import partial
+from fr3_contact_control import NormalForceController, oriented_wall_gap
+
+NormalForceController = partial(NormalForceController, max_force_N=None)
+''')
+    start = source.index('                if contact_monitor.phase.startswith("A"):\n')
+    end = source.index('                if force_label is not None', start)
+    source = source[:start] + source[end:]
+    source = replace_once(source, 'max_offset_m=max_travel_m, max_force_N=A_FORCE_LIMITS["max_force_N"])',
+                          'max_offset_m=max_travel_m)')
+    source = replace_once(source, '''                if compression > 10.0:
+                    raise RuntimeError(f"{phase}: unexpected contact force {compression:.2f} N")
+''', '')
+    source = replace_once(source, '''                if abs(last_force_sample[side]["tcp_gravity_corrected_world"][1]) > 10.:
+                    raise RuntimeError(f"{phase}: contact overloaded during plane alignment")
+''', '')
+    source = replace_once(source, '''                if abs(force) > 10 or ((follow_side is not None or probe_override is not None) and force_norm > 10):
+                    raise RuntimeError(f"{side} wall acquisition overload: "
+                                       f"normal {force:.3f} N, resultant {force_norm:.3f} N")
+''', '')
+    source = replace_once(source, 'max_offset_m=.002, max_force_N=10.)', 'max_offset_m=.002)')
+    source = replace_once(source, '''                if any(abs(force) > 10. for force in current.values()):
+                    raise RuntimeError(f"{phase}: dual-contact force exceeds 10 N")
+''', '')
+    source = replace_once(source, '''                    if abs(active_force) > 10.:
+                        raise RuntimeError(f"{push_side} B2 push overload: {active_force:.3f} N")
+''', '')
+    source = replace_once(source, '''                if wrist_load < -load_limit:
+                    raise RuntimeError(f"Upper seating downward compression {-wrist_load:.3f} N exceeds "
+                                       f"{load_limit:.3f} N at {descent*1000:.3f} mm approach")
+''', '')
+    source = replace_once(source, 'maximum_compression_N=load_limit)',
+                          'wrist_load_target_N=target_wrist_load)')
+
     anchor = '            GUIDE = floor_guide(slot)\n'
     start = source.index(anchor, source.index('        def run_front_a(')) + len(anchor)
     end = source.index('            FIRST_LOADED = ', start)

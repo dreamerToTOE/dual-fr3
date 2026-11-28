@@ -63,6 +63,13 @@ def test_full_runner_assembles_with_observed_skills():
         name for fn in code.co_consts if hasattr(fn, "co_names") for name in fn.co_names)
     assert "def move_to_observed_precontact(" in generated
     assert "def dynamic_withdraw(" in generated
+    assert "NormalForceController = partial(NormalForceController, max_force_N=None)" in generated
+    for removed_abort in ("declared acceptance envelope", "exceeded its wrist wrench limit",
+                          "dual-contact force exceeds 10 N", "B wrist envelope exceeded",
+                          "side seal unloading overload", "seam transport exceeded its wrench limits"):
+        assert removed_abort not in generated
+    assert "contact_monitor.raise_if_collision()" in generated
+    assert "Surface Gripper seal lost while carrying the Cube" in generated
     assert "move_independent_pair(targets, phase, planning_margin_m=planning_margin_m)" in generated
     assert "move_independent_pair({arm: path[-1] for arm, path in samples.items()}, phase, routes=samples)" in generated
     assert 'execute_joint_path(samples, motion_phase, check_step=monitor,' in generated

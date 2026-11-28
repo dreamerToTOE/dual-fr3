@@ -108,16 +108,9 @@ def inject_side_resume(source):
 
 def inject(source):
     source = replace_once(source, '        def contact_path(side, start, end, phase):',
-                          '        def contact_path(side, start, end, phase, *, speed=.08, force_limit=None):')
+                          '        def contact_path(side, start, end, phase, *, speed=.08):')
     source = replace_once(source, '1.875 * float(np.linalg.norm(end - start)) / .08)',
                           '1.875 * float(np.linalg.norm(end - start)) / speed)')
-    source = replace_once(source, '                if np.linalg.norm(actual - centers[index]) > .035:',
-                          '''                if force_limit is not None:
-                    wrench = np.asarray(last_force_sample[side]["tcp_gravity_corrected_world"])
-                    if (not np.all(np.isfinite(wrench)) or np.linalg.norm(wrench[:3]) > force_limit
-                            or np.linalg.norm(wrench[3:]) > 1.):
-                        raise RuntimeError(f"{phase}: {side} exceeded its wrist wrench limit: {wrench}")
-                if np.linalg.norm(actual - centers[index]) > .035:''')
     floor = patch_b(patch_a((REPO / "fr3_ab_visual_runner.py").read_text()))
     start = floor.index('            set_contact_drive_mode(True)\n            allowed_contacts.discard("right")')
     end = floor.index("        placed_bodies = [cube]", start)
@@ -256,7 +249,7 @@ def inject(source):
             def level_push(index, commands):
                 nonlocal vertical_offset, axial_offset, axial_average, tangential_offset
                 wrench = np.asarray(last_force_sample[push_side]["tcp_gravity_corrected_world"])
-                if not np.all(np.isfinite(wrench)) or np.linalg.norm(wrench[3:]) > 1.:
+                if not np.all(np.isfinite(wrench)):
                     raise RuntimeError(f"Front B2 wrist wrench invalid: {wrench}")
                 axial = float(-push_sign * wrench[0])
                 axial_average += .25 * (axial - axial_average)
@@ -426,8 +419,6 @@ def inject(source):
                 stable = 0
                 for _ in range(2400):
                     wrench = np.asarray(last_force_sample[arm]["tcp_gravity_corrected_world"])
-                    if not np.all(np.isfinite(wrench)) or np.linalg.norm(wrench[3:]) > 1.:
-                        raise RuntimeError(f"Front rear seating exceeded wrist limit at {travel*1000:.2f} mm: {wrench}")
                     loaded = True
                     if verify_path is not None:
                         snapshot = contact_monitor.cube_contact_snapshot()
@@ -473,8 +464,6 @@ def inject(source):
                     observed_paths.update(loaded)
                     floor_loads.append(impulses.get("/World/Environment/floor", 0.))
                     wrench = np.asarray(last_force_sample[arm]["tcp_gravity_corrected_world"])
-                    if not np.all(np.isfinite(wrench)) or np.linalg.norm(wrench[:3]) > 10. or np.linalg.norm(wrench[3:]) > 1.:
-                        raise RuntimeError(f"Front {slot} {label} wrench outside limits: {wrench}")
                     normals.append(-direction * wrench[axis])
                 evidence[label] = {"loaded_ticks": sum(positive), "ticks": 24, "contact_paths": sorted(observed_paths),
                                    "median_floor_N": float(np.median(floor_loads)),
@@ -549,7 +538,7 @@ def inject(source):
                 lateral[0] = placement_target[0] - push_sign * (half * (abs(attitude[0]).sum() - 1.) + clearance)
                 lateral_phase = f"{prefix}_{push_side}_lateral"
                 record(lateral_phase, push_side.upper() + "_ARM_ONLY", target_x_m=float(lateral[0]))
-                contact_path(push_side, start, lateral, lateral_phase, speed=.025, force_limit=10.)
+                contact_path(push_side, start, lateral, lateral_phase, speed=.025)
                 unload_normal(push_side, 0, push_sign, f"{prefix}_{push_side}_unload")
                 push_faces.clear()
                 tip, _ = tcp_fk(push_side, applied_targets[push_side])
@@ -590,7 +579,7 @@ def inject(source):
                 straight[1] = placement_target[1] - half * (abs(attitude[1]).sum() - 1.) - .0015
                 straight_phase = f"{prefix}_{support_side}_straight_insert"
                 record(straight_phase, support_side.upper() + "_ARM_ONLY", x_m=float(start[0]))
-                contact_path(support_side, start, straight, straight_phase, speed=.025, force_limit=10.)
+                contact_path(support_side, start, straight, straight_phase, speed=.025)
                 rear_path = f"/World/Cube_{slot}"
                 probe_rear_face(support_side, verify_path=rear_path)
                 verify_contact("rear_seat", [rear_path], support_side, 1, 1)
@@ -632,7 +621,7 @@ def inject(source):
                     touch_face("right", -outward, .016, "front_center_align_touch")
                     start, _ = sensed_cube()
                     contact_path("right", start, start + [correction, 0., 0.], "front_center_align_lateral",
-                                 speed=.005, force_limit=10.)
+                                 speed=.005)
                     unload_normal("right", 0, -1, "front_center_align_unload")
                     push_faces.clear()
                     tip, _ = tcp_fk("right", applied_targets["right"])

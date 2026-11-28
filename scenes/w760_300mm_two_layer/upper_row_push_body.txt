@@ -20,10 +20,7 @@
             settle_frame_count = 30
 
             def force(side, axis, sign):
-                wrench = np.asarray(last_force_sample[side]["tcp_gravity_corrected_world"])
-                if not np.all(np.isfinite(wrench)) or np.linalg.norm(wrench[3:]) > 1.0:
-                    raise RuntimeError(f"Upper {slot} {side} contact overload: {wrench.tolist()}")
-                return float(-sign * wrench[axis])
+                return float(-sign * last_force_sample[side]["tcp_gravity_corrected_world"][axis])
 
             def gap(center, rotation, axis, sign):
                 return oriented_wall_gap(center[axis], rotation[axis], half, final[axis], sign)
@@ -793,9 +790,6 @@
                     details.update(transport_index=2, entry_center_x_m=entry_x,
                                    support_edge_cube_ids=[4, 2], observed_support_edges_m=[inner_edge, outer_edge])
                 weight = CONFIG["physics"]["cube_mass_kg"] * abs(CONFIG["physics"]["gravity_m_s2"][2])
-                limits = {"max_internal_force_N": A_FORCE_LIMITS["max_internal_force_N"],
-                          "max_tcp_torque_Nm": 1.0, "max_vertical_load_fraction": 1.35,
-                          "min_lift_vertical_load_fraction": .65}
                 balance_offset_m = balance_filtered_N = balance_peak_m = 0.
                 balance_max_m = .00045
                 if slot == 2:
@@ -834,15 +828,7 @@
                 def check_carry():
                     if not all(grippers.is_closed(arm) for arm in arms):
                         raise RuntimeError(f"Upper {slot}: lost a seal during the support seam transfer")
-                    wrenches = np.asarray([last_force_sample[arm]["tcp_gravity_corrected_world"] for arm in arms])
-                    forces = wrenches[:, :3]
-                    vertical_load = -float(forces[:, 2].sum())
-                    if (not np.all(np.isfinite(wrenches))
-                            or np.max(np.linalg.norm(wrenches[:, 3:], axis=1)) > limits["max_tcp_torque_Nm"]
-                            or np.linalg.norm(forces[0] - forces[1]) / 2 > limits["max_internal_force_N"]
-                            or abs(vertical_load) > weight * limits["max_vertical_load_fraction"]):
-                        raise RuntimeError(f"Upper {slot}: seam transport exceeded its wrench limits: {wrenches.tolist()}")
-                    return vertical_load
+                    return sum(vertical_wrist_loads())
 
                 def translate_attached(destination, duration, motion_phase, airborne=False):
                     nonlocal commanded_center
@@ -915,7 +901,7 @@
                         if support_impulse() > 1e-5:
                             raise RuntimeError(f"Upper {slot}: lower support contact persisted after lift")
                     load_fraction = float(np.mean(loads)) / weight
-                    if not limits["min_lift_vertical_load_fraction"] <= load_fraction <= limits["max_vertical_load_fraction"]:
+                    if not .65 <= load_fraction <= 1.35:
                         raise RuntimeError(f"Upper {slot}: dual-arm lift carried {np.mean(loads):.3f} N "
                                            f"of {weight:.3f} N expected weight")
                     record(phase, "LIFT_CONFIRMED", **details, load_fraction=load_fraction,

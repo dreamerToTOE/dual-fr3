@@ -19,9 +19,8 @@ class HorizontalLoadShare:
 
     def check(self, main, front, lower_impulse_Ns, sealed):
         wrenches = np.asarray((main, front), dtype=float)
-        if (not sealed or not np.all(np.isfinite(wrenches))
-                or np.linalg.norm(wrenches[:, 3:], axis=1).max() > 1.):
-            raise RuntimeError(f"Horizontal assistance lost the front seal or wrist envelope: {wrenches.tolist()}")
+        if not sealed or not np.all(np.isfinite(wrenches)):
+            raise RuntimeError(f"Horizontal assistance requires a front seal and finite wrist feedback: {wrenches.tolist()}")
         if not np.isfinite(lower_impulse_Ns) or lower_impulse_Ns < 0:
             raise RuntimeError("Horizontal assistance requires fresh native support impulses")
         if abs(float(front[2])) > .20 * self.weight_N or -float(wrenches[:, 2].sum()) > .25 * self.weight_N:

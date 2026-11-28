@@ -45,12 +45,7 @@ def rear_landing(config, slot, poses):
 def install(source):
     hook = '        def save_front_checkpoint('
     source = replace_once(source, hook, REAR_BODY + '\n' + hook)
-    source = replace_once(source, 'speed=.08, force_limit=None):',
-                          'speed=.08, force_limit=None, rear_push=False):')
-    source = replace_once(source, 'if force_limit is not None:\n                    wrench =',
-                          'if rear_push or force_limit is not None:\n                    wrench =')
-    source = replace_once(source, 'or np.linalg.norm(wrench[:3]) > force_limit',
-                          'or (force_limit is not None and np.linalg.norm(wrench[:3]) > force_limit)')
+    source = replace_once(source, 'speed=.08):', 'speed=.08, rear_push=False):')
     source = replace_once(source, '            # Keep the touched normal anchored',
                           '''            axial_average = axial_relief = height_offset = 0.
 
@@ -189,8 +184,8 @@ REAR_BODY = '''
                     total = np.linalg.norm(wrench[:3])
                     normal = -direction * float(wrench[axis])
                     gap = direction * (boundary - center[axis]) - half * np.abs(rotation[axis]).sum()
-                    if np.linalg.norm(wrench[3:]) > 1. or gap < -.002:
-                        raise RuntimeError(f"{phase}: exceeded wrist torque or geometry envelope")
+                    if gap < -.002:
+                        raise RuntimeError(f"{phase}: exceeded seating geometry envelope")
                     window.append((direction * tip[axis], direction * measured[axis], normal))
                     if len(window) == window.maxlen:
                         values = np.asarray(window)

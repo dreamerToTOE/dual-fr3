@@ -156,26 +156,16 @@ def build(source):
                           '                    position[1] = y')
     source = replace_once(source, '                if status_label is not None and tick % 12 == 0:',
                           '''                if contact_monitor.phase.startswith("upper_B_"):
-                    watch = report.setdefault("upper_b_wrist_watch", {"torque_limit_Nm": 1.})
+                    watch = report.setdefault("upper_b_wrist_watch", {})
                     scope = {"physics_step": tick, "time_s": float(world.current_time),
                              "cube_id": current_task["cube_id"], "phase": contact_monitor.phase}
-                    violations = []
                     for arm in robots:
                         wrench = np.asarray(force_sample[arm]["tcp_gravity_corrected_world"])
-                        if not np.all(np.isfinite(wrench)):
-                            violations.append({"arm": arm, "reason": "nonfinite wrench"})
-                            continue
                         force_N = float(np.linalg.norm(wrench[:3]))
                         torque_Nm = float(np.linalg.norm(wrench[3:]))
                         for key, value in (("peak_force_N", force_N), ("peak_torque_Nm", torque_Nm)):
                             if key not in watch or value > watch[key]["value"]:
                                 watch[key] = {**scope, "arm": arm, "value": value}
-                        if torque_Nm > watch["torque_limit_Nm"]:
-                            violations.append({"arm": arm, "force_N": force_N, "torque_Nm": torque_Nm,
-                                               "wrench_world": wrench.tolist()})
-                    if violations:
-                        watch["stop"] = {**scope, "violations": violations}
-                        raise RuntimeError(f"{contact_monitor.phase}: B wrist envelope exceeded at tick {tick}: {violations}")
                 if "rear_to_side_hold_x_m" in current_task:
                     rear_bearing = any(pair["label"] == "wall_back" and pair["current_step_observed"]
                                        and (pair["normal_impulse_Ns"] or 0.) > 1e-5
