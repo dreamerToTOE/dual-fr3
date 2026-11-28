@@ -110,6 +110,14 @@ NormalForceController = partial(NormalForceController, max_force_N=None)
 ''', '')
     source = replace_once(source, 'maximum_compression_N=load_limit)',
                           'wrist_load_target_N=target_wrist_load)')
+    source = replace_once(source, '''                    rear_bearing = any(pair["label"] == "wall_back" and pair["current_step_observed"]
+                                       and (pair["normal_impulse_Ns"] or 0.) > 1e-5
+                                       for pair in reference_contacts["pairs"])
+                    if not rear_bearing or support_impulse() * 120 < 6.:
+                        raise RuntimeError("Rear-to-side handoff lost a loaded rear or lower support")
+''', '''                    if support_impulse() * 120 < 6.:
+                        raise RuntimeError("Rear-to-side handoff lost lower support")
+''')
 
     anchor = '            GUIDE = floor_guide(slot)\n'
     start = source.index(anchor, source.index('        def run_front_a(')) + len(anchor)

@@ -71,6 +71,8 @@ def test_full_runner_assembles_with_observed_skills():
     assert "contact_monitor.raise_if_collision()" in generated
     assert "Surface Gripper seal lost while carrying the Cube" in generated
     assert 'record(phase, "DUAL_SEALS_CLOSED", **details, joint_hold_ticks=12)' in generated
+    assert 'raise RuntimeError("Rear-to-side handoff lost lower support")' in generated
+    assert "Rear-to-side handoff lost a loaded rear or lower support" not in generated
     assert "move_independent_pair(targets, phase, planning_margin_m=planning_margin_m)" in generated
     assert "move_independent_pair({arm: path[-1] for arm, path in samples.items()}, phase, routes=samples)" in generated
     assert 'execute_joint_path(samples, motion_phase, check_step=monitor,' in generated
