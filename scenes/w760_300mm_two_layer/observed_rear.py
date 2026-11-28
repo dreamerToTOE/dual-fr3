@@ -45,6 +45,38 @@ def rear_landing(config, slot, poses):
 def install(source):
     hook = '        def save_front_checkpoint('
     source = replace_once(source, hook, REAR_BODY + '\n' + hook)
+    source = replace_once(source, 'speed=.08, force_limit=None):',
+                          'speed=.08, force_limit=None, rear_push=False):')
+    source = replace_once(source, '            # Keep the touched normal anchored',
+                          '''            axial_average = axial_relief = height_offset = 0.
+
+            def unload_rear_push(index, commands):
+                nonlocal axial_average, axial_relief, height_offset
+                wrench = last_force_sample[side]["tcp_gravity_corrected_world"]
+                axial_average += .25 * (-wrench[1] - axial_average)
+                axial_speed = np.clip(.001 * (6.3 - axial_average), -.003, .001)
+                axial_relief = float(np.clip(axial_relief + axial_speed / 120, -.003, 0.))
+                # Use light upward shear while the box remains supported by the floor.
+                vertical = float(wrench[2]) + 1.5
+                deadband = math.copysign(max(abs(vertical) - .25, 0.), vertical)
+                vertical_speed = np.clip(.001 * deadband, -.003, .003)
+                height_offset = float(np.clip(height_offset + vertical_speed / 120, -.002, .006))
+                tip, attitude = tcp_fk(side, commands[side])
+                commands[side] = cartesian_joint_target(
+                    side, commands[side], tip + [0., axial_relief, height_offset], attitude)
+                center, attitude = sensed_cube()
+                issues = checker.check(commands, cube_center=center, cube_rotation=attitude,
+                                       cup_contacts=allowed_contacts, margin_m=0., first_only=True)
+                if issues or np.max(np.abs(commands[side] - applied_targets[side])) * 120 > .4:
+                    raise RuntimeError(f"{phase}: invalid rear-push correction: {issues}")
+                return commands
+
+            # Keep the touched normal anchored''')
+    source = replace_once(source, '                                   sampled_trajectory=(times, samples))\n            finally:\n                latched_contact_axis = None',
+                          '''                                   sampled_trajectory=(times, samples),
+                                   adjust_targets=unload_rear_push if rear_push else None)
+            finally:
+                latched_contact_axis = None''')
     source = replace_once(source, '            if phase == "A_pickup_pose":\n',
                           '''            if phase == "rear_landing_resume":
                 return np.asarray(CHECKPOINT["rear_landed"]["position_m"]), None
@@ -255,7 +287,8 @@ REAR_BODY = '''
                                 start, _ = sensed_cube()
                             contact_path(arm, start, goal, phase + "_stage", speed=.004, force_limit=9.)
                         else:
-                            contact_path(arm, start, goal, phase, speed=.018, force_limit=9.)
+                            contact_path(arm, start, goal, phase, speed=.018, force_limit=9.,
+                                         rear_push=target_name == "wall_back")
                     else:
                         # Keep the command-to-encoder preload established by contact synchronization.
                         phase = f"rear_{slot}_B2_side_travel"
