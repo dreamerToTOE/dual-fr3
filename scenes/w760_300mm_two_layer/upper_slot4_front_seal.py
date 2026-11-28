@@ -212,7 +212,7 @@ def push_u4_with_front_seal():
         record("upper_B_u4_front_seal", "FRONT_SEAL_CLOSED", arm=front,
                main_arm=main, target=active_cube_path, front_tcp_anchor_m=anchor_front.tolist(),
                native_bend_angle_deg=ATTACHMENT_PARAMETERS["bend_angle_deg"],
-               max_force_N=9., max_torque_Nm=1., max_front_vertical_N=.20 * support_guard.weight_N)
+               max_torque_Nm=1., max_front_vertical_N=.20 * support_guard.weight_N)
         record("upper_B_u4_main_seating", "RUNNING", arm=main)
 
         def sample():

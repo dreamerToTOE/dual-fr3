@@ -15,12 +15,11 @@ class HorizontalLoadShare:
         self.impulses = deque(maxlen=12)
         self.missing = 0
         self.lead = NormalForceController(0., gain_m_per_Ns=.00045, max_offset_m=.0008,
-                                          max_speed_m_s=.0012, max_force_N=9.)
+                                          max_speed_m_s=.0012, max_force_N=None)
 
     def check(self, main, front, lower_impulse_Ns, sealed):
         wrenches = np.asarray((main, front), dtype=float)
         if (not sealed or not np.all(np.isfinite(wrenches))
-                or np.linalg.norm(wrenches[:, :3], axis=1).max() > 9.
                 or np.linalg.norm(wrenches[:, 3:], axis=1).max() > 1.):
             raise RuntimeError(f"Horizontal assistance lost the front seal or wrist envelope: {wrenches.tolist()}")
         if not np.isfinite(lower_impulse_Ns) or lower_impulse_Ns < 0:

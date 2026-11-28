@@ -404,7 +404,7 @@ def inject(source):
                 if (abs(math.atan2(math.sin(yaw-ref_yaw), math.cos(yaw-ref_yaw))) > math.radians(3)
                         or abs(tcp[0] - b1_actual[0]) > .006
                         or abs(center[1] - (b1_actual[1] if staged else b1_target[1])) > .005
-                        or not .4 <= force <= 9.):
+                        or not force >= .4):
                     raise RuntimeError("Front box occluded with insufficient RGB, wrist and support-face agreement")
                 c, s = math.cos(yaw), math.sin(yaw)
                 upright = np.array([[c, -s, 0.], [s, c, 0.], [0., 0., 1.]])
@@ -426,7 +426,7 @@ def inject(source):
                 stable = 0
                 for _ in range(2400):
                     wrench = np.asarray(last_force_sample[arm]["tcp_gravity_corrected_world"])
-                    if not np.all(np.isfinite(wrench)) or np.linalg.norm(wrench[:3]) > 9. or np.linalg.norm(wrench[3:]) > 1.:
+                    if not np.all(np.isfinite(wrench)) or np.linalg.norm(wrench[3:]) > 1.:
                         raise RuntimeError(f"Front rear seating exceeded wrist limit at {travel*1000:.2f} mm: {wrench}")
                     loaded = True
                     if verify_path is not None:

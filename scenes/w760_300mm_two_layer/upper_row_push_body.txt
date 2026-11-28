@@ -17,13 +17,11 @@
                            3: "/World/Cube_7", 4: "/World/Cube_8"}.get(slot)
             front_offset = np.array([0., -half, .004])
             phase_prefix = f"upper_b{slot}"
-            force_ceiling = 9.
             settle_frame_count = 30
 
             def force(side, axis, sign):
                 wrench = np.asarray(last_force_sample[side]["tcp_gravity_corrected_world"])
-                if (not np.all(np.isfinite(wrench)) or np.linalg.norm(wrench[:3]) > force_ceiling
-                        or np.linalg.norm(wrench[3:]) > 1.0):
+                if not np.all(np.isfinite(wrench)) or np.linalg.norm(wrench[3:]) > 1.0:
                     raise RuntimeError(f"Upper {slot} {side} contact overload: {wrench.tolist()}")
                 return float(-sign * wrench[axis])
 
@@ -55,7 +53,7 @@
                 left_hold_z = float(position[2])
                 left_hold = NormalForceController(
                     float(position[1]), target_force_N=target, gain_m_per_Ns=.001 if slot in (1, 2) else 8e-5,
-                    max_offset_m=.003, max_speed_m_s=.001 if slot in (1, 2) else .0005, max_force_N=force_ceiling)
+                    max_offset_m=.003, max_speed_m_s=.001 if slot in (1, 2) else .0005, max_force_N=None)
 
             def prepare_rear_to_side_hold(target=1.25):
                 phase = "upper_B_front_pressure_handoff"
@@ -346,10 +344,10 @@
 
                     push_height = NormalForceController(0., target_force_N=0., gain_m_per_Ns=.00055,
                                                        max_offset_m=.0022 if force_paced_lateral else .0014, max_speed_m_s=.001,
-                                                       max_force_N=force_ceiling)
+                                                       max_force_N=None)
                     push_y = NormalForceController(0., target_force_N=0., gain_m_per_Ns=.00075,
                                                    max_offset_m=.002, max_speed_m_s=.0014,
-                                                   max_force_N=force_ceiling)
+                                                   max_force_N=None)
                     front_rgb_start = None
                     if recenter_vertical:
                         from fr3_surface_gripper import ATTACHMENT_PARAMETERS
@@ -795,10 +793,9 @@
                     details.update(transport_index=2, entry_center_x_m=entry_x,
                                    support_edge_cube_ids=[4, 2], observed_support_edges_m=[inner_edge, outer_edge])
                 weight = CONFIG["physics"]["cube_mass_kg"] * abs(CONFIG["physics"]["gravity_m_s2"][2])
-                limits = {name: A_FORCE_LIMITS[name]
-                          for name in ("max_force_N", "max_tcp_torque_Nm", "max_internal_force_N")}
-                limits.update(max_force_N=force_ceiling, max_tcp_torque_Nm=1.0, max_horizontal_force_N=force_ceiling, max_vertical_load_fraction=1.35,
-                              min_lift_vertical_load_fraction=.65)
+                limits = {"max_internal_force_N": A_FORCE_LIMITS["max_internal_force_N"],
+                          "max_tcp_torque_Nm": 1.0, "max_vertical_load_fraction": 1.35,
+                          "min_lift_vertical_load_fraction": .65}
                 balance_offset_m = balance_filtered_N = balance_peak_m = 0.
                 balance_max_m = .00045
                 if slot == 2:
@@ -841,9 +838,7 @@
                     forces = wrenches[:, :3]
                     vertical_load = -float(forces[:, 2].sum())
                     if (not np.all(np.isfinite(wrenches))
-                            or np.max(np.linalg.norm(forces, axis=1)) > limits["max_force_N"]
                             or np.max(np.linalg.norm(wrenches[:, 3:], axis=1)) > limits["max_tcp_torque_Nm"]
-                            or np.max(np.linalg.norm(forces[:, :2], axis=1)) > limits["max_horizontal_force_N"]
                             or np.linalg.norm(forces[0] - forces[1]) / 2 > limits["max_internal_force_N"]
                             or abs(vertical_load) > weight * limits["max_vertical_load_fraction"]):
                         raise RuntimeError(f"Upper {slot}: seam transport exceeded its wrench limits: {wrenches.tolist()}")

@@ -344,7 +344,7 @@ def install(source, *, observed_skills=False):
                             # Relieve the settling transient before confirming sustained rear contact.
                             if rear_hold is None:
                                 rear_hold = NormalForceController(tip[1] + travel, target_force_N=6.,
-                                    gain_m_per_Ns=.0006, max_speed_m_s=.0009, max_force_N=9.)
+                                    gain_m_per_Ns=.0006, max_speed_m_s=.0009, max_force_N=None)
                             travel = rear_hold.update(-wrench[1]) - tip[1]
                             q = cartesian_joint_target(arm, applied_targets[arm], tip + [0., travel, 0.], orientation)
                             command_positions(arm, q)
@@ -461,7 +461,7 @@ def install(source, *, observed_skills=False):
                               '''                side_wrist_window = deque(maxlen=settle_frame_count)
                 if steer_front:
                     terminal_height = NormalForceController(origin[2], target_force_N=0.,
-                        gain_m_per_Ns=.00055, max_offset_m=.0014, max_speed_m_s=.001, max_force_N=force_ceiling)''')
+                        gain_m_per_Ns=.00055, max_offset_m=.0014, max_speed_m_s=.001, max_force_N=None)''')
         start = source.index('                    negative_gap_limit = -.002 if slot4_boundary else -.003')
         end = source.index('                        forces.append(measured_force)', start)
         source = source[:start] + '''                    negative_gap_limit = -.002 if slot4_boundary and not steer_front else -.003

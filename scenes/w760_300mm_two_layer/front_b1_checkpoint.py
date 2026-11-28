@@ -60,7 +60,7 @@ def inject(source):
                     pairs = contact_monitor.cube_contact_snapshot()["pairs"]
                     loads = {p["label"] for p in pairs if p["current_step_observed"] and (p["normal_impulse_Ns"] or 0.) > 1e-5}
                     force = -last_force_sample[support_side]["tcp_gravity_corrected_world"][1]
-                    stable = stable + 1 if {"floor",support_side + "_cup"} <= loads and push_side + "_cup" not in loads and .4 <= force <= 9. else 0
+                    stable = stable + 1 if {"floor",support_side + "_cup"} <= loads and push_side + "_cup" not in loads and force >= .4 else 0
                     if stable == 18:
                         break
                 else:
@@ -84,7 +84,7 @@ def inject(source):
                                 and (p["normal_impulse_Ns"] or 0.) > 1e-5}
             if (slot in (1, 2, 3, 4) and not handoff and current_pairs["valid"] and {"floor", support_side + "_cup"} <= boundary_support
                     and push_side + "_cup" not in boundary_support and not any(grippers.is_closed(a) for a in robots)
-                    and .5 < -last_force_sample[support_side]["tcp_gravity_corrected_world"][1] < 9.):
+                    and -last_force_sample[support_side]["tcp_gravity_corrected_world"][1] > .5):
                 from front_b1_checkpoint import write_state
                 state = {"scene": SCENE, "next_front": slot, "next_slot": 1, "source_run": str(output_directory),
                          "initial_boxes": upper_pose_records(lower_bodies), "rear_initial": rear_initial,

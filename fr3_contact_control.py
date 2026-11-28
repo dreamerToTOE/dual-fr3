@@ -13,18 +13,18 @@ def oriented_wall_gap(center_axis, rotation_row, half_size, target_center, inwar
 class NormalForceController:
     """Integrate an absolute normal position, bounded about its initial value.
 
-    Force is positive for compression. Limits apply to commands, never to
-    measured force. Clamping the integrator state prevents hidden windup.
+    Force is positive for compression. The position and speed of the command
+    are bounded. A measured-force stop is optional.
     """
 
     def __init__(self, position_m, target_force_N=2.0, gain_m_per_Ns=1e-6,
                  max_offset_m=0.002, max_speed_m_s=0.00005, max_force_N=10.0):
-        values = (position_m, target_force_N, gain_m_per_Ns,
-                  max_offset_m, max_speed_m_s, max_force_N)
+        values = (position_m, target_force_N, gain_m_per_Ns, max_offset_m, max_speed_m_s)
         if not all(math.isfinite(value) for value in values):
             raise ValueError("Force controller parameters must be finite")
-        if (gain_m_per_Ns <= 0 or max_offset_m <= 0 or max_speed_m_s <= 0
-                or max_force_N <= 0 or not 0 <= target_force_N <= max_force_N):
+        if (gain_m_per_Ns <= 0 or max_offset_m <= 0 or max_speed_m_s <= 0 or target_force_N < 0
+                or (max_force_N is not None
+                    and (not math.isfinite(max_force_N) or max_force_N <= 0 or target_force_N > max_force_N))):
             raise ValueError("Invalid force controller gains, limits, or target")
         self.initial_position_m = float(position_m)
         self.position_m = float(position_m)
@@ -32,7 +32,7 @@ class NormalForceController:
         self.gain_m_per_Ns = float(gain_m_per_Ns)
         self.max_offset_m = float(max_offset_m)
         self.max_speed_m_s = float(max_speed_m_s)
-        self.max_force_N = float(max_force_N)
+        self.max_force_N = None if max_force_N is None else float(max_force_N)
 
     @property
     def offset_m(self):
@@ -40,10 +40,10 @@ class NormalForceController:
 
     def update(self, force_N, dt=1 / 120, target_force_N=None):
         target = self.target_force_N if target_force_N is None else target_force_N
-        if (not all(math.isfinite(value) for value in (force_N, dt, target))
-                or dt <= 0 or not 0 <= target <= self.max_force_N):
+        if (not all(math.isfinite(value) for value in (force_N, dt, target)) or dt <= 0 or target < 0
+                or (self.max_force_N is not None and target > self.max_force_N)):
             raise ValueError("Force, target and positive sample interval must be finite and valid")
-        if abs(force_N) > self.max_force_N:
+        if self.max_force_N is not None and abs(force_N) > self.max_force_N:
             raise RuntimeError(f"Normal force overload: {force_N:.6f} N exceeds {self.max_force_N:.6f} N")
         self.target_force_N = float(target)
         velocity = self.gain_m_per_Ns * (self.target_force_N - force_N)

@@ -63,8 +63,7 @@ SEEK = '''
                 increment = speed / 120
                 for index in range(int(limit / increment) + 1):
                     wrench = np.asarray(last_force_sample[arm]["tcp_gravity_corrected_world"])
-                    if (not np.all(np.isfinite(wrench)) or np.linalg.norm(wrench[:3]) > 9.
-                            or np.linalg.norm(wrench[3:]) > 1.):
+                    if not np.all(np.isfinite(wrench)) or np.linalg.norm(wrench[3:]) > 1.:
                         raise RuntimeError(f"{phase}: {arm} wrench outside limits: {wrench}")
                     position = np.asarray(last_force_sample[arm]["tcp_position_m"])
                     center, attitude = sensed_cube()

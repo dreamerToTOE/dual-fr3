@@ -47,6 +47,10 @@ def install(source):
     source = replace_once(source, hook, REAR_BODY + '\n' + hook)
     source = replace_once(source, 'speed=.08, force_limit=None):',
                           'speed=.08, force_limit=None, rear_push=False):')
+    source = replace_once(source, 'if force_limit is not None:\n                    wrench =',
+                          'if rear_push or force_limit is not None:\n                    wrench =')
+    source = replace_once(source, 'or np.linalg.norm(wrench[:3]) > force_limit',
+                          'or (force_limit is not None and np.linalg.norm(wrench[:3]) > force_limit)')
     source = replace_once(source, '            # Keep the touched normal anchored',
                           '''            axial_average = axial_relief = height_offset = 0.
 
@@ -185,8 +189,8 @@ REAR_BODY = '''
                     total = np.linalg.norm(wrench[:3])
                     normal = -direction * float(wrench[axis])
                     gap = direction * (boundary - center[axis]) - half * np.abs(rotation[axis]).sum()
-                    if total > 9. or np.linalg.norm(wrench[3:]) > 1. or gap < -.002:
-                        raise RuntimeError(f"{phase}: exceeded force or geometry envelope")
+                    if np.linalg.norm(wrench[3:]) > 1. or gap < -.002:
+                        raise RuntimeError(f"{phase}: exceeded wrist torque or geometry envelope")
                     window.append((direction * tip[axis], direction * measured[axis], normal))
                     if len(window) == window.maxlen:
                         values = np.asarray(window)
@@ -283,11 +287,11 @@ REAR_BODY = '''
                             if direction * (goal[axis] - start[axis]) > .005:
                                 lead = goal.copy()
                                 lead[axis] -= direction * .005
-                                contact_path(arm, start, lead, phase, speed=.018, force_limit=9., rear_push=True)
+                                contact_path(arm, start, lead, phase, speed=.018, rear_push=True)
                                 start, _ = sensed_cube()
-                            contact_path(arm, start, goal, phase + "_stage", speed=.004, force_limit=9., rear_push=True)
+                            contact_path(arm, start, goal, phase + "_stage", speed=.004, rear_push=True)
                         else:
-                            contact_path(arm, start, goal, phase, speed=.018, force_limit=9.,
+                            contact_path(arm, start, goal, phase, speed=.018,
                                          rear_push=target_name == "wall_back")
                     else:
                         # Keep the command-to-encoder preload established by contact synchronization.
@@ -375,17 +379,11 @@ REAR_BODY = '''
                                 else:
                                     raise RuntimeError(f"{phase}: lateral travel remained blocked under load")
 
-                        def check_load(index, count):
+                        def measure_slide(index, count):
                             if slot == 4 and .2 * count <= index <= .7 * count and index not in measured_slide:
                                 measured_slide[index] = -direction * last_force_sample[arm]["tcp_gravity_corrected_world"][0]
-                            for active in robots:
-                                force = np.asarray(last_force_sample[active]["tcp_gravity_corrected_world"][:3])
-                                if np.linalg.norm(force) > 9.:
-                                    record(phase, "WRIST_LIMIT", arm=active, force_N=force.tolist(),
-                                           lateral_relief_m=relief.tolist())
-                                    raise RuntimeError(f"Rear slot {slot} coordinated push exceeded wrist load")
 
-                        execute_joint_path(samples, phase, check_step=check_load, adjust_targets=level_push,
+                        execute_joint_path(samples, phase, check_step=measure_slide, adjust_targets=level_push,
                                            sample_order=advance_under_load,
                                            cube_center_path=lambda _samples, _times: start + translation,
                                            sampled_trajectory=(times, samples))

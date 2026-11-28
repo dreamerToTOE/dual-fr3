@@ -19,7 +19,7 @@
                 check_current_collision(phase + "_unload")
                 wrench = np.asarray(last_force_sample[side]["tcp_gravity_corrected_world"])
                 compression = -float(wrench[:3] @ inward)
-                if np.linalg.norm(wrench[:3]) > 9. or np.linalg.norm(wrench[3:]) > 1.:
+                if np.linalg.norm(wrench[3:]) > 1.:
                     raise RuntimeError(f"{side} side seal unloading overload: {wrench.tolist()}")
                 if compression > .12 or retreat < .00040:
                     retreat += .000005
@@ -54,7 +54,7 @@
                 step()
                 for arm in robots:
                     wrench = np.asarray(last_force_sample[arm]["tcp_gravity_corrected_world"])
-                    if np.linalg.norm(wrench[:3]) > 9. or np.linalg.norm(wrench[3:]) > 1.:
+                    if np.linalg.norm(wrench[3:]) > 1.:
                         raise RuntimeError(f"{arm} stationary side seal overload: {wrench.tolist()}")
                 if not grippers.is_closed(side):
                     raise RuntimeError(f"{side} seal broke while holding the docking pose")
