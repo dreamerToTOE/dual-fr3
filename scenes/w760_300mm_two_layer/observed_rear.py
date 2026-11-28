@@ -143,8 +143,7 @@ REAR_BODY = '''
                     # The wrench envelope limits advance while the neighboring box is already bearing.
                     min_advance = .000004
                 max_tracking_ratio = .45 if short_window else .35
-                extended_terminal = axis == 0 or slot != 1
-                travel_limit = .012 if slot == 5 else .009 if extended_terminal else .004
+                travel_limit = .012 if slot == 5 else .009
                 gap_limit = (B2_CONTROLLER_PARAMETERS["seating_gap_tolerance_m"]
                              if slot == 2 and axis == 1 else .00045)
                 for _ in range(5400 if slot == 5 else 3600):
@@ -170,7 +169,7 @@ REAR_BODY = '''
                             return
                     increment = 0.
                     if total < 7.7:
-                        speed = .0005 if extended_terminal and gap > .001 else .00012
+                        speed = .0005 if gap > .001 else .00012
                         increment = direction * speed / 120
                         tip[axis] += increment
                     if abs(tip[axis] - start) > travel_limit:
@@ -238,7 +237,7 @@ REAR_BODY = '''
                 start, rotation = sensed_cube()
                 measured_slide = {}
                 goal = start.copy()
-                standoff = .005 if slot != 1 and target_name == "wall_back" else .001
+                standoff = .005 if target_name == "wall_back" else .001
                 if slot == 5 and target_name == "wall_back":
                     standoff = .009
                 goal[axis] = boundary - direction * (half * np.abs(rotation[axis]).sum() + standoff)
