@@ -1,0 +1,456 @@
+{
+  "campaign": "dynamic-full-15-20261128",
+  "boxes": {
+    "1": "R1",
+    "2": "R2",
+    "3": "R3",
+    "4": "R4",
+    "5": "R5",
+    "12": "F1",
+    "15": "F2",
+    "13": "F3",
+    "14": "F4",
+    "6": "F5",
+    "7": "U1",
+    "8": "U2",
+    "9": "U3",
+    "10": "U4",
+    "11": "U5"
+  },
+  "checkpoint_chain": [
+    "initial",
+    "rear1-terminal",
+    "rear2-load",
+    "rear4-load",
+    "front3-fr3-limits",
+    "upper1-fr3-limits",
+    "upper2-seam2",
+    "upper3-extend",
+    "upper4-bearing"
+  ],
+  "runs": {
+    "initial": {
+      "runner_report_sha256": "9137dd11824f147a6b5e29715789363abe716fb1911d1c16eb4452937a15c036",
+      "windows": [
+        {
+          "name": "R1_suction_on_to_carry",
+          "cube_id": 1,
+          "after_step": 4213,
+          "through_step": 4273,
+          "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED through A_lift_and_align/RUNNING before its first instruction"
+        },
+        {
+          "name": "R1_suction_off_to_withdraw",
+          "cube_id": 1,
+          "after_step": 13279,
+          "through_step": 13339,
+          "evidence": "upper_release synchronous open calls return before the support sample loop, then A_dynamic_withdraw starts"
+        }
+      ]
+    },
+    "rear1-terminal": {
+      "runner_report_sha256": "e41491b01fe0c66ea77d382640b9629c8770ccd39de01de24280064907939e54",
+      "windows": [
+        {
+          "name": "R2_suction_on_to_carry",
+          "cube_id": 2,
+          "after_step": 37608,
+          "through_step": 37668,
+          "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED through A_lift_and_align/RUNNING before its first instruction"
+        },
+        {
+          "name": "R2_suction_off_to_withdraw",
+          "cube_id": 2,
+          "after_step": 50418,
+          "through_step": 50478,
+          "evidence": "upper_release synchronous open calls return before the support sample loop, then A_dynamic_withdraw starts"
+        }
+      ]
+    },
+    "rear2-load": {
+      "runner_report_sha256": "d379c56cda0342610126d6fc3bfff10996d48776ab4037d2cbd54052094ad838",
+      "windows": [
+        {
+          "name": "R3_suction_on_to_carry",
+          "cube_id": 3,
+          "after_step": 31536,
+          "through_step": 31596,
+          "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED through A_lift_and_align/RUNNING before its first instruction"
+        },
+        {
+          "name": "R3_suction_off_to_withdraw",
+          "cube_id": 3,
+          "after_step": 40869,
+          "through_step": 40929,
+          "evidence": "upper_release synchronous open calls return before the support sample loop, then A_dynamic_withdraw starts"
+        },
+        {
+          "name": "R4_suction_on_to_carry",
+          "cube_id": 4,
+          "after_step": 79316,
+          "through_step": 79376,
+          "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED through A_lift_and_align/RUNNING before its first instruction"
+        },
+        {
+          "name": "R4_suction_off_to_withdraw",
+          "cube_id": 4,
+          "after_step": 92170,
+          "through_step": 92230,
+          "evidence": "upper_release synchronous open calls return before the support sample loop, then A_dynamic_withdraw starts"
+        }
+      ]
+    },
+    "rear4-load": {
+      "runner_report_sha256": "6713698c3517ad346d40d329ed48f56bae5fcf2ef2a6a62d485a16c7b71b35ed",
+      "windows": [
+        {
+          "name": "R5_suction_on_to_carry",
+          "cube_id": 5,
+          "after_step": 26504,
+          "through_step": 26564,
+          "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED through A_lift_and_align/RUNNING before its first instruction"
+        },
+        {
+          "name": "R5_suction_off_to_withdraw",
+          "cube_id": 5,
+          "after_step": 35550,
+          "through_step": 35610,
+          "evidence": "upper_release synchronous open calls return before the support sample loop, then A_dynamic_withdraw starts"
+        },
+        {
+          "name": "F1_suction_on_to_carry",
+          "cube_id": 12,
+          "after_step": 53770,
+          "through_step": 53830,
+          "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED through A_lift_and_align/RUNNING before its first instruction"
+        },
+        {
+          "name": "F1_suction_off_to_withdraw",
+          "cube_id": 12,
+          "after_step": 62815,
+          "through_step": 62875,
+          "evidence": "A_front_floor_release synchronous open calls return before the support sample loop, then A_dynamic_withdraw starts"
+        },
+        {
+          "name": "F1_park_to_b",
+          "cube_id": 12,
+          "after_step": 64544,
+          "through_step": 64808,
+          "evidence": "A_empty_repark_transit completes; F1 skips return rails; stationary sensing before B1_rail_preparation"
+        },
+        {
+          "name": "F1_b_camera_clear_to_reapproach",
+          "cube_id": 12,
+          "after_step": 85005,
+          "through_step": 85029,
+          "evidence": "B2_stage_camera_clear_transit completes, then camera sampling before B2_staged_observed_reapproach"
+        },
+        {
+          "name": "F3_suction_on_to_carry",
+          "cube_id": 13,
+          "after_step": 151174,
+          "through_step": 151234,
+          "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED through A_lift_and_align/RUNNING before its first instruction"
+        },
+        {
+          "name": "F3_suction_off_to_withdraw",
+          "cube_id": 13,
+          "after_step": 160538,
+          "through_step": 160598,
+          "evidence": "A_front_floor_release synchronous open calls return before the support sample loop, then A_dynamic_withdraw starts"
+        },
+        {
+          "name": "F3_park_to_landing_checkpoint",
+          "cube_id": 13,
+          "after_step": 165437,
+          "through_step": 165461,
+          "evidence": "A_empty_repark_transit plus 1362+1362 rail steps; retain through the inherited landing checkpoint only"
+        },
+        {
+          "name": "F2_suction_on_to_carry",
+          "cube_id": 15,
+          "after_step": 101220,
+          "through_step": 101280,
+          "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED through A_lift_and_align/RUNNING before its first instruction"
+        },
+        {
+          "name": "F2_suction_off_to_withdraw",
+          "cube_id": 15,
+          "after_step": 113936,
+          "through_step": 113996,
+          "evidence": "A_front_floor_release synchronous open calls return before the support sample loop, then A_dynamic_withdraw starts"
+        },
+        {
+          "name": "F2_park_to_b",
+          "cube_id": 15,
+          "after_step": 115626,
+          "through_step": 115890,
+          "evidence": "A_empty_repark_transit completes; F2 skips return rails; stationary sensing before B1_rail_preparation"
+        },
+        {
+          "name": "F2_b_camera_clear_to_reapproach",
+          "cube_id": 15,
+          "after_step": 135049,
+          "through_step": 135073,
+          "evidence": "B2_stage_camera_clear_transit completes, then camera sampling before B2_staged_observed_reapproach"
+        }
+      ]
+    },
+    "front3-fr3-limits": {
+      "runner_report_sha256": "ffc01880ad94d19838146244e5aef29d049cc90323491e5673183912dd53a7a0",
+      "windows": [
+        {
+          "name": "F5_suction_on_to_carry",
+          "cube_id": 6,
+          "after_step": 53743,
+          "through_step": 53803,
+          "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED through A_lift_and_align/RUNNING before its first instruction"
+        },
+        {
+          "name": "F5_suction_off_to_withdraw",
+          "cube_id": 6,
+          "after_step": 62807,
+          "through_step": 62867,
+          "evidence": "A_front_floor_release synchronous open calls return before the support sample loop, then A_dynamic_withdraw starts"
+        },
+        {
+          "name": "F5_park_to_b",
+          "cube_id": 6,
+          "after_step": 65899,
+          "through_step": 66187,
+          "evidence": "A_empty_repark_transit plus 1361+2 rail steps, before B1_rail_preparation"
+        },
+        {
+          "name": "U1_suction_on_to_carry",
+          "cube_id": 7,
+          "after_step": 76425,
+          "through_step": 76485,
+          "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED through A_lift_and_align/RUNNING before its first instruction"
+        },
+        {
+          "name": "U1_suction_off_to_withdraw",
+          "cube_id": 7,
+          "after_step": 86498,
+          "through_step": 86558,
+          "evidence": "upper_release synchronous open calls return before the support sample loop, then A_dynamic_withdraw starts"
+        },
+        {
+          "name": "U1_park_to_b",
+          "cube_id": 7,
+          "after_step": 91602,
+          "through_step": 91686,
+          "evidence": "A_empty_repark_transit at 88979 plus 2022+601 rail steps, then stationary sensing before upper_B_rail"
+        },
+        {
+          "name": "F3_b_park_to_other_arm",
+          "cube_id": 13,
+          "after_step": 7258,
+          "through_step": 7282,
+          "evidence": "After-lateral camera window after lift and park complete, before front_3_left_rail"
+        },
+        {
+          "name": "F4_suction_on_to_carry",
+          "cube_id": 14,
+          "after_step": 20059,
+          "through_step": 20119,
+          "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED through A_lift_and_align/RUNNING before its first instruction"
+        },
+        {
+          "name": "F4_suction_off_to_withdraw",
+          "cube_id": 14,
+          "after_step": 32840,
+          "through_step": 32900,
+          "evidence": "A_front_floor_release synchronous open calls return before the support sample loop, then A_dynamic_withdraw starts"
+        },
+        {
+          "name": "F4_park_to_b",
+          "cube_id": 14,
+          "after_step": 37143,
+          "through_step": 37407,
+          "evidence": "A_empty_repark_transit plus 1361+1231 rail steps, through the new contact drive command recorded at 37407"
+        },
+        {
+          "name": "F4_b_park_to_other_arm",
+          "cube_id": 14,
+          "after_step": 42409,
+          "through_step": 42433,
+          "evidence": "After-lateral camera window after lift and park complete, before front_4_right_rail"
+        }
+      ]
+    },
+    "upper1-fr3-limits": {
+      "runner_report_sha256": "e1a47bba81a57d044a87bbb1c82decceee24152dea58d1890634cf40e5c32fd7",
+      "windows": [
+        {
+          "name": "U1_seam1_on_to_lift",
+          "cube_id": 7,
+          "after_step": 11591,
+          "through_step": 11603,
+          "evidence": "upper_B_seam_transport DUAL_SEALS_CLOSED through 12 stationary steps before first carry"
+        },
+        {
+          "name": "U1_seam1_off_to_motion",
+          "cube_id": 7,
+          "after_step": 14303,
+          "through_step": 14387,
+          "evidence": "upper_B_seam_transport synchronous opening calls through SETTLED_ON_LOWER_SUPPORT before next motion"
+        },
+        {
+          "name": "U2_suction_on_to_carry",
+          "cube_id": 8,
+          "after_step": 30638,
+          "through_step": 30698,
+          "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED through A_lift_and_align/RUNNING before its first instruction"
+        },
+        {
+          "name": "U2_suction_off_to_withdraw",
+          "cube_id": 8,
+          "after_step": 40709,
+          "through_step": 40769,
+          "evidence": "upper_release synchronous open calls return before the support sample loop, then A_dynamic_withdraw starts"
+        },
+        {
+          "name": "U2_park_to_b",
+          "cube_id": 8,
+          "after_step": 44957,
+          "through_step": 45041,
+          "evidence": "A_empty_repark_transit at 42334 plus 601+2022 rail steps, then stationary sensing before upper_B_rail"
+        },
+        {
+          "name": "U2_seam1_on_to_lift",
+          "cube_id": 8,
+          "after_step": 60954,
+          "through_step": 60966,
+          "evidence": "upper_B_seam_transport DUAL_SEALS_CLOSED through 12 stationary steps before first carry"
+        },
+        {
+          "name": "U2_seam1_off_to_motion",
+          "cube_id": 8,
+          "after_step": 62766,
+          "through_step": 62850,
+          "evidence": "upper_B_seam_transport synchronous opening calls through SETTLED_ON_LOWER_SUPPORT before next motion"
+        },
+        {
+          "name": "U2_seam2_on_to_lift",
+          "cube_id": 8,
+          "after_step": 64430,
+          "through_step": 64442,
+          "evidence": "upper_B_extra_seam_transport DUAL_SEALS_CLOSED through 12 stationary steps before first carry"
+        },
+        {
+          "name": "U2_seam2_off_to_motion",
+          "cube_id": 8,
+          "after_step": 67111,
+          "through_step": 67195,
+          "evidence": "upper_B_extra_seam_transport synchronous opening calls through SETTLED_ON_LOWER_SUPPORT before next motion"
+        }
+      ]
+    },
+    "upper2-seam2": {
+      "runner_report_sha256": "b1118e7aee8237effd7bf989c0d323c05027b28d4dbfeda4881dadd5b8b9285d",
+      "windows": [
+        {
+          "name": "U3_suction_on_to_carry",
+          "cube_id": 9,
+          "after_step": 20011,
+          "through_step": 20071,
+          "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED through A_lift_and_align/RUNNING before its first instruction"
+        },
+        {
+          "name": "U3_suction_off_to_withdraw",
+          "cube_id": 9,
+          "after_step": 29777,
+          "through_step": 29837,
+          "evidence": "upper_release synchronous open calls return before the support sample loop, then A_dynamic_withdraw starts"
+        },
+        {
+          "name": "U3_park_to_b",
+          "cube_id": 9,
+          "after_step": 34199,
+          "through_step": 34283,
+          "evidence": "A_empty_repark_transit at 31695 plus 1904+600 rail steps, then stationary sensing before upper_B_rail"
+        },
+        {
+          "name": "U3_seam1_on_to_lift",
+          "cube_id": 9,
+          "after_step": 45205,
+          "through_step": 45217,
+          "evidence": "upper_B_seam_transport DUAL_SEALS_CLOSED through 12 stationary steps before first carry"
+        },
+        {
+          "name": "U3_seam1_off_to_motion",
+          "cube_id": 9,
+          "after_step": 48363,
+          "through_step": 48447,
+          "evidence": "upper_B_seam_transport synchronous opening calls through SETTLED_ON_LOWER_SUPPORT before next motion"
+        }
+      ]
+    },
+    "upper3-extend": {
+      "runner_report_sha256": "9f618b59f172cf3565896c446432fa81ed742184b2c78ccdadfecab24f2139fc",
+      "windows": [
+        {
+          "name": "U4_suction_on_to_carry",
+          "cube_id": 10,
+          "after_step": 20718,
+          "through_step": 20778,
+          "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED through A_lift_and_align/RUNNING before its first instruction"
+        },
+        {
+          "name": "U4_suction_off_to_withdraw",
+          "cube_id": 10,
+          "after_step": 30491,
+          "through_step": 30551,
+          "evidence": "upper_release synchronous open calls return before the support sample loop, then A_dynamic_withdraw starts"
+        },
+        {
+          "name": "U4_park_to_b",
+          "cube_id": 10,
+          "after_step": 34309,
+          "through_step": 34393,
+          "evidence": "A_empty_repark_transit at 31798 plus 601+1910 rail steps, then stationary sensing before upper_B_rail"
+        },
+        {
+          "name": "U4_seam1_on_to_lift",
+          "cube_id": 10,
+          "after_step": 40714,
+          "through_step": 40726,
+          "evidence": "upper_B_seam_transport DUAL_SEALS_CLOSED through 12 stationary steps before first carry"
+        },
+        {
+          "name": "U4_seam1_off_to_motion",
+          "cube_id": 10,
+          "after_step": 43566,
+          "through_step": 43650,
+          "evidence": "upper_B_seam_transport synchronous opening calls through SETTLED_ON_LOWER_SUPPORT before next motion"
+        }
+      ]
+    },
+    "upper4-bearing": {
+      "runner_report_sha256": "53c2e8d7f7e0f0918ed82ca5ad063cc4c9cfa06bd3b7df399b5d82f763e79787",
+      "windows": [
+        {
+          "name": "U5_suction_on_to_carry",
+          "cube_id": 11,
+          "after_step": 23781,
+          "through_step": 23841,
+          "evidence": "A_attach/SURFACE_GRIPPERS_CLOSED through A_lift_and_align/RUNNING before its first instruction"
+        },
+        {
+          "name": "U5_suction_off_to_withdraw",
+          "cube_id": 11,
+          "after_step": 33469,
+          "through_step": 33529,
+          "evidence": "upper_release synchronous open calls return before the support sample loop, then A_dynamic_withdraw starts"
+        },
+        {
+          "name": "U5_park_to_b",
+          "cube_id": 11,
+          "after_step": 37832,
+          "through_step": 37964,
+          "evidence": "A_empty_repark_transit at 35362 plus 1870+600 rail steps, then stationary sensing before upper_B_rail"
+        }
+      ]
+    }
+  }
+}

@@ -38,7 +38,7 @@ def optical_neighbors(report, cube_id):
             stamp = box.get("capture_time_s")
             if stamp is None or box["name"] == f"Cube_{cube_id}":
                 continue
-            arrivals = [a["ended_s"] for a in report["neighbor_observation_attempts"]
+            arrivals = [a["ended_s"] for a in report.get("neighbor_observation_attempts", ())
                         if a["cube_id"] == cube_id and a["started_s"] <= stamp <= a["ended_s"]]
             if arrivals:
                 records.setdefault("/World/" + box["name"], {
@@ -49,11 +49,12 @@ def optical_neighbors(report, cube_id):
 
 
 def physical_label(row):
-    """Label upright upper-row traces using current native contact and suction."""
+    """Label upright box traces using current native contact and suction."""
     snapshot = row["cube_contacts"]
     if not snapshot["valid"]:
         return UNKNOWN, set(), set()
-    active = f"/World/Cube_{row['active_cube_id']}"
+    cube = row["active_cube_id"]
+    active = f"/World/Cube_{cube}"
     touching, unresolved, bearing = set(), set(), set()
     supported = False
     for pair in snapshot["pairs"]:
@@ -74,7 +75,7 @@ def physical_label(row):
         elif loaded:
             axes = pair.get("normal_axis_impulse_abs_Ns")
             vertical = axes is None or axes[2] >= max(axes[:2])
-            if label in ("floor", "supply") or other in LOWER:
+            if label in ("floor", "supply") or (7 <= cube <= 11 and other in LOWER):
                 supported |= vertical
             elif label == "cube_neighbor" or label.startswith("wall_"):
                 if axes is None or max(axes[:2]) > axes[2]:
@@ -159,8 +160,12 @@ def profiles():
         yield "fusion_compensated", delay, .003
 
 
-def load_idle_windows(path, report_digest, cubes):
+def load_idle_windows(path, report_digest, cubes, run_name=None):
     manifest = json.loads(path.read_text())
+    if "runs" in manifest:
+        if run_name not in manifest["runs"]:
+            raise ValueError(f"No idle window record for run {run_name!r}")
+        manifest = manifest["runs"][run_name]
     if manifest["runner_report_sha256"] != report_digest:
         raise ValueError("Idle windows were marked on a different runner report")
     windows = {}
@@ -188,7 +193,8 @@ def replay(run, output, cubes, isaac_dir, idle_manifest=None):
 
     report_bytes = (run / "runner_report.json").read_bytes()
     report = json.loads(report_bytes)
-    idle = load_idle_windows(idle_manifest, sha256(report_bytes).hexdigest(), cubes) if idle_manifest else {}
+    idle = load_idle_windows(idle_manifest, sha256(report_bytes).hexdigest(), cubes, run.name) if idle_manifest else {}
+    last_scored_step = max((entries[-1]["through_step"] for entries in idle.values()), default=None)
     config = report["scene_parameters"]
     hz = report["simulation_clock"]["control_hz"]
     kin, robot_sha = command_kinematics(isaac_dir)
@@ -200,9 +206,8 @@ def replay(run, output, cubes, isaac_dir, idle_manifest=None):
     neighbors = {cube: optical_neighbors(report, cube) for cube in cubes}
     current = None
     counts, events, ages, unavailable, step_ranges = {}, {}, {}, {}, {}
-    idle_counts = {}
-    if idle:
-        idle_counts = {row["name"]: Counter() for entries in idle.values() for row in entries}
+    idle_counts = {row["name"]: Counter() for entries in idle.values() for row in entries}
+    held_targets = {}
     columns = tuple(profiles())
     result = {"run": run.name, "runner_status": report["status"], "legacy_revision": LEGACY,
               "hz": hz, "robot_sha256": robot_sha, "sources_sha256": {},
@@ -245,7 +250,14 @@ def replay(run, output, cubes, isaac_dir, idle_manifest=None):
                 continue
             label, clear, bearing = physical_label(physical)
             if idle_window:
-                idle_counts[idle_window["name"]][label] += 1
+                name = idle_window["name"]
+                control = wrench["control"]
+                current_targets = control["position_targets_rad"]
+                initial_targets = held_targets.setdefault(name, current_targets)
+                if (initial_targets != current_targets
+                        or any(any(velocities) for velocities in control["velocity_targets_rad_s"].values())):
+                    raise ValueError(f"Robot command changes in the idle window {name}, step {step}")
+                idle_counts[name][label] += 1
             active_windows = [(name, target, arms, all_clear)
                               for (cid, name), (start, end, target, arms, all_clear) in windows.items()
                               if cid == cube and start < step <= end]
@@ -268,6 +280,9 @@ def replay(run, output, cubes, isaac_dir, idle_manifest=None):
                         truth = None if label == UNKNOWN else set(arms) <= clear
                         detected = all(estimate["tools"][side] == "separated" for side in arms)
                     events[cube][key][name].append((step, truth, detected))
+            if step == last_scored_step:
+                # A checkpoint handoff can leave the gzip footer unwritten after the usable prefix.
+                break
     if set(counts) != set(cubes):
         raise ValueError(f"Missing requested cubes: {set(cubes) - set(counts)}")
     if idle:
@@ -304,7 +319,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("run", type=Path)
     parser.add_argument("output", type=Path)
-    parser.add_argument("--cube", nargs="+", type=int, required=True, choices=range(7, 12))
+    parser.add_argument("--cube", nargs="+", type=int, required=True, choices=range(1, 16))
     parser.add_argument("--isaac-sim-dir", type=Path, required=True)
     parser.add_argument("--idle-windows", type=Path,
                         help="Score only the listed verified between-skill intervals")
