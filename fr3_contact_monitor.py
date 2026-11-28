@@ -51,7 +51,8 @@ class CubeContactTracker:
             self._pairs.clear()
         self.physics_step = physics_step
 
-    def update(self, path0, path1, *, event_type, physics_step, separation_m=None, normal_impulse_Ns=None):
+    def update(self, path0, path1, *, event_type, physics_step, separation_m=None, normal_impulse_Ns=None,
+               normal_axis_impulse_abs_Ns=None):
         label = _cube_contact_label(path0, path1, self.cube_path)
         if label is None or physics_step is None:
             return
@@ -72,6 +73,7 @@ class CubeContactTracker:
             "collider0": pair[0], "collider1": pair[1], "label": label,
             "separation_m": separation_m if separation_m is not None else previous.get("separation_m"),
             "normal_impulse_Ns": normal_impulse_Ns,
+            "normal_axis_impulse_abs_Ns": normal_axis_impulse_abs_Ns,
             "last_observed_physics_step": physics_step,
             "last_separation_physics_step": (physics_step if separation_m is not None
                                              else previous.get("last_separation_physics_step")),
@@ -99,11 +101,13 @@ class CubeContactTracker:
         return result
 
 
-def _contact_normal_impulse(points):
+def _contact_normal_impulses(points):
+    """Total normal impulse and unsigned world-axis components, invariant to collider order."""
     total = 0.0
+    axes = [0., 0., 0.]
     for point in points:
         if not hasattr(point, "impulse") or not hasattr(point, "normal"):
-            return None
+            return None, None
         impulse, normal = tuple(point.impulse), tuple(point.normal)
         if (len(impulse) != 3 or len(normal) != 3
                 or not all(math.isfinite(value) for value in (*impulse, *normal))):
@@ -111,8 +115,11 @@ def _contact_normal_impulse(points):
         norm = math.sqrt(sum(value * value for value in normal))
         if norm <= 0:
             raise ValueError("PhysX contact normal cannot be zero")
-        total += abs(sum(a * b for a, b in zip(impulse, normal))) / norm
-    return total if points else None
+        magnitude = abs(sum(a * b for a, b in zip(impulse, normal))) / norm
+        total += magnitude
+        for axis in range(3):
+            axes[axis] += magnitude * abs(normal[axis]) / norm
+    return (total, axes) if points else (None, None)
 
 
 def _robot_side(path):
@@ -199,9 +206,10 @@ class PhysxContactMonitor:
             points = [data[i] for i in range(start, start + header.num_contact_data)]
             separation = min((float(point.separation) for point in points), default=None)
             if _cube_contact_label(path0, path1, self.active_cube_path) is not None:
+                normal_impulse, axis_impulses = _contact_normal_impulses(points)
                 self.cube_contacts.update(path0, path1, event_type=getattr(header, "type", 0),
                                           physics_step=self.physics_step_index, separation_m=separation,
-                                          normal_impulse_Ns=_contact_normal_impulse(points))
+                                          normal_impulse_Ns=normal_impulse, normal_axis_impulse_abs_Ns=axis_impulses)
             if not header.num_contact_data:
                 continue
             if _robot_side(path0) is None and _robot_side(path1) is None:
