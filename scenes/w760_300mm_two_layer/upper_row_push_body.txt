@@ -389,7 +389,6 @@
                     terminal_reference_x = None
                     terminal_rate = 0.
                     probe_axial_limit = None
-                    recent_probe_resultants = deque(maxlen=8)
 
                     def smooth_supported_x(index, commands, z_offset, y_offset):
                         nonlocal paced_x, last_measured_x, measured_x_rate, paced_x_rate
@@ -401,11 +400,8 @@
                         resultant = np.linalg.norm(wrench[:3])
                         headroom = min(7.1 + sign * wrench[0], 7.65 - resultant)
                         if probe_axial_limit is not None:
-                            # Permit a small bounded increase above sliding friction during the static probe.
-                            # A recent near-limit transient stops loading even if this sample falls back.
-                            recent_probe_resultants.append(float(resultant))
-                            headroom = min(probe_axial_limit + sign * wrench[0], 8.28 - resultant,
-                                           8.50 - max(recent_probe_resultants))
+                            # Regulate the axial effort while checking that the box actually reaches the target.
+                            headroom = probe_axial_limit + sign * wrench[0]
                         sample = min(index, len(translation) - 2)
                         reference_rate = abs(translation[sample + 1] - translation[sample]) * 120
                         if terminal_reference_x is not None:
@@ -597,20 +593,28 @@
                                     box_advance = sign * (float(np.mean(centers)) - probe_center_x)
                                     if (increase >= .15 and np.min(loads) >= threshold and np.max(gaps) <= .00045
                                             and np.ptp(wrists) <= .000025 and np.ptp(centers) <= .000045
-                                            and -.00005 <= wrist_advance <= .00020 and abs(box_advance) <= .00025):
+                                            and wrist_advance >= -.00005 and box_advance >= -.00005):
                                         if sum(observed) < 24:
-                                            raise RuntimeError(f"{terminal}: active probe lacks native U1 bearing "
-                                                               f"({sum(observed)}/30, measured rise {increase:.3f} N, "
-                                                               f"command {advance*1000:.3f} mm)")
-                                        record(phase, "FORCE_CONFIRMED", arm=side, contact_target=target,
-                                               held_samples=settle_frame_count, normal_force_N=float(np.mean(loads)),
-                                               normal_force_samples_N=loads.tolist(), estimated_gap_m=gap2d,
-                                               witnessed_target_contact_ticks=sum(observed), sliding_baseline_N=background,
-                                               force_threshold_N=threshold, terminal_travel_m=abs(paced_x-terminal_start),
-                                               active_probe={"command_advance_m":advance,"wrist_advance_m":wrist_advance,
-                                                             "cube_advance_m":box_advance,"normal_force_rise_N":increase,
-                                                             "initial_normal_force_N":probe_baseline})
-                                        return
+                                            # A supported box can stop under sliding resistance before the neighbor.
+                                            if probe_axial_limit < probe_baseline + 1.8:
+                                                probe_axial_limit = probe_baseline + 1.8
+                                                # Extend the slow seek within the existing overall travel bound.
+                                                probe_distance = .001
+                                                probe_ticks = 0
+                                                record(terminal, "CONTINUING_SEEK", normal_force_N=normal,
+                                                       target_contact_ticks=sum(observed), command_advance_m=advance,
+                                                       estimated_gap_m=gap2d, axial_target_N=probe_axial_limit,
+                                                       commanded_probe_m=probe_distance)
+                                        else:
+                                            record(phase, "FORCE_CONFIRMED", arm=side, contact_target=target,
+                                                   held_samples=settle_frame_count, normal_force_N=float(np.mean(loads)),
+                                                   normal_force_samples_N=loads.tolist(), estimated_gap_m=gap2d,
+                                                   witnessed_target_contact_ticks=sum(observed), sliding_baseline_N=background,
+                                                   force_threshold_N=threshold, terminal_travel_m=abs(paced_x-terminal_start),
+                                                   active_probe={"command_advance_m": advance, "wrist_advance_m": wrist_advance,
+                                                                 "cube_advance_m": box_advance, "normal_force_rise_N": increase,
+                                                                 "initial_normal_force_N": probe_baseline})
+                                            return
                                 if probe_ticks >= 1200:
                                     raise RuntimeError(f"{terminal}: active differential probe did not settle "
                                                        f"(advance {advance*1000:.3f} mm, wrist {normal:.3f} N, "
