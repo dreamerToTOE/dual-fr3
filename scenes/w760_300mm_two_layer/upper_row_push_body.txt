@@ -883,7 +883,7 @@
                         tcp, tool_rotation = tcp_fk(arm, q)
                         carry_offsets[arm] = (tool_rotation.T @ (origin - tcp), tool_rotation.T @ orientation)
                     push_faces.clear()
-                    record(phase, "DUAL_SEALS_CLOSED", **details, transport_limits=limits, joint_hold_ticks=12)
+                    record(phase, "DUAL_SEALS_CLOSED", **details, joint_hold_ticks=12)
                     for _ in range(12):
                         step()
                         check_carry()
