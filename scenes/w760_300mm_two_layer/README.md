@@ -14,6 +14,8 @@
 
 本分支的设计用状态事件结束技能。允许的安全运动范围内，任何位置的正确识别均视为同等成功。 [新状态表、技能库与改造顺序](long_skill_short_state.md) · [15 箱逐箱运行线](long_skill_short_state_routes.md) · [试验运行记录](observed_skills_validation.md)
 
+[15 箱整线验收](dynamic_full_15_20261128.md) · [新技能与状态观测实验方案](experiments/long_skill_observer_plan.md)
+
 ## ArUco 版可视化运行
 
 在仓库根目录运行，令 `ISAAC_SIM_DIR` 指向 Isaac Sim 4.5.0 的安装目录。官方 FR3 USD 和 D455 资产需能通过 Isaac Sim 的资产源解析。每次选一条命令，输出目录使用新路径。
