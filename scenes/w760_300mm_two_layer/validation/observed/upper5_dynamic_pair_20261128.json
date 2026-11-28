@@ -1,0 +1,1448 @@
+{
+  "date": "2026-11-28",
+  "source_s0_receipt_step": 70533,
+  "method": "Single headless Isaac Sim instance at a time, encoder feedback before issuing independent arm commands. K0 commands are compared with a 2 mm nominal collision model and actual PhysX contacts.",
+  "normal_plan": "Two independently recomputed RRTConnect paths.",
+  "disturbed_plan": "Prevalidated geometric routes feed the production online scheduler while a test-only command rate limit slows the left arm. The first disturbed trial continues through the regular U5 B stage. The second trial repeats only parking with measured velocity accounted for in the advancement gate.",
+  "suite": {
+    "cases": 87,
+    "physics_conflict_replan": "tests/test_fr3_dynamic_pair.py: deterministic blocked progress and plan restart using measured positions"
+  },
+  "runs": [
+    {
+      "run": "normal",
+      "scope": "../runs/upper5-dynamic-pair-20261128/normal",
+      "status": "PASS_U5_DYNAMIC_PAIR",
+      "error": null,
+      "first_collision": null,
+      "unexpected_contact_count": 0,
+      "input_checkpoint": {
+        "path": "scenes/w760_300mm_two_layer/validation/observed/upper5_full_7mm_recovered_landing.json",
+        "sha256": "64508d8da6586b87e6f74539e9514fd2d4a8b796c5f837fc3481022809859dd3"
+      },
+      "events": [
+        {
+          "phase": "upper5_s0_parking_trial",
+          "status": "RESTORED_AFTER_RELEASE",
+          "sim_time_s": 1.7083333333333333,
+          "wall_elapsed_s": 21.005272988999877,
+          "cube_position_m": [
+            -0.0002977880940306932,
+            0.9890921115875244,
+            0.9369999766349792
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.1719968284751303e-07,
+            2.9731427275692113e-07,
+            -2.942777932446461e-08
+          ],
+          "cube_id": 11,
+          "source_step": 70533,
+          "both_independent_arms": true,
+          "actual_joints_rad": {
+            "left": [
+              1.2820900678634644,
+              1.0343152284622192,
+              -1.6695204973220825,
+              -2.5925190448760986,
+              1.193192720413208,
+              1.973252773284912,
+              0.3113294839859009
+            ],
+            "right": [
+              -0.7401566505432129,
+              0.33174243569374084,
+              -0.1612437665462494,
+              -2.0696823596954346,
+              0.0771748274564743,
+              2.396000862121582,
+              -2.520230770111084
+            ]
+          },
+          "rails_y_m": {
+            "left": 1.1349369239807126,
+            "right": 0.5
+          },
+          "support": {
+            "positive_steps": 60,
+            "median_contact_impulse_Ns": 0.10217403756543078,
+            "samples": 60
+          }
+        },
+        {
+          "phase": "A_empty_repark_transit",
+          "status": "DYNAMIC_PAIR_RUNNING",
+          "sim_time_s": 1.7083333333333333,
+          "wall_elapsed_s": 21.021301375999883,
+          "cube_position_m": [
+            -0.0002977880940306932,
+            0.9890921115875244,
+            0.9369999766349792
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.1719968284751303e-07,
+            2.9731427275692113e-07,
+            -2.942777932446461e-08
+          ],
+          "cube_id": 11,
+          "arms": [
+            "left",
+            "right"
+          ]
+        },
+        {
+          "phase": "A_empty_repark_transit",
+          "status": "DYNAMIC_PAIR_COMPLETE",
+          "sim_time_s": 30.416666666666668,
+          "wall_elapsed_s": 941.9258485350001,
+          "cube_position_m": [
+            -0.00029767051455564797,
+            0.9890920519828796,
+            0.9369998574256897
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -3.4817975347323227e-07,
+            3.7657378015865106e-07,
+            7.533575541174287e-08
+          ],
+          "cube_id": 11,
+          "overlap_steps": 526,
+          "yield_steps": 502,
+          "tracking_wait_steps": 2026,
+          "replans": 0
+        },
+        {
+          "phase": "upper5_s0_parking_trial",
+          "status": "PARKED_BOTH",
+          "sim_time_s": 51.5,
+          "wall_elapsed_s": 980.87820061,
+          "cube_position_m": [
+            -0.0002978825359605253,
+            0.9890913367271423,
+            0.9369999170303345
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.368764684928081e-10,
+            1.845405392941757e-07,
+            1.568456582390354e-07
+          ],
+          "cube_id": 11,
+          "rails_y_m": {
+            "left": 0.19999999999999996,
+            "right": 0.2
+          },
+          "support": {
+            "positive_steps": 60,
+            "median_contact_impulse_Ns": 0.10218002129116993,
+            "samples": 60
+          }
+        }
+      ],
+      "interventions": [
+        {
+          "phase": "A_empty_repark_transit",
+          "status": "TRACKING_WAIT",
+          "logged_events": 1759,
+          "first": {
+            "phase": "A_empty_repark_transit",
+            "status": "TRACKING_WAIT",
+            "sim_time_s": 1.9,
+            "wall_elapsed_s": 127.04996135500005,
+            "cube_position_m": [
+              -0.0002978227857965976,
+              0.9890919923782349,
+              0.9369999766349792
+            ],
+            "cube_orientation_wxyz": [
+              1.0,
+              -1.939705356335253e-07,
+              1.8219604669411638e-07,
+              -4.032548073240605e-09
+            ],
+            "cube_id": 11,
+            "advancing": [
+              "left"
+            ],
+            "waiting": [
+              "right"
+            ]
+          }
+        },
+        {
+          "phase": "A_empty_repark_transit",
+          "status": "RESUMED",
+          "logged_events": 672,
+          "first": {
+            "phase": "A_empty_repark_transit",
+            "status": "RESUMED",
+            "sim_time_s": 1.9083333333333334,
+            "wall_elapsed_s": 127.27442283399978,
+            "cube_position_m": [
+              -0.0002978412667289376,
+              0.989092230796814,
+              0.9369999170303345
+            ],
+            "cube_orientation_wxyz": [
+              1.0,
+              -1.6917675793592934e-07,
+              1.788894081755643e-07,
+              1.1078024186872426e-07
+            ],
+            "cube_id": 11,
+            "advancing": [
+              "left",
+              "right"
+            ]
+          }
+        },
+        {
+          "phase": "A_empty_repark_transit",
+          "status": "YIELD",
+          "logged_events": 347,
+          "first": {
+            "phase": "A_empty_repark_transit",
+            "status": "YIELD",
+            "sim_time_s": 13.1,
+            "wall_elapsed_s": 432.647633734,
+            "cube_position_m": [
+              -0.0002978343691211194,
+              0.9890917539596558,
+              0.9370000958442688
+            ],
+            "cube_orientation_wxyz": [
+              1.0,
+              -2.1388319737525308e-07,
+              2.2122232223864557e-07,
+              1.019915529809623e-07
+            ],
+            "cube_id": 11,
+            "advancing": [
+              "right"
+            ],
+            "waiting": [
+              "left"
+            ]
+          }
+        }
+      ],
+      "completed_upper_slots": [],
+      "rail_checks": [
+        {
+          "cube_id": 11,
+          "side": "left",
+          "samples": 1870,
+          "collision_workers": 3,
+          "cache_replay": false,
+          "planning_wall_s": 4.034828721999929
+        },
+        {
+          "cube_id": 11,
+          "side": "right",
+          "samples": 600,
+          "collision_workers": 3,
+          "cache_replay": false,
+          "planning_wall_s": 1.2216441880000275
+        }
+      ],
+      "measured_both_moving_steps_above_0p03_rad_s": {
+        "A_empty_repark_transit": 2251
+      },
+      "raw_sha256": {
+        "runner_report.json": "71674290dcca602fb1cfdec9dd9a7bf62a02c32f17ab0337fd904e3f3c438c70",
+        "runner_snapshot.py": "d072fde6d6ed26ad873289100d593a5cf157f8d4eec47838078e7e745f17a18a",
+        "wrench.jsonl.gz": "9602a9b8abf56a6a604ac8d539f12d53e3a8c40d1fe4df20ccc5597a314bcb6f",
+        "contact_states/reference.jsonl.gz": "795dab5658d421263bc3ae7c0ceabf6aeaaeeb0826c7ca2a721ae5d23ec70520"
+      }
+    },
+    {
+      "run": "delay",
+      "scope": "../runs/upper5-dynamic-pair-20261128/delay",
+      "status": "PASS_W760_UPPER_ROW",
+      "error": null,
+      "first_collision": null,
+      "unexpected_contact_count": 0,
+      "input_checkpoint": {
+        "path": "scenes/w760_300mm_two_layer/validation/observed/upper5_full_7mm_recovered_landing.json",
+        "sha256": "64508d8da6586b87e6f74539e9514fd2d4a8b796c5f837fc3481022809859dd3"
+      },
+      "events": [
+        {
+          "phase": "upper5_s0_parking_trial",
+          "status": "RESTORED_AFTER_RELEASE",
+          "sim_time_s": 1.7083333333333333,
+          "wall_elapsed_s": 19.709632089000024,
+          "cube_position_m": [
+            -0.0002977880940306932,
+            0.9890921115875244,
+            0.9369999766349792
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.1719968284751303e-07,
+            2.9731427275692113e-07,
+            -2.942777932446461e-08
+          ],
+          "cube_id": 11,
+          "source_step": 70533,
+          "both_independent_arms": true,
+          "actual_joints_rad": {
+            "left": [
+              1.2820900678634644,
+              1.0343152284622192,
+              -1.6695204973220825,
+              -2.5925190448760986,
+              1.193192720413208,
+              1.973252773284912,
+              0.3113294839859009
+            ],
+            "right": [
+              -0.7401566505432129,
+              0.33174243569374084,
+              -0.1612437665462494,
+              -2.0696823596954346,
+              0.0771748274564743,
+              2.396000862121582,
+              -2.520230770111084
+            ]
+          },
+          "rails_y_m": {
+            "left": 1.1349369239807126,
+            "right": 0.5
+          },
+          "support": {
+            "positive_steps": 60,
+            "median_contact_impulse_Ns": 0.10217403756543078,
+            "samples": 60
+          }
+        },
+        {
+          "phase": "U5_disturbed_empty_park",
+          "status": "DYNAMIC_PAIR_RUNNING",
+          "sim_time_s": 1.7083333333333333,
+          "wall_elapsed_s": 19.764379602999725,
+          "cube_position_m": [
+            -0.0002977880940306932,
+            0.9890921115875244,
+            0.9369999766349792
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.1719968284751303e-07,
+            2.9731427275692113e-07,
+            -2.942777932446461e-08
+          ],
+          "cube_id": 11,
+          "arms": [
+            "left",
+            "right"
+          ]
+        },
+        {
+          "phase": "U5_disturbed_empty_park",
+          "status": "INDEPENDENT_PATHS_READY",
+          "sim_time_s": 1.7083333333333333,
+          "wall_elapsed_s": 19.771954137999728,
+          "cube_position_m": [
+            -0.0002977880940306932,
+            0.9890921115875244,
+            0.9369999766349792
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.1719968284751303e-07,
+            2.9731427275692113e-07,
+            -2.942777932446461e-08
+          ],
+          "cube_id": 11,
+          "samples": {
+            "left": 1224,
+            "right": 1727
+          }
+        },
+        {
+          "phase": "U5_disturbed_empty_park",
+          "status": "INJECTED_LEFT_RATE_LIMIT",
+          "sim_time_s": 2.375,
+          "wall_elapsed_s": 25.568051223999646,
+          "cube_position_m": [
+            -0.00029780686600133777,
+            0.9890913963317871,
+            0.9369999766349792
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            4.2577556769174407e-07,
+            4.2466956529096933e-07,
+            -3.877936904927992e-08
+          ],
+          "cube_id": 11,
+          "trial_step": 80
+        },
+        {
+          "phase": "U5_disturbed_empty_park",
+          "status": "INJECTED_RATE_RESTORED",
+          "sim_time_s": 3.5416666666666665,
+          "wall_elapsed_s": 36.14686245899975,
+          "cube_position_m": [
+            -0.00029769435059279203,
+            0.9890920519828796,
+            0.9369998574256897
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -3.462443771695689e-07,
+            3.0352819635481865e-07,
+            -5.974744965442369e-08
+          ],
+          "cube_id": 11,
+          "trial_step": 220
+        },
+        {
+          "phase": "U5_disturbed_empty_park",
+          "status": "DYNAMIC_PAIR_COMPLETE",
+          "sim_time_s": 32.516666666666666,
+          "wall_elapsed_s": 276.6147622220001,
+          "cube_position_m": [
+            -0.0002977228432428092,
+            0.989091694355011,
+            0.9369999170303345
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -6.038845867806231e-08,
+            2.426383503006946e-07,
+            7.866412232715447e-08
+          ],
+          "cube_id": 11,
+          "overlap_steps": 518,
+          "yield_steps": 0,
+          "tracking_wait_steps": 2643,
+          "replans": 0
+        },
+        {
+          "phase": "upper5_s0_parking_trial",
+          "status": "PARKED_BOTH",
+          "sim_time_s": 53.6,
+          "wall_elapsed_s": 315.8952060300003,
+          "cube_position_m": [
+            -0.0002981772704515606,
+            0.9890915751457214,
+            0.9369999766349792
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            1.8779653032652277e-07,
+            -5.537308922498596e-08,
+            -7.955728875685963e-08
+          ],
+          "cube_id": 11,
+          "rails_y_m": {
+            "left": 0.19999999999999996,
+            "right": 0.2
+          },
+          "support": {
+            "positive_steps": 60,
+            "median_contact_impulse_Ns": 0.10218689558680094,
+            "samples": 60
+          }
+        },
+        {
+          "phase": "upper_B_straight_entry_gate",
+          "status": "CLEAR",
+          "sim_time_s": 54.7,
+          "wall_elapsed_s": 318.09715763099985,
+          "cube_position_m": [
+            -0.00029813492437824607,
+            0.9890915751457214,
+            0.9369998574256897
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            1.1241592545729873e-07,
+            -1.9397377926111403e-08,
+            -8.040149879207092e-08
+          ],
+          "cube_id": 11,
+          "left_gap_m": 0.004575599522930435,
+          "right_gap_m": 0.004034735689741331,
+          "projected_cube_width_m": 0.15,
+          "slot_width_m": 0.15861033521267176,
+          "left_inner_edge_x_m": -0.07976560050402288,
+          "right_inner_edge_x_m": 0.07884473470864888,
+          "observed_cube_x_m": -0.000190000981092453,
+          "minimum_gap_per_side_m": 0.001,
+          "observed_yaw_deg": 0.0
+        },
+        {
+          "phase": "upper_B_front_approach",
+          "status": "PRECONTACT_REACHED",
+          "sim_time_s": 66.1,
+          "wall_elapsed_s": 344.67358731099966,
+          "cube_position_m": [
+            -0.000297933496767655,
+            0.9890918135643005,
+            0.937000036239624
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -8.393021744268481e-08,
+            1.5716678092303482e-07,
+            5.659359914034212e-08
+          ],
+          "cube_id": 11,
+          "arm": "left",
+          "measured_tcp_m": [
+            -0.00016087565750850307,
+            0.9072941258736603,
+            0.9418991399554085
+          ],
+          "position_error_m": 0.0009676562240980519,
+          "orientation_matrix_error": 0.0020649209309552444,
+          "ik_seed_source": "measured_joints"
+        },
+        {
+          "phase": "upper_B_front_dynamic_withdraw",
+          "status": "S0_CONFIRMED",
+          "sim_time_s": 163.26666666666668,
+          "wall_elapsed_s": 654.101490085,
+          "cube_position_m": [
+            0.0009380851406604052,
+            1.0757068395614624,
+            0.9369995594024658
+          ],
+          "cube_orientation_wxyz": [
+            0.999998152256012,
+            -1.8253998632644652e-06,
+            2.8488881298471824e-07,
+            -0.001952037331648171
+          ],
+          "cube_id": 11,
+          "travel_m": 0.0030249999999999956,
+          "commanded_travel_by_arm_m": {
+            "left": 0.0030249999999999956
+          },
+          "cup_clearance_step": {
+            "right": 19471,
+            "left": 19592
+          },
+          "cup_gap_m": {
+            "left": 0.0031230417545985573,
+            "right": 0.6674890821187657
+          },
+          "wrist_N": {
+            "left": 0.00450634661766921,
+            "right": 1.1897294502167211e-06
+          },
+          "measured_travel_m": {
+            "left": 0.0026453691543895097
+          },
+          "box_estimate_m": [
+            0.0011600207619070592,
+            1.076611358000158,
+            0.937
+          ],
+          "measured_joints_rad": {
+            "left": [
+              0.2944987714290619,
+              0.4733325242996216,
+              0.09952587634325027,
+              -1.8214328289031982,
+              -0.06148308143019676,
+              2.291152238845825,
+              0.42770034074783325
+            ],
+            "right": [
+              -0.0002313992299605161,
+              -0.7850832939147949,
+              -0.00011384175013517961,
+              -2.3560266494750977,
+              8.050489668676164e-06,
+              1.5709469318389893,
+              0.7841755747795105
+            ]
+          }
+        },
+        {
+          "phase": "upper_slot_complete",
+          "status": "SEATED_STABLE",
+          "sim_time_s": 168.78333333333333,
+          "wall_elapsed_s": 669.8025405160001,
+          "cube_position_m": [
+            0.0009379958501085639,
+            1.0757073163986206,
+            0.9369996786117554
+          ],
+          "cube_orientation_wxyz": [
+            0.999998152256012,
+            -1.8488742625777377e-06,
+            5.029137355450075e-07,
+            -0.0019530077697709203
+          ],
+          "cube_id": 11,
+          "slot": 5
+        },
+        {
+          "phase": "upper_row_complete",
+          "status": "PASS_W760_UPPER_ROW",
+          "sim_time_s": 168.78333333333333,
+          "wall_elapsed_s": 669.8262835820001,
+          "cube_position_m": [
+            0.0009379958501085639,
+            1.0757073163986206,
+            0.9369996786117554
+          ],
+          "cube_orientation_wxyz": [
+            0.999998152256012,
+            -1.8488742625777377e-06,
+            5.029137355450075e-07,
+            -0.0019530077697709203
+          ],
+          "cube_id": 11
+        }
+      ],
+      "interventions": [
+        {
+          "phase": "U5_disturbed_empty_park",
+          "status": "TRACKING_WAIT",
+          "logged_events": 50,
+          "first": {
+            "phase": "U5_disturbed_empty_park",
+            "status": "TRACKING_WAIT",
+            "sim_time_s": 1.7833333333333334,
+            "wall_elapsed_s": 20.38370370599978,
+            "cube_position_m": [
+              -0.0002977974945679307,
+              0.9890918135643005,
+              0.9369999766349792
+            ],
+            "cube_orientation_wxyz": [
+              1.0,
+              -1.8157597025947325e-07,
+              2.4771523499111936e-07,
+              2.3254679604178818e-07
+            ],
+            "cube_id": 11,
+            "advancing": [
+              "left"
+            ],
+            "waiting": [
+              "right"
+            ]
+          }
+        },
+        {
+          "phase": "U5_disturbed_empty_park",
+          "status": "RESUMED",
+          "logged_events": 50,
+          "first": {
+            "phase": "U5_disturbed_empty_park",
+            "status": "RESUMED",
+            "sim_time_s": 2.05,
+            "wall_elapsed_s": 22.786495355999705,
+            "cube_position_m": [
+              -0.0002978165284730494,
+              0.9890917539596558,
+              0.9369997978210449
+            ],
+            "cube_orientation_wxyz": [
+              1.0,
+              -5.370826627881797e-08,
+              1.7304232358128502e-07,
+              2.0691841484676843e-07
+            ],
+            "cube_id": 11,
+            "advancing": [
+              "left",
+              "right"
+            ]
+          }
+        }
+      ],
+      "completed_upper_slots": [
+        {
+          "slot": 5,
+          "cube_id": 11,
+          "target_m": [
+            -0.0005062147664130698,
+            1.076,
+            0.9369999999999999
+          ],
+          "rgb_final_m": [
+            0.0011600207619070592,
+            1.076611358000158,
+            0.937
+          ],
+          "physical_final_m": [
+            0.0009379958501085639,
+            1.0757073163986206,
+            0.9369996786117554
+          ],
+          "yaw_pitch_roll_deg": [
+            -0.22379833400265894,
+            5.804333037609071e-05,
+            -0.00021175241638584638
+          ],
+          "support": {
+            "positive_steps": 60,
+            "median_contact_impulse_Ns": 0.1015738166622373,
+            "samples": 60
+          },
+          "max_lower_shift_m": 2.314910475172133e-05
+        }
+      ],
+      "rail_checks": [
+        {
+          "cube_id": 11,
+          "side": "left",
+          "samples": 1870,
+          "collision_workers": 3,
+          "cache_replay": false,
+          "planning_wall_s": 4.0357502679999016
+        },
+        {
+          "cube_id": 11,
+          "side": "right",
+          "samples": 600,
+          "collision_workers": 3,
+          "cache_replay": false,
+          "planning_wall_s": 1.2238603849991705
+        },
+        {
+          "cube_id": 11,
+          "side": "left",
+          "samples": 800,
+          "collision_workers": 3,
+          "cache_replay": false,
+          "planning_wall_s": 1.6016118699999424
+        }
+      ],
+      "measured_both_moving_steps_above_0p03_rad_s": {
+        "U5_disturbed_empty_park": 2623
+      },
+      "raw_sha256": {
+        "runner_report.json": "62372806f3fc9c048976973b815dcc04cd90ad67e10a1532f4184bf3abe30b12",
+        "runner_snapshot.py": "b0b18850c5233bcc4db26cc97b3b096b08f76f89a34f7da7090f836fae932d25",
+        "wrench.jsonl.gz": "0566adaedb291389fa070730d612fb62adf422a5249a7c920e2485eaccb12a04",
+        "contact_states/reference.jsonl.gz": "9705c9baa87b99e8fe21bbfdd5721cd090d3ac5cabc15e4cc034090b1adde1b8"
+      },
+      "disturbance_window": {
+        "start_step_exclusive": 285,
+        "end_step_inclusive": 425,
+        "left_command_speed_cap_rad_s": 0.048,
+        "motion_threshold_rad_s": 0.03,
+        "moving_steps_by_arm": {
+          "left": 140,
+          "right": 140
+        }
+      }
+    },
+    {
+      "run": "pickup",
+      "scope": "../runs/upper5-dynamic-pair-20261128/pickup",
+      "status": "PASS_DYNAMIC_PICKUP_K0",
+      "error": null,
+      "first_collision": null,
+      "unexpected_contact_count": 0,
+      "input_checkpoint": {
+        "path": "../runs/upper-full-7mm-20261127/resume-u3-crossed/checkpoint_history/u4_complete.json",
+        "sha256": "3f24204a4632b89673cb63c49ea49f4b411b881ee0275423d2742e39975f8b73"
+      },
+      "events": [
+        {
+          "phase": "A_observed_transport_transit",
+          "status": "DYNAMIC_PAIR_RUNNING",
+          "sim_time_s": 8.325,
+          "wall_elapsed_s": 29.455272682000214,
+          "cube_position_m": [
+            -4.395173114346562e-09,
+            -0.2999998927116394,
+            0.7870000004768372
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -2.76052709580199e-08,
+            -1.40047218266659e-09,
+            2.544109811708495e-09
+          ],
+          "cube_id": 11,
+          "arms": [
+            "left",
+            "right"
+          ]
+        },
+        {
+          "phase": "A_observed_transport_transit",
+          "status": "INDEPENDENT_PATHS_READY",
+          "sim_time_s": 8.325,
+          "wall_elapsed_s": 42.494187618999604,
+          "cube_position_m": [
+            -4.395173114346562e-09,
+            -0.2999998927116394,
+            0.7870000004768372
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -2.76052709580199e-08,
+            -1.40047218266659e-09,
+            2.544109811708495e-09
+          ],
+          "cube_id": 11,
+          "samples": {
+            "left": 813,
+            "right": 862
+          }
+        },
+        {
+          "phase": "A_observed_transport_transit",
+          "status": "DYNAMIC_PAIR_COMPLETE",
+          "sim_time_s": 15.591666666666667,
+          "wall_elapsed_s": 102.17939682300039,
+          "cube_position_m": [
+            -7.2901609193820605e-09,
+            -0.2999998927116394,
+            0.7870000004768372
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.4705859641139796e-08,
+            6.627951520954412e-10,
+            1.6071902697589735e-09
+          ],
+          "cube_id": 11,
+          "overlap_steps": 812,
+          "yield_steps": 0,
+          "tracking_wait_steps": 0,
+          "replans": 0
+        },
+        {
+          "phase": "A_contact_approach",
+          "status": "DYNAMIC_PAIR_RUNNING",
+          "sim_time_s": 16.091666666666665,
+          "wall_elapsed_s": 103.08710024799984,
+          "cube_position_m": [
+            -1.1759985873993628e-08,
+            -0.2999998927116394,
+            0.7870000004768372
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -2.8075775038161055e-09,
+            -2.259296394413468e-08,
+            -3.18180592984163e-09
+          ],
+          "cube_id": 11,
+          "arms": [
+            "left",
+            "right"
+          ]
+        },
+        {
+          "phase": "A_contact_approach",
+          "status": "INDEPENDENT_PATHS_READY",
+          "sim_time_s": 16.091666666666665,
+          "wall_elapsed_s": 103.09580387499955,
+          "cube_position_m": [
+            -1.1759985873993628e-08,
+            -0.2999998927116394,
+            0.7870000004768372
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -2.8075775038161055e-09,
+            -2.259296394413468e-08,
+            -3.18180592984163e-09
+          ],
+          "cube_id": 11,
+          "samples": {
+            "left": 241,
+            "right": 241
+          }
+        },
+        {
+          "phase": "A_contact_approach",
+          "status": "DYNAMIC_PAIR_COMPLETE",
+          "sim_time_s": 18.091666666666665,
+          "wall_elapsed_s": 112.57092213499982,
+          "cube_position_m": [
+            -6.4335075045107715e-09,
+            -0.2999998927116394,
+            0.7870000004768372
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -4.4953800681923894e-09,
+            -1.6025389015794644e-08,
+            2.5135535874909465e-09
+          ],
+          "cube_id": 11,
+          "overlap_steps": 240,
+          "yield_steps": 0,
+          "tracking_wait_steps": 0,
+          "replans": 0
+        },
+        {
+          "phase": "A_contact_approach",
+          "status": "PRECONTACT_REACHED",
+          "sim_time_s": 18.091666666666665,
+          "wall_elapsed_s": 112.5802853590003,
+          "cube_position_m": [
+            -6.4335075045107715e-09,
+            -0.2999998927116394,
+            0.7870000004768372
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -4.4953800681923894e-09,
+            -1.6025389015794644e-08,
+            2.5135535874909465e-09
+          ],
+          "cube_id": 11,
+          "arm": "left",
+          "target_tcp_m": [
+            -0.082,
+            -0.3291093248128891,
+            0.787
+          ],
+          "target_face_point_m": [
+            -0.075,
+            -0.3291093248128891,
+            0.787
+          ],
+          "measured_tcp_m": [
+            -0.08214836152418103,
+            -0.3291093969958361,
+            0.7870003714743501
+          ],
+          "position_error_m": 0.0001483620067971898,
+          "orientation_matrix_error": 0.0001643970927967805,
+          "standoff_m": 0.007
+        },
+        {
+          "phase": "A_contact_approach",
+          "status": "PRECONTACT_REACHED",
+          "sim_time_s": 18.091666666666665,
+          "wall_elapsed_s": 112.58909721100008,
+          "cube_position_m": [
+            -6.4335075045107715e-09,
+            -0.2999998927116394,
+            0.7870000004768372
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -4.4953800681923894e-09,
+            -1.6025389015794644e-08,
+            2.5135535874909465e-09
+          ],
+          "cube_id": 11,
+          "arm": "right",
+          "target_tcp_m": [
+            0.082,
+            -0.3291093248128891,
+            0.787
+          ],
+          "target_face_point_m": [
+            0.075,
+            -0.3291093248128891,
+            0.787
+          ],
+          "measured_tcp_m": [
+            0.08214426004872705,
+            -0.32910759077874596,
+            0.7869999139301005
+          ],
+          "position_error_m": 0.00014427049574034954,
+          "orientation_matrix_error": 0.00015290520982297044,
+          "standoff_m": 0.007
+        }
+      ],
+      "interventions": [],
+      "completed_upper_slots": [],
+      "rail_checks": [
+        {
+          "cube_id": 11,
+          "side": "left",
+          "samples": 709,
+          "collision_workers": 3,
+          "cache_replay": false,
+          "planning_wall_s": 1.6259387500003868
+        },
+        {
+          "cube_id": 11,
+          "side": "right",
+          "samples": 2,
+          "collision_workers": 1,
+          "cache_replay": false,
+          "planning_wall_s": 0.013211821999902895
+        }
+      ],
+      "measured_both_moving_steps_above_0p03_rad_s": {
+        "A_observed_transport_transit": 779,
+        "A_contact_approach": 127
+      },
+      "raw_sha256": {
+        "runner_report.json": "a17ab71757619c39ca3cd7aa0a08f77d8afc5e230f56e7b8c04a8a786ff818cf",
+        "runner_snapshot.py": "9c60b85c9499046ccf8d1418b8c0431ab95cd24eac459aebb517b0d17c08c93f",
+        "wrench.jsonl.gz": "eac4bc9f99178bdb7e5599121edbfdc58d8a396a73dcb2200fe80bcc8888c894",
+        "contact_states/reference.jsonl.gz": "775e127177730c3d95000b58770aa0eba58279d194cbbc8eeb1a14b7376dc517"
+      }
+    },
+    {
+      "run": "delay-speed-aware",
+      "scope": "../runs/upper5-dynamic-pair-20261128/delay-speed-aware",
+      "status": "PASS_U5_DYNAMIC_PAIR",
+      "error": null,
+      "first_collision": null,
+      "unexpected_contact_count": 0,
+      "input_checkpoint": {
+        "path": "scenes/w760_300mm_two_layer/validation/observed/upper5_full_7mm_recovered_landing.json",
+        "sha256": "64508d8da6586b87e6f74539e9514fd2d4a8b796c5f837fc3481022809859dd3"
+      },
+      "events": [
+        {
+          "phase": "upper5_s0_parking_trial",
+          "status": "RESTORED_AFTER_RELEASE",
+          "sim_time_s": 1.7083333333333333,
+          "wall_elapsed_s": 19.003911566999705,
+          "cube_position_m": [
+            -0.0002977880940306932,
+            0.9890921115875244,
+            0.9369999766349792
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.1719968284751303e-07,
+            2.9731427275692113e-07,
+            -2.942777932446461e-08
+          ],
+          "cube_id": 11,
+          "source_step": 70533,
+          "both_independent_arms": true,
+          "actual_joints_rad": {
+            "left": [
+              1.2820900678634644,
+              1.0343152284622192,
+              -1.6695204973220825,
+              -2.5925190448760986,
+              1.193192720413208,
+              1.973252773284912,
+              0.3113294839859009
+            ],
+            "right": [
+              -0.7401566505432129,
+              0.33174243569374084,
+              -0.1612437665462494,
+              -2.0696823596954346,
+              0.0771748274564743,
+              2.396000862121582,
+              -2.520230770111084
+            ]
+          },
+          "rails_y_m": {
+            "left": 1.1349369239807126,
+            "right": 0.5
+          },
+          "support": {
+            "positive_steps": 60,
+            "median_contact_impulse_Ns": 0.10217403756543078,
+            "samples": 60
+          }
+        },
+        {
+          "phase": "U5_disturbed_empty_park",
+          "status": "DYNAMIC_PAIR_RUNNING",
+          "sim_time_s": 1.7083333333333333,
+          "wall_elapsed_s": 19.057080198999756,
+          "cube_position_m": [
+            -0.0002977880940306932,
+            0.9890921115875244,
+            0.9369999766349792
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.1719968284751303e-07,
+            2.9731427275692113e-07,
+            -2.942777932446461e-08
+          ],
+          "cube_id": 11,
+          "arms": [
+            "left",
+            "right"
+          ]
+        },
+        {
+          "phase": "U5_disturbed_empty_park",
+          "status": "INDEPENDENT_PATHS_READY",
+          "sim_time_s": 1.7083333333333333,
+          "wall_elapsed_s": 19.064293602999896,
+          "cube_position_m": [
+            -0.0002977880940306932,
+            0.9890921115875244,
+            0.9369999766349792
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.1719968284751303e-07,
+            2.9731427275692113e-07,
+            -2.942777932446461e-08
+          ],
+          "cube_id": 11,
+          "samples": {
+            "left": 1224,
+            "right": 1727
+          }
+        },
+        {
+          "phase": "U5_disturbed_empty_park",
+          "status": "INJECTED_LEFT_RATE_LIMIT",
+          "sim_time_s": 2.375,
+          "wall_elapsed_s": 24.281962059999387,
+          "cube_position_m": [
+            -0.00029780686600133777,
+            0.9890913963317871,
+            0.9369999766349792
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            4.2577556769174407e-07,
+            4.2466956529096933e-07,
+            -3.877936904927992e-08
+          ],
+          "cube_id": 11,
+          "trial_step": 80
+        },
+        {
+          "phase": "U5_disturbed_empty_park",
+          "status": "INJECTED_RATE_RESTORED",
+          "sim_time_s": 3.5416666666666665,
+          "wall_elapsed_s": 33.75911354899927,
+          "cube_position_m": [
+            -0.0002978290431201458,
+            0.9890920519828796,
+            0.937000036239624
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.3794148401302664e-07,
+            2.633838391830068e-07,
+            4.5468624421118875e-08
+          ],
+          "cube_id": 11,
+          "trial_step": 220
+        },
+        {
+          "phase": "U5_disturbed_empty_park",
+          "status": "DYNAMIC_PAIR_COMPLETE",
+          "sim_time_s": 16.091666666666665,
+          "wall_elapsed_s": 139.3562619459999,
+          "cube_position_m": [
+            -0.0002980050048790872,
+            0.9890919327735901,
+            0.9369998574256897
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -2.560376231031114e-07,
+            1.1554222112408752e-07,
+            -4.953141896635316e-08
+          ],
+          "cube_id": 11,
+          "overlap_steps": 1223,
+          "yield_steps": 0,
+          "tracking_wait_steps": 118,
+          "replans": 0
+        },
+        {
+          "phase": "upper5_s0_parking_trial",
+          "status": "PARKED_BOTH",
+          "sim_time_s": 37.175,
+          "wall_elapsed_s": 178.25410588999966,
+          "cube_position_m": [
+            -0.0002979160926770419,
+            0.989092230796814,
+            0.937000036239624
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -2.269248255970524e-07,
+            1.9235523041061242e-07,
+            1.0993654342428272e-07
+          ],
+          "cube_id": 11,
+          "rails_y_m": {
+            "left": 0.19999999999999996,
+            "right": 0.2
+          },
+          "support": {
+            "positive_steps": 60,
+            "median_contact_impulse_Ns": 0.10218211387110648,
+            "samples": 60
+          }
+        }
+      ],
+      "interventions": [
+        {
+          "phase": "U5_disturbed_empty_park",
+          "status": "TRACKING_WAIT",
+          "logged_events": 3,
+          "first": {
+            "phase": "U5_disturbed_empty_park",
+            "status": "TRACKING_WAIT",
+            "sim_time_s": 2.408333333333333,
+            "wall_elapsed_s": 24.573404891999417,
+            "cube_position_m": [
+              -0.0002981309371534735,
+              0.989091694355011,
+              0.9369998574256897
+            ],
+            "cube_orientation_wxyz": [
+              1.0,
+              3.4715903041160345e-08,
+              -3.272927528996661e-08,
+              -5.724234242165949e-08
+            ],
+            "cube_id": 11,
+            "advancing": [
+              "right"
+            ],
+            "waiting": [
+              "left"
+            ]
+          }
+        },
+        {
+          "phase": "U5_disturbed_empty_park",
+          "status": "RESUMED",
+          "logged_events": 3,
+          "first": {
+            "phase": "U5_disturbed_empty_park",
+            "status": "RESUMED",
+            "sim_time_s": 2.7083333333333335,
+            "wall_elapsed_s": 27.183638967999286,
+            "cube_position_m": [
+              -0.0002977132680825889,
+              0.9890921711921692,
+              0.9369999170303345
+            ],
+            "cube_orientation_wxyz": [
+              1.0,
+              -4.1762623936847376e-07,
+              3.098432159731601e-07,
+              8.219565472700197e-08
+            ],
+            "cube_id": 11,
+            "advancing": [
+              "left",
+              "right"
+            ]
+          }
+        }
+      ],
+      "completed_upper_slots": [],
+      "rail_checks": [
+        {
+          "cube_id": 11,
+          "side": "left",
+          "samples": 1870,
+          "collision_workers": 3,
+          "cache_replay": false,
+          "planning_wall_s": 3.9605636249998497
+        },
+        {
+          "cube_id": 11,
+          "side": "right",
+          "samples": 600,
+          "collision_workers": 3,
+          "cache_replay": false,
+          "planning_wall_s": 1.2228656790002788
+        }
+      ],
+      "measured_both_moving_steps_above_0p03_rad_s": {
+        "U5_disturbed_empty_park": 1269
+      },
+      "raw_sha256": {
+        "runner_report.json": "eb82484cfdba2c3457060989c89613253162f039616cef9796db4020f2ab60b6",
+        "runner_snapshot.py": "cb5ef0fad12124d529c8fbede1147558ce7d3a6bfb7ebe5a9084899cf0f8589c",
+        "wrench.jsonl.gz": "10cbba7ebba4ace0af4b857fc50a9c687bc6b1855b555f5ad9325f2308d4a2f0",
+        "contact_states/reference.jsonl.gz": "2fdcb85dca3be72e13b3f0c1fbc695cd5d7298f03e46ac76b9d8facfbc9a9c5c"
+      },
+      "disturbance_window": {
+        "start_step_exclusive": 285,
+        "end_step_inclusive": 425,
+        "left_command_speed_cap_rad_s": 0.048,
+        "motion_threshold_rad_s": 0.03,
+        "moving_steps_by_arm": {
+          "left": 140,
+          "right": 140
+        }
+      }
+    },
+    {
+      "run": "withdraw",
+      "scope": "../runs/upper5-dynamic-pair-20261128/withdraw",
+      "status": "PASS_U5_INDEPENDENT_WITHDRAW",
+      "error": null,
+      "first_collision": null,
+      "unexpected_contact_count": 0,
+      "input_checkpoint": {
+        "path": "scenes/w760_300mm_two_layer/validation/observed/upper5_full_7mm_recovered_landing.json",
+        "sha256": "64508d8da6586b87e6f74539e9514fd2d4a8b796c5f837fc3481022809859dd3"
+      },
+      "events": [
+        {
+          "phase": "upper5_s0_parking_trial",
+          "status": "RESTORED_AFTER_RELEASE",
+          "sim_time_s": 1.7083333333333333,
+          "wall_elapsed_s": 19.46642752200023,
+          "cube_position_m": [
+            -0.00029704158077947795,
+            0.9890919327735901,
+            0.9369997978210449
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.527865549633134e-07,
+            8.456861451122677e-07,
+            1.013178348330257e-06
+          ],
+          "cube_id": 11,
+          "source_step": 70395,
+          "both_independent_arms": true,
+          "actual_joints_rad": {
+            "left": [
+              1.2762221097946167,
+              1.0337949991226196,
+              -1.6647931337356567,
+              -2.583721399307251,
+              1.1930516958236694,
+              1.9727487564086914,
+              0.3154696822166443
+            ],
+            "right": [
+              -0.7376896142959595,
+              0.3366279602050781,
+              -0.1597703993320465,
+              -2.0619945526123047,
+              0.07732778787612915,
+              2.3932552337646484,
+              -2.5161120891571045
+            ]
+          },
+          "rails_y_m": {
+            "left": 1.1349369239807126,
+            "right": 0.5
+          },
+          "support": {
+            "positive_steps": 60,
+            "median_contact_impulse_Ns": 0.10573712387145807,
+            "samples": 60
+          }
+        },
+        {
+          "phase": "A_dynamic_withdraw",
+          "status": "S0_CONFIRMED",
+          "sim_time_s": 2.8583333333333334,
+          "wall_elapsed_s": 31.466963943999872,
+          "cube_position_m": [
+            -0.00029791067936457694,
+            0.9890919923782349,
+            0.9369999766349792
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -1.3203728599364695e-07,
+            1.8361366471708607e-07,
+            6.518198603089331e-08
+          ],
+          "cube_id": 11,
+          "travel_m": 0.0033249999999999938,
+          "commanded_travel_by_arm_m": {
+            "left": 0.0033249999999999938,
+            "right": 0.003299999999999994
+          },
+          "cup_clearance_step": {
+            "right": 342,
+            "left": 343
+          },
+          "cup_gap_m": {
+            "left": 0.0031169278405359935,
+            "right": 0.003126262796335405
+          },
+          "wrist_N": {
+            "left": 0.00644762183305923,
+            "right": 0.005663241572855471
+          },
+          "measured_travel_m": {
+            "left": 0.003140084128254545,
+            "right": 0.003134965249402759
+          },
+          "box_estimate_m": [
+            -0.0002987825876077585,
+            0.9899830723455747,
+            0.9370009592154678
+          ],
+          "measured_joints_rad": {
+            "left": [
+              1.2820897102355957,
+              1.0343152284622192,
+              -1.6695202589035034,
+              -2.5925190448760986,
+              1.1931859254837036,
+              1.9732493162155151,
+              0.3113294839859009
+            ],
+            "right": [
+              -0.7401500940322876,
+              0.33175772428512573,
+              -0.1612391471862793,
+              -2.0696544647216797,
+              0.07717542350292206,
+              2.3959903717041016,
+              -2.52021861076355
+            ]
+          }
+        },
+        {
+          "phase": "upper5_s0_parking_trial",
+          "status": "WITHDRAWN_BOTH",
+          "sim_time_s": 3.3583333333333334,
+          "wall_elapsed_s": 32.4433865179999,
+          "cube_position_m": [
+            -0.00029783876379951835,
+            0.9890919923782349,
+            0.9369999766349792
+          ],
+          "cube_orientation_wxyz": [
+            1.0,
+            -2.0639834019675618e-07,
+            2.3826707717944373e-07,
+            1.653791947830996e-08
+          ],
+          "cube_id": 11,
+          "rails_y_m": {
+            "left": 1.1349369239807126,
+            "right": 0.5
+          },
+          "support": {
+            "positive_steps": 60,
+            "median_contact_impulse_Ns": 0.10217987711076809,
+            "samples": 60
+          }
+        }
+      ],
+      "interventions": [],
+      "completed_upper_slots": [],
+      "rail_checks": [],
+      "measured_both_moving_steps_above_0p03_rad_s": {},
+      "raw_sha256": {
+        "runner_report.json": "9ec4f18e3081e25cad14799c1587971993cd38d217045a69a3b745acbb5f1842",
+        "runner_snapshot.py": "a2e120435908b932d02fd1287336ba7ecc7ececa0280c24946606a061aff814f",
+        "wrench.jsonl.gz": "0cb2049aea6729b8cf6b02c303bc6dc31f637674c8dd54770b9c5052f6879e19",
+        "contact_states/reference.jsonl.gz": "22721f0ce348d7e5844561b91df1dc40f40e608d159468b914effa01636f55e6"
+      }
+    }
+  ]
+}

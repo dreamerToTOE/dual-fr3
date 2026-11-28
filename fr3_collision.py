@@ -146,8 +146,19 @@ class FR3CollisionChecker:
             raise ValueError("FK returned non-finite collision geometry")
         return centers, tools
 
+    def arm_bounds(self, geometry):
+        centers, tools = geometry
+        extents = self.radii[:, None]
+        lower = [np.min(centers - extents, axis=0)]
+        upper = [np.max(centers + extents, axis=0)]
+        for _, center, half, rotation in tools:
+            radius = np.abs(rotation) @ half
+            lower.append(center - radius)
+            upper.append(center + radius)
+        return np.min(lower, axis=0), np.max(upper, axis=0)
+
     def check(self, q_by_side, *, cube_center=None, cube_rotation=None, cup_contacts=(),
-              margin_m=0.002, contact_tolerance_m=0.003, first_only=False):
+              margin_m=0.002, contact_tolerance_m=0.003, first_only=False, geometry=None):
         """Return collision issues; only named cup/Cube contacts get tolerance.
 
         ``cup_contacts`` contains arm names; it never exempts links or supports.
@@ -168,7 +179,10 @@ class FR3CollisionChecker:
             if not np.allclose(rotation.T @ rotation, np.eye(3), atol=1e-5) or np.linalg.det(rotation) < 0:
                 raise ValueError("Cube rotation must be a proper orthonormal matrix")
             obstacles.append(("Cube", center, np.full(3, self.config["cube_size_m"] / 2), rotation))
-        geometry = {side: self.geometry(side, q) for side, q in q_by_side.items()}
+        if geometry is None:
+            geometry = {side: self.geometry(side, q) for side, q in q_by_side.items()}
+        elif geometry.keys() != q_by_side.keys():
+            raise ValueError("Checked geometry must match the arms being checked")
         issues = []
 
         def add(a, b, clearance, kind, threshold=margin_m):
@@ -208,6 +222,20 @@ class FR3CollisionChecker:
                 for index in np.flatnonzero((self.link_indices <= 5) & (clearances < margin_m - 1e-10)):
                     if add(f"{side}/{self.spheres[index][0]}", f"{side}/{name}", clearances[index], "self_tool"):
                         return issues
+
+        if len(geometry) > 1:
+            issues.extend(self.check_interarm(geometry, margin_m=margin_m, first_only=first_only))
+        return issues
+
+    def check_interarm(self, geometry, *, margin_m=.002, first_only=False):
+        """Check only tool and link pairs across the two arms."""
+        issues = []
+
+        def add(a, b, clearance, kind):
+            if clearance < margin_m - 1e-10:
+                issues.append({"a": a, "b": b, "clearance_m": float(clearance), "kind": kind})
+                return first_only
+            return False
 
         sides = list(geometry)
         for i, side in enumerate(sides):

@@ -6,6 +6,7 @@ from source_hooks import replace_once
 WITHDRAW = '''
         def dynamic_withdraw(directions, phase, *, require_support=False, limit_m=.012):
             from fr3_collision import obb_signed_clearance
+            from fr3_dynamic_pair import pair_step_is_clear
 
             record(phase, "RUNNING", arms=list(directions), travel_limit_m=limit_m)
             start = joint_state()
@@ -13,11 +14,12 @@ WITHDRAW = '''
             outward = {arm: vector / np.linalg.norm(vector) for arm, vector in directions.items()}
             seeds = start.copy()
             height = np.full(3, half)
-            travel = 0.
-            quiet = 0
+            travel = dict.fromkeys(directions, 0.)
             checked_arms = list(robots if require_support else directions)
-            # The legacy wrist and geometry separation inputs remain independent of truth.
-            while travel <= limit_m + 1e-9:
+            quiet = dict.fromkeys(checked_arms, 0)
+            cleared_at = {}
+            # Each cup stops advancing as soon as its own clearance is visible.
+            for _ in range(math.ceil(len(directions) * limit_m * 120 / .003) + 120):
                 center, rotation = sensed_cube()
                 measured = joint_state()
                 gaps = {}
@@ -28,39 +30,60 @@ WITHDRAW = '''
                 forces = {arm: float(np.linalg.norm(last_force_sample[arm]["tcp_gravity_corrected_world"][:3]))
                           for arm in checked_arms}
                 supported = abs(center[2] - (SUPPORT_TOP + half)) <= .004
-                if all(gaps[a] >= .003 and forces[a] < .30 for a in checked_arms) and (
-                        not require_support or supported):
-                    quiet += 1
-                    if quiet >= 6:
-                        actual_travel = {arm: float((tcp_fk(arm, measured[arm])[0] - origins[arm][0])
-                                                    @ outward[arm]) for arm in directions}
-                        record(phase, "S0_CONFIRMED" if require_support else "TOOL_CLEAR",
-                               travel_m=travel, cup_gap_m=gaps, wrist_N=forces,
-                               measured_travel_m=actual_travel, box_estimate_m=center.tolist(),
-                               measured_joints_rad={arm: q.tolist() for arm, q in measured.items()})
-                        return
-                    step()
-                    check_current_collision(phase)
-                    continue
-                quiet = 0
-                if travel >= limit_m - 1e-9:
-                    break
-                travel = min(limit_m, travel + .003 / 120)
+                for arm in checked_arms:
+                    quiet[arm] = quiet[arm] + 1 if gaps[arm] >= .003 and forces[arm] < .30 else 0
+                    if quiet[arm] == 6:
+                        cleared_at[arm] = tick
+                if min(quiet.values()) >= 6 and (not require_support or supported):
+                    actual_travel = {arm: float((tcp_fk(arm, measured[arm])[0] - origins[arm][0])
+                                                @ outward[arm]) for arm in directions}
+                    record(phase, "S0_CONFIRMED" if require_support else "TOOL_CLEAR",
+                           travel_m=max(travel.values()), commanded_travel_by_arm_m=travel,
+                           cup_clearance_step=cleared_at, cup_gap_m=gaps, wrist_N=forces,
+                           measured_travel_m=actual_travel, box_estimate_m=center.tolist(),
+                           measured_joints_rad={arm: q.tolist() for arm, q in measured.items()})
+                    return
+
+                candidates = {}
+                distances = {}
                 for arm, (tip, attitude) in origins.items():
-                    seeds[arm] = cartesian_joint_target(arm, seeds[arm], tip + travel * outward[arm], attitude)
-                proposed = {**measured, **{arm: seeds[arm] for arm in directions}}
-                issues = checker.check(proposed, cube_center=center, cube_rotation=rotation,
-                    cup_contacts=allowed_contacts, margin_m=0., first_only=True)
-                if issues:
-                    record(phase, "SAFETY_WINDOW_BLOCKED", travel_m=travel, collision=issues[0])
-                    raise RuntimeError(f"{phase}: observed withdrawal range blocked by {issues[0]}")
-                for arm in directions:
-                    if np.max(np.abs(seeds[arm] - applied_targets[arm])) * 120 > .4:
+                    if quiet[arm] or travel[arm] >= limit_m - 1e-9:
+                        continue
+                    distance = min(limit_m, travel[arm] + .003 / 120)
+                    q = cartesian_joint_target(arm, seeds[arm], tip + distance * outward[arm], attitude)
+                    if np.max(np.abs(q - applied_targets[arm])) * 120 > .4:
                         raise RuntimeError(f"{phase}: dynamic withdrawal reached joint speed limit")
-                    command_positions(arm, seeds[arm])
+                    candidates[arm] = q
+                    distances[arm] = distance
+                if candidates:
+                    def clear(proposed):
+                        return checker.is_clear(proposed, cube_center=center, cube_rotation=rotation,
+                                                cup_contacts=allowed_contacts, margin_m=0.)
+                    # If the pair cannot advance together, check each remaining normal move separately.
+                    full = tuple(candidates)
+                    choices = (full, *((arm,) for arm in full)) if len(full) == 2 else (full,)
+                    forecast = {arm: q + robots[arm].get_joint_velocities(joint_indices=joints[arm]) / 120
+                                for arm, q in measured.items()} if len(directions) == 2 else measured
+                    held = applied_targets if len(directions) == 2 else measured
+                    for moving in choices:
+                        proposed = {**held, **{arm: candidates[arm] for arm in moving}}
+                        safe = (pair_step_is_clear(measured, forecast, proposed, clear)
+                                if len(directions) == 2 else clear(proposed))
+                        if not safe:
+                            continue
+                        for arm in moving:
+                            seeds[arm] = candidates[arm]
+                            travel[arm] = distances[arm]
+                            command_positions(arm, seeds[arm])
+                        break
+                    else:
+                        record(phase, "SAFETY_WINDOW_BLOCKED", travel_m=max(travel.values()))
+                        raise RuntimeError(f"{phase}: no collision-checked normal withdrawal")
+                elif not any(quiet[arm] for arm in directions):
+                    break
                 step()
                 check_current_collision(phase)
-            record(phase, "WINDOW_WITHOUT_CONFIRMATION", travel_m=travel, cup_gap_m=gaps, wrist_N=forces)
+            record(phase, "WINDOW_WITHOUT_CONFIRMATION", travel_m=max(travel.values()), cup_gap_m=gaps, wrist_N=forces)
             raise RuntimeError(f"{phase}: no observed separation in the collision-checked retreat")
 
 '''

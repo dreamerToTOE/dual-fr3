@@ -63,6 +63,9 @@ def test_full_runner_assembles_with_observed_skills():
         name for fn in code.co_consts if hasattr(fn, "co_names") for name in fn.co_names)
     assert "def move_to_observed_precontact(" in generated
     assert "def dynamic_withdraw(" in generated
+    assert "move_independent_pair(targets, phase, planning_margin_m=planning_margin_m)" in generated
+    assert "move_independent_pair({arm: path[-1] for arm, path in samples.items()}, phase, routes=samples)" in generated
+    assert 'execute_joint_path(samples, motion_phase, check_step=monitor,' in generated
     pickup_standoff = generated.index('paired_cartesian_move(approach_targets, 2., "A_contact_approach")')
     confirm_arrival = generated.index("wait_for_precontact(", pickup_standoff)
     allow_touch = generated.index("allowed_contacts.update(robots)", pickup_standoff)

@@ -6,11 +6,108 @@ from source_hooks import replace_once
 FACE_STANDOFF_M = .007
 
 
+DYNAMIC_PAIR = '''        def move_independent_pair(targets, phase, *, routes=None, planning_margin_m=.002):
+            from fr3_dynamic_pair import arm_route, run_independent_pair
+
+            if left_hold is not None or allowed_contacts or carry_offsets is not None:
+                raise RuntimeError(f"{phase}: independent paths require unloaded, separated tools")
+            arms = tuple(targets)
+            limits = {arm: tuple(np.asarray(robots[arm].dof_properties[key][joints[arm]])
+                                 for key in ("lower", "upper")) for arm in arms}
+            center, rotation = sensed_cube()
+            obstacles = checker.other_cubes
+            static_cache = {arm: {} for arm in arms}
+
+            def clear(states):
+                options = dict(cube_center=center, cube_rotation=rotation, margin_m=planning_margin_m)
+                geometry = {}
+                bounds = []
+                for arm, q in states.items():
+                    key = q.tobytes()
+                    if key not in static_cache[arm]:
+                        body = checker.geometry(arm, q)
+                        safe = checker.is_clear({arm: q}, geometry={arm: body}, **options)
+                        static_cache[arm][key] = safe, body, checker.arm_bounds(body)
+                    safe, geometry[arm], extent = static_cache[arm][key]
+                    if not safe:
+                        return False
+                    bounds.append(extent)
+                if len(bounds) < 2:
+                    return True
+                (a_min, a_max), (b_min, b_max) = bounds
+                if np.any(np.maximum(a_min - b_max, b_min - a_max) >= planning_margin_m):
+                    return True
+                return not checker.check_interarm(geometry, margin_m=planning_margin_m, first_only=True)
+
+            def observe():
+                nonlocal center, rotation, obstacles
+                new_center, new_rotation = sensed_cube()
+                if (obstacles is not checker.other_cubes or not np.array_equal(center, new_center)
+                        or not np.array_equal(rotation, new_rotation)):
+                    for cache in static_cache.values():
+                        cache.clear()
+                center, rotation = new_center, new_rotation
+                obstacles = checker.other_cubes
+                for cache in static_cache.values():
+                    if len(cache) > 64:
+                        cache.clear()
+                return joint_state(), {arm: np.asarray(robots[arm].get_joint_velocities(joint_indices=joints[arm]))
+                                       for arm in arms}
+
+            def plan_one(arm, start, goal, held):
+                def arm_clear(q):
+                    planning_update(f"{phase}: {arm} RRTConnect")
+                    return clear({**held, arm: q})
+                return arm_route(start, goal, limits[arm], arm_clear)
+
+            def plan_remainder(actual, goals):
+                failures = []
+                for first, second in (arms, arms[::-1]):
+                    try:
+                        first_route = plan_one(first, actual[first], goals[first], {second: actual[second]})
+                        second_route = plan_one(second, actual[second], goals[second], {first: goals[first]})
+                    except RuntimeError as error:
+                        failures.append(str(error))
+                        continue
+                    # Preserve the verified passing order only for the conflicting remainder.
+                    return {first: first_route,
+                            second: np.vstack((np.tile(actual[second], (len(first_route) - 1, 1)), second_route))}
+                raise RuntimeError(f"{phase}: no remaining independent arm paths: {failures}")
+
+            def advance():
+                step()
+                check_current_collision(phase)
+
+            record(phase, "DYNAMIC_PAIR_RUNNING", arms=list(arms))
+            if routes is None:
+                actual, _ = observe()
+                routes = {arm: plan_one(arm, actual[arm], targets[arm], {}) for arm in arms}
+            for arm, path in routes.items():
+                if not np.all(np.isfinite(path) & (path >= limits[arm][0]) & (path <= limits[arm][1])):
+                    raise RuntimeError(f"{phase}: {arm} path exceeds joint limits")
+            record(phase, "INDEPENDENT_PATHS_READY", samples={arm: len(path) for arm, path in routes.items()})
+            result = run_independent_pair(routes, observe, clear, command_positions, advance, plan_remainder,
+                                          lambda status, **details: record(phase, status, **details))
+            record(phase, "DYNAMIC_PAIR_COMPLETE", **result)
+
+'''
+
+
 def install(source):
     source = replace_once(source, '        def move(targets, duration=1.0):',
                           '        def move(targets, duration=1.0, *, planning_margin_m=.002, continuation=()):')
     source = replace_once(source, '            cached = take_cached_phase(phase, current)\n',
-                          '            cached = None if continuation else take_cached_phase(phase, current)\n')
+                          '''            if len(sides) == 2:
+                move_independent_pair(targets, phase, planning_margin_m=planning_margin_m)
+                return
+            cached = None if continuation else take_cached_phase(phase, current)
+''')
+    source = replace_once(source, '        def move(targets, duration=1.0, *, planning_margin_m=.002, continuation=()):',
+                          DYNAMIC_PAIR + '        def move(targets, duration=1.0, *, planning_margin_m=.002, continuation=()):')
+    source = replace_once(source, '            execute_joint_path(samples, phase, sampled_trajectory=(times, samples))\n\n'
+                                 '        def seat_against_wall(',
+                          '            move_independent_pair({arm: path[-1] for arm, path in samples.items()}, phase, '
+                          'routes=samples)\n\n        def seat_against_wall(')
     source = replace_once(source,
                           "                                prefetched_cache=None, sampled_trajectory=None, sample_order=None, adjust_targets=None):",
                           "                                prefetched_cache=None, sampled_trajectory=None, sample_order=None, adjust_targets=None, *, use_cache=True):")

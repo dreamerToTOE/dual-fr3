@@ -54,6 +54,9 @@ def test_interarm_and_tool_body_collisions():
     collision = checker(solvers={"left": FakeFK(body=(20., .138, .08), flange=(30., 0, 0)),
                                  "right": FakeFK(body=(10., 0, 0), flange=(20., 0, 0))})
     assert any(issue["kind"] == "interarm_tool" for issue in collision.check(q))
+    geometry = {arm: collision.geometry(arm, angles) for arm, angles in q.items()}
+    static = [issue for arm in q for issue in collision.check({arm: q[arm]}, geometry={arm: geometry[arm]})]
+    assert static + collision.check_interarm(geometry) == collision.check(q)
 
 
 def test_path_checks_between_clear_endpoints():
