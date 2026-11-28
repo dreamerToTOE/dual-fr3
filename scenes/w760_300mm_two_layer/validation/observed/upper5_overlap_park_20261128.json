@@ -1,0 +1,351 @@
+{
+  "u5_saved_s0_source_step": 70533,
+  "serial_isaac_sim_archive": "validation/observed/upper5_separate_park_20261128.json",
+  "serial_isaac_sim_archive_sha256": "ae6e6531cd77f66cadc30b306612897814f15c0f594722b8dadbff6e7eaf092f",
+  "offline_scope": "Retimed independent validated spatial paths paired on a 120 Hz clock. Fixed launch offsets and speed scales.",
+  "offline": {
+    "nominal_serial_arm_motion_s": 24.567961513146727,
+    "individual_arm_durations_s": {
+      "left": 10.189116912852898,
+      "right": 14.378844600293831
+    },
+    "source_step": 70533,
+    "collision_margin_mm": 2.0,
+    "sample_hz": 120,
+    "trials": [
+      {
+        "starts_s": {
+          "left": 0.0,
+          "right": 0.0
+        },
+        "rates": {
+          "left": 1.0,
+          "right": 1.0
+        },
+        "duration_s": 14.378844600293831,
+        "overlap_s": 10.189116912852898,
+        "fitted_pose_check": {
+          "status": "CLEAR",
+          "samples_checked": 1727,
+          "issues": []
+        },
+        "native_pose_check": {
+          "status": "CLEAR",
+          "samples_checked": 1727,
+          "issues": []
+        },
+        "min_inter_arm_geometry_clearance_mm": 156.2920239269998,
+        "min_inter_arm_clearance_time_s": 0.0
+      },
+      {
+        "starts_s": {
+          "left": 0.0,
+          "right": 0.25
+        },
+        "rates": {
+          "left": 1.0,
+          "right": 1.0
+        },
+        "duration_s": 14.628844600293831,
+        "overlap_s": 9.939116912852898,
+        "fitted_pose_check": {
+          "status": "CLEAR",
+          "samples_checked": 1757,
+          "issues": []
+        }
+      },
+      {
+        "starts_s": {
+          "left": 0.25,
+          "right": 0.0
+        },
+        "rates": {
+          "left": 1.0,
+          "right": 1.0
+        },
+        "duration_s": 14.378844600293831,
+        "overlap_s": 10.189116912852898,
+        "fitted_pose_check": {
+          "status": "CLEAR",
+          "samples_checked": 1727,
+          "issues": []
+        }
+      },
+      {
+        "starts_s": {
+          "left": 0.0,
+          "right": 0.0
+        },
+        "rates": {
+          "left": 0.85,
+          "right": 1.0
+        },
+        "duration_s": 14.378844600293831,
+        "overlap_s": 11.987196368062232,
+        "fitted_pose_check": {
+          "status": "CLEAR",
+          "samples_checked": 1727,
+          "issues": []
+        }
+      }
+    ]
+  },
+  "isaac_sim": {
+    "status": "PASS_U5_OVERLAP_PARK",
+    "scope": "Single headless Isaac Sim run from exact U5 S0 arms, rails and measured landing box. Independently retimed paths are paired and fully collision-validated before execution. Existing measured checks run each step. No autonomous timing adjustment is exercised.",
+    "source_checkpoint_sha256": "64508d8da6586b87e6f74539e9514fd2d4a8b796c5f837fc3481022809859dd3",
+    "raw_run": "../runs/upper5-overlap-park-20261128/overlap-physx",
+    "file_sha256": {
+      "runner_report.json": "a41b4e41e2492ae6ecd27419c075f9b2fe2ac72e24ccd3cfb9809fade2e4e5de",
+      "runner_snapshot.py": "c40a440d54c730bcd35395df61d7ccb7a355d496ee2161090eecf1133c1c770a",
+      "contact_states/reference.jsonl.gz": "e14d7d971375599f8320c908d1f450dde1892f98d6fb3728fd7f1ef889ff6f58",
+      "wrench.jsonl.gz": "4d8dd607f94b865a5e948d5158a260170c22845c070d88d12989e58c2293a0c7"
+    },
+    "trajectory_plan": {
+      "phase": "upper5_joint_overlap",
+      "arm": [
+        "left",
+        "right"
+      ],
+      "samples": 1727,
+      "duration_s": 14.383333333333333,
+      "collision_check": {
+        "status": "CLEAR",
+        "samples_checked": 1727,
+        "issues": []
+      },
+      "source": "Cartesian_quintic_with_force_overlay"
+    },
+    "events": [
+      {
+        "phase": "upper5_s0_parking_trial",
+        "status": "RESTORED_AFTER_RELEASE",
+        "sim_time_s": 1.7083333333333333,
+        "wall_elapsed_s": 20.39221381699963,
+        "cube_position_m": [
+          -0.0002977880940306932,
+          0.9890921115875244,
+          0.9369999766349792
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -1.1719968284751303e-07,
+          2.9731427275692113e-07,
+          -2.942777932446461e-08
+        ],
+        "cube_id": 11,
+        "source_step": 70533,
+        "both_independent_arms": true,
+        "actual_joints_rad": {
+          "left": [
+            1.2820900678634644,
+            1.0343152284622192,
+            -1.6695204973220825,
+            -2.5925190448760986,
+            1.193192720413208,
+            1.973252773284912,
+            0.3113294839859009
+          ],
+          "right": [
+            -0.7401566505432129,
+            0.33174243569374084,
+            -0.1612437665462494,
+            -2.0696823596954346,
+            0.0771748274564743,
+            2.396000862121582,
+            -2.520230770111084
+          ]
+        },
+        "rails_y_m": {
+          "left": 1.1349369239807126,
+          "right": 0.5
+        },
+        "support": {
+          "positive_steps": 60,
+          "median_contact_impulse_Ns": 0.10217403756543078,
+          "samples": 60
+        }
+      },
+      {
+        "phase": "upper5_joint_overlap",
+        "status": "RUNNING",
+        "sim_time_s": 1.7083333333333333,
+        "wall_elapsed_s": 20.447067220000008,
+        "cube_position_m": [
+          -0.0002977880940306932,
+          0.9890921115875244,
+          0.9369999766349792
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -1.1719968284751303e-07,
+          2.9731427275692113e-07,
+          -2.942777932446461e-08
+        ],
+        "cube_id": 11,
+        "rates": {
+          "left": 0.85,
+          "right": 1.0
+        },
+        "nominal_finish_s": {
+          "left": 11.987196368062232,
+          "right": 14.378844600293831
+        }
+      },
+      {
+        "phase": "upper5_joint_overlap",
+        "status": "PARKED",
+        "sim_time_s": 16.1,
+        "wall_elapsed_s": 60.375787257999946,
+        "cube_position_m": [
+          -0.00029781527700833976,
+          0.9890918135643005,
+          0.9369998574256897
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -2.0419405188931705e-07,
+          2.4686391952855047e-07,
+          1.7624766712742712e-07
+        ],
+        "cube_id": 11,
+        "rates": {
+          "left": 0.85,
+          "right": 1.0
+        },
+        "nominal_finish_s": {
+          "left": 11.987196368062232,
+          "right": 14.378844600293831
+        },
+        "actual_joints_rad": {
+          "left": [
+            2.241195770635862e-11,
+            -0.785383403301239,
+            1.9349319368977547e-10,
+            -2.356132984161377,
+            7.809397017943809e-10,
+            1.5708274841308594,
+            0.7853829264640808
+          ],
+          "right": [
+            -0.00022154385806061327,
+            -0.7850969433784485,
+            -0.00010901494533754885,
+            -2.356032371520996,
+            7.717001608398277e-06,
+            1.5709410905838013,
+            0.7842274308204651
+          ]
+        }
+      },
+      {
+        "phase": "upper5_left_rail_park",
+        "status": "RUNNING",
+        "sim_time_s": 16.1,
+        "wall_elapsed_s": 60.38467168199986,
+        "cube_position_m": [
+          -0.00029781527700833976,
+          0.9890918135643005,
+          0.9369998574256897
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -2.0419405188931705e-07,
+          2.4686391952855047e-07,
+          1.7624766712742712e-07
+        ],
+        "cube_id": 11,
+        "arm": "left"
+      },
+      {
+        "phase": "upper5_right_rail_park",
+        "status": "RUNNING",
+        "sim_time_s": 31.683333333333334,
+        "wall_elapsed_s": 89.5694043919998,
+        "cube_position_m": [
+          -0.00029784842627123,
+          0.9890919923782349,
+          0.9369998574256897
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -1.1813504130486763e-07,
+          2.473775282396673e-07,
+          -7.812885627345167e-08
+        ],
+        "cube_id": 11,
+        "arm": "right"
+      },
+      {
+        "phase": "upper5_s0_parking_trial",
+        "status": "PARKED_BOTH",
+        "sim_time_s": 37.18333333333333,
+        "wall_elapsed_s": 99.50684244700005,
+        "cube_position_m": [
+          -0.0002978586999233812,
+          0.9890919923782349,
+          0.9369998574256897
+        ],
+        "cube_orientation_wxyz": [
+          1.0,
+          -1.6044562300976395e-07,
+          2.0265707689759438e-07,
+          4.7968438110501666e-08
+        ],
+        "cube_id": 11,
+        "rails_y_m": {
+          "left": 0.19999999999999996,
+          "right": 0.2
+        },
+        "support": {
+          "positive_steps": 60,
+          "median_contact_impulse_Ns": 0.10217930565708067,
+          "samples": 60
+        }
+      }
+    ],
+    "unexpected_contact_count": 0,
+    "first_collision": null,
+    "rail_checks": [
+      {
+        "cube_id": 11,
+        "side": "left",
+        "samples": 1870,
+        "collision_workers": 3,
+        "cache_replay": false,
+        "planning_wall_s": 3.9537253230000715
+      },
+      {
+        "cube_id": 11,
+        "side": "right",
+        "samples": 600,
+        "collision_workers": 3,
+        "cache_replay": false,
+        "planning_wall_s": 1.2121693130002313
+      }
+    ],
+    "joint_motion_sim_s": {
+      "serial": 24.758333333333333,
+      "overlapped": 14.391666666666667,
+      "reduction_fraction": 0.41871423763042737
+    },
+    "park_including_sequential_rails_sim_s": {
+      "serial": 45.84166666666666,
+      "overlapped": 35.474999999999994,
+      "difference_s": 10.366666666666667
+    },
+    "measured_joint_motion": {
+      "first_last_physics_step": [
+        205,
+        1932
+      ],
+      "both_arms_above_motion_threshold_s": 12.0,
+      "motion_threshold_max_joint_speed_rad_s": 0.01,
+      "elapsed_stay_within_home_tolerance_s": {
+        "left": 11.866666666666667,
+        "right": 14.225
+      },
+      "home_max_joint_error_tolerance_rad": 0.005
+    }
+  }
+}
