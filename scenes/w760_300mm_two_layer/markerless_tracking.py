@@ -462,18 +462,21 @@ def install(source, *, observed_skills=False):
                 if steer_front:
                     terminal_height = NormalForceController(origin[2], target_force_N=0.,
                         gain_m_per_Ns=.00055, max_offset_m=.0014, max_speed_m_s=.001, max_force_N=None)''')
+        source = replace_once(source, '                    front_engaged = not steer_front or support_ready()\n', '')
         start = source.index('                    negative_gap_limit = -.002 if slot4_boundary else -.003')
         end = source.index('                        forces.append(measured_force)', start)
         source = source[:start] + '''                    negative_gap_limit = -.002 if slot4_boundary and not steer_front else -.003
                     if steer_front:
-                        side_wrist_window.append(float(last_force_sample[side]["tcp_position_m"][axis]))
-                        stationary = (len(side_wrist_window) == settle_frame_count
-                                      and np.ptp(side_wrist_window) <= .000012)
+                        # Contact can hold while pad loads alternate and the front wrist unloads.
+                        side_wrist_window.append((float(last_force_sample[side]["tcp_position_m"][axis]),
+                                                  measured_force))
+                        wrists, loads = np.asarray(side_wrist_window).T
+                        stationary = len(wrists) == settle_frame_count and np.ptp(wrists) <= .000012
                         contact_threshold = min(7.25, max(6.6, contact_threshold + .7))
+                        bearing = stationary and np.median(loads) >= contact_threshold
                     else:
-                        stationary = True
-                    if (front_engaged and stationary and measured_force >= contact_threshold
-                            and negative_gap_limit <= near <= near_limit):
+                        bearing = measured_force >= contact_threshold
+                    if bearing and negative_gap_limit <= near <= near_limit:
 ''' + source[end:]
         source = replace_once(source, '''                        force_headroom = (not probing or np.linalg.norm(
                             last_force_sample[side]["tcp_gravity_corrected_world"][:3]) < 7.8)
@@ -485,9 +488,9 @@ def install(source, *, observed_skills=False):
                                 # Remove stored drive compression instead of holding the high-force command.
                                 relief = min(.0012, .0012 * (resultant - 7.4)) / 120
                                 position[axis] -= sign * relief
-                            elif front_engaged:
+                            elif support_ready():
                                 position[axis] += sign * increment
-                        elif front_engaged:
+                        else:
                             position[axis] += sign * increment''')
         source = replace_once(source, '                    target_rotation = slot4_side_rotation(steer_rotation) if steer_front else tool_rotation',
                               '''                    if steer_front:
